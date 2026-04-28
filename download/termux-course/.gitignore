@@ -1,0 +1,29 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+
+# Node modules (if any scripts added)
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Secrets (never commit these)
+.env
+.env.local
+*.key
+*.pem
+
+# Backup files
+*.bak
+*.backup
