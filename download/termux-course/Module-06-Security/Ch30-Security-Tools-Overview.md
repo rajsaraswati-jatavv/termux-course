@@ -1640,6 +1640,785 @@ git clone https://github.com/owasp/owasp-testing-guide
 
 ---
 
+## 💡 PRO TIPS BOX
+
+> 💡 **Pro Tip #1:** Always start with passive reconnaissance before active scanning. You'd be surprised how much information is publicly available without touching the target.
+
+> 💡 **Pro Tip #2:** Document EVERYTHING from day one. Use tools like CherryTree or Obsidian to maintain detailed notes. Your future self will thank you during report writing.
+
+> 💡 **Pro Tip #3:** Create a dedicated "tools" directory in your Termux setup with organized subdirectories for wordlists, scripts, payloads, and scan results.
+
+> 💡 **Pro Tip #4:** Before using any tool on a target, test it in your lab environment first. Understand its output format, options, and potential impact.
+
+> 💡 **Pro Tip #5:** Use `tmux` or `screen` in Termux for persistent sessions. Long-running scans won't be lost if Termux crashes or you need to switch apps.
+
+> 💡 **Pro Tip #6:** Keep your tools updated! Run `pkg update && pkg upgrade` weekly, and check GitHub repos for the latest versions.
+
+> 💡 **Pro Tip #7:** Build your own wordlist by combining rockyou.txt with target-specific words. Use tools like CUPP (Common User Passwords Profiler).
+
+> 💡 **Pro Tip #8:** Learn to read source code! Many tools have options not documented in help menus. Check the source on GitHub.
+
+> 💡 **Pro Tip #9:** Set up aliases for frequently used commands in your `~/.bashrc`. Save keystrokes and time.
+
+> 💡 **Pro Tip #10:** Join security communities on Discord, Reddit, and Twitter. The field moves fast - stay connected to learn about new tools and techniques.
+
+---
+
+## 🔥 REAL WORLD APPLICATIONS
+
+### Bug Bounty Scenarios
+
+**Scenario 1: Reconnaissance for Bug Bounty**
+```bash
+# Step 1: Subdomain enumeration
+subfinder -d target.com -o subdomains.txt
+
+# Step 2: Check live subdomains
+cat subdomains.txt | httprobe | tee live_subdomains.txt
+
+# Step 3: Scan with Nmap
+nmap -iL live_subdomains.txt -sV -oA scan_results
+
+# Step 4: Identify technologies
+whatweb -i live_subdomains.txt
+
+# Step 5: Check for common vulnerabilities
+nikto -host target.com
+```
+
+**Scenario 2: Pre-engagement Scope Documentation**
+```
+PENETRATION TEST SCOPE DOCUMENT
+================================
+Client: [Company Name]
+Date: [Start Date] to [End Date]
+
+AUTHORIZED TARGETS:
+- IP Range: 192.168.1.0/24
+- Domains: target.com, api.target.com
+- Applications: Web Portal, Mobile App
+
+OUT OF SCOPE:
+- Production databases
+- Third-party services
+- Social engineering attacks
+
+TOOLS AUTHORIZED:
+- Nmap, Hydra, SQLMap
+- Burp Suite
+- Custom scripts
+
+EMERGENCY CONTACT:
+- Name: [Contact Person]
+- Phone: [Number]
+- Email: [Email]
+```
+
+### Penetration Testing Workflow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PROFESSIONAL PENTEST WORKFLOW                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   PHASE 1: PRE-ENGAGEMENT                                               │
+│   ├── Sign contract and NDA                                             │
+│   ├── Define scope document                                             │
+│   ├── Get written authorization                                         │
+│   └── Set up testing environment                                        │
+│                                                                          │
+│   PHASE 2: RECONNAISSANCE (1-2 days)                                    │
+│   ├── Passive OSINT gathering                                           │
+│   ├── Active scanning with Nmap                                         │
+│   ├── Service enumeration                                               │
+│   └── Technology fingerprinting                                         │
+│                                                                          │
+│   PHASE 3: VULNERABILITY ANALYSIS (2-3 days)                            │
+│   ├── Automated vulnerability scanning                                  │
+│   ├── Manual testing                                                    │
+│   ├── False positive verification                                       │
+│   └── Vulnerability prioritization                                      │
+│                                                                          │
+│   PHASE 4: EXPLOITATION (2-4 days)                                      │
+│   ├── Develop/identify exploits                                         │
+│   ├── Test exploits in lab                                              │
+│   ├── Execute authorized exploits                                       │
+│   └── Document evidence                                                 │
+│                                                                          │
+│   PHASE 5: POST-EXPLOITATION (1-2 days)                                 │
+│   ├── Privilege escalation                                              │
+│   ├── Lateral movement (if authorized)                                  │
+│   ├── Data collection                                                   │
+│   └── Clean up                                                          │
+│                                                                          │
+│   PHASE 6: REPORTING (2-3 days)                                         │
+│   ├── Executive summary                                                 │
+│   ├── Technical findings                                                │
+│   ├── Risk assessment                                                   │
+│   └── Remediation recommendations                                       │
+│                                                                          │
+│   PHASE 7: RE-TESTING (after fixes)                                     │
+│   ├── Verify patches                                                    │
+│   ├── Document remaining issues                                         │
+│   └── Final report delivery                                             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### Essential Security Tool Commands
+
+| Tool | Purpose | Quick Command |
+|------|---------|---------------|
+| **Nmap** | Port Scanner | `nmap -sV -sC target.com` |
+| **Hydra** | Password Cracker | `hydra -l user -P wordlist.txt ssh://target` |
+| **John** | Hash Cracker | `john --wordlist=rockyou.txt hash.txt` |
+| **SQLMap** | SQL Injection | `sqlmap -u "url?id=1" --dbs` |
+| **Netcat** | Network Tool | `nc -lvnp 4444` |
+| **Gobuster** | Dir Brute Force | `gobuster dir -u url -w wordlist.txt` |
+| **Nikto** | Web Scanner | `nikto -h target.com` |
+| **Crunch** | Wordlist Gen | `crunch 8 8 -t pass@@@ -o list.txt` |
+| **Searchsploit** | Exploit Search | `searchsploit apache 2.4` |
+| **Ncat** | Advanced Netcat | `ncat --ssl target 443` |
+
+### Termux Security Tool Installation
+
+```bash
+# Update & Upgrade
+pkg update && pkg upgrade -y
+
+# Essential Tools
+pkg install nmap hydra john netcat git wget curl python -y
+
+# Web Tools
+pkg install nikto whatweb gobuster -y
+
+# Wordlists
+pkg install seclists -y
+pip install sqlmap
+
+# Proot for Advanced Tools
+pkg install proot-distro -y
+proot-distro install kali
+```
+
+### Common Port Reference
+
+| Port | Service | Security Focus |
+|------|---------|----------------|
+| 21 | FTP | Anonymous access, brute force |
+| 22 | SSH | Brute force, key theft |
+| 23 | Telnet | Cleartext credentials |
+| 25 | SMTP | Email spoofing, relay |
+| 80 | HTTP | Web vulnerabilities |
+| 443 | HTTPS | SSL/TLS issues |
+| 3306 | MySQL | SQL injection, brute force |
+| 3389 | RDP | BlueKeep, brute force |
+| 5432 | PostgreSQL | SQL injection |
+| 8080 | HTTP Proxy | Web vulnerabilities |
+
+### HTTP Status Codes for Security
+
+| Code | Meaning | Security Implication |
+|------|---------|---------------------|
+| 200 | OK | Successful request |
+| 301/302 | Redirect | Check redirect targets |
+| 401 | Unauthorized | Authentication bypass attempt |
+| 403 | Forbidden | Directory traversal, IDOR |
+| 404 | Not Found | Hidden files/directories |
+| 500 | Server Error | Information disclosure |
+| 502/503 | Gateway Error | DoS possible |
+
+---
+
+## 🏆 BONUS: ADVANCED EXPLOITATION
+
+### Setting Up Advanced Lab Environment
+
+```bash
+# Install Docker in proot environment
+proot-distro login ubuntu
+apt install docker.io -y
+systemctl start docker
+
+# Run vulnerable web applications
+docker run -d -p 80:80 vulnerables/web-dvwa
+docker run -d -p 3000:3000 bkimminich/juice-shop
+docker run -d -p 8080:8080 webgoat/webgoat
+
+# Access locally
+# DVWA: http://localhost
+# Juice Shop: http://localhost:3000
+# WebGoat: http://localhost:8080/WebGoat
+```
+
+### Additional Powerful Tools
+
+| Tool | Description | Installation |
+|------|-------------|--------------|
+| **Aircrack-ng** | WiFi Security Suite | `pkg install aircrack-ng` |
+| **Bettercap** | Network Attack Tool | Requires root |
+| **Metasploit** | Exploitation Framework | Via proot-distro |
+| **Burp Suite** | Web Proxy | Requires GUI/Java |
+| **Wireshark** | Packet Analysis | Requires root |
+| **Nuclei** | Vulnerability Scanner | `go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest` |
+| **Amass** | Subdomain Enumeration | `go install -v github.com/OWASP/Amass/v3/...@master` |
+| **FFUF** | Web Fuzzer | `go install github.com/ffuf/ffuf@latest` |
+| **Subfinder** | Subdomain Finder | `go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest` |
+
+### Advanced Reconnaissance Automation Script
+
+```bash
+#!/bin/bash
+# Auto-Recon Script for Bug Bounty
+# Usage: ./autorecon.sh target.com
+
+TARGET=$1
+mkdir -p ~/recon/$TARGET
+cd ~/recon/$TARGET
+
+echo "[*] Starting reconnaissance for: $TARGET"
+
+# Subdomain enumeration
+echo "[+] Enumerating subdomains..."
+subfinder -d $TARGET -o subdomains.txt
+amass enum -passive -d $TARGET >> subdomains.txt
+sort -u subdomains.txt -o subdomains.txt
+
+# Check live hosts
+echo "[+] Checking live hosts..."
+cat subdomains.txt | httprobe | tee live_hosts.txt
+
+# Port scanning
+echo "[+] Scanning ports..."
+nmap -iL live_hosts.txt -sV -T4 -oA nmap_scan
+
+# Technology detection
+echo "[+] Detecting technologies..."
+whatweb -i live_hosts.txt | tee tech_detection.txt
+
+# Screenshot (requires aquatone)
+echo "[+] Taking screenshots..."
+cat live_hosts.txt | aquatone -out screenshots/
+
+echo "[!] Reconnaissance complete!"
+echo "[*] Results saved in: ~/recon/$TARGET"
+```
+
+---
+
+## 📝 CHAPTER SUMMARY: What You Learned
+
+### Key Concepts Mastered
+
+- ✅ **Ethical Hacking Fundamentals**: Understanding the difference between white hat and black hat hackers, legal requirements, and authorization
+- ✅ **Security Testing Methodology**: PTES, OWASP, NIST frameworks and the complete testing lifecycle
+- ✅ **Tool Categories**: Information gathering, vulnerability scanning, password cracking, exploitation, and more
+- ✅ **Termux vs Proot**: Which tools work natively vs which need additional setup
+- ✅ **Lab Environment Setup**: Vulnerable VMs, Docker containers, and online platforms
+- ✅ **Wordlists Management**: rockyou.txt, SecLists, and custom wordlist generation
+- ✅ **Documentation**: Penetration test report structure and best practices
+
+### Key Takeaways
+
+1. **Permission is Non-Negotiable**: Never test without written authorization
+2. **Documentation is Critical**: If it's not documented, it didn't happen
+3. **Lab Practice First**: Always test tools in controlled environments
+4. **Stay Updated**: Security field evolves rapidly, continuous learning is essential
+5. **Legal Compliance**: Understand your local laws (IT Act 2000 for India)
+6. **Ethics Matter**: Responsible disclosure protects everyone
+
+---
+
+## 🛡️ DEFENSIVE SECURITY: Protecting Against Attacks
+
+### Network Security Hardening
+
+```bash
+# Firewall Configuration (Linux)
+sudo ufw enable
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
+
+# Check open ports
+sudo netstat -tulpn
+sudo ss -tulpn
+
+# Disable unnecessary services
+sudo systemctl disable telnet
+sudo systemctl disable ftp
+```
+
+### Password Security Best Practices
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PASSWORD SECURITY GUIDELINES                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ✅ DO:                                                                 │
+│  ├── Minimum 12+ characters                                             │
+│  ├── Mix uppercase, lowercase, numbers, symbols                        │
+│  ├── Use password managers (Bitwarden, KeePass)                        │
+│  ├── Enable 2FA everywhere possible                                     │
+│  ├── Use unique passwords for each account                             │
+│  └── Change passwords after breach notifications                       │
+│                                                                          │
+│  ❌ DON'T:                                                              │
+│  ├── Use dictionary words                                               │
+│  ├── Use personal information (birthdays, names)                       │
+│  ├── Reuse passwords across accounts                                    │
+│  ├── Share passwords via email/messaging                                │
+│  ├── Write passwords on sticky notes                                    │
+│  └── Use default passwords                                              │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### System Hardening Checklist
+
+- [ ] Change default credentials on all devices
+- [ ] Disable unused services and ports
+- [ ] Enable firewall (UFW/iptables)
+- [ ] Install and configure fail2ban
+- [ ] Enable automatic security updates
+- [ ] Configure SSH key authentication
+- [ ] Disable root login via SSH
+- [ ] Install intrusion detection system (OSSEC, Wazuh)
+- [ ] Enable logging and monitoring
+- [ ] Regular security audits
+
+---
+
+## 📋 METHODOLOGY: Step-by-Step Attack Framework
+
+### Standard Penetration Testing Methodology
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PTES-BASED ATTACK METHODOLOGY                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  STEP 1: PRE-ENGAGEMENT                                                 │
+│  ─────────────────────                                                  │
+│  □ Sign contract and NDA                                                │
+│  □ Define scope (IPs, domains, applications)                           │
+│  □ Establish rules of engagement                                        │
+│  □ Set communication channels                                           │
+│  □ Agree on timeline and deliverables                                   │
+│                                                                          │
+│  STEP 2: INFORMATION GATHERING                                          │
+│  ─────────────────────────                                              │
+│  □ WHOIS lookup                                                         │
+│  □ DNS enumeration (dig, nslookup)                                      │
+│  □ Google dorking                                                       │
+│  □ Social media reconnaissance                                          │
+│  □ Subdomain enumeration                                                │
+│  □ Technology fingerprinting                                            │
+│                                                                          │
+│  STEP 3: THREAT MODELING                                                │
+│  ─────────────────────                                                  │
+│  □ Identify assets                                                      │
+│  □ Map attack surface                                                   │
+│  □ Prioritize targets                                                   │
+│  □ Identify potential attack vectors                                    │
+│                                                                          │
+│  STEP 4: VULNERABILITY ANALYSIS                                         │
+│  ──────────────────────────────                                         │
+│  □ Port scanning (Nmap)                                                 │
+│  □ Service enumeration                                                  │
+│  □ Vulnerability scanning (Nessus, OpenVAS)                            │
+│  □ Manual testing                                                       │
+│  □ False positive verification                                          │
+│                                                                          │
+│  STEP 5: EXPLOITATION                                                   │
+│  ────────────────                                                       │
+│  □ Identify applicable exploits                                         │
+│  □ Test exploits in lab                                                 │
+│  □ Execute exploits (with authorization)                               │
+│  □ Bypass security controls                                             │
+│  □ Document evidence                                                    │
+│                                                                          │
+│  STEP 6: POST-EXPLOITATION                                              │
+│  ───────────────────────                                                │
+│  □ Privilege escalation                                                 │
+│  □ Lateral movement                                                     │
+│  □ Data exfiltration (authorized)                                       │
+│  □ Persistence mechanisms                                               │
+│  □ Evidence collection                                                  │
+│                                                                          │
+│  STEP 7: REPORTING                                                      │
+│  ──────────────                                                         │
+│  □ Executive summary                                                    │
+│  □ Technical details                                                    │
+│  □ Risk scoring (CVSS)                                                  │
+│  □ Remediation recommendations                                          │
+│  □ Supporting evidence                                                  │
+│                                                                          │
+│  STEP 8: CLEANUP & RE-TEST                                              │
+│  ─────────────────────────                                              │
+│  □ Remove all tools and access                                          │
+│  □ Clean up test accounts                                               │
+│  □ Delete collected data                                                │
+│  □ Re-test after remediation                                            │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Penetration Test Report Template
+
+```markdown
+# PENETRATION TEST REPORT
+## [Company Name]
+### [Date Range]
+
+---
+
+## 1. EXECUTIVE SUMMARY
+
+### Overview
+[2-3 paragraph summary for management]
+
+### Risk Summary
+| Severity | Count |
+|----------|-------|
+| Critical | X |
+| High | X |
+| Medium | X |
+| Low | X |
+
+### Key Findings
+1. [Finding 1]
+2. [Finding 2]
+3. [Finding 3]
+
+---
+
+## 2. SCOPE AND METHODOLOGY
+
+### Scope
+- IP Addresses: [List]
+- Domains: [List]
+- Applications: [List]
+
+### Methodology
+- Framework: PTES/OWASP
+- Tools: [List]
+- Testing Period: [Dates]
+
+---
+
+## 3. TECHNICAL FINDINGS
+
+### Finding 1: [Title]
+**Severity:** Critical/High/Medium/Low
+**CVSS Score:** X.X
+**Affected Systems:** [List]
+
+**Description:**
+[Detailed description]
+
+**Evidence:**
+[Screenshots, logs]
+
+**Remediation:**
+[Fix recommendations]
+
+**References:**
+[CVE, CWE, etc.]
+
+---
+
+## 4. APPENDICES
+- Full scan results
+- Tool outputs
+- Screenshots
+```
+
+---
+
+## ⚠️ LEGAL & ETHICS: Detailed Framework
+
+### Indian IT Act 2000 - Relevant Sections
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    INDIAN CYBER LAW - KEY SECTIONS                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  SECTION 66: COMPUTER OFFENCES                                          │
+│  ─────────────────────────────                                          │
+│  • Hacking with intent to cause damage                                  │
+│  • Punishment: Up to 3 years imprisonment + ₹5 lakh fine               │
+│                                                                          │
+│  SECTION 66A: OFFENSIVE MESSAGES                                        │
+│  ─────────────────────────────                                          │
+│  • Sending offensive messages via communication devices                 │
+│  • Punishment: Up to 3 years + fine                                    │
+│  (Note: Partly struck down by Supreme Court)                            │
+│                                                                          │
+│  SECTION 66C: IDENTITY THEFT                                            │
+│  ─────────────────────────                                              │
+│  • Fraudulently using someone's identity                                │
+│  • Punishment: Up to 3 years + ₹1 lakh fine                            │
+│                                                                          │
+│  SECTION 66D: CHEATING BY PERSONATION                                   │
+│  ───────────────────────────────                                        │
+│  • Cheating using computer resources                                    │
+│  • Punishment: Up to 3 years + ₹1 lakh fine                            │
+│                                                                          │
+│  SECTION 67: OBSCENE CONTENT                                            │
+│  ─────────────────────────                                              │
+│  • Publishing obscene material electronically                           │
+│  • Punishment: Up to 5 years + ₹10 lakh fine                           │
+│                                                                          │
+│  SECTION 70: PROTECTED SYSTEMS                                          │
+│  ─────────────────────────────                                          │
+│  • Unauthorized access to protected systems                             │
+│  • Punishment: Up to 10 years + fine                                   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scope of Authorization Document Template
+
+```
+PENETRATION TEST AUTHORIZATION
+================================
+
+CLIENT INFORMATION:
+Company: _________________________
+Address: _________________________
+Contact: _________________________
+Email: ___________________________
+
+TESTER INFORMATION:
+Name: ___________________________
+Company: _________________________
+Contact: _________________________
+Email: ___________________________
+
+AUTHORIZED SCOPE:
+IP Addresses: ____________________
+Domains: _________________________
+Applications: ____________________
+Time Period: _____________________
+
+EXPLICIT PERMISSION:
+I, [Name], authorize [Tester Name] to conduct penetration testing 
+on the systems defined in this scope. I confirm that I have the 
+authority to grant this permission.
+
+PROHIBITED ACTIVITIES:
+- Denial of Service attacks
+- Social engineering (unless specified)
+- Data exfiltration
+- [Other restrictions]
+
+EMERGENCY CONTACT:
+Name: ___________________________
+Phone: __________________________
+
+CLIENT SIGNATURE: ________________  Date: ____________
+
+TESTER SIGNATURE: ________________  Date: ____________
+
+WITNESS (if required): ____________  Date: ____________
+```
+
+### Responsible Disclosure Guidelines
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    RESPONSIBLE DISCLOSURE PROCESS                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  STEP 1: DISCOVERY                                                      │
+│  ├── Find vulnerability through authorized testing                     │
+│  ├── Document findings thoroughly                                       │
+│  └── Prepare proof of concept (harmless)                               │
+│                                                                          │
+│  STEP 2: PRIVATE DISCLOSURE                                             │
+│  ├── Contact vendor/company security team                              │
+│  ├── Provide detailed vulnerability report                             │
+│  ├── Allow reasonable time for fix (30-90 days)                        │
+│  └── Maintain confidentiality                                          │
+│                                                                          │
+│  STEP 3: COORDINATED DISCLOSURE                                         │
+│  ├── Work with vendor on timeline                                      │
+│  ├── Confirm patch effectiveness                                       │
+│  └── Agree on public disclosure date                                   │
+│                                                                          │
+│  STEP 4: PUBLIC DISCLOSURE (After Fix)                                  │
+│  ├── Publish findings responsibly                                       │
+│  ├── Credit vendor for cooperation                                     │
+│  └── Help community learn from findings                                │
+│                                                                          │
+│  NEVER:                                                                 │
+│  ├── Publicly disclose before fix                                      │
+│  ├── Exploit vulnerability for personal gain                           │
+│  ├── Demand payment (unless bug bounty program)                        │
+│  └── Threaten vendor                                                    │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+### Prerequisites
+- **Chapter 1-10**: Termux Basics, Navigation, Package Management
+- **Chapter 11-20**: Linux Commands, Scripting, Network Basics
+
+### Next Chapters in This Module
+| Chapter | Title | Focus |
+|---------|-------|-------|
+| **31** | Hydra Password Cracking | SSH, FTP, HTTP brute force |
+| **32** | Hydra Advanced | Proxies, multiple targets, optimization |
+| **33** | John the Ripper | Hash cracking, extraction tools |
+| **34** | SQLMap Basics | SQL injection automation |
+| **35** | Metasploit Framework | Exploitation framework |
+| **36** | PhoneSploit & ADB | Android device security |
+| **37** | Social Engineering Toolkit | Phishing, credential harvesting |
+| **38** | WiFi Security Tools | Aircrack-ng, wireless attacks |
+
+### Related Modules
+- **Module 7**: Advanced Security Techniques
+- **Module 8**: Automation & Scripting for Security
+- **Module 9**: CTF & Bug Bounty Preparation
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+### Test Your Knowledge
+
+**Q1: What is the primary difference between ethical hacking and malicious hacking?**
+- A) Tools used
+- B) Permission and authorization
+- C) Operating system
+- D) Programming skills
+
+**Q2: Which Indian IT Act section specifically deals with computer hacking?**
+- A) Section 65
+- B) Section 66
+- C) Section 67
+- D) Section 68
+
+**Q3: Which tool is used for offline password hash cracking?**
+- A) Hydra
+- B) Nmap
+- C) John the Ripper
+- D) SQLMap
+
+**Q4: What does PTES stand for?**
+- A) Penetration Testing Execution Standard
+- B) Professional Testing and Evaluation System
+- C) Penetration Test Enterprise Solution
+- D) Private Testing Execution Standard
+
+**Q5: Which of these tools requires root access for full functionality?**
+- A) Nmap
+- B) Hydra
+- C) Aircrack-ng (injection mode)
+- D) SQLMap
+
+**Q6: What is the recommended minimum password length?**
+- A) 6 characters
+- B) 8 characters
+- C) 12 characters
+- D) 4 characters
+
+**Q7: Which phase comes immediately after vulnerability scanning?**
+- A) Reporting
+- B) Exploitation
+- C) Reconnaissance
+- D) Post-exploitation
+
+**Q8: What is rockyou.txt?**
+- A) A hacking tool
+- B) A wordlist with 14.3 million passwords
+- C) A vulnerability database
+- D) An exploit framework
+
+**Q9: Which proot command installs Kali Linux in Termux?**
+- A) `pkg install kali`
+- B) `proot-distro install kali`
+- C) `apt-get install kali`
+- D) `sudo install kali`
+
+**Q10: What is the correct order of penetration testing phases?**
+- A) Exploit → Scan → Report → Recon
+- B) Recon → Scan → Exploit → Report
+- C) Report → Recon → Scan → Exploit
+- D) Scan → Recon → Report → Exploit
+
+**Q11: Which tool is primarily used for network port scanning?**
+- A) John
+- B) Hydra
+- C) Nmap
+- D) Crunch
+
+**Q12: What should be obtained BEFORE starting any penetration test?**
+- A) New tools
+- B) Written authorization
+- C) Social media accounts
+- D) Employee information
+
+<details>
+<summary>📝 Click to Reveal Answers</summary>
+
+1. **B** - Permission and authorization
+2. **B** - Section 66 (Computer hacking)
+3. **C** - John the Ripper (offline hash cracking)
+4. **A** - Penetration Testing Execution Standard
+5. **C** - Aircrack-ng (injection mode)
+6. **C** - 12 characters minimum
+7. **B** - Exploitation
+8. **B** - A wordlist with 14.3 million passwords
+9. **B** - `proot-distro install kali`
+10. **B** - Recon → Scan → Exploit → Report
+11. **C** - Nmap
+12. **B** - Written authorization
+</details>
+
+---
+
+## 🎯 ETHICAL HACKING CHALLENGES
+
+### Challenge 1: Lab Setup
+- [ ] Set up DVWA in Docker or local environment
+- [ ] Install all basic security tools in Termux
+- [ ] Create organized directory structure for tools and wordlists
+- [ ] Document your lab setup process
+
+### Challenge 2: Reconnaissance
+- [ ] Perform passive reconnaissance on your own website
+- [ ] Use WHOIS to find domain registration details
+- [ ] Enumerate subdomains using online tools
+- [ ] Document all findings in a structured report
+
+### Challenge 3: Tool Mastery
+- [ ] Master Nmap basic scans (TCP, UDP, Service detection)
+- [ ] Create a custom wordlist using Crunch
+- [ ] Practice with Hydra on your local SSH server
+- [ ] Document 10 useful options for each tool
+
+### Challenge 4: Documentation
+- [ ] Create a penetration test report template
+- [ ] Write a sample executive summary
+- [ ] Practice documenting findings with evidence
+- [ ] Review and improve your notes organization
+
+---
+
 ## ✅ CHAPTER CHECKLIST
 
 Before moving to Chapter 31, verify:
@@ -1653,6 +2432,8 @@ Before moving to Chapter 31, verify:
 - [ ] Explored lab environment options
 - [ ] Registered on at least one practice platform
 - [ ] Understood documentation requirements
+- [ ] Completed the interactive quiz
+- [ ] Attempted at least 2 challenges
 
 ---
 

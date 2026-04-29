@@ -1695,3 +1695,559 @@ Before moving to Chapter 22, verify:
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*
+
+---
+
+## 💡 PRO TIPS BOX
+
+> 💡 **Pro Tip #1:** Use unique notification IDs for each notification to manage them individually with `termux-notification-remove`.
+
+> 💡 **Pro Tip #2:** Ongoing notifications with `--ongoing` flag are perfect for background services - they can't be swiped away.
+
+> 💡 **Pro Tip #3:** Combine `--sound`, `--vibrate`, and `--led-color` for maximum attention-grabbing alerts.
+
+> 💡 **Pro Tip #4:** Use `--priority high` or `--priority max` for urgent notifications that need heads-up display.
+
+> 💡 **Pro Tip #5:** Dialog output returns JSON with `text` and `code` fields - always check `code` for cancellation.
+
+> 💡 **Pro Tip #6:** Use `termux-dialog --confirm` for yes/no prompts with proper button handling.
+
+> 💡 **Pro Tip #7:** Toast messages with `--bgcolor` and `--textcolor` create visual feedback for script status.
+
+> 💡 **Pro Tip #8:** Notification actions (buttons) can run any command - use for quick script controls.
+
+> 💡 **Pro Tip #9:** Set `--on-delete` to run cleanup commands when user dismisses notification.
+
+> 💡 **Pro Tip #10:** Use date/time pickers (`--date`, `--time`) for user-friendly scheduling input.
+
+---
+
+## 🔥 REAL WORLD APPLICATIONS
+
+### 1. Task Reminder System
+Create scheduled reminders with custom notifications.
+
+```bash
+#!/bin/bash
+# reminder_system.sh - Scheduled task reminders
+REMIND_DIR=~/.reminders
+mkdir -p "$REMIND_DIR"
+
+add_reminder() {
+    TITLE=$(termux-dialog --title "Reminder" --text "What to remind?" | jq -r '.text')
+    MINS=$(termux-dialog --title "Time" --number "Minutes from now:" | jq -r '.text')
+    
+    if [ -n "$TITLE" ] && [ "$TITLE" != "null" ]; then
+        echo "$TITLE" > "$REMIND_DIR/remind_$(date +%s).txt"
+        (sleep $((MINS * 60)) && termux-notification --title "⏰ Reminder" --content "$TITLE" --sound --vibrate 1000) &
+        termux-toast "Reminder set for $MINS minutes"
+    fi
+}
+
+show_menu() {
+    echo "1. Add Reminder"
+    echo "2. View Pending"
+    echo "3. Exit"
+    read -p "Choice: " choice
+    case $choice in
+        1) add_reminder ;;
+        2) ls -la "$REMIND_DIR" ;;
+        3) exit 0 ;;
+    esac
+}
+
+while true; do show_menu; done
+```
+
+### 2. Progress Monitor
+Track long-running operations with progress notifications.
+
+```bash
+#!/bin/bash
+# progress_monitor.sh - Track operation progress
+TASK="Downloading files..."
+
+for i in {1..100}; do
+    termux-notification \
+        --id "progress" \
+        --title "$TASK" \
+        --content "Progress: $i%" \
+        --ongoing \
+        --priority low
+    sleep 0.5
+done
+
+termux-notification \
+    --id "progress" \
+    --title "Complete!" \
+    --content "All files downloaded" \
+    --sound
+
+sleep 3
+termux-notification-remove --id "progress"
+```
+
+### 3. Interactive Script Menu
+Use dialogs for user-friendly script interaction.
+
+```bash
+#!/bin/bash
+# interactive_menu.sh - Dialog-based menu system
+
+main_menu() {
+    CHOICE=$(termux-dialog --title "Main Menu" --spinner "Option 1|Option 2|Option 3|Settings|Exit" | jq -r '.text')
+    
+    case "$CHOICE" in
+        "Option 1")
+            termux-toast "Selected Option 1"
+            ;;
+        "Option 2")
+            NAME=$(termux-dialog --title "Input" --text "Enter name:" | jq -r '.text')
+            termux-toast "Hello, $NAME!"
+            ;;
+        "Option 3")
+            CONFIRM=$(termux-dialog --title "Confirm" --confirm "Are you sure?" | jq -r '.text')
+            [ "$CONFIRM" = "yes" ] && termux-toast "Confirmed!" || termux-toast "Cancelled"
+            ;;
+        "Settings")
+            DATE=$(termux-dialog --title "Select Date" --date | jq -r '.text')
+            termux-toast "Selected: $DATE"
+            ;;
+        "Exit")
+            exit 0
+            ;;
+    esac
+}
+
+while true; do main_menu; done
+```
+
+### 4. Alert System for Events
+Monitor events and send rich notifications.
+
+```bash
+#!/bin/bash
+# alert_system.sh - Event monitoring alerts
+monitor_battery() {
+    while true; do
+        BATTERY=$(termux-battery-status | jq -r '.percentage')
+        TEMP=$(termux-battery-status | jq -r '.temperature')
+        
+        if [ "$BATTERY" -lt 15 ]; then
+            termux-notification \
+                --id "battery_alert" \
+                --title "⚠️ Low Battery" \
+                --content "Battery at $BATTERY% - Please charge!" \
+                --priority high \
+                --sound \
+                --vibrate 500,200,500 \
+                --led-color FF0000 \
+                --ongoing
+        fi
+        
+        if [ "$(echo "$TEMP > 40" | bc)" -eq 1 ]; then
+            termux-notification \
+                --title "🔥 Battery Hot!" \
+                --content "Temperature: ${TEMP}°C" \
+                --priority max \
+                --sound
+        fi
+        
+        sleep 300
+    done
+}
+
+monitor_battery
+```
+
+### 5. Password Input with Security
+Secure password input with masked display.
+
+```bash
+#!/bin/bash
+# secure_input.sh - Secure password handling
+PASSWORD=$(termux-dialog --title "Authentication" --password "Enter password:" | jq -r '.text')
+
+if [ "$PASSWORD" = "null" ]; then
+    termux-toast --bgcolor "#FF0000" "Cancelled"
+    exit 1
+fi
+
+# Verify password (example)
+if [ "$PASSWORD" = "secret123" ]; then
+    termux-toast --bgcolor "#4CAF50" "Access Granted"
+    # Proceed with protected operation
+else
+    termux-toast --bgcolor "#FF0000" "Access Denied"
+    exit 1
+fi
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### Notification Commands
+
+| Command | Purpose |
+|---------|---------|
+| `termux-notification --title "T" --content "C"` | Basic notification |
+| `termux-notification --id "X" ...` | Notification with ID |
+| `termux-notification --ongoing ...` | Persistent notification |
+| `termux-notification-remove --id "X"` | Remove notification |
+
+### Notification Options
+
+| Option | Description |
+|--------|-------------|
+| `--title` | Notification title |
+| `--content` | Message body |
+| `--id` | Unique identifier |
+| `--sound` | Play notification sound |
+| `--vibrate` | Vibration pattern (ms) |
+| `--led-color` | LED color (hex) |
+| `--priority` | high/low/max/min/default |
+| `--ongoing` | Non-dismissible |
+| `--button1` | First button text |
+| `--button1-action` | Button command |
+| `--on-click` | Command on tap |
+| `--on-delete` | Command on dismiss |
+
+### Dialog Types
+
+| Type | Purpose |
+|------|---------|
+| `--text` | Text input |
+| `--password` | Password input (masked) |
+| `--number` | Numeric input |
+| `--date` | Date picker |
+| `--time` | Time picker |
+| `--confirm` | Yes/No dialog |
+| `--checkbox` | Multiple selection |
+| `--radio` | Single selection |
+| `--spinner` | Dropdown list |
+
+### Toast Options
+
+| Option | Description |
+|--------|-------------|
+| `--short` | Short duration |
+| `--long` | Long duration |
+| `--bgcolor` | Background color (hex) |
+| `--textcolor` | Text color (hex) |
+| `--position` | top/middle/bottom |
+
+---
+
+## 🏆 BONUS: AUTOMATION IDEAS
+
+### Idea 1: Smart Morning Alarm
+```bash
+#!/bin/bash
+# Morning alarm with weather and reminders
+ALARM_TIME="07:00"
+
+while true; do
+    if [ "$(date +%H:%M)" = "$ALARM_TIME" ]; then
+        termux-notification \
+            --title "🌅 Good Morning!" \
+            --content "Time to wake up!" \
+            --priority max \
+            --sound \
+            --vibrate 1000,500,1000,500,1000
+        break
+    fi
+    sleep 30
+done
+```
+
+### Idea 2: Build Completion Notifier
+```bash
+#!/bin/bash
+# Notify when long build completes
+./build.sh &
+BUILD_PID=$!
+
+# Progress notification
+termux-notification --id "build" --title "Building..." --content "Please wait" --ongoing
+
+wait $BUILD_PID
+RESULT=$?
+
+if [ $RESULT -eq 0 ]; then
+    termux-notification --id "build" --title "✅ Build Complete" --content "Success!" --sound
+else
+    termux-notification --id "build" --title "❌ Build Failed" --content "Exit code: $RESULT" --sound --led-color FF0000
+fi
+```
+
+### Idea 3: Meeting Reminder Bot
+```bash
+#!/bin/bash
+# Meeting reminders from calendar
+MEETINGS=(
+    "09:00:Team Standup"
+    "14:00:Client Call"
+    "16:30:Sprint Review"
+)
+
+while true; do
+    NOW=$(date +%H:%M)
+    for meeting in "${MEETINGS[@]}"; do
+        TIME="${meeting%%:*}"
+        TITLE="${meeting#*:}"
+        if [ "$NOW" = "$TIME" ]; then
+            termux-notification \
+                --title "📅 Meeting: $TITLE" \
+                --content "Starting now!" \
+                --priority high \
+                --sound \
+                --vibrate 500,200,500
+        fi
+    done
+    sleep 60
+done
+```
+
+---
+
+## 📝 CHAPTER SUMMARY
+
+### ✅ What You Learned
+
+- **termux-notification**: Create rich notifications with titles, content, and actions
+- **Notification IDs**: Manage individual notifications with unique identifiers
+- **Ongoing notifications**: Create persistent notifications for background services
+- **Notification actions**: Add buttons that execute commands when tapped
+- **termux-toast**: Display quick popup messages
+- **termux-dialog**: Create various input dialogs for user interaction
+- **Dialog types**: text, password, number, date, time, confirm, checkbox, radio, spinner
+- **Notification removal**: Clear specific or all notifications
+
+### 🎯 Key Takeaways
+
+1. Use unique IDs to manage multiple notifications
+2. Ongoing notifications can't be swiped away - use for services
+3. Priority levels control notification prominence
+4. Buttons add interactivity to notifications
+5. Dialog output is JSON - always parse with jq
+6. Toast is for quick feedback, notification for persistent info
+7. LED and vibration enhance alert visibility
+
+---
+
+## 🎯 PRACTICAL PROJECTS
+
+### Project 1: Complete Notification Manager
+```bash
+#!/bin/bash
+# notify_manager.sh - Complete notification management
+
+CONFIG_DIR=~/.notify_manager
+mkdir -p "$CONFIG_DIR"
+
+show_menu() {
+    clear
+    echo "╔════════════════════════════════════════╗"
+    echo "║      NOTIFICATION MANAGER              ║"
+    echo "╠════════════════════════════════════════╣"
+    echo "║ 1. Send Quick Notification             ║"
+    echo "║ 2. Schedule Reminder                   ║"
+    echo "║ 3. Create Progress Notification        ║"
+    echo "║ 4. Send Toast Message                  ║"
+    echo "║ 5. Get User Input                      ║"
+    echo "║ 6. Clear All Notifications             ║"
+    echo "║ 7. Exit                                ║"
+    echo "╚════════════════════════════════════════╝"
+}
+
+quick_notify() {
+    TITLE=$(termux-dialog --title "Title" --text "Notification title:" | jq -r '.text')
+    CONTENT=$(termux-dialog --title "Content" --text "Message:" | jq -r '.text')
+    termux-notification --title "$TITLE" --content "$CONTENT" --sound
+    termux-toast "Notification sent!"
+}
+
+schedule_reminder() {
+    MSG=$(termux-dialog --title "Reminder" --text "What to remind?" | jq -r '.text')
+    MINS=$(termux-dialog --title "Time" --number "Minutes:" | jq -r '.text')
+    (sleep $((MINS * 60)) && termux-notification --title "⏰ Reminder" --content "$MSG" --sound --vibrate 1000) &
+    termux-toast "Reminder set!"
+}
+
+progress_notify() {
+    for i in {1..100}; do
+        termux-notification --id "progress" --title "Progress" --content "$i%" --ongoing
+        sleep 0.1
+    done
+    termux-notification-remove --id "progress"
+    termux-toast "Complete!"
+}
+
+while true; do
+    show_menu
+    read -p "Choice: " choice
+    case $choice in
+        1) quick_notify ;;
+        2) schedule_reminder ;;
+        3) progress_notify ;;
+        4) MSG=$(termux-dialog --text "Message:" | jq -r '.text'); termux-toast "$MSG" ;;
+        5) termux-dialog --title "Input" --text "Enter value:" ;;
+        6) for id in $(ls "$CONFIG_DIR"/active_* 2>/dev/null); do termux-notification-remove --id "$(basename $id)"; done; termux-toast "Cleared" ;;
+        7) exit 0 ;;
+    esac
+done
+```
+
+---
+
+## 🚀 INTEGRATION TIPS
+
+### Notification + Battery Monitor
+```bash
+BATTERY=$(termux-battery-status | jq -r '.percentage')
+[ "$BATTERY" -lt 20 ] && termux-notification --title "Low Battery" --content "$BATTERY%" --sound
+```
+
+### Notification + WiFi Alert
+```bash
+WIFI=$(termux-wifi-connectioninfo 2>/dev/null)
+[ -z "$WIFI" ] && termux-notification --title "WiFi Disconnected" --content "Network lost" --priority high
+```
+
+### Dialog + File Operations
+```bash
+FILENAME=$(termux-dialog --title "Filename" --text "Enter name:" | jq -r '.text')
+termux-storage-get ~/"$FILENAME"
+```
+
+---
+
+## 📊 JSON OUTPUT GUIDE
+
+### Dialog Output Parsing
+```bash
+# Get text value
+RESULT=$(termux-dialog --text "Enter value:" | jq -r '.text')
+
+# Check if cancelled
+CODE=$(termux-dialog --text "Enter:" | jq -r '.code')
+[ "$CODE" != "0" ] && echo "User cancelled"
+
+# Parse checkbox selections
+termux-dialog --checkbox "Option A|Option B|Option C" | jq -r '.text'
+```
+
+### Notification Response Parsing
+```bash
+# For advanced notification handling
+termux-notification --id "test" --title "Test" --content "Message"
+# Note: Notification commands don't return JSON, they execute async
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Topic | Relation |
+|---------|-------|----------|
+| Chapter 17 | File Operations | Notify on file operations |
+| Chapter 18 | Device Info | Alert on device conditions |
+| Chapter 19 | Camera & Media | Notify on capture complete |
+| Chapter 20 | Network APIs | Network status alerts |
+| Chapter 22 | Contacts & SMS | SMS-triggered notifications |
+| Chapter 23 | Clipboard | Notify on clipboard actions |
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+### Test Your Knowledge!
+
+**Q1.** What command removes a notification by ID?
+- A) `termux-notification-delete`
+- B) `termux-notification-remove`
+- C) `termux-clear-notification`
+- D) `termux-dismiss`
+
+**Q2.** Which flag makes a notification non-dismissible?
+- A) `--sticky`
+- B) `--permanent`
+- C) `--ongoing`
+- D) `--locked`
+
+**Q3.** What is the maximum number of buttons on a notification?
+- A) 1
+- B) 2
+- C) 3
+- D) No limit
+
+**Q4.** Which dialog type hides the input text?
+- A) `--hidden`
+- B) `--password`
+- C) `--secret`
+- D) `--mask`
+
+**Q5.** What priority level gives heads-up notification?
+- A) `default`
+- B) `high`
+- C) `max`
+- D) Both B and C
+
+**Q6.** What does `termux-toast --long` do?
+- A) Makes text longer
+- B) Shows toast for longer duration
+- C) Makes toast wider
+- D) Nothing different
+
+**Q7.** Which dialog type shows a dropdown list?
+- A) `--dropdown`
+- B) `--list`
+- C) `--spinner`
+- D) `--select`
+
+**Q8.** How do you specify vibration pattern?
+- A) `--vibrate "100 200 100"`
+- B) `--vibrate 100,200,100`
+- C) `--pattern 100,200,100`
+- D) `--vibration 100-200-100`
+
+**Q9.** What LED color is FF0000?
+- A) Green
+- B) Blue
+- C) Red
+- D) Yellow
+
+**Q10.** What does `--on-click` do?
+- A) Changes notification appearance
+- B) Runs command when notification tapped
+- C) Opens URL
+- D) Creates button
+
+**Q11.** Which command shows a date picker?
+- A) `termux-dialog --date`
+- B) `termux-date-picker`
+- C) `termux-calendar`
+- D) `termux-pick-date`
+
+**Q12.** What is returned when user cancels a dialog?
+- A) Empty string
+- B) `null`
+- C) Code -1
+- D) Code 0
+
+### Quiz Answers
+
+1. **B** - `termux-notification-remove --id "X"` removes notification
+2. **C** - `--ongoing` makes notification non-dismissible
+3. **C** - Maximum 3 buttons (button1, button2, button3)
+4. **B** - `--password` hides input text for security
+5. **D** - Both `high` and `max` priority give heads-up display
+6. **B** - `--long` extends toast display duration
+7. **C** - `--spinner` shows dropdown selection list
+8. **B** - `--vibrate 100,200,100` specifies pattern in milliseconds
+9. **C** - FF0000 is red (Red=FF, Green=00, Blue=00)
+10. **B** - `--on-click` runs command when user taps notification
+11. **A** - `termux-dialog --date` shows date picker
+12. **C** - Code -1 or -2 indicates user cancelled dialog
+

@@ -1626,3 +1626,1009 @@ Before moving to Chapter 7, verify:
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*
+
+---
+
+## 💡 PRO TIPS BOX
+
+> 💡 **Pro Tip #1: Create Directory Shortcuts**
+> 
+> Add these aliases to your `~/.bashrc` for instant navigation:
+> ```bash
+> alias p='cd $PREFIX'
+> alias h='cd ~'
+> alias s='cd ~/storage'
+> alias dl='cd ~/storage/downloads'
+> alias conf='cd $PREFIX/etc'
+> ```
+
+> 💡 **Pro Tip #2: Quick File Type Check**
+> 
+> Use `file *` in any directory to quickly identify all file types:
+> ```bash
+> cd ~/storage/downloads
+> file *
+> # Instantly shows: PDF, images, scripts, archives, etc.
+> ```
+
+> 💡 **Pro Tip #3: Find Large Files Fast**
+> 
+> Free up space by finding files larger than 100MB:
+> ```bash
+> find ~/storage -size +100M -type f 2>/dev/null
+> find ~ -size +50M -type f -exec ls -lh {} \;
+> ```
+
+> 💡 **Pro Tip #4: Directory Size Analysis**
+> 
+> Find which directories are consuming the most space:
+> ```bash
+> du -h --max-depth=1 ~ | sort -hr | head -10
+> du -sh $PREFIX/* | sort -hr
+> ```
+
+> 💡 **Pro Tip #5: Storage Path Variables**
+> 
+> Create easy-to-remember variables in `.bashrc`:
+> ```bash
+> export DCIM=~/storage/dcim
+> export DOWNLOADS=~/storage/downloads
+> export PICTURES=~/storage/pictures
+> export MUSIC=~/storage/music
+> # Now use: cd $DOWNLOADS
+> ```
+
+> 💡 **Pro Tip #6: Symlink Your Projects**
+> 
+> Create a symlink to your Android project folder:
+> ```bash
+> ln -s /sdcard/MyProjects ~/projects
+> # Now access via: cd ~/projects
+> ```
+
+> 💡 **Pro Tip #7: Hidden Files Backup**
+> 
+> Backup all your dotfiles (configuration files):
+> ```bash
+> tar -czvf dotfiles_backup.tar.gz ~/.bashrc ~/.vimrc ~/.gitconfig ~/.ssh
+> ```
+
+> 💡 **Pro Tip #8: Quick PREFIX Access**
+> 
+> Remember: `$PREFIX` is your system root. Use it in scripts:
+> ```bash
+> # Find any executable
+> ls $PREFIX/bin | grep python
+> # Check config files
+> cat $PREFIX/etc/hosts
+> ```
+
+> 💡 **Pro Tip #9: Tree with Exclusions**
+> 
+> Use tree with smart exclusions:
+> ```bash
+> tree -I 'node_modules|.git|__pycache__' -L 3
+> # Ignores common large directories
+> ```
+
+> 💡 **Pro Tip #10: Find Modified Files**
+> 
+> Find files modified in last 24 hours:
+> ```bash
+> find ~ -mtime -1 -type f
+> find ~/storage/downloads -mtime -7 -type f
+> ```
+
+---
+
+## 🔥 REAL WORLD USE CASES
+
+### Use Case 1: Organizing a Development Project
+
+```
+Scenario: You're building a Python web app in Termux
+
+Directory Structure:
+~/projects/
+├── webapp/
+│   ├── app.py
+│   ├── templates/
+│   ├── static/
+│   │   ├── css/
+│   │   └── js/
+│   ├── venv/
+│   └── requirements.txt
+├── scripts/
+│   ├── deploy.sh
+│   └── backup.sh
+└── data/
+    └── database.db
+
+Commands Used:
+mkdir -p ~/projects/webapp/{templates,static/{css,js}}
+mkdir -p ~/projects/{scripts,data}
+```
+
+### Use Case 2: Security Tool Directory Setup
+
+```
+Scenario: Setting up penetration testing tools
+
+Directory Structure:
+~/tools/
+├── reconnaissance/
+│   └── nmap/
+├── exploitation/
+│   └── metasploit/
+├── wordlists/
+│   ├── passwords.txt
+│   └── usernames.txt
+└── loot/
+    ├── hashes/
+    └── data/
+
+Key Commands:
+mkdir -p ~/tools/{reconnaissance,exploitation,wordlists,loot/hashes}
+```
+
+### Use Case 3: Media File Organization
+
+```
+Scenario: Organizing downloaded files by type
+
+Automated Sorting Script:
+#!/bin/bash
+cd ~/storage/downloads
+find . -name "*.jpg" -o -name "*.png" | xargs -I {} mv {} ~/storage/pictures/
+find . -name "*.mp3" -o -name "*.wav" | xargs -I {} mv {} ~/storage/music/
+find . -name "*.mp4" -o -name "*.mkv" | xargs -I {} mv {} ~/storage/movies/
+```
+
+### Use Case 4: Backup Script Organization
+
+```
+Scenario: Creating automated backup system
+
+Structure:
+~/backups/
+├── daily/
+├── weekly/
+├── monthly/
+└── scripts/
+    ├── backup.sh
+    └── restore.sh
+
+Commands:
+mkdir -p ~/backups/{daily,weekly,monthly,scripts}
+```
+
+### Use Case 5: Git Repository Management
+
+```
+Scenario: Managing multiple git repositories
+
+Structure:
+~/repos/
+├── personal/
+│   ├── dotfiles/
+│   └── scripts/
+├── work/
+│   └── project-alpha/
+└── forks/
+    └── open-source-tool/
+
+Navigation Alias:
+alias repos='cd ~/repos'
+alias per='cd ~/repos/personal'
+alias work='cd ~/repos/work'
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### Essential Path Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `pwd` | Print working directory | `/data/data/com.termux/files/home` |
+| `cd` | Change directory | `cd /sdcard` |
+| `cd ~` | Go to home | `~` |
+| `cd -` | Go to previous directory | `-` |
+| `cd ..` | Go up one level | Parent directory |
+| `cd ../..` | Go up two levels | Grandparent directory |
+
+### Important Paths
+
+| Variable/Path | Location | Purpose |
+|---------------|----------|---------|
+| `$HOME` or `~` | `/data/data/com.termux/files/home` | User directory |
+| `$PREFIX` | `/data/data/com.termux/files/usr` | System root |
+| `$PREFIX/bin` | `/data/.../usr/bin` | Executables |
+| `$PREFIX/etc` | `/data/.../usr/etc` | Configurations |
+| `$PREFIX/tmp` | `/data/.../usr/tmp` | Temporary files |
+| `/sdcard` | Internal storage | Android files |
+| `~/storage` | Symlinks to storage | Organized access |
+
+### File Listing Commands
+
+| Command | Description |
+|---------|-------------|
+| `ls` | Simple list |
+| `ls -l` | Long format with details |
+| `ls -la` | All files including hidden |
+| `ls -lh` | Human-readable sizes |
+| `ls -laS` | Sort by size |
+| `ls -lat` | Sort by time |
+| `ls -R` | Recursive listing |
+
+### Search Commands
+
+| Command | Description |
+|---------|-------------|
+| `find . -name "*.txt"` | Find by name pattern |
+| `find ~ -type d` | Find directories |
+| `find ~ -size +10M` | Files larger than 10MB |
+| `find ~ -mtime -7` | Modified in last 7 days |
+| `grep -r "text" .` | Search text in files |
+
+### Disk Commands
+
+| Command | Description |
+|---------|-------------|
+| `df -h` | Disk free space |
+| `du -sh *` | Directory sizes |
+| `du -h --max-depth=1` | Size breakdown |
+| `ncdu` | Interactive disk usage |
+
+---
+
+## 🏆 BONUS: ADVANCED TIPS
+
+### Advanced Tip 1: Create a Smart Navigation Function
+
+```bash
+# Add to ~/.bashrc
+nav() {
+    case "$1" in
+        home|h) cd ~ ;;
+        prefix|p) cd $PREFIX ;;
+        storage|s) cd ~/storage ;;
+        downloads|dl) cd ~/storage/downloads ;;
+        projects|proj) cd ~/projects ;;
+        *) echo "Usage: nav {home|prefix|storage|downloads|projects}" ;;
+    esac
+}
+# Usage: nav dl  (goes to downloads)
+```
+
+### Advanced Tip 2: Directory Bookmarking System
+
+```bash
+# Add to ~/.bashrc
+export MARKS_DIR="$HOME/.marks"
+mkdir -p "$MARKS_DIR"
+
+mark() {
+    local mark_name="$1"
+    local current_dir="$(pwd)"
+    ln -s "$current_dir" "$MARKS_DIR/$mark_name"
+    echo "Bookmarked: $mark_name -> $current_dir"
+}
+
+jump() {
+    cd "$MARKS_DIR/$1"
+}
+
+marks() {
+    ls -l "$MARKS_DIR"
+}
+
+# Usage:
+# mark project1   # Bookmark current dir
+# jump project1   # Jump to bookmark
+# marks           # List all bookmarks
+```
+
+### Advanced Tip 3: Find and Auto-Organize Files
+
+```bash
+# Auto-organize downloads by extension
+organize_downloads() {
+    cd ~/storage/downloads
+    
+    mkdir -p {Images,Documents,Archives,Code,Media}
+    
+    # Move images
+    find . -maxdepth 1 -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.gif" \) -exec mv {} Images/ \;
+    
+    # Move documents
+    find . -maxdepth 1 -type f \( -name "*.pdf" -o -name "*.doc" -o -name "*.txt" \) -exec mv {} Documents/ \;
+    
+    # Move archives
+    find . -maxdepth 1 -type f \( -name "*.zip" -o -name "*.tar.gz" -o -name "*.rar" \) -exec mv {} Archives/ \;
+    
+    echo "Downloads organized!"
+}
+```
+
+### Advanced Tip 4: Storage Usage Alert Script
+
+```bash
+# Add to ~/.bashrc
+check_storage() {
+    local usage=$(df -h /sdcard | tail -1 | awk '{print $5}' | sed 's/%//')
+    if [ "$usage" -gt 90 ]; then
+        echo "⚠️ WARNING: Storage usage at ${usage}%!"
+        echo "Top 10 largest directories:"
+        du -h --max-depth=1 /sdcard | sort -hr | head -10
+    else
+        echo "✅ Storage usage: ${usage}%"
+    fi
+}
+```
+
+### Advanced Tip 5: Git Status in Prompt
+
+```bash
+# Add to ~/.bashrc for git-aware prompt
+parse_git_branch() {
+    git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+export PS1="\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\]\$ "
+```
+
+### Advanced Tip 6: Find Duplicate Files
+
+```bash
+# Find duplicate files by checksum
+find_duplicates() {
+    find "$1" -type f -exec md5sum {} \; | sort | uniq -w32 -dD
+}
+# Usage: find_duplicates ~/storage/downloads
+```
+
+---
+
+## 📝 CHAPTER SUMMARY
+
+### What You Learned
+
+✅ **File System Fundamentals**
+- Understood how Termux file system is organized
+- Learned the difference between Linux and Termux directory structures
+- Mastered the concept of $PREFIX and $HOME
+
+✅ **Directory Navigation**
+- Navigate using `pwd`, `cd`, and shortcuts
+- Use relative and absolute paths correctly
+- Access storage through symlinks
+
+✅ **Important Directories**
+- `$PREFIX/bin` - All executable commands
+- `$PREFIX/etc` - System configurations
+- `$PREFIX/lib` - Shared libraries
+- `$HOME` - Your personal workspace
+- `~/storage` - Android storage access
+
+✅ **Hidden Files**
+- View hidden files with `ls -la`
+- Understand dot files (.bashrc, .vimrc, etc.)
+- Know which files control your environment
+
+✅ **File System Commands**
+- `ls` for listing with various options
+- `tree` for visual directory structure
+- `find` for searching files
+- `du` and `df` for disk usage
+- `file` and `stat` for file information
+
+✅ **Storage Management**
+- Set up storage access with `termux-setup-storage`
+- Use symlinks for organized access
+- Navigate to different storage areas
+
+### Key Takeaways
+
+1. **$PREFIX is your system root** - All Termux system files live here
+2. **$HOME is your playground** - Keep your projects and scripts here
+3. **Use symlinks wisely** - ~/storage provides organized Android access
+4. **Hidden files are powerful** - .bashrc and friends customize your experience
+5. **Know your paths** - Navigation becomes second nature with practice
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Question 1
+**Q: What is the difference between $PREFIX and $HOME in Termux?**
+
+**Answer:**
+- `$PREFIX` (/data/data/com.termux/files/usr) is Termux's system directory containing executables, libraries, and configurations. It's equivalent to `/usr` in standard Linux.
+- `$HOME` (/data/data/com.termux/files/home) is the user's personal directory for files, scripts, and user configurations. It's equivalent to `/home/user` in standard Linux.
+
+---
+
+### Question 2
+**Q: How does Termux's file system differ from standard Linux?**
+
+**Answer:**
+1. Termux uses `$PREFIX` instead of root `/` as the system base
+2. No separate `/bin` and `/sbin` - merged into `$PREFIX/bin`
+3. Single-user system - no root user concept
+4. Runs in Android sandbox with isolated environment
+5. Android kernel provides `/dev`, `/proc`, `/sys`
+
+---
+
+### Question 3
+**Q: What command grants storage access in Termux and what does it do?**
+
+**Answer:**
+`termux-setup-storage` requests Android storage permissions and creates symlinks in `~/storage/` pointing to various Android storage locations (DCIM, Download, Music, Pictures, etc.). This allows Termux to access files on internal storage and SD card.
+
+---
+
+### Question 4
+**Q: How do you find all Python files modified in the last 7 days?**
+
+**Answer:**
+```bash
+find ~ -name "*.py" -mtime -7
+# For full details:
+find ~ -name "*.py" -mtime -7 -exec ls -lh {} \;
+```
+
+---
+
+### Question 5
+**Q: What are hidden files in Linux and how do you view them?**
+
+**Answer:**
+Hidden files start with a dot (.) and are used for configurations. View them with:
+- `ls -a` - Show all files including hidden
+- `ls -la` - Show all with details
+- `ls -la | grep "^\."` - Show only hidden files
+
+Common hidden files: `.bashrc`, `.vimrc`, `.gitconfig`, `.ssh/`
+
+---
+
+### Question 6
+**Q: What is the difference between absolute and relative paths?**
+
+**Answer:**
+- **Absolute path**: Starts from root, complete path from `/`
+  - Example: `/data/data/com.termux/files/home/script.sh`
+- **Relative path**: Relative to current directory
+  - Example: `./script.sh` or `../scripts/backup.sh`
+- **Home-relative**: Uses `~` as shortcut
+  - Example: `~/projects/webapp/app.py`
+
+---
+
+### Question 7
+**Q: How would you find the 10 largest files in your home directory?**
+
+**Answer:**
+```bash
+find ~ -type f -exec du -h {} \; | sort -rh | head -10
+# Or using du:
+du -ah ~ | sort -rh | head -10
+```
+
+---
+
+### Question 8
+**Q: What is FHS and how does it relate to Termux?**
+
+**Answer:**
+FHS (Filesystem Hierarchy Standard) is the standard directory structure for Unix-like systems. Termux adapts FHS but with modifications:
+- No root `/` - uses `$PREFIX` as base
+- Merged `/bin` and `/sbin` into `$PREFIX/bin`
+- Single-user environment (no `/root`, `/home/user`)
+- Android provides kernel interfaces (`/dev`, `/proc`, `/sys`)
+
+---
+
+### Question 9
+**Q: What is a symlink and how is it used in Termux storage?**
+
+**Answer:**
+A symlink (symbolic link) is a pointer to another file/directory. In Termux, `~/storage/` contains symlinks to Android storage:
+- `~/storage/downloads` → `/sdcard/Download`
+- `~/storage/dcim` → `/sdcard/DCIM`
+
+Create symlinks with: `ln -s /path/to/target link_name`
+
+---
+
+### Question 10
+**Q: How would you check disk space usage in Termux?**
+
+**Answer:**
+```bash
+# Overall disk space
+df -h
+
+# Specific storage
+df -h /sdcard
+
+# Directory sizes
+du -sh *
+du -h --max-depth=1 ~ | sort -hr
+
+# Interactive (if ncdu installed)
+ncdu ~
+```
+
+---
+
+## 🚀 NEXT LEVEL TIPS
+
+### Performance Optimization
+
+```
+⚡ TIP: Speed Up File Searches
+
+Instead of: find / -name "*.py"  # Very slow!
+Use: find ~ -name "*.py"         # Search in home only
+Or: locate "*.py"                 # Uses database (install mlocate first)
+
+Installation:
+pkg install mlocate
+updatedb  # Build database
+locate filename  # Fast search
+```
+
+### Best Practices
+
+```
+📌 BEST PRACTICE: Directory Organization
+
+Always maintain this structure:
+~/
+├── projects/     # Your coding projects
+├── scripts/      # Utility scripts  
+├── tools/        # Downloaded tools
+├── backups/      # Important backups
+├── tmp/          # Temporary files
+└── .config/      # App configurations
+
+Create with one command:
+mkdir -p ~/projects ~/scripts ~/tools ~/backups ~/tmp
+```
+
+### Common Mistakes to Avoid
+
+```
+❌ MISTAKE 1: Using / instead of $PREFIX
+Wrong: ls /usr/bin
+Right: ls $PREFIX/bin
+
+❌ MISTAKE 2: Forgetting -a flag for hidden files
+Wrong: ls ~  # Won't show .bashrc
+Right: ls -la ~
+
+❌ MISTAKE 3: Not using quotes in find with patterns
+Wrong: find . -name *.py  # Shell expands *
+Right: find . -name "*.py"  # Pattern passed to find
+
+❌ MISTAKE 4: Running commands from wrong directory
+Wrong: python script.py  # If not in script's directory
+Right: python ~/scripts/script.py  # Use full path
+
+❌ MISTAKE 5: Ignoring storage permissions
+Always run: termux-setup-storage
+Before accessing: ~/storage/ or /sdcard
+```
+
+### Efficiency Tips
+
+```
+⏱️ TIME SAVERS:
+
+1. Use Tab completion aggressively
+   cd ~/pro<TAB> → cd ~/projects
+   
+2. Use history search (Ctrl+R)
+   Press Ctrl+R, type part of command
+   
+3. Create aliases for common paths
+   alias cdp='cd ~/projects'
+   
+4. Use pushd/popd for directory stack
+   pushd ~/storage/downloads
+   popd  # Return to previous directory
+   
+5. Use !! for last command
+   !!  # Repeat last command
+   sudo !!  # Run last command with sudo
+```
+
+---
+
+## 📊 VISUAL DIAGRAMS
+
+### Diagram 1: Termux Directory Tree
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        TERMUX DIRECTORY HIERARCHY                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│    /data/data/com.termux/                                                   │
+│    │                                                                        │
+│    ├── files/                                                               │
+│    │   │                                                                    │
+│    │   ├── usr/ ← $PREFIX ─────────────────────────────────────────────┐    │
+│    │   │   │                                                          │    │
+│    │   │   ├── bin/ ──────────────────────────────────────────────┐   │    │
+│    │   │   │   ├── bash, python, git, vim, ls, cat, grep...      │   │    │
+│    │   │   │   └── (500+ executable commands)                    │   │    │
+│    │   │   │                                                      │   │    │
+│    │   │   ├── lib/ ─────────────────────────────────────────────┐│   │    │
+│    │   │   │   ├── libpython*.so, libcrypto.so, libc.so...      ││   │    │
+│    │   │   │   └── python3.11/, node_modules/                   ││   │    │
+│    │   │   │                                                     ││   │    │
+│    │   │   ├── etc/ ─────────────────────────────────────────────┐│   │    │
+│    │   │   │   ├── passwd, group, hosts, shells                 ││   │    │
+│    │   │   │   ├── apt/sources.list                              ││   │    │
+│    │   │   │   └── termux/termux.properties                      ││   │    │
+│    │   │   │                                                     ││   │    │
+│    │   │   ├── share/ ───────────────────────────────────────────┐│   │    │
+│    │   │   │   ├── doc/, man/, locale/                          ││   │    │
+│    │   │   │   └── bash-completion/, vim/                       ││   │    │
+│    │   │   │                                                     ││   │    │
+│    │   │   ├── tmp/ ─────────────────────────────────────────────┘│   │    │
+│    │   │   ├── var/ (cache, logs)                                 │   │    │
+│    │   │   └── include/ (C headers)                               │   │    │
+│    │   │                                                          │   │    │
+│    │   └── home/ ← $HOME ────────────────────────────────────────┐   │    │
+│    │       │                                                      │   │    │
+│    │       ├── .bashrc ──────────────────────────────────────────┐│   │    │
+│    │       │   └── (Aliases, functions, PATH modifications)     ││   │    │
+│    │       │                                                      │   │    │
+│    │       ├── .bash_history ──── (Command history)              ││   │    │
+│    │       ├── .vimrc ─────────── (Vim configuration)            ││   │    │
+│    │       ├── .config/ ───────── (App configs)                  ││   │    │
+│    │       ├── .local/ ────────── (User programs)                ││   │    │
+│    │       ├── .ssh/ ──────────── (SSH keys)                     ││   │    │
+│    │       │                                                      │   │    │
+│    │       └── storage/ ───────────────────────────────────────┐ ││   │    │
+│    │           ├── dcim ────────→ /sdcard/DCIM                 │ ││   │    │
+│    │           ├── downloads ───→ /sdcard/Download             │ ││   │    │
+│    │           ├── music ───────→ /sdcard/Music                │ ││   │    │
+│    │           ├── pictures ────→ /sdcard/Pictures             │ ││   │    │
+│    │           ├── movies ───────→ /sdcard/Movies              │ ││   │    │
+│    │           ├── shared ───────→ /sdcard                     │ ││   │    │
+│    │           └── external-1 ───→ /storage/XXXX-XXXX (SD)     │ ││   │    │
+│    │                                                          │ ││   │    │
+│    └── cache/ (Package cache - managed by Android)             │ ││   │    │
+│                                                                │ ││   │    │
+└────────────────────────────────────────────────────────────────┴─┴┴───┴────┘
+```
+
+### Diagram 2: Navigation Flowchart
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        DIRECTORY NAVIGATION MAP                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│                          ┌─────────────┐                                   │
+│                          │   START     │                                   │
+│                          │  (in ~)     │                                   │
+│                          └──────┬──────┘                                   │
+│                                 │                                          │
+│              ┌──────────────────┼──────────────────┐                       │
+│              │                  │                  │                       │
+│              ▼                  ▼                  ▼                       │
+│     ┌─────────────┐    ┌─────────────┐    ┌─────────────┐                 │
+│     │ cd $PREFIX  │    │ cd storage  │    │ cd /sdcard  │                 │
+│     │   (System)  │    │  (Storage)  │    │  (Android)  │                 │
+│     └──────┬──────┘    └──────┬──────┘    └──────┬──────┘                 │
+│            │                  │                  │                         │
+│   ┌────────┴────────┐  ┌──────┴──────┐  ┌───────┴───────┐                 │
+│   │                 │  │             │  │               │                 │
+│   ▼                 ▼  ▼             ▼  ▼               ▼                 │
+│ ┌─────┐         ┌─────┐ ┌─────┐ ┌────────┐ ┌─────┐ ┌─────────┐           │
+│ │ bin │         │ etc │ │ dcim│ │downloads│ │DCIM │ │Download │           │
+│ │     │         │     │ │     │ │        │ │     │ │         │           │
+│ │cmds │         │conf │ │photos│ │files   │ │photos│ │files   │           │
+│ └─────┘         └─────┘ └─────┘ └────────┘ └─────┘ └─────────┘           │
+│                                                                           │
+│  NAVIGATION SHORTCUTS:                                                    │
+│  ─────────────────────                                                   │
+│  cd ~     → Home directory                                               │
+│  cd -     → Previous directory                                           │
+│  cd ..    → Parent directory                                             │
+│  cd ../.. → Two levels up                                                │
+│  pushd .  → Save current location                                        │
+│  popd     → Return to saved location                                     │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: File Search Decision Tree
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        FILE SEARCH DECISION TREE                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│                         ┌──────────────────┐                               │
+│                         │ What do you want │                               │
+│                         │     to find?     │                               │
+│                         └────────┬─────────┘                               │
+│                                  │                                          │
+│        ┌─────────────┬───────────┼───────────┬─────────────┐               │
+│        │             │           │           │             │               │
+│        ▼             ▼           ▼           ▼             ▼               │
+│   ┌─────────┐  ┌─────────┐ ┌─────────┐ ┌─────────┐  ┌─────────┐           │
+│   │ By name │  │ By type │ │By size  │ │By time  │  │By content│           │
+│   └────┬────┘  └────┬────┘ └────┬────┘ └────┬────┘  └────┬────┘           │
+│        │            │           │           │            │                 │
+│        ▼            ▼           ▼           ▼            ▼                 │
+│   ┌─────────┐  ┌─────────┐ ┌─────────┐ ┌─────────┐  ┌─────────┐           │
+│   │find .   │  │find .   │ │find .   │ │find .   │  │grep -r  │           │
+│   │-name    │  │-type f  │ │-size    │ │-mtime   │  │"text" . │           │
+│   │"*.txt"  │  │-type d  │ │+10M     │ │-7       │  │         │           │
+│   └─────────┘  └─────────┘ └─────────┘ └─────────┘  └─────────┘           │
+│                                                                             │
+│  EXAMPLES:                                                                 │
+│  ─────────────────────────────────────────────────────────────────────    │
+│  find ~ -name "*.py"           → All Python files in home                 │
+│  find . -type d -name "test"   → All test directories                     │
+│  find /sdcard -size +100M      → Files larger than 100MB                  │
+│  find ~ -mtime -1              → Files modified today                      │
+│  grep -r "TODO" ~/projects     → Find TODO in all project files           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Title | Relevance |
+|---------|-------|-----------|
+| **Chapter 5** | Termux Setup & Configuration | Prerequisites for file system access |
+| **Chapter 7** | Environment Variables | $PREFIX, $HOME, $PATH variables explained |
+| **Chapter 8** | Text Editors | Editing configuration files in ~/ |
+| **Chapter 11** | Package Management | Files installed in $PREFIX |
+| **Chapter 15** | Shell Scripting Basics | Creating scripts in ~/scripts/ |
+| **Chapter 18** | Git Version Control | Setting up ~/repos/ structure |
+| **Chapter 25** | Python Development | Organizing Python projects |
+| **Chapter 30** | Web Development | Project directory structure |
+| **Chapter 45** | Termux Backup | Backing up important directories |
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+### Quiz: Test Your Knowledge!
+
+**Question 1:** What command shows your current directory?
+- A) `ls`
+- B) `pwd`
+- C) `cd`
+- D) `whereami`
+
+**Question 2:** Which variable contains Termux's system directory?
+- A) `$HOME`
+- B) `$SYSTEM`
+- C) `$PREFIX`
+- D) `$ROOT`
+
+**Question 3:** How do you list hidden files?
+- A) `ls -h`
+- B) `ls -a`
+- C) `ls hidden`
+- D) `ls -x`
+
+**Question 4:** What does `cd -` do?
+- A) Goes to root
+- B) Goes to previous directory
+- C) Goes to home
+- D) Shows current directory
+
+**Question 5:** Which command finds all .py files?
+- A) `find . -name *.py`
+- B) `find . -name "*.py"`
+- C) `search *.py`
+- D) `locate .py`
+
+**Question 6:** Where are executable commands stored in Termux?
+- A) `/bin`
+- B) `$PREFIX/bin`
+- C) `/usr/bin`
+- D) `~/bin`
+
+**Question 7:** What creates storage symlinks?
+- A) `setup-storage`
+- B) `termux-setup-storage`
+- C) `create-links`
+- D) `mount-storage`
+
+**Question 8:** Which file is Bash configuration?
+- A) `.bash`
+- B) `.bashrc`
+- C) `.config`
+- D) `.profile`
+
+**Question 9:** What shows directory sizes?
+- A) `df`
+- B) `du`
+- C) `size`
+- D) `ls -s`
+
+**Question 10:** What is `~/storage/downloads` pointing to?
+- A) `/downloads`
+- B) `/sdcard/Download`
+- C) `~/Download`
+- D) `$PREFIX/downloads`
+
+**Question 11:** How to go up two directory levels?
+- A) `cd up 2`
+- B) `cd ../../`
+- C) `cd -2`
+- D) `cd upup`
+
+**Question 12:** What does `tree -L 2` show?
+- A) 2 files only
+- B) 2 levels deep
+- C) 2 directories
+- D) 2 branches
+
+**Question 13:** Which is NOT a hidden file?
+- A) `.bashrc`
+- B) `.config`
+- C) `scripts`
+- D) `.vimrc`
+
+**Question 14:** What is the home directory shortcut?
+- A) `@`
+- B) `#`
+- C) `~`
+- D) `$`
+
+**Question 15:** What shows file type?
+- A) `type`
+- B) `file`
+- C) `info`
+- D) `stat`
+
+### Quiz Answers
+
+| Q | Answer | Explanation |
+|---|--------|-------------|
+| 1 | **B** | `pwd` = Print Working Directory |
+| 2 | **C** | `$PREFIX` = /data/data/com.termux/files/usr |
+| 3 | **B** | `ls -a` = show All files including hidden |
+| 4 | **B** | `cd -` goes to previous directory |
+| 5 | **B** | Quotes prevent shell expansion |
+| 6 | **B** | Termux executables are in $PREFIX/bin |
+| 7 | **B** | `termux-setup-storage` creates symlinks |
+| 8 | **B** | `.bashrc` is Bash configuration |
+| 9 | **B** | `du` = Disk Usage |
+| 10 | **B** | Points to /sdcard/Download |
+| 11 | **B** | `../../` = two levels up |
+| 12 | **B** | `-L 2` limits depth to 2 levels |
+| 13 | **C** | `scripts` doesn't start with dot |
+| 14 | **C** | `~` = home directory |
+| 15 | **B** | `file` command identifies file types |
+
+---
+
+## 🔄 TRY IT YOURSELF CHALLENGES
+
+### Challenge 1: Directory Explorer
+```bash
+# Task: Create and navigate a project structure
+# Create this structure:
+# ~/challenge/
+# ├── src/
+# │   └── main.py
+# ├── tests/
+# │   └── test_main.py
+# ├── docs/
+# │   └── README.md
+# └── config/
+#     └── settings.json
+
+# Your commands here:
+# 1. Create the directory structure
+# 2. Navigate to each directory using cd
+# 3. Use tree to verify structure
+# 4. Find all .py files
+```
+
+### Challenge 2: File Finder
+```bash
+# Task: Find specific files in your system
+# 1. Find all .sh files in your home directory
+# 2. Find all files larger than 5MB in ~/storage/downloads
+# 3. Find all directories named ".git"
+# 4. Find files modified in the last 3 days
+
+# Write your commands:
+```
+
+### Challenge 3: Storage Detective
+```bash
+# Task: Analyze your storage usage
+# 1. Check total disk space with df
+# 2. Find top 5 largest directories in home
+# 3. Find the largest file in ~/storage/downloads
+# 4. Calculate total size of your projects folder
+
+# Write your commands:
+```
+
+### Challenge 4: Navigation Master
+```bash
+# Task: Complete this navigation sequence
+# 1. Start at home
+# 2. Go to $PREFIX/bin and list python files
+# 3. Go to ~/storage/downloads
+# 4. Return to previous directory
+# 5. Go back to home
+# 6. Navigate to /sdcard/DCIM
+
+# Write your commands:
+```
+
+### Challenge 5: Cleanup Mission
+```bash
+# Task: Find and organize files
+# 1. Find all .jpg files in ~/storage/downloads
+# 2. Count how many files are there
+# 3. Find all files with "backup" in name
+# 4. Find empty directories in home
+
+# Write your commands:
+```
+
+---
+
+## ✅ SKILL CHECK CHECKPOINTS
+
+### Checkpoint 1: Basic Navigation
+- [ ] Can use `pwd` to show current directory
+- [ ] Can use `cd` to navigate to any directory
+- [ ] Understands `~`, `..`, and `-` shortcuts
+- [ ] Can list files with `ls -la`
+
+### Checkpoint 2: Path Understanding
+- [ ] Knows the value of `$HOME`
+- [ ] Knows the value of `$PREFIX`
+- [ ] Understands absolute vs relative paths
+- [ ] Can use paths in commands
+
+### Checkpoint 3: File System Commands
+- [ ] Can use `find` to search files
+- [ ] Can use `tree` to visualize directories
+- [ ] Can use `du` to check sizes
+- [ ] Can use `file` and `stat`
+
+### Checkpoint 4: Storage Access
+- [ ] Has run `termux-setup-storage`
+- [ ] Can access ~/storage/ links
+- [ ] Can navigate to /sdcard
+- [ ] Understands symlink concept
+
+### Checkpoint 5: Hidden Files
+- [ ] Can list hidden files
+- [ ] Knows important dot files
+- [ ] Understands their purpose
+- [ ] Can edit .bashrc
+
+---
+
+**Chapter Complete! 🎉**
+
+*Upgraded to NEXT LEVEL with all powerful features!*
+
+*Created by T3rmuxk1ng | Termux Full Course*

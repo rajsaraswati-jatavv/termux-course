@@ -2306,6 +2306,799 @@ Before moving to Chapter 5, verify:
 
 ---
 
+## 💡 PRO TIPS - MASTER THESE!
+
+> 💡 **Pro Tip #1:** Use `grep -r "pattern" .` to search recursively through all files in current directory.
+
+> 💡 **Pro Tip #2:** `chmod +x script.sh` is the quick way to make a script executable - works for all users.
+
+> 💡 **Pro Tip #3:** Use `find . -name "*.txt" -exec rm {} \;` to find and delete all .txt files - be careful!
+
+> 💡 **Pro Tip #4:** `grep -i` for case-insensitive search - saves time when you're not sure about case.
+
+> 💡 **Pro Tip #5:** `head -n 20 file` and `tail -n 20 file` show first/last 20 lines - `-n` flag specifies count.
+
+> 💡 **Pro Tip #6:** Use `tail -f logfile` to monitor log files in real-time - essential for debugging.
+
+> 💡 **Pro Tip #7:** `chmod 755` for scripts (owner: all, others: read+execute) and `chmod 644` for data files.
+
+> 💡 **Pro Tip #8:** Pipe multiple commands: `cat file | grep error | wc -l` counts lines with "error".
+
+> 💡 **Pro Tip #9:** Use `grep -v` to exclude lines - great for filtering out comments or blank lines.
+
+> 💡 **Pro Tip #10:** `find . -type f -size +100M` finds files larger than 100MB - useful for disk cleanup.
+
+---
+
+## 🔥 REAL WORLD APPLICATIONS
+
+### Where This Knowledge Applies:
+
+**1. Log Analysis & Debugging**
+- Search through application logs
+- Filter error messages
+- Monitor real-time events
+
+**2. Security Auditing**
+- Search for sensitive data in files
+- Find permission issues
+- Audit file access
+
+**3. Data Processing**
+- Extract specific information
+- Filter and transform data
+- Count and analyze patterns
+
+**4. System Administration**
+- Find large or old files
+- Set proper permissions
+- Manage configurations
+
+**5. Development Workflows**
+- Search code patterns
+- View configuration files
+- Debug application output
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    COMMAND APPLICATION MAP                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   SEARCHING          VIEWING          PERMISSIONS                        │
+│   ┌─────────┐       ┌─────────┐       ┌─────────┐                       │
+│   │  grep   │       │  cat    │       │ chmod   │                       │
+│   │  find   │       │  head   │       │ chown   │                       │
+│   └────┬────┘       │  tail   │       └────┬────┘                       │
+│        │            └────┬────┘            │                             │
+│        │                 │                 │                             │
+│        └─────────────────┼─────────────────┘                             │
+│                          │                                               │
+│                          ▼                                               │
+│                 ┌─────────────────┐                                      │
+│                 │  FILE MASTERY   │                                      │
+│                 │   PRO LEVEL     │                                      │
+│                 └─────────────────┘                                      │
+│                                                                          │
+│   PROCESSING         REDIRECTION                                          │
+│   ┌─────────┐       ┌─────────┐                                          │
+│   │  sort   │       │   >     │                                          │
+│   │  uniq   │       │   >>    │                                          │
+│   │   wc    │       │   |     │                                          │
+│   └─────────┘       └─────────┘                                          │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### Text Viewing Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `cat file` | Display entire file | `cat readme.txt` |
+| `head -n 10 file` | First 10 lines | `head -n 20 log.txt` |
+| `tail -n 10 file` | Last 10 lines | `tail -n 50 error.log` |
+| `tail -f file` | Follow file in real-time | `tail -f /var/log/syslog` |
+| `less file` | Scroll through file | `less bigfile.txt` |
+
+### Search Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `grep "pattern" file` | Search in file | `grep "error" log.txt` |
+| `grep -i "pattern" file` | Case-insensitive | `grep -i "ERROR" log.txt` |
+| `grep -r "pattern" dir` | Recursive search | `grep -r "TODO" ./src` |
+| `grep -v "pattern" file` | Exclude matching | `grep -v "^#" config.conf` |
+| `grep -n "pattern" file` | Show line numbers | `grep -n "function" code.py` |
+| `grep -c "pattern" file` | Count matches | `grep -c "error" log.txt` |
+
+### Find Commands
+
+| Command | Description |
+|---------|-------------|
+| `find . -name "*.txt"` | Find by name |
+| `find . -type d` | Find directories only |
+| `find . -type f` | Find files only |
+| `find . -size +10M` | Find files larger than 10MB |
+| `find . -mtime -7` | Modified in last 7 days |
+| `find . -perm 755` | Find by permission |
+
+### Permission Commands
+
+| Command | Description |
+|---------|-------------|
+| `chmod 755 file` | rwxr-xr-x |
+| `chmod 644 file` | rw-r--r-- |
+| `chmod +x script.sh` | Add execute permission |
+| `chmod -R 755 dir/` | Recursive permission |
+| `chown user:group file` | Change ownership |
+
+### Redirection & Pipes
+
+| Symbol | Description | Example |
+|--------|-------------|---------|
+| `>` | Redirect output (overwrite) | `ls > filelist.txt` |
+| `>>` | Redirect output (append) | `echo "log" >> logfile` |
+| `<` | Input from file | `sort < data.txt` |
+| `\|` | Pipe to next command | `cat file \| grep "x"` |
+
+---
+
+## 🏆 BONUS: ADVANCED TIPS
+
+### Advanced grep Patterns
+
+```bash
+# === REGULAR EXPRESSIONS ===
+# Lines starting with "error"
+grep "^error" logfile.txt
+
+# Lines ending with "failed"
+grep "failed$" logfile.txt
+
+# Lines containing numbers
+grep "[0-9]\+" data.txt
+
+# Email addresses
+grep -E "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" file.txt
+
+# IP addresses
+grep -E "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" file.txt
+
+# === CONTEXT SEARCH ===
+# Show 3 lines before and after match
+grep -C 3 "error" logfile.txt
+
+# Show 5 lines after match
+grep -A 5 "error" logfile.txt
+
+# Show 5 lines before match
+grep -B 5 "error" logfile.txt
+
+# === MULTIPLE PATTERNS ===
+# Match any of multiple patterns
+grep -E "error|warning|fail" logfile.txt
+
+# Match all lines NOT containing pattern
+grep -v "^#" config.txt | grep -v "^$"  # Remove comments and blank lines
+```
+
+### Advanced find Commands
+
+```bash
+# === COMPLEX FINDS ===
+# Find and delete all .tmp files
+find . -name "*.tmp" -type f -delete
+
+# Find and execute command
+find . -name "*.log" -exec gzip {} \;
+
+# Find files modified in last hour
+find . -mmin -60
+
+# Find empty files and directories
+find . -empty
+
+# Find files by multiple criteria
+find . -name "*.txt" -size +1k -mtime -7
+
+# Find files with specific permissions
+find . -perm 777  # World-writable files (security risk!)
+
+# Find and copy to another directory
+find . -name "*.jpg" -exec cp {} /backup/ \;
+
+# Find largest files
+find . -type f -exec ls -lh {} \; | sort -k5 -hr | head -10
+```
+
+### Permission Shortcuts
+
+```bash
+# === COMMON PERMISSIONS ===
+# Script (executable)
+chmod 755 script.sh    # rwxr-xr-x
+
+# Private file
+chmod 600 private.key  # rw-------
+
+# Public read-only
+chmod 644 document.txt # rw-r--r--
+
+# Directory (accessible)
+chmod 755 directory/   # rwxr-xr-x
+
+# Private directory
+chmod 700 secrets/     # rwx------
+
+# === QUICK PERMISSION CHANGES ===
+# Add execute for all
+chmod +x script.sh
+
+# Remove write for others
+chmod o-w file.txt
+
+# Add read for group
+chmod g+r file.txt
+
+# Copy permissions from another file
+chmod --reference=source.txt dest.txt
+```
+
+### Text Processing Pipeline
+
+```bash
+# === POWERFUL PIPELINES ===
+# Count unique IPs in log
+cat access.log | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | sort | uniq -c | sort -nr
+
+# Find most common words
+cat document.txt | tr ' ' '\n' | sort | uniq -c | sort -nr | head -20
+
+# Extract email addresses
+cat contacts.txt | grep -oE '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' | sort -u
+
+# Analyze log by hour
+cat syslog | grep -oE '[0-9]{2}:[0-9]{2}' | cut -d: -f1 | sort | uniq -c
+
+# Find large files and sort by size
+find . -type f -size +10M -exec ls -lh {} \; | sort -k5 -hr
+```
+
+---
+
+## 📝 CHAPTER SUMMARY: What You Learned
+
+### ✅ Key Takeaways
+
+- **`cat`** displays file contents, creates files, and concatenates files
+- **`touch`** creates empty files and updates timestamps
+- **`grep`** searches text patterns with powerful options
+- **`find`** searches for files by name, type, size, time, permissions
+- **`chmod`** changes file permissions using symbolic or octal notation
+- **`chown`** changes file ownership
+- **`head`/`tail`** view beginning/end of files
+- **`wc`**, **`sort`**, **`uniq`**, **`diff`** process text data
+- **Redirection** (`>`, `>>`, `<`) controls input/output
+- **Pipes** (`|`) chain commands together
+
+### 🎯 Skills Acquired
+
+- [ ] Use cat to view and create files
+- [ ] Search patterns with grep
+- [ ] Find files using various criteria
+- [ ] Change file permissions with chmod
+- [ ] View file parts with head/tail
+- [ ] Process text with wc, sort, uniq
+- [ ] Use pipes to combine commands
+- [ ] Redirect output to files
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Test Your Knowledge (With Answers)
+
+**Q1: What is the difference between `grep "error" file` and `grep -i "error" file`?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+- `grep "error" file` - Case-sensitive search, matches only "error"
+- `grep -i "error" file` - Case-insensitive, matches "error", "Error", "ERROR", etc.
+- Use `-i` when you're not sure about the case in the file.
+</details>
+
+**Q2: Explain what `chmod 755 script.sh` does.**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+- `7` (owner) = 4+2+1 = read + write + execute (rwx)
+- `5` (group) = 4+0+1 = read + execute (r-x)
+- `5` (others) = 4+0+1 = read + execute (r-x)
+- Final: rwxr-xr-x - Owner can do everything, others can read and execute.
+</details>
+
+**Q3: How would you find all `.log` files modified in the last 24 hours?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+```bash
+find . -name "*.log" -mtime -1
+```
+- `-name "*.log"` - Find files ending in .log
+- `-mtime -1` - Modified within the last 24 hours (1 day)
+</details>
+
+**Q4: What does `tail -f /var/log/syslog` do and when would you use it?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+- `-f` flag means "follow" - it shows new lines as they're added
+- Used for real-time log monitoring
+- Common use cases: Debugging applications, monitoring server logs, watching for errors
+- Press Ctrl+C to stop following
+</details>
+
+**Q5: What is the difference between `>` and `>>` in redirection?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+- `>` - Overwrites the file (destructive)
+  ```bash
+  echo "new" > file.txt  # file.txt now contains only "new"
+  ```
+- `>>` - Appends to the file (non-destructive)
+  ```bash
+  echo "added" >> file.txt  # "added" is added to end of file
+  ```
+- Use `>>` for logs and `>` for creating new files.
+</details>
+
+**Q6: How do you count the number of lines containing "error" in a file?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+```bash
+grep -c "error" logfile.txt
+```
+Or alternatively:
+```bash
+grep "error" logfile.txt | wc -l
+```
+The `-c` flag is more efficient as it counts without displaying matches.
+</details>
+
+**Q7: What command would find all empty files in a directory?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+```bash
+find . -type f -empty
+```
+- `-type f` - Only regular files (not directories)
+- `-empty` - Only empty files
+</details>
+
+**Q8: Explain the pipe (`|`) operator with an example.**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+The pipe takes the output of one command and uses it as input for another:
+```bash
+cat log.txt | grep "error" | wc -l
+```
+1. `cat log.txt` outputs file contents
+2. `grep "error"` filters lines containing "error"
+3. `wc -l` counts the lines
+
+This counts how many lines contain "error" in log.txt.
+</details>
+
+**Q9: What does `chmod +x script.sh` do?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+- Adds execute permission for all users (owner, group, others)
+- Equivalent to `chmod a+x script.sh`
+- Makes the script runnable with `./script.sh`
+- Without this, you'd need to run `bash script.sh`
+</details>
+
+**Q10: How would you display lines 10-20 of a large file?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+```bash
+sed -n '10,20p' file.txt
+```
+Or using head and tail:
+```bash
+head -n 20 file.txt | tail -n 11
+```
+The `sed` method is more efficient for large files.
+</details>
+
+---
+
+## 🚀 NEXT LEVEL TIPS
+
+### Performance Optimization
+
+```bash
+# Use grep -F for fixed strings (faster than regex)
+grep -F "exact text" file.txt
+
+# Use grep -E for extended regex
+grep -E "pattern1|pattern2" file.txt
+
+# Parallel grep for large directories
+find . -type f | xargs -P 4 grep "pattern"
+
+# Use ripgrep (rg) if available - much faster
+pkg install ripgrep
+rg "pattern" .
+```
+
+### Best Practices
+
+1. **Use `grep -i` for case-insensitive search** - More flexible
+2. **Quote patterns** - Prevents shell expansion: `grep "*.txt" file`
+3. **Use `--color=auto`** - Highlight matches: `grep --color=auto "error" file`
+4. **Check permissions before editing** - `ls -la file`
+5. **Use `find ... -print0 | xargs -0`** - Handle filenames with spaces
+6. **Prefer `>>` over `>`** - Safer for logging
+7. **Test with `ls` before `find -delete`** - Verify what you'll delete
+
+### Common Mistakes to Avoid
+
+| ❌ Mistake | ✅ Correct Approach |
+|-----------|---------------------|
+| `grep *.txt` without quotes | `grep "pattern" *.txt` |
+| `chmod 777` (too permissive) | Use minimum needed: `chmod 755` |
+| `find . -delete` without checking | `find . -name "*.tmp" -print` first |
+| Forgetting `-type f` in find | Use `-type f` for files, `-type d` for dirs |
+| Using `cat file \| grep` | Just `grep "pattern" file` (simpler) |
+| `chmod -R 777` on directories | Use `chmod -R 755` for directories |
+
+### Command Power Rankings
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    COMMAND POWER RANKINGS                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   🔥 MOST USED (Daily)                                                  │
+│   ├── grep, find, cat                                                   │
+│   ├── head, tail, less                                                  │
+│   └── chmod, sort, wc                                                   │
+│                                                                          │
+│   ⚡ MODERATE USE (Weekly)                                               │
+│   ├── diff, uniq, tr                                                    │
+│   ├── tail -f, grep -r                                                  │
+│   └── find -exec, xargs                                                 │
+│                                                                          │
+│   💪 ADVANCED (As Needed)                                                │
+│   ├── sed, awk                                                          │
+│   ├── Regular expressions in grep                                       │
+│   └── Complex find pipelines                                            │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🎮 INTERACTIVE ELEMENTS
+
+### 📝 Quiz: Test Your Knowledge
+
+**Score yourself: 10 points per correct answer**
+
+1. What does `grep -i` do?
+   - a) Inverts the match
+   - b) Case-insensitive search
+   - c) Interactive mode
+   - d) Includes line numbers
+
+2. Which command shows the last 10 lines of a file?
+   - a) head file
+   - b) tail file
+   - c) end file
+   - d) bottom file
+
+3. What permission value is rwxr-xr-x?
+   - a) 644
+   - b) 755
+   - c) 777
+   - d) 700
+
+4. How do you make a script executable?
+   - a) chmod +x script.sh
+   - b) chmod 644 script.sh
+   - c) make executable script.sh
+   - d) run script.sh
+
+5. What does `find . -name "*.txt"` do?
+   - a) Finds files containing ".txt"
+   - b) Finds files named exactly ".txt"
+   - c) Finds files ending in .txt
+   - d) Finds text in .txt files
+
+6. Which redirects output and appends to file?
+   - a) >
+   - b) >>
+   - c) <
+   - d) |
+
+7. What does `grep -v "pattern" file` do?
+   - a) Verbose output
+   - b) Validates pattern
+   - c) Shows lines NOT matching
+   - d) Variable pattern
+
+8. How do you find files larger than 100MB?
+   - a) find . -big 100M
+   - b) find . -size +100M
+   - c) find . -large 100M
+   - d) ls -lS | grep 100M
+
+9. What does `cat file | wc -l` count?
+   - a) Words in file
+   - b) Characters in file
+   - c) Lines in file
+   - d) Files in directory
+
+10. Which permission allows read, write, execute for owner only?
+    - a) 755
+    - b) 700
+    - c) 777
+    - d) 600
+
+**Answers:** 1-b, 2-b, 3-b, 4-a, 5-c, 6-b, 7-c, 8-b, 9-c, 10-b
+
+---
+
+### 🛠️ Try It Yourself Challenges
+
+**Challenge 1: Search and Count**
+```bash
+# Task: Count how many times "error" appears in a log
+# Steps:
+# 1. Create a test file
+cat > test.log << 'EOF'
+INFO: Server started
+ERROR: Connection failed
+INFO: Retrying
+ERROR: Timeout
+WARNING: Slow response
+ERROR: Database error
+INFO: Processing
+EOF
+
+# 2. Count errors
+grep -c "ERROR" test.log
+
+# 3. Show only error lines
+grep "ERROR" test.log
+
+# Expected: 3 errors counted
+```
+
+**Challenge 2: Find Files**
+```bash
+# Task: Find and list all .txt files
+# Steps:
+# 1. Create test files
+touch file1.txt file2.txt file3.log data.txt
+
+# 2. Find all .txt files
+find . -name "*.txt"
+
+# 3. Find .txt files modified in last day
+find . -name "*.txt" -mtime -1
+
+# 4. Clean up
+rm file*.txt file3.log
+# Expected: Found all .txt files
+```
+
+**Challenge 3: Permissions Practice**
+```bash
+# Task: Set up script with proper permissions
+# Steps:
+# 1. Create a script
+cat > test_script.sh << 'EOF'
+#!/bin/bash
+echo "Hello from script!"
+EOF
+
+# 2. Check current permissions
+ls -la test_script.sh
+
+# 3. Make executable
+chmod +x test_script.sh
+
+# 4. Verify
+ls -la test_script.sh
+
+# 5. Run it
+./test_script.sh
+
+# 6. Clean up
+rm test_script.sh
+
+# Expected: Script runs successfully
+```
+
+**Challenge 4: Pipeline Power**
+```bash
+# Task: Use pipes to process data
+# Steps:
+# 1. Create data file
+cat > data.txt << 'EOF'
+apple
+banana
+apple
+cherry
+banana
+apple
+EOF
+
+# 2. Count unique items
+sort data.txt | uniq -c
+
+# 3. Find most common
+sort data.txt | uniq -c | sort -rn | head -1
+
+# 4. Count total lines
+wc -l data.txt
+
+# 5. Clean up
+rm data.txt
+
+# Expected: apple appears 3 times
+```
+
+---
+
+### ✅ Skill Check Checkpoints
+
+**Checkpoint 1: Text Viewing**
+- [ ] Can use cat to view files
+- [ ] Can use head and tail
+- [ ] Know how to follow files with tail -f
+- [ ] Can use less for scrolling
+
+**Checkpoint 2: Searching**
+- [ ] Can use basic grep
+- [ ] Know grep -i, -v, -n, -c, -r
+- [ ] Can use regular expressions
+- [ ] Understand context options
+
+**Checkpoint 3: File Finding**
+- [ ] Can find by name
+- [ ] Can find by type
+- [ ] Can find by size and time
+- [ ] Can execute commands on results
+
+**Checkpoint 4: Permissions**
+- [ ] Understand rwx notation
+- [ ] Can use octal permissions
+- [ ] Know chmod symbolic mode
+- [ ] Can change ownership
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+### Cross-Reference Guide
+
+| This Chapter | Related Chapter | Why Related |
+|-------------|-----------------|-------------|
+| Ch04: Linux Basics 2 | **Ch03: Linux Basics 1** | Builds on basic commands |
+| Ch04: Permissions | **Ch06: File System** | Permission details |
+| Ch04: grep/find | **Ch07: Bash Scripting** | Use in scripts |
+| Ch04: Pipes | **Ch08: Text Processing** | Advanced text tools |
+| Ch04: chmod | **Ch09: Security Basics** | Security implications |
+
+### Next Steps Flowchart
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    YOUR LEARNING PATH                                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   Chapter 1 ──→ Chapter 2 ──→ Chapter 3 ──→ Chapter 4 ──→ Chapter 5   │
+│   (Install)    (Config)      (Linux 1)     (You are     (Package         │
+│                              Basics)       here)        Mgmt)           │
+│                                                                          │
+│   After this chapter, practice:                                         │
+│   • Write grep one-liners                                              │
+│   • Create find pipelines                                               │
+│   • Set up proper file permissions                                      │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 VISUAL DIAGRAMS
+
+### grep Options Flowchart
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    GREP DECISION FLOWCHART                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│                      Need to search?                                     │
+│                           │                                              │
+│           ┌───────────────┼───────────────┐                             │
+│           │               │               │                             │
+│        In file      In directory    Case matters?                       │
+│           │               │               │                             │
+│           ▼               ▼               ▼                             │
+│     ┌─────────┐     ┌─────────┐     ┌─────────┐                        │
+│     │ grep    │     │ grep -r │     │ -i = no │                        │
+│     │ "text"  │     │ "text"  │     │ default │                        │
+│     │ file    │     │ dir/    │     │ = yes   │                        │
+│     └─────────┘     └─────────┘     └─────────┘                        │
+│                                                                          │
+│           Common flags:                                                  │
+│           -n : show line numbers                                        │
+│           -v : invert match                                             │
+│           -c : count only                                               │
+│           -l : filenames only                                           │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Permission Structure
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PERMISSION BREAKDOWN                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   Example: chmod 755 file                                               │
+│                                                                          │
+│   ┌───┬───┬───┐                                                         │
+│   │ 7 │ 5 │ 5 │  ← Octal notation                                       │
+│   └─┬─┴─┬─┴─┬─┘                                                         │
+│     │   │   │                                                            │
+│     ▼   ▼   ▼                                                            │
+│   Owner Group Others                                                     │
+│   (u)   (g)   (o)                                                        │
+│                                                                          │
+│   Octal to Permission:                                                   │
+│   ┌───┬───────────────────────────┐                                      │
+│   │ 7 │ rwx = 4+2+1 (all)       │                                       │
+│   │ 6 │ rw- = 4+2+0 (read/write)│                                       │
+│   │ 5 │ r-x = 4+0+1 (read/exec) │                                       │
+│   │ 4 │ r-- = 4+0+0 (read only) │                                       │
+│   │ 0 │ --- = 0+0+0 (none)      │                                       │
+│   └───┴───────────────────────────┘                                      │
+│                                                                          │
+│   755 = rwxr-xr-x = Owner: all, Group: read+exec, Others: read+exec    │
+│   644 = rw-r--r-- = Owner: read+write, Group/Others: read only          │
+│   700 = rwx------ = Owner only, no access for others                     │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*

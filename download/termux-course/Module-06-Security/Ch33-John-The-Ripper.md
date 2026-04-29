@@ -1724,6 +1724,516 @@ Before moving to Chapter 34, verify:
 - [ ] Can use custom rules
 - [ ] Know difference between single, wordlist, and incremental modes
 - [ ] Understand ethical and legal implications
+- [ ] Completed the interactive quiz
+- [ ] Attempted at least 2 challenges
+
+---
+
+## 💡 PRO TIPS BOX
+
+> 💡 **Pro Tip #1:** Always identify the hash type before cracking. Use `hash-identifier` or online tools like CrackStation's hash analyzer.
+
+> 💡 **Pro Tip #2:** Start with `--show` to check if you've already cracked a hash - John saves everything in john.pot file!
+
+> 💡 **Pro Tip #3:** Use `--fork=$(nproc)` to utilize all CPU cores. Multi-core cracking is significantly faster.
+
+> 💡 **Pro Tip #4:** Create targeted wordlists with CeWL for web application testing - extract words directly from the target website.
+
+> 💡 **Pro Tip #5:** Use `--rules=best64` for wordlist mutations. It applies 64 common password variations automatically.
+
+> 💡 **Pro Tip #6:** For large hash files, use `--session=name` to save progress. Resume anytime with `--restore=name`.
+
+> 💡 **Pro Tip #7:** `zip2john` and `pdf2john` are your best friends for file cracking. Always extract hashes first, then crack offline.
+
+> 💡 **Pro Tip #8:** Check `~/.john/john.pot` for all cracked passwords - great for maintaining a personal knowledge base.
+
+> 💡 **Pro Tip #9:** Use `--incremental=Digits` for PIN cracking - much faster than full character sets.
+
+> 💡 **Pro Tip #10:** Combine multiple wordlists: `cat wordlist1.txt wordlist2.txt | sort -u > combined.txt` for better coverage.
+
+---
+
+## 🔥 REAL WORLD APPLICATIONS
+
+### Password Audit Report Template
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PASSWORD AUDIT REPORT                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ORGANIZATION: _________________________                                 │
+│  AUDIT DATE: _________________________                                   │
+│  AUDITOR: ___________________________                                    │
+│                                                                          │
+│  SUMMARY:                                                                │
+│  ├── Total hashes collected: ________                                    │
+│  ├── Successfully cracked: ________                                      │
+│  ├── Crack rate: ________%                                              │
+│  └── Time taken: ________                                                │
+│                                                                          │
+│  CRACKED PASSWORDS ANALYSIS:                                             │
+│  ├── < 8 characters: ________%                                          │
+│  ├── Dictionary words: ________%                                        │
+│  ├── Common patterns: ________%                                         │
+│  └── Weak complexity: ________%                                         │
+│                                                                          │
+│  RECOMMENDATIONS:                                                        │
+│  ├── Minimum 12 character passwords                                     │
+│  ├── Implement password complexity requirements                        │
+│  ├── Enable multi-factor authentication                                │
+│  └── Regular password audits                                            │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Hash Extraction Workflow
+
+```bash
+#!/bin/bash
+# Comprehensive Hash Extraction Script
+# Usage: ./extract_hashes.sh target_directory
+
+DIR=$1
+OUTPUT_DIR="extracted_hashes"
+
+mkdir -p $OUTPUT_DIR
+
+echo "[*] Extracting hashes from $DIR"
+
+# ZIP files
+for f in $(find $DIR -name "*.zip"); do
+    echo "[*] Processing: $f"
+    zip2john "$f" >> "$OUTPUT_DIR/zip_hashes.txt"
+done
+
+# RAR files
+for f in $(find $DIR -name "*.rar"); do
+    echo "[*] Processing: $f"
+    rar2john "$f" >> "$OUTPUT_DIR/rar_hashes.txt"
+done
+
+# PDF files
+for f in $(find $DIR -name "*.pdf"); do
+    echo "[*] Processing: $f"
+    pdf2john "$f" >> "$OUTPUT_DIR/pdf_hashes.txt"
+done
+
+# Office documents
+for f in $(find $DIR -name "*.doc*" -o -name "*.xls*" -o -name "*.ppt*"); do
+    echo "[*] Processing: $f"
+    office2john "$f" >> "$OUTPUT_DIR/office_hashes.txt"
+done
+
+# 7z archives
+for f in $(find $DIR -name "*.7z"); do
+    echo "[*] Processing: $f"
+    7z2john "$f" >> "$OUTPUT_DIR/7z_hashes.txt"
+done
+
+echo "[!] Hash extraction complete. Output in $OUTPUT_DIR/"
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### John the Ripper Commands
+
+| Task | Command |
+|------|---------|
+| **Basic Crack** | `john hashes.txt` |
+| **Wordlist Attack** | `john --wordlist=rockyou.txt hashes.txt` |
+| **Show Results** | `john --show hashes.txt` |
+| **Identify Hash** | `john --list=formats` |
+| **Incremental Attack** | `john --incremental hashes.txt` |
+| **With Rules** | `john --wordlist=list.txt --rules hashes.txt` |
+| **Multi-core** | `john --fork=4 hashes.txt` |
+| **Save Session** | `john --session=myattack hashes.txt` |
+| **Restore Session** | `john --restore=myattack` |
+| **Benchmark** | `john --test` |
+
+### Hash Extraction Tools
+
+| Tool | Extracts From |
+|------|---------------|
+| `zip2john` | ZIP archives |
+| `rar2john` | RAR archives |
+| `pdf2john` | PDF files |
+| `office2john` | MS Office docs |
+| `ssh2john` | SSH private keys |
+| `7z2john` | 7z archives |
+| `keepass2john` | KeePass databases |
+| `unshadow` | Linux passwd+shadow |
+
+### Hash Types Quick Reference
+
+| Hash | Length | Format Example |
+|------|--------|----------------|
+| MD5 | 32 chars | `5f4dcc3b5aa7...` |
+| SHA1 | 40 chars | `5baa61e4c9b0...` |
+| SHA256 | 64 chars | `5e884898da28...` |
+| SHA512 | 128 chars | `b109f3bbbc24...` |
+| bcrypt | 60 chars | `$2a$10$N9qo8u...` |
+| NTLM | 32 chars | `8846F7EAEE8F...` |
+| MySQL | 41 chars | `*A4B6157319...` |
+
+---
+
+## 🏆 BONUS: ADVANCED EXPLOITATION
+
+### Custom Rule Configuration
+
+```bash
+# Create custom rules file
+cat > ~/.john/custom_rules.conf << 'EOF'
+[List.Rules:CustomStrong]
+# Add numbers at end
+$[0-9]
+# Add symbols at end
+$[!@#$%^&*()]
+# Capitalize first letter
+c
+# Leet speak conversions
+sa@ se3 si1 so0 ss$
+# Add year suffixes
+$[0-9]$[0-9]$[0-9]$[0-9]
+# Reverse the word
+r
+# Double the word
+d
+EOF
+
+# Use custom rules
+john --wordlist=rockyou.txt --rules=CustomStrong --config=~/.john/custom_rules.conf hashes.txt
+```
+
+### Automated Cracking Pipeline
+
+```bash
+#!/bin/bash
+# Advanced John Pipeline
+
+HASH_FILE=$1
+WORDLISTS=("rockyou.txt" "top1000.txt" "common.txt")
+OUTPUT_DIR="cracking_results"
+
+mkdir -p $OUTPUT_DIR
+
+echo "[*] Starting Advanced Cracking Pipeline"
+
+# Phase 1: Quick single mode
+echo "[*] Phase 1: Single Mode"
+john --single --session=single "$HASH_FILE"
+
+# Phase 2: Dictionary attacks
+for wl in "${WORDLISTS[@]}"; do
+    echo "[*] Phase: Wordlist $wl"
+    john --wordlist="$wl" --session="dict_$wl" --rules=best64 "$HASH_FILE"
+done
+
+# Phase 3: Show results
+echo "[!] Results:"
+john --show "$HASH_FILE"
+
+echo "[!] Pipeline complete!"
+```
+
+---
+
+## 📝 CHAPTER SUMMARY: What You Learned
+
+### Key Concepts Mastered
+
+- ✅ **Hash Fundamentals**: Understanding password hashing, one-way functions, and collision resistance
+- ✅ **Hash Types**: MD5, SHA family, bcrypt, NTLM, and 400+ supported formats
+- ✅ **John Architecture**: Single mode, wordlist mode, incremental mode, rules
+- ✅ **Hash Extraction**: zip2john, pdf2john, office2john, and other extraction tools
+- ✅ **Session Management**: Saving and resuming cracking sessions
+- ✅ **Performance Optimization**: Multi-core cracking, GPU acceleration concepts
+- ✅ **Custom Rules**: Creating password mutation rules
+
+### Key Takeaways
+
+1. **Hashes Can't Be Reversed**: Hashing is one-way; cracking requires comparing hash outputs
+2. **Wordlist Quality Matters**: Better wordlists = faster cracking
+3. **Rules Multiply Effectiveness**: One wordlist with rules = thousands of variations
+4. **Session Management Essential**: Long attacks need save/resume capability
+5. **Multi-core Speedup**: Use `--fork` for parallel processing
+
+---
+
+## 🛡️ DEFENSIVE SECURITY: Password Security
+
+### Password Hardening Guide
+
+```bash
+# Password Policy Configuration (Linux)
+sudo nano /etc/security/pwquality.conf
+
+# Recommended settings:
+minlen = 14
+minclass = 4
+dcredit = -1
+ucredit = -1
+lcredit = -1
+ocredit = -1
+maxrepeat = 2
+maxsequence = 3
+
+# Enable password aging
+sudo chage -M 90 username
+
+# Check password strength
+echo "password123" | pwscore
+```
+
+### Password Security Checklist
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PASSWORD SECURITY CHECKLIST                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  FOR USERS:                                                             │
+│  ├── Use unique passwords for each account                              │
+│  ├── Minimum 12 characters                                              │
+│  ├── Mix uppercase, lowercase, numbers, symbols                        │
+│  ├── Use password manager                                               │
+│  ├── Enable 2FA everywhere                                              │
+│  └── Never share passwords                                              │
+│                                                                          │
+│  FOR ADMINISTRATORS:                                                    │
+│  ├── Enforce strong password policies                                   │
+│  ├── Implement account lockout                                          │
+│  ├── Regular password audits                                            │
+│  ├── Monitor for breached passwords                                     │
+│  ├── Use bcrypt or Argon2 for hashing                                  │
+│  ├── Implement salting                                                 │
+│  └── Educate users on security                                         │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📋 METHODOLOGY: Hash Cracking Workflow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    HASH CRACKING METHODOLOGY                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  STEP 1: HASH COLLECTION                                                │
+│  ─────────────────────────                                              │
+│  □ Obtain hash file (authorized only!)                                  │
+│  □ Document hash source and type                                        │
+│  □ Verify hash integrity                                                │
+│                                                                          │
+│  STEP 2: HASH IDENTIFICATION                                           │
+│  ─────────────────────────────                                          │
+│  □ Analyze hash length                                                  │
+│  □ Check hash format markers ($, etc.)                                 │
+│  □ Use hash-identifier tools                                            │
+│  □ Confirm with John format list                                       │
+│                                                                          │
+│  STEP 3: CRACKING STRATEGY                                              │
+│  ─────────────────────────                                              │
+│  □ Start with single mode                                               │
+│  □ Try common wordlists                                                 │
+│  □ Apply rules for variations                                           │
+│  □ Use incremental if needed                                            │
+│                                                                          │
+│  STEP 4: EXECUTION                                                      │
+│  ─────────────                                                          │
+│  □ Configure session for resume                                         │
+│  □ Enable multi-core processing                                         │
+│  □ Monitor progress                                                     │
+│  □ Document timeline                                                    │
+│                                                                          │
+│  STEP 5: DOCUMENTATION                                                  │
+│  ─────────────────                                                      │
+│  □ Record cracked passwords                                             │
+│  □ Analyze patterns                                                     │
+│  □ Generate security report                                             │
+│  □ Recommend improvements                                               │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ⚠️ LEGAL & ETHICS
+
+### Authorization Requirements for Hash Cracking
+
+```
+HASH CRACKING AUTHORIZATION
+===========================
+
+This document authorizes password hash cracking for security testing.
+
+CLIENT: _________________________
+SYSTEM: _________________________
+HASH SOURCE: ____________________
+TESTER: _________________________
+
+AUTHORIZED ACTIVITIES:
+□ Hash extraction from authorized files
+□ Offline password cracking
+□ Password strength analysis
+□ Security report generation
+
+LIMITATIONS:
+- Hashes must be from authorized systems only
+- Cracked passwords must be securely stored
+- Results must be reported to client only
+- All test data must be deleted after engagement
+
+LEGAL ACKNOWLEDGMENT:
+I understand unauthorized hash cracking is illegal under IT Act 2000 Section 66.
+
+CLIENT SIGNATURE: _________________ DATE: ________
+TESTER SIGNATURE: _________________ DATE: ________
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+### Prerequisites
+- **Chapter 30**: Security Tools Overview
+- **Chapter 31-32**: Hydra (Online password cracking)
+
+### Related Chapters
+| Chapter | Title | Relationship |
+|---------|-------|--------------|
+| **31** | Hydra Basics | Online vs Offline cracking |
+| **32** | Hydra Advanced | Complementary tools |
+| **34** | SQLMap Basics | Database password extraction |
+| **35** | Metasploit Framework | Post-exploitation hash dumping |
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+**Q1: What is the main difference between John and Hydra?**
+- A) John is faster
+- B) John cracks offline hashes, Hydra attacks online services
+- C) John is newer
+- D) No difference
+
+**Q2: Which command shows already cracked passwords?**
+- A) `john --results hashes.txt`
+- B) `john --show hashes.txt`
+- C) `john --display hashes.txt`
+- D) `john --found hashes.txt`
+
+**Q3: What does zip2john do?**
+- A) Cracks ZIP files
+- B) Extracts password hash from ZIP files
+- C) Creates ZIP files
+- D) Repairs ZIP files
+
+**Q4: Which mode tries all possible combinations?**
+- A) Wordlist mode
+- B) Single mode
+- C) Incremental mode
+- D) Rules mode
+
+**Q5: How do you enable multi-core cracking?**
+- A) `john --multi hashes.txt`
+- B) `john --fork=4 hashes.txt`
+- C) `john --parallel hashes.txt`
+- D) `john --cores=4 hashes.txt`
+
+**Q6: What is bcrypt identified by?**
+- A) 32 character string
+- B) $2a$, $2b$, or $2y$ prefix
+- C) SHA prefix
+- D) MD5 prefix
+
+**Q7: Which file stores all cracked passwords?**
+- A) `john.log`
+- B) `john.pot`
+- C) `john.out`
+- D) `john.cache`
+
+**Q8: What does --rules=best64 do?**
+- A) Uses 64 threads
+- B) Applies 64 common password variations
+- C) Limits to 64 passwords
+- D) Creates 64 wordlists
+
+**Q9: How do you resume a saved session?**
+- A) `john --resume=session_name`
+- B) `john --restore=session_name`
+- C) `john --continue=session_name`
+- D) Both A and B work
+
+**Q10: What is the purpose of salting?**
+- A) Make passwords tasty
+- B) Add randomness to prevent rainbow table attacks
+- C) Speed up cracking
+- D) Compress passwords
+
+**Q11: Which tool extracts hashes from PDF files?**
+- A) `pdfcrack`
+- B) `pdf2john`
+- C) `pdftocrack`
+- D) `john-pdf`
+
+**Q12: What is the minimum recommended password length today?**
+- A) 6 characters
+- B) 8 characters
+- C) 12 characters
+- D) 4 characters
+
+<details>
+<summary>📝 Click to Reveal Answers</summary>
+
+1. **B** - John cracks offline hashes, Hydra attacks online services
+2. **B** - `john --show hashes.txt`
+3. **B** - Extracts password hash from ZIP files
+4. **C** - Incremental mode
+5. **B** - `john --fork=4 hashes.txt`
+6. **B** - $2a$, $2b$, or $2y$ prefix
+7. **B** - `john.pot`
+8. **B** - Applies 64 common password variations
+9. **D** - Both A and B work
+10. **B** - Add randomness to prevent rainbow table attacks
+11. **B** - `pdf2john`
+12. **C** - 12 characters
+
+</details>
+
+---
+
+## 🎯 ETHICAL HACKING CHALLENGES
+
+### Challenge 1: Hash Identification
+- [ ] Download sample hash files
+- [ ] Identify hash types by length and format
+- [ ] Use `john --list=formats` to verify
+- [ ] Document findings
+
+### Challenge 2: ZIP File Cracking
+- [ ] Create password-protected ZIP file
+- [ ] Extract hash with zip2john
+- [ ] Crack with John using wordlist
+- [ ] Verify password works
+
+### Challenge 3: Session Management
+- [ ] Start a cracking session
+- [ ] Save with `--session=name`
+- [ ] Interrupt and restore
+- [ ] Verify continuation point
+
+### Challenge 4: Custom Rules
+- [ ] Create custom rules file
+- [ ] Apply to wordlist attack
+- [ ] Compare success rate vs no rules
+- [ ] Document improvements
 
 ---
 

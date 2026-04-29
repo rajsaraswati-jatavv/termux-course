@@ -2320,3 +2320,1148 @@ Before moving to Chapter 9, verify:
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*
+
+---
+
+## 💡 PRO TIPS BOX
+
+> 💡 **Pro Tip #1: Nano Configuration Backup**
+> 
+> Always backup your editor configurations:
+> ```bash
+> cp ~/.nanorc ~/.nanorc.backup
+> cp ~/.vimrc ~/.vimrc.backup
+> # Quick restore if something breaks
+> ```
+
+> 💡 **Pro Tip #2: Nano with Syntax Highlighting**
+> 
+> Enable syntax highlighting for all languages:
+> ```bash
+> # Add to ~/.nanorc
+> include /data/data/com.termux/files/usr/share/nano/*.nanorc
+> # Or for specific languages:
+> include /data/data/com.termux/files/usr/share/nano/python.nanorc
+> include /data/data/com.termux/files/usr/share/nano/sh.nanorc
+> ```
+
+> 💡 **Pro Tip #3: Vim Relative Line Numbers**
+> 
+> Show relative line numbers for easy navigation:
+> ```vim
+> " Add to ~/.vimrc
+> set relativenumber
+> set number
+> " Now j3 moves 3 lines down, dk deletes current + above line
+> ```
+
+> 💡 **Pro Tip #4: Quick Nano Line Jump**
+> 
+> Open file at specific line:
+> ```bash
+> nano +10 script.sh    # Opens at line 10
+> nano +/error log.txt  # Opens at first "error"
+> ```
+
+> 💡 **Pro Tip #5: Vim Split Screen Editing**
+> 
+> Edit multiple files simultaneously:
+> ```vim
+> :split file2.txt      " Horizontal split
+> :vsplit file3.txt     " Vertical split
+> Ctrl+w w              " Switch between windows
+> Ctrl+w q              " Close current window
+> ```
+
+> 💡 **Pro Tip #6: Nano Auto-Backup**
+> 
+> Enable automatic backup files:
+> ```bash
+> # Add to ~/.nanorc
+> set backup
+> set backupdir "~/.nano/backups/"
+> mkdir -p ~/.nano/backups
+> ```
+
+> 💡 **Pro Tip #7: Vim Persistent Undo**
+> 
+> Undo even after closing Vim:
+> ```vim
+> " Add to ~/.vimrc
+> set undofile
+> set undodir=~/.vim/undo
+> " Create directory
+> mkdir -p ~/.vim/undo
+> ```
+
+> 💡 **Pro Tip #8: Edit Multiple Files in Nano**
+> 
+> Open and switch between multiple files:
+> ```bash
+> nano file1.txt file2.txt file3.txt
+> # Inside Nano:
+> # Alt+.  → Next file
+> # Alt+,  → Previous file
+> ```
+
+> 💡 **Pro Tip #9: Vim Macros for Repetition**
+> 
+> Record and replay actions:
+> ```vim
+> qa       " Start recording to register 'a'
+> [actions]
+> q        " Stop recording
+> @a       " Play macro once
+> 10@a     " Play macro 10 times
+> ```
+
+> 💡 **Pro Tip #10: Quick File Comparison**
+> 
+> Compare two files in Vim:
+> ```bash
+> vimdiff file1.txt file2.txt
+> # Or in Vim:
+> :vert diffsplit file2.txt
+> ```
+
+---
+
+## 🔥 REAL WORLD USE CASES
+
+### Use Case 1: Editing Configuration Files
+
+```
+Scenario: You need to edit multiple configuration files
+
+Challenge: System configs require precision, one typo can break everything
+
+Best Practices:
+1. Always backup before editing
+   cp /etc/hosts ~/hosts.backup
+   
+2. Use Nano for quick edits
+   nano $PREFIX/etc/hosts
+   
+3. Use Vim for complex editing
+   vim ~/.bashrc
+   
+4. Verify syntax after editing
+   bash -n script.sh  # Check bash syntax
+
+Time-Saving Workflow:
+alias edit-conf='nano $PREFIX/etc'
+alias edit-bash='vim ~/.bashrc && source ~/.bashrc'
+```
+
+### Use Case 2: Development Workflow
+
+```
+Scenario: Writing Python scripts and web code
+
+Setup:
+# .vimrc for Python development
+syntax on
+filetype plugin indent on
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
+
+Workflow:
+1. vim project/app.py     # Open in Vim
+2. :split tests/test.py   # Open test file
+3. :make test             # Run tests
+4. :cn / :cp              # Navigate errors
+
+Alternative with Nano:
+nano -c app.py  # Show line numbers
+```
+
+### Use Case 3: Quick Script Creation
+
+```
+Scenario: Creating shell scripts on the fly
+
+Rapid Script Creation:
+```bash
+# Method 1: Here document
+cat > script.sh << 'EOF'
+#!/bin/bash
+echo "Hello World"
+EOF
+chmod +x script.sh
+
+# Method 2: Nano quick
+nano script.sh
+# Ctrl+O, Enter, Ctrl+X
+
+# Method 3: Vim quick
+vim -c 'normal i#!/bin/bash' -c 'wq' script.sh
+```
+
+### Use Case 4: Log File Analysis
+
+```
+Scenario: Examining large log files
+
+Vim Approach:
+vim +G error.log       # Open at end (newest)
+:set nowrap            # Don't wrap long lines
+/Error                 # Search for "Error"
+n                      # Next occurrence
+?Warning               # Search backward
+
+Nano Approach:
+nano +1000 log.txt     # Open at line 1000
+Ctrl+W → "error"       # Search
+Alt+W                  # Find next
+```
+
+### Use Case 5: Remote File Editing
+
+```
+Scenario: Editing files via SSH
+
+Direct Remote Edit:
+vim scp://user@server//path/to/file
+vim scp://server/path/to/file
+
+Or mount first:
+sshfs user@server:/remote/path ~/mnt
+nano ~/mnt/config.txt
+
+Best Practice:
+# Edit local copy, then upload
+vim config.txt
+scp config.txt user@server:/path/
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### Nano Essential Shortcuts
+
+| Action | Shortcut |
+|--------|----------|
+| Save | Ctrl+O |
+| Exit | Ctrl+X |
+| Search | Ctrl+W |
+| Find Next | Alt+W |
+| Replace | Ctrl+\ |
+| Cut Line | Ctrl+K |
+| Paste | Ctrl+U |
+| Go to Line | Ctrl+_ |
+| Show Help | Ctrl+G |
+| Justify | Ctrl+J |
+
+### Vim Essential Commands
+
+| Mode | Command | Action |
+|------|---------|--------|
+| Normal | `i` | Insert before cursor |
+| Normal | `a` | Insert after cursor |
+| Normal | `o` | New line below |
+| Normal | `Esc` | Return to Normal |
+| Normal | `:w` | Save |
+| Normal | `:q` | Quit |
+| Normal | `:wq` | Save and quit |
+| Normal | `dd` | Delete line |
+| Normal | `yy` | Copy line |
+| Normal | `p` | Paste |
+| Normal | `u` | Undo |
+| Normal | `/text` | Search forward |
+| Normal | `:s/old/new/g` | Replace in line |
+
+### Vim Navigation
+
+| Keys | Movement |
+|------|----------|
+| `h j k l` | Left Down Up Right |
+| `w` | Next word |
+| `b` | Previous word |
+| `0` | Start of line |
+| `$` | End of line |
+| `gg` | First line |
+| `G` | Last line |
+| `:10` | Go to line 10 |
+| `Ctrl+d` | Half page down |
+| `Ctrl+u` | Half page up |
+
+### Editor Comparison
+
+| Feature | Nano | Vim |
+|---------|------|-----|
+| Learning Curve | Easy | Steep |
+| Modes | None | Multiple |
+| Customization | Limited | Extensive |
+| Plugins | No | Yes |
+| Speed | Good | Excellent |
+| Best For | Quick edits | Heavy coding |
+
+---
+
+## 🏆 BONUS: ADVANCED TIPS
+
+### Advanced Tip 1: Vim as IDE
+
+```vim
+" ~/.vimrc - IDE-like setup
+" Enable syntax highlighting
+syntax on
+
+" Line numbers
+set number
+set relativenumber
+
+" Indentation
+set autoindent
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+" Search
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+
+" Status line
+set statusline=%F%m%r%h%w\ [Line:%l/%L]\ [Col:%c]
+set laststatus=2
+
+" File browsing
+:set wildmenu
+:set wildmode=list:longest
+
+" Mouse support
+set mouse=a
+
+" Clipboard
+set clipboard=unnamed
+
+" Split navigation
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+```
+
+### Advanced Tip 2: Nano Enhanced Configuration
+
+```bash
+# ~/.nanorc - Enhanced Nano setup
+
+# Include syntax highlighting
+include /data/data/com.termux/files/usr/share/nano/*.nanorc
+
+# UI settings
+set linenumber       # Show line numbers
+set autoindent       # Auto indent
+set tabsize 4        # Tab width
+set tabstospaces     # Convert tabs to spaces
+set smooth           # Smooth scrolling
+set softwrap         # Soft wrap long lines
+set constantshow     # Show cursor position
+
+# Behavior
+set backup           # Create backups
+set backupdir "~/.nano/backups/"
+set casesensitive    # Case sensitive search
+set historylog       # Save search history
+
+# Visual
+set titlecolor brightwhite,blue
+set statuscolor brightwhite,green
+set keycolor brightwhite
+set functioncolor green
+
+# Create backup directory
+mkdir -p ~/.nano/backups
+```
+
+### Advanced Tip 3: Vim Plugins with vim-plug
+
+```bash
+# Install vim-plug
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+# Add to ~/.vimrc
+call plug#begin('~/.vim/plugged')
+" File explorer
+Plug 'preservim/nerdtree'
+" Git integration
+Plug 'tpope/vim-fugitive'
+" Status line
+Plug 'vim-airline/vim-airline'
+" Auto-completion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+call plug#end()
+
+# Install plugins in Vim:
+:PlugInstall
+```
+
+### Advanced Tip 4: Multiple Cursors in Vim
+
+```vim
+" Using vim-multiple-cursors plugin
+" Or native way with visual block:
+
+" Select block: Ctrl+V, select lines
+" Then: Shift+I, type text, Esc
+" Text appears on all selected lines
+
+" Example: Add // to multiple lines
+" 1. Ctrl+V, select lines
+" 2. Shift+I, type //
+" 3. Esc
+```
+
+### Advanced Tip 5: Vim Sessions
+
+```vim
+" Save current session
+:mksession project.vim
+
+" Open session
+vim -S project.vim
+
+" Or in Vim:
+:source project.vim
+
+" Auto-save on exit (add to .vimrc)
+autocmd VimLeave * mksession! ~/.vim/last_session.vim
+" Auto-restore on start
+autocmd VimEnter * source ~/.vim/last_session.vim
+```
+
+### Advanced Tip 6: Custom Nano Syntax
+
+```bash
+# Create custom syntax file
+cat >> ~/.nanorc << 'EOF'
+
+# Custom syntax for my scripts
+syntax "myscript" "\.ms$"
+color brightblue "^#.*$"
+color red "\<(error|warning|fail)\>"
+color green "\<(success|pass|ok)\>"
+color yellow "\<(TODO|FIXME|NOTE)\>"
+color brightcyan "[0-9]+"
+EOF
+```
+
+---
+
+## 📝 CHAPTER SUMMARY
+
+### What You Learned
+
+✅ **Nano Editor**
+- Installation and basic usage
+- All essential shortcuts
+- Configuration with .nanorc
+- When to use Nano
+
+✅ **Vim Editor**
+- Vim modes (Normal, Insert, Command, Visual)
+- Navigation commands
+- Editing commands
+- Configuration with .vimrc
+
+✅ **Editor Comparison**
+- Strengths of each editor
+- When to use which editor
+- Performance considerations
+
+✅ **Advanced Features**
+- Syntax highlighting
+- Multiple file editing
+- Custom configurations
+- Plugin systems
+
+✅ **Best Practices**
+- Configuration backups
+- Efficient workflows
+- Keyboard shortcut mastery
+
+### Key Takeaways
+
+1. **Nano for speed** - Quick edits, beginners, simple tasks
+2. **Vim for power** - Heavy coding, complex editing, productivity
+3. **Learn the shortcuts** - Muscle memory increases speed 10x
+4. **Configure your editor** - Custom settings improve workflow
+5. **Practice regularly** - Editor mastery comes with daily use
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Question 1
+**Q: What is the difference between Nano and Vim?**
+
+**Answer:**
+- **Nano**: Simple, modeless editor with on-screen shortcuts. Great for beginners and quick edits. Limited customization.
+- **Vim**: Modal editor with extensive features. Steep learning curve but extremely powerful. Highly customizable with plugins.
+- Use Nano for: Quick config edits, beginners
+- Use Vim for: Heavy coding, repetitive tasks, professional development
+
+---
+
+### Question 2
+**Q: Explain Vim modes and their purposes.**
+
+**Answer:**
+Vim has 4 main modes:
+1. **Normal Mode** (default): Navigation, commands, text manipulation
+2. **Insert Mode** (i, a, o): Type text like normal editor
+3. **Command Mode** (:): Save, quit, search-replace, settings
+4. **Visual Mode** (v, V, Ctrl+V): Select text for operations
+
+Mode switching:
+- Normal → Insert: i, a, o, etc.
+- Any mode → Normal: Esc
+- Normal → Command: :
+- Normal → Visual: v, V
+
+---
+
+### Question 3
+**Q: How would you save and exit Vim?**
+
+**Answer:**
+```vim
+:w          # Save only
+:q          # Quit (if no changes)
+:wq         # Save and quit
+:x          # Save and quit (same as :wq)
+ZZ          # Save and quit (shift+z+z)
+:q!         # Quit without saving
+ZQ          # Quit without saving (shift+z+q)
+```
+
+---
+
+### Question 4
+**Q: How do you search and replace in Vim?**
+
+**Answer:**
+```vim
+/text           # Search forward
+?text           # Search backward
+n               # Next match
+N               # Previous match
+
+# Replace commands:
+:s/old/new/         # Replace first in line
+:s/old/new/g        # Replace all in line
+:%s/old/new/g       # Replace all in file
+:%s/old/new/gc      # Replace with confirmation
+:5,10s/old/new/g    # Replace in lines 5-10
+```
+
+---
+
+### Question 5
+**Q: What are dotfiles and why are they important for editors?**
+
+**Answer:**
+Dotfiles are hidden configuration files (starting with `.`) that customize editor behavior:
+- `.vimrc` - Vim configuration
+- `.nanorc` - Nano configuration
+
+They're important because:
+1. Persist settings across sessions
+2. Customize editor to your workflow
+3. Can be version controlled and shared
+4. Allow quick setup on new systems
+
+Example:
+```bash
+# Backup and sync dotfiles
+git clone https://github.com/user/dotfiles.git
+ln -s ~/dotfiles/.vimrc ~/.vimrc
+```
+
+---
+
+### Question 6
+**Q: How would you edit a file at a specific line number?**
+
+**Answer:**
+```bash
+# Nano:
+nano +10 file.txt      # Open at line 10
+nano +/search file.txt # Open at first match
+
+# Vim:
+vim +10 file.txt       # Open at line 10
+vim +/search file.txt  # Open at first match
+vim + file.txt         # Open at last line
+
+# Inside Vim:
+:10                    # Jump to line 10
+10G                    # Jump to line 10
+```
+
+---
+
+### Question 7
+**Q: Explain the Vim delete/yank/put operations.**
+
+**Answer:**
+**Delete (cut):**
+```vim
+x           # Delete character
+dd          # Delete line
+dw          # Delete word
+d$          # Delete to end of line
+d0          # Delete to beginning of line
+5dd         # Delete 5 lines
+```
+
+**Yank (copy):**
+```vim
+yy          # Copy line
+yw          # Copy word
+y$          # Copy to end of line
+5yy         # Copy 5 lines
+```
+
+**Put (paste):**
+```vim
+p           # Paste after cursor
+P           # Paste before cursor
+```
+
+---
+
+### Question 8
+**Q: How do you enable syntax highlighting in Nano and Vim?**
+
+**Answer:**
+**Nano:**
+```bash
+# In ~/.nanorc:
+include /data/data/com.termux/files/usr/share/nano/*.nanorc
+# Or specific languages:
+include /data/data/com.termux/files/usr/share/nano/python.nanorc
+```
+
+**Vim:**
+```vim
+" In ~/.vimrc:
+syntax on
+filetype plugin indent on
+```
+
+---
+
+### Question 9
+**Q: What is the difference between `.` and `source` in Vim?**
+
+**Answer:**
+- `.` (dot) repeats the last editing command
+- `source` (or `:so`) loads a Vim script file
+
+Examples:
+```vim
+# Dot command:
+dw          # Delete word
+.           # Repeat: delete word again
+5.          # Repeat 5 times
+
+# Source command:
+:source ~/.vimrc    # Reload configuration
+:so %               # Source current file
+```
+
+---
+
+### Question 10
+**Q: How would you edit multiple files efficiently?**
+
+**Answer:**
+**Nano:**
+```bash
+nano file1.txt file2.txt file3.txt
+# Alt+. = Next file
+# Alt+, = Previous file
+```
+
+**Vim:**
+```bash
+vim file1.txt file2.txt
+# :n = Next file
+# :N = Previous file
+# :args = List files
+
+# Or with splits:
+vim -o file1 file2 file3   # Horizontal splits
+vim -O file1 file2 file3   # Vertical splits
+
+# Inside Vim:
+:split file2    # Horizontal split
+:vsplit file3   # Vertical split
+:tabnew file4   # New tab
+```
+
+---
+
+## 🚀 NEXT LEVEL TIPS
+
+### Performance Optimization
+
+```
+⚡ TIP: Faster Vim Startup
+
+Slow Vim startup? Optimize .vimrc:
+
+1. Profile startup time:
+   vim --startuptime vim.log +qall
+   cat vim.log | sort -k2 -n | tail -20
+
+2. Defer plugin loading:
+   " Lazy load plugins
+   autocmd FileType python Plug 'python-mode'
+
+3. Use faster plugins:
+   " Use faster grep alternative
+   let g:grepprg="rg --vimgrep"
+
+4. Reduce syntax complexity:
+   syntax sync minlines=100
+   set re=1  " Use old regex engine
+```
+
+### Best Practices
+
+```
+📌 BEST PRACTICE: Editor Workflow
+
+1. Before editing:
+   - Create backup of important files
+   - Use version control (git)
+   - Know the file location
+
+2. During editing:
+   - Save frequently (Ctrl+O or :w)
+   - Use undo when needed (u in Vim)
+   - Navigate efficiently (not arrow keys in Vim)
+
+3. After editing:
+   - Verify changes before closing
+   - Test modifications
+   - Commit to version control
+
+4. Configuration:
+   - Keep .vimrc and .nanorc in git
+   - Comment your configurations
+   - Share useful settings
+```
+
+### Common Mistakes to Avoid
+
+```
+❌ MISTAKE 1: Not saving before quitting
+Solution: Always check for modifications indicator
+
+❌ MISTAKE 2: Stuck in Vim
+Solution: Press Esc, then :q! to force quit
+
+❌ MISTAKE 3: Arrow keys in Vim
+Solution: Learn h, j, k, l - much faster
+
+❌ MISTAKE 4: No configuration backup
+Solution: git init ~/dotfiles && cp .vimrc .nanorc ~/
+
+❌ MISTAKE 5: Ignoring keyboard shortcuts
+Solution: Print cheat sheet, practice 15 min/day
+
+❌ MISTAKE 6: Using mouse in Vim
+Solution: :set mouse=a but prefer keyboard navigation
+```
+
+### Efficiency Tips
+
+```
+⏱️ TIME SAVERS:
+
+1. Vim text objects (super powerful):
+   ciw     # Change inside word
+   ci"     # Change inside quotes
+   da{     # Delete around braces
+   yap     # Yank around paragraph
+
+2. Vim macros:
+   qa      # Start recording macro 'a'
+   q       # Stop recording
+   @a      # Play macro
+   @@      # Play last macro
+
+3. Nano quick search:
+   Ctrl+W, Enter  # Repeat last search
+
+4. Vim command history:
+   q:      # Open command history
+   q/      # Open search history
+
+5. Quick file switching:
+   Ctrl+^  # Alternate file (Nano)
+   Ctrl+6  # Alternate file (Vim)
+```
+
+---
+
+## 📊 VISUAL DIAGRAMS
+
+### Diagram 1: Vim Modes Flowchart
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        VIM MODES FLOWCHART                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│                          ┌─────────────┐                                   │
+│                          │   NORMAL    │                                   │
+│                          │    MODE     │                                   │
+│                          │  (Default)  │                                   │
+│                          └──────┬──────┘                                   │
+│                                 │                                          │
+│        ┌─────────────┬──────────┼──────────┬─────────────┐                │
+│        │             │          │          │             │                │
+│        ▼             ▼          ▼          ▼             ▼                │
+│   ┌─────────┐  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐          │
+│   │ INSERT  │  │ VISUAL  │ │COMMAND  │ │ REPLACE │ │ SELECT  │          │
+│   │  MODE   │  │  MODE   │ │  MODE   │ │  MODE   │ │  MODE   │          │
+│   │         │  │         │ │         │ │         │ │         │          │
+│   │ i,a,o,O │  │ v,V,C-V │ │    :    │ │   R     │ │ gh      │          │
+│   │         │  │         │ │         │ │         │ │         │          │
+│   │ Type    │  │ Select  │ │ Execute │ │ Over-   │ │ Select  │          │
+│   │ text    │  │ text    │ │ commands│ │ write   │ │ like GUI│          │
+│   │         │  │         │ │         │ │         │ │         │          │
+│   │ Esc to  │  │ Esc to  │ │ Enter/  │ │ Esc to  │ │ Esc to  │          │
+│   │ Normal  │  │ Normal  │ │ Esc to  │ │ Normal  │ │ Normal  │          │
+│   │         │  │         │ │ Normal  │ │         │ │         │          │
+│   └─────────┘  └─────────┘ └─────────┘ └─────────┘ └─────────┘          │
+│                                                                             │
+│   TIP: Press Esc twice to ensure you're in Normal mode                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: Editor Decision Tree
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    WHICH EDITOR TO USE?                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│                         ┌──────────────────┐                               │
+│                         │ What's your task?│                               │
+│                         └────────┬─────────┘                               │
+│                                  │                                          │
+│        ┌─────────────┬───────────┼───────────┬─────────────┐               │
+│        │             │           │           │             │               │
+│        ▼             ▼           ▼           ▼             ▼               │
+│   ┌─────────┐  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐           │
+│   │ Quick   │  │ Beginner │ │ Heavy   │ │ Server  │ │ Learning│           │
+│   │ Config  │  │ Friendly │ │ Coding  │ │ Admin   │ │   Vim   │           │
+│   │ Edit    │  │          │ │         │ │         │ │         │           │
+│   └────┬────┘  └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘           │
+│        │            │           │           │            │                │
+│        ▼            ▼           ▼           ▼            ▼                │
+│   ┌─────────┐  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐           │
+│   │  NANO   │  │  NANO   │ │   VIM   │ │   VIM   │ │vimtutor │           │
+│   │         │  │         │ │         │ │         │ │         │           │
+│   │ - Fast  │  │ - Easy  │ │ - Power │ │ - SSH  │ │ :help   │           │
+│   │ - Simple│  │ - Safe  │ │ - Macro │ │ - Edit │ │ Ctrl+G  │           │
+│   └─────────┘  └─────────┘ └─────────┘ └─────────┘ └─────────┘           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: Vim Command Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    VIM COMMAND QUICK REFERENCE                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   NAVIGATION          │   EDITING           │   COMMAND MODE               │
+│   ──────────────────────┼─────────────────────┼──────────────────────────── │
+│   h ←  j ↓  k ↑  l →  │   i insert         │   :w save                    │
+│   w  next word        │   a append         │   :q quit                    │
+│   b  prev word        │   o open below     │   :wq save & quit            │
+│   0  line start       │   O open above     │   :q! force quit             │
+│   $  line end         │   dd delete line   │   :e edit file               │
+│   gg first line       │   yy yank line     │   :s/old/new/g replace       │
+│   G  last line        │   p  paste after   │   :set number                │
+│   :5 go to line 5     │   u  undo          │   :syntax on                 │
+│                       │   Ctrl+R redo      │   :help topic                │
+│   ──────────────────────┼─────────────────────┼──────────────────────────── │
+│                                                                             │
+│   SEARCH              │   VISUAL MODE       │   FILE OPERATIONS            │
+│   ──────────────────────┼─────────────────────┼──────────────────────────── │
+│   /pattern  forward   │   v  visual        │   :ls list buffers           │
+│   ?pattern  backward  │   V  visual line   │   :bn next buffer            │
+│   n  next match       │   Ctrl+V visual    │   :bp prev buffer            │
+│   N  prev match       │        block       │   :split horizontal          │
+│   *  search word      │   d delete         │   :vsplit vertical           │
+│   #  search word back │   y yank           │   :tabnew new tab            │
+│                       │   c change         │   :tabn next tab             │
+│   ──────────────────────┴─────────────────────┴──────────────────────────── │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Title | Relevance |
+|---------|-------|-----------|
+| **Chapter 7** | Environment Variables | EDITOR variable setup |
+| **Chapter 11** | Package Management | Installing editors |
+| **Chapter 15** | Shell Scripting Basics | Writing scripts |
+| **Chapter 18** | Git Version Control | Commit message editing |
+| **Chapter 25** | Python Development | Code editing workflow |
+| **Chapter 30** | Web Development | HTML/CSS/JS editing |
+| **Chapter 45** | Termux Backup | Backup dotfiles |
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+### Quiz: Test Your Editor Knowledge!
+
+**Question 1:** How do you save and exit in Nano?
+- A) Ctrl+S, Ctrl+Q
+- B) Ctrl+O, Ctrl+X
+- C) Ctrl+W, Ctrl+Z
+- D) Ctrl+S, Esc
+
+**Question 2:** What is Vim's default mode?
+- A) Insert Mode
+- B) Command Mode
+- C) Normal Mode
+- D) Visual Mode
+
+**Question 3:** Which command deletes a line in Vim?
+- A) `dl`
+- B) `dd`
+- C) `:d`
+- D) `D`
+
+**Question 4:** How do you enter Insert Mode in Vim?
+- A) Press `i`
+- B) Press `I`
+- C) Press `insert`
+- D) Press `a`
+
+**Question 5:** Which Nano shortcut searches for text?
+- A) Ctrl+S
+- B) Ctrl+F
+- C) Ctrl+W
+- D) Ctrl+R
+
+**Question 6:** What does `:q!` do in Vim?
+- A) Save and quit
+- B) Quit without saving
+- C) Quit if no changes
+- D) Force save
+
+**Question 7:** How do you copy a line in Vim?
+- A) `cc`
+- B) `yy`
+- C) `cp`
+- D) `Cy`
+
+**Question 8:** Which is NOT a Vim mode?
+- A) Normal
+- B) Insert
+- C) Edit
+- D) Visual
+
+**Question 9:** What does `u` do in Vim?
+- A) Undo
+- B) Redo
+- C) Update
+- D) Upload
+
+**Question 10:** How do you go to line 10 in Vim?
+- A) `g10`
+- B) `:10`
+- C) `10g`
+- D) `/10`
+
+**Question 11:** Which command replaces all occurrences in Vim?
+- A) `:s/old/new/`
+- B) `:%s/old/new/g`
+- C) `:r/old/new/`
+- D) `:replace old new`
+
+**Question 12:** What does `o` do in Vim Normal mode?
+- A) Open file
+- B) Open line below
+- C) Open line above
+- D) Overwrite
+
+**Question 13:** Which file is Vim's configuration?
+- A) `.vim`
+- B) `.vimrc`
+- C) `.vimconfig`
+- D) `.vimrc.conf`
+
+**Question 14:** How do you repeat last command in Vim?
+- A) `r`
+- B) `.`
+- C) `@`
+- D) `!`
+
+**Question 15:** What's the Nano shortcut for help?
+- A) Ctrl+H
+- B) Ctrl+G
+- C) Ctrl+?
+- D) F1
+
+### Quiz Answers
+
+| Q | Answer | Explanation |
+|---|--------|-------------|
+| 1 | **B** | Ctrl+O saves, Ctrl+X exits |
+| 2 | **C** | Normal Mode is default in Vim |
+| 3 | **B** | `dd` deletes entire line |
+| 4 | **A** | `i` enters Insert Mode |
+| 5 | **C** | Ctrl+W is "Where Is" (search) |
+| 6 | **B** | `:q!` quits without saving |
+| 7 | **B** | `yy` yanks (copies) line |
+| 8 | **C** | Edit is not a Vim mode |
+| 9 | **A** | `u` undoes last action |
+| 10 | **B** | `:10` jumps to line 10 |
+| 11 | **B** | `:%s/old/new/g` replaces all |
+| 12 | **B** | `o` opens new line below |
+| 13 | **B** | `.vimrc` is Vim's config file |
+| 14 | **B** | `.` repeats last edit command |
+| 15 | **B** | Ctrl+G shows help in Nano |
+
+---
+
+## 🔄 TRY IT YOURSELF CHALLENGES
+
+### Challenge 1: Nano Configuration
+```bash
+# Task: Create a complete .nanorc
+# 1. Enable syntax highlighting for all languages
+# 2. Set tab size to 4 spaces
+# 3. Enable line numbers
+# 4. Enable auto-indent
+# 5. Create backup directory
+# 6. Test by editing a Python file
+
+# Your .nanorc content:
+```
+
+### Challenge 2: Vim Basic Workflow
+```bash
+# Task: Complete this Vim workflow
+# 1. Open a new file with Vim
+# 2. Type a simple bash script
+# 3. Save the file
+# 4. Delete line 2
+# 5. Undo the deletion
+# 6. Search for "echo"
+# 7. Quit Vim
+
+# Commands used:
+```
+
+### Challenge 3: Vim Navigation Mastery
+```bash
+# Task: Navigate without arrow keys
+# 1. Open a long file
+# 2. Go to line 50
+# 3. Go to first line
+# 4. Go to last line
+# 5. Jump to next word 5 times
+# 6. Jump to end of line
+# 7. Jump to beginning of line
+# 8. Search forward for "error"
+
+# Your commands:
+```
+
+### Challenge 4: Create Editor Alias
+```bash
+# Task: Set up editor workflow aliases
+# Create aliases for:
+# 1. Quick edit .bashrc
+# 2. Quick edit .vimrc
+# 3. Edit with sudo
+# 4. Edit at specific line
+# 5. Diff two files
+
+# Your aliases:
+```
+
+### Challenge 5: Vim Macro Recording
+```bash
+# Task: Create a Vim macro
+# 1. Record a macro that:
+#    - Adds "// " at beginning of line
+#    - Moves to next line
+# 2. Apply macro to 10 lines
+# 3. Save the macro
+
+# Steps:
+```
+
+---
+
+## ✅ SKILL CHECK CHECKPOINTS
+
+### Checkpoint 1: Nano Basics
+- [ ] Can open and create files
+- [ ] Can save files with Ctrl+O
+- [ ] Can exit with Ctrl+X
+- [ ] Can search with Ctrl+W
+- [ ] Can cut and paste lines
+
+### Checkpoint 2: Vim Modes
+- [ ] Understand Normal mode
+- [ ] Can enter Insert mode
+- [ ] Can use Command mode
+- [ ] Can use Visual mode
+- [ ] Always return to Normal with Esc
+
+### Checkpoint 3: Vim Navigation
+- [ ] Use h, j, k, l keys
+- [ ] Navigate by word (w, b)
+- [ ] Jump to line numbers
+- [ ] Use gg and G
+- [ ] Page navigation (Ctrl+d/u)
+
+### Checkpoint 4: Vim Editing
+- [ ] Delete lines (dd)
+- [ ] Copy lines (yy)
+- [ ] Paste (p)
+- [ ] Undo (u)
+- [ ] Search and replace
+
+### Checkpoint 5: Configuration
+- [ ] Created .vimrc
+- [ ] Created .nanorc
+- [ ] Enabled syntax highlighting
+- [ ] Customized settings
+- [ ] Backed up configurations
+
+---
+
+**Chapter Complete! 🎉**
+
+*Upgraded to NEXT LEVEL with all powerful features!*
+
+*Created by T3rmuxk1ng | Termux Full Course*

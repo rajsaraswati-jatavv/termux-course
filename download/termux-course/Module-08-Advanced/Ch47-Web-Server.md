@@ -2054,3 +2054,789 @@ Before moving to Chapter 48, verify:
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*
+
+---
+
+## 💡 PRO TIPS BOXES
+
+> 💡 **Pro Tip #1:** Use `python -m http.server 8080 --bind 127.0.0.1` for localhost-only access - prevents network exposure!
+
+> 💡 **Pro Tip #2:** For production-like testing, use Nginx as reverse proxy to Node.js apps - better performance and SSL support
+
+> 💡 **Pro Tip #3:** Enable gzip compression in Nginx: `gzip on; gzip_types text/plain text/css application/json;`
+
+> 💡 **Pro Tip #4:** Use PM2 (npm install -g pm2) to keep Node.js apps running and auto-restart on crashes
+
+> 💡 **Pro Tip #5:** Always set proper file permissions: `chmod 644` for files, `chmod 755` for directories in web root
+
+> 💡 **Pro Tip #6:** For static sites, use `darkhttpd` - it's lighter than Python's server and shows real-time logs
+
+> 💡 **Pro Tip #7:** Protect sensitive files with `.htaccess` in Apache or `location` blocks in Nginx
+
+> 💡 **Pro Tip #8:** Use Let's Encrypt with certbot for free SSL certificates - even works with ngrok!
+
+> 💡 **Pro Tip #9:** Monitor your web server with `htop` and `netstat -tlnp` to catch resource issues early
+
+> 💡 **Pro Tip #10:** For local development, use `php -S 0.0.0.0:8080` instead of full Apache setup - much faster!
+
+---
+
+## 🔥 REAL WORLD USE CASES
+
+### Production Web Server Stack
+
+```bash
+# Full LAMP stack setup in Termux
+
+# 1. Install all components
+pkg install apache2 php php-apache mariadb nginx -y
+
+# 2. Configure Apache with PHP
+cat >> $PREFIX/etc/apache2/httpd.conf << 'EOF'
+LoadModule php_module $PREFIX/libexec/apache2/libphp.so
+AddHandler php-script .php
+AddType text/html .php
+
+<Directory "$PREFIX/var/www/html">
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Require all granted
+    DirectoryIndex index.php index.html
+</Directory>
+EOF
+
+# 3. Start MariaDB
+mysql_install_db
+mysqld_safe &
+
+# 4. Create application database
+mysql -u root << 'SQL'
+CREATE DATABASE webapp;
+CREATE USER 'webapp'@'localhost' IDENTIFIED BY 'secure_password';
+GRANT ALL PRIVILEGES ON webapp.* TO 'webapp'@'localhost';
+FLUSH PRIVILEGES;
+SQL
+
+# 5. Start Apache
+apachectl start
+
+# 6. Verify
+curl http://localhost:8080
+```
+
+### Development Environment Setup
+
+```bash
+# Complete Node.js development server
+
+# 1. Install Node.js
+pkg install nodejs -y
+
+# 2. Create project structure
+mkdir -p ~/dev-server/{public,routes,views}
+cd ~/dev-server
+
+# 3. Initialize project
+npm init -y
+npm install express morgan body-parser cors helmet
+
+# 4. Create server file
+cat > server.js << 'EOF'
+const express = require('express');
+const morgan = require('morgan');
+const helmet = require('helmet');
+const cors = require('cors');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(helmet());
+app.use(cors());
+app.use(morgan('combined'));
+app.use(express.json());
+app.use(express.static('public'));
+
+// Routes
+app.get('/', (req, res) => {
+    res.json({ status: 'ok', message: 'Termux Dev Server Running!' });
+});
+
+app.get('/api/info', (req, res) => {
+    res.json({
+        platform: process.platform,
+        arch: process.arch,
+        nodeVersion: process.version,
+        uptime: process.uptime()
+    });
+});
+
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
+});
+EOF
+
+# 5. Start with PM2 for persistence
+npm install -g pm2
+pm2 start server.js --name dev-server
+pm2 save
+pm2 startup
+```
+
+### API Server with Database
+
+```bash
+# RESTful API server with SQLite
+
+cat > api-server.js << 'EOF'
+const express = require('express');
+const sqlite3 = require('sqlite3').verbose();
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+
+// Initialize database
+const db = new sqlite3.Database('./api.db');
+db.serialize(() => {
+    db.run(`CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`);
+});
+
+// CRUD Endpoints
+// Create
+app.post('/users', (req, res) => {
+    const { name, email } = req.body;
+    db.run('INSERT INTO users (name, email) VALUES (?, ?)', [name, email], function(err) {
+        if (err) return res.status(400).json({ error: err.message });
+        res.status(201).json({ id: this.lastID, name, email });
+    });
+});
+
+// Read all
+app.get('/users', (req, res) => {
+    db.all('SELECT * FROM users', [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ data: rows });
+    });
+});
+
+// Read one
+app.get('/users/:id', (req, res) => {
+    db.get('SELECT * FROM users WHERE id = ?', [req.params.id], (err, row) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (!row) return res.status(404).json({ error: 'User not found' });
+        res.json(row);
+    });
+});
+
+// Update
+app.put('/users/:id', (req, res) => {
+    const { name, email } = req.body;
+    db.run('UPDATE users SET name = ?, email = ? WHERE id = ?', 
+        [name, email, req.params.id], function(err) {
+        if (err) return res.status(400).json({ error: err.message });
+        res.json({ changes: this.changes });
+    });
+});
+
+// Delete
+app.delete('/users/:id', (req, res) => {
+    db.run('DELETE FROM users WHERE id = ?', [req.params.id], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ deleted: this.changes > 0 });
+    });
+});
+
+app.listen(PORT, '0.0.0.0', () => console.log(`API running on port ${PORT}`));
+EOF
+
+# Install dependencies and run
+npm install express sqlite3
+node api-server.js
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+| Category | Command | Description |
+|----------|---------|-------------|
+| **Python Server** | `python -m http.server 8080` | Basic HTTP server |
+| | `python -m http.server 8080 --bind 127.0.0.1` | Localhost only |
+| | `python -m http.server 8080 --directory /path` | Custom directory |
+| **Node.js** | `node server.js` | Run Node server |
+| | `npm start` | Run via package.json |
+| | `pm2 start app.js` | Run with PM2 |
+| | `pm2 list` | List PM2 apps |
+| | `pm2 logs app` | View PM2 logs |
+| **Apache** | `apachectl start` | Start Apache |
+| | `apachectl stop` | Stop Apache |
+| | `apachectl restart` | Restart Apache |
+| | `apachectl configtest` | Test config |
+| **Nginx** | `nginx` | Start Nginx |
+| | `nginx -s stop` | Stop Nginx |
+| | `nginx -s reload` | Reload config |
+| | `nginx -t` | Test config |
+| **PHP** | `php -S 0.0.0.0:8080` | Built-in server |
+| | `php -S 0.0.0.0:8080 -t public` | Custom docroot |
+| **MariaDB** | `mysqld_safe &` | Start MySQL |
+| | `mysql -u root` | Connect as root |
+| | `mysqladmin -u root shutdown` | Stop MySQL |
+| **Ngrok** | `ngrok http 8080` | HTTP tunnel |
+| | `ngrok tcp 22` | TCP tunnel |
+| **SSL** | `openssl req -x509 ...` | Generate cert |
+
+---
+
+## 🏆 BONUS: PRODUCTION TIPS
+
+### Web Server Security Hardening
+
+```bash
+# Security hardening checklist
+
+# 1. Hide server version
+# Apache: In httpd.conf
+ServerTokens Prod
+ServerSignature Off
+
+# Nginx: In nginx.conf
+server_tokens off;
+
+# 2. Security headers
+# Nginx configuration
+add_header X-Frame-Options "SAMEORIGIN";
+add_header X-Content-Type-Options "nosniff";
+add_header X-XSS-Protection "1; mode=block";
+add_header Content-Security-Policy "default-src 'self'";
+add_header Referrer-Policy "strict-origin-when-cross-origin";
+
+# 3. Disable directory listing
+# Apache
+Options -Indexes
+
+# Nginx
+autoindex off;
+
+# 4. Limit request size
+# Nginx
+client_max_body_size 10M;
+
+# Apache (in .htaccess)
+LimitRequestBody 10485760
+
+# 5. Rate limiting
+# Nginx
+limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;
+limit_req zone=one burst=20 nodelay;
+
+# 6. Block common attacks
+# In Nginx location block
+if ($request_method !~ ^(GET|HEAD|POST)$) { return 405; }
+if ($http_user_agent ~* (bot|crawl|spider)) { return 403; }
+
+# 7. Secure PHP settings
+# In php.ini
+expose_php = Off
+display_errors = Off
+log_errors = On
+```
+
+### SSL/HTTPS Configuration
+
+```bash
+# Complete SSL setup
+
+# 1. Generate self-signed certificate
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout $PREFIX/etc/apache2/server.key \
+    -out $PREFIX/etc/apache2/server.crt \
+    -subj "/C=IN/ST=State/L=City/O=Org/CN=localhost"
+
+# 2. Apache SSL configuration
+cat >> $PREFIX/etc/apache2/httpd.conf << 'EOF'
+LoadModule ssl_module $PREFIX/libexec/apache2/mod_ssl.so
+
+Listen 8443
+<VirtualHost *:8443>
+    ServerName localhost
+    SSLEngine on
+    SSLCertificateFile $PREFIX/etc/apache2/server.crt
+    SSLCertificateKeyFile $PREFIX/etc/apache2/server.key
+    DocumentRoot $PREFIX/var/www/html
+    
+    <Directory "$PREFIX/var/www/html">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+EOF
+
+# 3. Nginx SSL configuration
+cat >> $PREFIX/etc/nginx/nginx.conf << 'EOF'
+server {
+    listen 8443 ssl;
+    server_name localhost;
+    
+    ssl_certificate $PREFIX/etc/nginx/server.crt;
+    ssl_certificate_key $PREFIX/etc/nginx/server.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    
+    location / {
+        root $PREFIX/usr/share/nginx/html;
+        index index.html;
+    }
+}
+EOF
+
+# 4. Test HTTPS
+curl -k https://localhost:8443
+```
+
+### Firewall Configuration
+
+```bash
+# Firewall rules for web servers (if iptables available)
+
+# Allow HTTP and HTTPS
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
+
+# Allow from specific IP only
+iptables -A INPUT -p tcp -s 192.168.1.0/24 --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -j DROP
+
+# Rate limit connections
+iptables -A INPUT -p tcp --dport 80 -m limit --limit 25/min --limit-burst 100 -j ACCEPT
+
+# Block common attack patterns
+iptables -A INPUT -p tcp --dport 80 -m string --string "SELECT" --algo bm -j DROP
+iptables -A INPUT -p tcp --dport 80 -m string --string "UNION" --algo bm -j DROP
+
+# Save rules
+iptables-save > /etc/iptables/rules.v4
+```
+
+---
+
+## 📝 CHAPTER SUMMARY
+
+### What You Learned
+
+- ✅ **Python HTTP Server**: Quick file sharing and testing
+- ✅ **Node.js Server**: Dynamic web applications and APIs
+- ✅ **Apache Setup**: PHP hosting and virtual hosts
+- ✅ **Nginx Configuration**: Reverse proxy and static files
+- ✅ **PHP Integration**: Dynamic web pages with Apache
+- ✅ **Database Setup**: MariaDB and SQLite for web apps
+- ✅ **Public Access**: Using ngrok for internet exposure
+- ✅ **SSL Configuration**: HTTPS setup and certificates
+
+### Key Takeaways
+
+1. **Choose the right server**: Python for quick tests, Nginx for production
+2. **Security first**: Always use HTTPS in production
+3. **Monitor resources**: Use htop/netstat to watch server health
+4. **Backup configs**: Keep copies of working configurations
+5. **Test thoroughly**: Always test from external devices before going live
+
+---
+
+## 📈 PERFORMANCE TUNING
+
+### Apache Optimization
+
+```apache
+# Apache performance tuning in httpd.conf
+
+# MPM Configuration
+<IfModule mpm_prefork_module>
+    StartServers             5
+    MinSpareServers          5
+    MaxSpareServers         10
+    MaxRequestWorkers      150
+    MaxConnectionsPerChild   0
+</IfModule>
+
+# Enable compression
+LoadModule deflate_module $PREFIX/libexec/apache2/mod_deflate.so
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript
+</IfModule>
+
+# Enable caching
+LoadModule expires_module $PREFIX/libexec/apache2/mod_expires.so
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+</IfModule>
+
+# Connection settings
+KeepAlive On
+KeepAliveTimeout 5
+MaxKeepAliveRequests 100
+```
+
+### Nginx Optimization
+
+```nginx
+# nginx.conf performance tuning
+
+worker_processes 1;  # Set to CPU cores
+
+events {
+    worker_connections 1024;
+    use epoll;
+    multi_accept on;
+}
+
+http {
+    # Basic optimization
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    
+    # Compression
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_types text/plain text/css text/xml application/json application/javascript application/xml;
+    
+    # Caching
+    open_file_cache max=1000 inactive=20s;
+    open_file_cache_valid 30s;
+    open_file_cache_min_uses 2;
+    open_file_cache_errors on;
+    
+    # Buffer sizes
+    client_body_buffer_size 16K;
+    client_header_buffer_size 1k;
+    client_max_body_size 8m;
+    large_client_header_buffers 4 8k;
+}
+```
+
+### Node.js Optimization
+
+```javascript
+// Node.js server optimization
+
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
+
+if (cluster.isMaster) {
+    // Fork workers
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+    }
+    
+    cluster.on('exit', (worker) => {
+        console.log(`Worker ${worker.process.pid} died`);
+        cluster.fork(); // Restart worker
+    });
+} else {
+    const express = require('express');
+    const app = express();
+    
+    // Enable trust proxy
+    app.set('trust proxy', true);
+    
+    // Compression middleware
+    const compression = require('compression');
+    app.use(compression());
+    
+    // Cache headers
+    app.use((req, res, next) => {
+        res.set('Cache-Control', 'public, max-age=300');
+        next();
+    });
+    
+    app.listen(3000);
+}
+```
+
+---
+
+## 🔄 BACKUP & RECOVERY
+
+### Web Server Backup Script
+
+```bash
+#!/bin/bash
+# web-server-backup.sh
+
+BACKUP_DIR=~/web-backups
+DATE=$(date +%Y%m%d_%H%M%S)
+
+mkdir -p $BACKUP_DIR
+
+# Backup web root
+tar czf $BACKUP_DIR/www-$DATE.tar.gz -C $PREFIX/var/www html
+
+# Backup Apache config
+tar czf $BACKUP_DIR/apache-config-$DATE.tar.gz -C $PREFIX/etc/apache2 .
+
+# Backup Nginx config
+tar czf $BACKUP_DIR/nginx-config-$DATE.tar.gz -C $PREFIX/etc/nginx .
+
+# Backup SSL certificates
+tar czf $BACKUP_DIR/ssl-certs-$DATE.tar.gz -C $PREFIX/etc/apache2 server.crt server.key 2>/dev/null
+
+# Backup databases
+mysqldump -u root --all-databases > $BACKUP_DIR/all-databases-$DATE.sql 2>/dev/null
+
+# Keep only last 7 backups
+find $BACKUP_DIR -name "*.tar.gz" -mtime +7 -delete
+find $BACKUP_DIR -name "*.sql" -mtime +7 -delete
+
+echo "Web server backup completed: $BACKUP_DIR"
+ls -la $BACKUP_DIR/
+```
+
+### Disaster Recovery Plan
+
+```bash
+# Web server disaster recovery
+
+# 1. Stop all services
+pkill nginx
+apachectl stop
+mysqladmin -u root shutdown
+
+# 2. Restore web files
+tar xzf www-backup.tar.gz -C $PREFIX/var/www/
+
+# 3. Restore configurations
+tar xzf apache-config-backup.tar.gz -C $PREFIX/etc/apache2/
+tar xzf nginx-config-backup.tar.gz -C $PREFIX/etc/nginx/
+
+# 4. Restore SSL certificates
+cp server.crt server.key $PREFIX/etc/apache2/
+
+# 5. Restore databases
+mysqld_safe &
+sleep 5
+mysql -u root < all-databases-backup.sql
+
+# 6. Fix permissions
+chmod -R 755 $PREFIX/var/www/html
+chmod 644 $PREFIX/var/www/html/*.html
+chmod 644 $PREFIX/var/www/html/*.php
+
+# 7. Test configuration
+apachectl configtest
+nginx -t
+
+# 8. Start services
+apachectl start
+nginx
+```
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+### Quiz: Web Server Mastery
+
+**Question 1:** What command starts Python's HTTP server on port 8080?
+- A) `python http.server 8080`
+- B) `python -m http.server 8080`
+- C) `python3 --http 8080`
+- D) `python -s http 8080`
+
+**Question 2:** How do you start Apache in Termux?
+- A) `service apache2 start`
+- B) `apache2 start`
+- C) `apachectl start`
+- D) `/etc/init.d/apache start`
+
+**Question 3:** What is the default Apache document root in Termux?
+- A) `/var/www/html`
+- B) `$PREFIX/var/www/html`
+- C) `/home/www`
+- D) `~/www`
+
+**Question 4:** Which command stops Nginx?
+- A) `nginx stop`
+- B) `nginx -s stop`
+- C) `service nginx stop`
+- D) `killall nginx`
+
+**Question 5:** What does `-t` flag do in PHP built-in server?
+- A) Test mode
+- B) Specify document root
+- C) Enable TLS
+- D) Timeout setting
+
+**Question 6:** How to start MariaDB server?
+- A) `service mysql start`
+- B) `mysqld_safe &`
+- C) `mysql start`
+- D) `systemctl start mariadb`
+
+**Question 7:** What is ngrok used for?
+- A) DNS management
+- B) SSL certificate generation
+- C) Creating public tunnels
+- D) Load balancing
+
+**Question 8:** Which Nginx command tests configuration?
+- A) `nginx -c`
+- B) `nginx -t`
+- C) `nginx --test`
+- D) `nginx configtest`
+
+**Question 9:** What Apache module enables PHP?
+- A) `mod_php`
+- B) `php_module`
+- C) `mod_script`
+- D) `libphp`
+
+**Question 10:** Which port is default for HTTPS?
+- A) 80
+- B) 443
+- C) 8080
+- D) 8443
+
+**Question 11:** What PHP command shows installed modules?
+- A) `php -m`
+- B) `php --modules`
+- C) `php -i`
+- D) `php -l`
+
+**Question 12:** How to make Python server accessible only on localhost?
+- A) `python -m http.server --local`
+- B) `python -m http.server --bind 127.0.0.1`
+- C) `python -m http.server --only localhost`
+- D) `python -m http.server -l 127.0.0.1`
+
+### Answers
+
+| Q | A | Q | A | Q | A | Q | A |
+|---|---|---|---|---|---|---|---|
+| 1 | B | 4 | B | 7 | C | 10 | B |
+| 2 | C | 5 | B | 8 | B | 11 | A |
+| 3 | B | 6 | B | 9 | B | 12 | B |
+
+---
+
+## 🎯 SERVER SETUP CHALLENGES
+
+### Challenge 1: Static Website Hosting
+```bash
+# Task: Host a static HTML website
+
+# Steps:
+# 1. Create website directory
+mkdir -p ~/my-website
+cd ~/my-website
+
+# 2. Create HTML files
+echo '<h1>Welcome to My Website</h1>' > index.html
+echo '<p>About page</p>' > about.html
+
+# 3. Start server
+python -m http.server 8080 &
+
+# 4. Test access
+curl http://localhost:8080
+curl http://localhost:8080/about.html
+
+# Verification: Both pages should be accessible
+```
+
+### Challenge 2: PHP Application Setup
+```bash
+# Task: Setup PHP application with Apache
+
+# Steps:
+# 1. Install PHP and Apache
+pkg install php php-apache apache2 -y
+
+# 2. Configure PHP module
+echo "LoadModule php_module $PREFIX/libexec/apache2/libphp.so" >> $PREFIX/etc/apache2/httpd.conf
+
+# 3. Create PHP file
+cat > $PREFIX/var/www/html/info.php << 'EOF'
+<?php
+phpinfo();
+?>
+EOF
+
+# 4. Start Apache
+apachectl start
+
+# 5. Test
+curl http://localhost:8080/info.php
+
+# Verification: PHP info page should display
+```
+
+### Challenge 3: Database-Backed Application
+```bash
+# Task: Create web app with database
+
+# Steps:
+# 1. Setup MariaDB
+pkg install mariadb -y
+mysql_install_db
+mysqld_safe &
+sleep 3
+
+# 2. Create database and table
+mysql -u root << 'SQL'
+CREATE DATABASE webapp;
+USE webapp;
+CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100));
+INSERT INTO users (name) VALUES ('Test User');
+SQL
+
+# 3. Create PHP page
+cat > $PREFIX/var/www/html/db.php << 'EOF'
+<?php
+$conn = new mysqli('localhost', 'root', '', 'webapp');
+$result = $conn->query('SELECT * FROM users');
+while ($row = $result->fetch_assoc()) {
+    echo $row['name'] . '<br>';
+}
+?>
+EOF
+
+# 4. Test
+curl http://localhost:8080/db.php
+
+# Verification: "Test User" should be displayed
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Title | Relevance |
+|---------|-------|-----------|
+| **Chapter 45** | SSH Server | Secure remote access to web server |
+| **Chapter 46** | SSH Client | Tunnel to access web services |
+| **Chapter 48** | Database | Backend for dynamic websites |
+| **Chapter 49** | Proot Distros | Run full Linux web servers |
+| **Chapter 22** | Users & Permissions | File permissions for web root |
+| **Chapter 38** | Network Tools | Diagnose web server issues |
+| **Chapter 44** | Termux API | Control server via API |
+
+---
+
+**🎉 Chapter 47 Upgraded Successfully!**
+

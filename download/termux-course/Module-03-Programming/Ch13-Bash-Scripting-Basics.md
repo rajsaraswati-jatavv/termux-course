@@ -3611,4 +3611,2167 @@ Before moving to Chapter 14, verify:
 
 **Chapter Complete! 🎉**
 
+---
+
+## 💡 PRO TIPS BOX
+
+> 💡 **Pro Tip #1:** Always use `#!/usr/bin/env bash` instead of `#!/bin/bash` for better portability across different systems.
+
+> 💡 **Pro Tip #2:** Use `set -euo pipefail` at the beginning of scripts for strict error handling - exit on error, undefined variables, and pipe failures.
+
+> 💡 **Pro Tip #3:** Quote all variable expansions with `"$variable"` to prevent word splitting and glob expansion issues.
+
+> 💡 **Pro Tip #4:** Use `[[ ]]` instead of `[ ]` for tests - it's more powerful and avoids many quoting issues.
+
+> 💡 **Pro Tip #5:** Use `$()` for command substitution instead of backticks `` ` ` `` - it's more readable and nestable.
+
+> 💡 **Pro Tip #6:** Use `printf` instead of `echo` for portable and predictable output formatting.
+
+> 💡 **Pro Tip #7:** Always check if a variable is set with `${var:-default}` or `${var:?error message}` for safer scripts.
+
+> 💡 **Pro Tip #8:** Use `local` keyword for variables inside functions to prevent polluting the global namespace.
+
+> 💡 **Pro Tip #9:** Use `shellcheck` to find common bash scripting mistakes - it's invaluable for script quality.
+
+> 💡 **Pro Tip #10:** Add `|| exit 1` after critical commands to ensure script fails immediately if a command fails.
+
+---
+
+## 🔥 REAL WORLD APPLICATIONS
+
+### Where Bash Scripting Applies in Real Life
+
+**1. System Administration**
+- Automated user management and provisioning
+- Log rotation and system maintenance
+- Backup automation with scheduling
+- Service monitoring and auto-restart
+
+**2. DevOps & Deployment**
+- CI/CD pipeline scripts
+- Automated deployment workflows
+- Environment setup automation
+- Container orchestration helpers
+
+**3. Security & Penetration Testing**
+- Network scanning automation
+- Log analysis scripts
+- Security audit automation
+- Exploit chain scripting
+
+**4. Data Processing**
+- Log file parsing and analysis
+- Batch file processing
+- Data transformation pipelines
+- Report generation automation
+
+**5. Mobile Development (Termux)**
+- Android automation scripts
+- File synchronization tools
+- Quick prototyping and testing
+- Custom tool development
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### Bash Scripting Quick Reference
+
+| Concept | Syntax | Example |
+|---------|--------|---------|
+| Shebang | `#!/bin/bash` | First line of script |
+| Variable | `name=value` | `name="Termux"` |
+| Use variable | `$name` or `${name}` | `echo $name` |
+| Command sub | `$(command)` | `date=$(date)` |
+| User input | `read var` | `read -p "Name: " name` |
+| Arithmetic | `$((expr))` | `sum=$((a + b))` |
+| String length | `${#var}` | `${#name}` |
+| Substring | `${var:start:len}` | `${name:0:5}` |
+| If statement | `if [ ]; then fi` | `if [ -f "$file" ]` |
+| For loop | `for i in list; do done` | `for f in *.txt` |
+| While loop | `while [ ]; do done` | `while read line` |
+| Function | `name() { }` | `greet() { echo "Hi"; }` |
+| Array | `arr=(a b c)` | `items=(1 2 3)` |
+| Array element | `${arr[i]}` | `${items[0]}` |
+| All array | `${arr[@]}` | `${items[@]}` |
+| Array length | `${#arr[@]}` | `${#items[@]}` |
+| Exit status | `$?` | `if [ $? -eq 0 ]` |
+| Arguments | `$1, $2, $@` | `echo "First: $1"` |
+| Debug | `bash -x script` | Shows execution |
+
+---
+
+## 🏆 BONUS: ADVANCED TIPS
+
+### Advanced Bash Patterns
+
+```bash
+# 1. Error handling with trap
+cleanup() {
+    rm -f "$temp_file"
+    echo "Cleanup done!"
+}
+trap cleanup EXIT INT TERM
+
+# 2. Safe script template
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+# 3. Parsing command line arguments with getopts
+while getopts ":u:p:h" opt; do
+    case $opt in
+        u) user="$OPTARG" ;;
+        p) pass="$OPTARG" ;;
+        h) echo "Usage: $0 [-u user] [-p pass]"; exit 0 ;;
+        \?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
+        :) echo "Option -$OPTARG requires argument." >&2; exit 1 ;;
+    esac
+done
+
+# 4. Process substitution
+while read line; do
+    echo "Processing: $line"
+done < <(grep "error" logfile.txt)
+
+# 5. Here documents
+cat << EOF
+Configuration file
+User: $USER
+Home: $HOME
+Date: $(date)
+EOF
+
+# 6. Associative arrays (Bash 4+)
+declare -A config
+config[host]="localhost"
+config[port]="8080"
+echo "Server: ${config[host]}:${config[port]}"
+
+# 7. Parallel processing
+process_file() {
+    echo "Processing: $1"
+}
+export -f process_file
+find . -name "*.txt" | xargs -P 4 -I {} bash -c 'process_file "$@"' _ {}
+
+# 8. Lock file for single instance
+LOCK_FILE="/tmp/script.lock"
+exec 200>"$LOCK_FILE"
+flock -n 200 || { echo "Script already running"; exit 1; }
+```
+
+### Useful Bash One-Liners
+
+```bash
+# Find and delete files older than 7 days
+find /path -type f -mtime +7 -delete
+
+# Replace string in multiple files
+sed -i 's/old/new/g' *.txt
+
+# Count lines in all Python files
+find . -name "*.py" -exec cat {} + | wc -l
+
+# Get external IP
+curl -s ifconfig.me
+
+# Monitor file changes
+inotifywait -m -r -e modify,create,delete /path/to/watch
+
+# Parallel downloads
+cat urls.txt | xargs -P 4 -I {} wget {}
+
+# Find largest files
+du -ah /path | sort -rh | head -20
+
+# Kill process by name
+pkill -f "process_name"
+
+# Create backup with timestamp
+cp file.txt file.txt.$(date +%Y%m%d_%H%M%S).bak
+
+# Check if command exists
+command -v git >/dev/null 2>&1 || { echo "git not found"; exit 1; }
+```
+
+---
+
+## 📝 CHAPTER SUMMARY
+
+### What You Learned
+
+- ✅ What Bash scripting is and why it's useful
+- ✅ Creating and executing shell scripts
+- ✅ Shebang lines and script structure
+- ✅ Variables, special variables, and user input
+- ✅ Arithmetic operations with `(( ))`, `expr`, and `let`
+- ✅ String operations: length, substring, replacement
+- ✅ Conditional statements: if, elif, else, case
+- ✅ File and string test operators
+- ✅ Loops: for, while, until with break/continue
+- ✅ Arrays: indexed and associative
+- ✅ Functions and local variables
+- ✅ Debugging techniques with `bash -x` and `set`
+
+### Key Takeaways
+
+1. **Bash is powerful for automation** - Leverage it for repetitive tasks
+2. **Quote your variables** - Prevent word splitting issues
+3. **Use proper error handling** - Scripts should fail gracefully
+4. **Test incrementally** - Write small pieces, test, then expand
+5. **Use shellcheck** - It catches common mistakes automatically
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Bash Scripting Interview Questions
+
+**Q1: What is the difference between `[ ]` and `[[ ]]`?**
+
+```bash
+# Answer:
+# [ ] is POSIX test command
+# [[ ]] is Bash extended test (more features)
+
+# [ ] issues:
+[ $name == "hello" ]  # Fails if name is empty or has spaces
+[ "$name" == "hello" ]  # Needs quotes
+
+# [[ ]] advantages:
+[[ $name == "hello" ]]  # Handles empty/space variables
+[[ $name == h* ]]       # Pattern matching
+[[ $name =~ ^h.* ]]     # Regex support
+[[ $a > $b ]]          # String comparison (no escaping needed)
+```
+
+**Q2: How do you handle errors in Bash scripts?**
+
+```bash
+# Answer: Multiple approaches
+
+# 1. set -e: Exit on any command failure
+set -e
+
+# 2. Check exit status
+command || { echo "Failed"; exit 1; }
+
+# 3. Use if statements
+if ! command; then
+    echo "Error occurred"
+    exit 1
+fi
+
+# 4. Trap for cleanup
+trap 'echo "Error on line $LINENO"; exit 1' ERR
+
+# 5. Full strict mode
+set -euo pipefail
+```
+
+**Q3: Explain the difference between `$@` and `$*`**
+
+```bash
+# Answer:
+# $* - All arguments as single string (words joined by first char of IFS)
+# $@ - All arguments as separate strings
+
+# Example:
+set -- "one two" "three"
+
+echo "$*"   # Output: one two three (single string)
+echo "$@"   # Output: one two three (two arguments preserved)
+
+# Use "$@" when iterating:
+for arg in "$@"; do
+    echo "Arg: $arg"
+done
+```
+
+**Q4: How do you pass arguments to a function in Bash?**
+
+```bash
+# Answer: Functions receive arguments like scripts
+
+greet() {
+    local name="${1:-Guest}"  # Default value
+    local greeting="${2:-Hello}"
+    
+    echo "$greeting, $name!"
+    
+    # All arguments
+    echo "All args: $@"
+    echo "Number of args: $#"
+}
+
+greet "Alice" "Hi"      # Hi, Alice!
+greet                    # Hello, Guest!
+
+# Pass array to function
+process_array() {
+    local arr=("$@")
+    for item in "${arr[@]}"; do
+        echo "Item: $item"
+    done
+}
+my_array=(a b c)
+process_array "${my_array[@]}"
+```
+
+**Q5: What is the purpose of `local` keyword in functions?**
+
+```bash
+# Answer: local limits variable scope to function
+
+counter=0
+
+increment() {
+    local counter=10  # Local variable
+    ((counter++))
+    echo "Inside: $counter"  # 11
+}
+
+increment
+echo "Outside: $counter"  # 0 (unchanged)
+
+# Without local:
+bad_increment() {
+    ((counter++))  # Modifies global!
+}
+```
+
+**Q6: How do you read a file line by line in Bash?**
+
+```bash
+# Answer: Use while read with IFS
+
+# Correct way (preserves spaces and backslashes):
+while IFS= read -r line; do
+    echo "Line: $line"
+done < "file.txt"
+
+# Read with fields:
+while IFS=, read -r field1 field2 field3; do
+    echo "Field1: $field1, Field2: $field2"
+done < "data.csv"
+
+# Process substitution for multiple files:
+while read -r line; do
+    echo "$line"
+done < <(grep "error" logfile.txt)
+```
+
+**Q7: Explain process substitution with examples**
+
+```bash
+# Answer: Process substitution treats command output as a file
+
+# <(command) - Output as file (input)
+# >(command) - Input as file (output)
+
+# Compare two command outputs:
+diff <(sort file1.txt) <(sort file2.txt)
+
+# Write to multiple files:
+tee >(process1) >(process2) > output.txt
+
+# Read from multiple sources:
+cat <(echo "First") <(echo "Second")
+
+# Use in loops:
+while read line; do
+    echo "$line"
+done < <(find . -name "*.txt")
+```
+
+**Q8: What is the significance of `$?` and how do you use it?**
+
+```bash
+# Answer: $? holds exit status of last command
+
+command
+if [ $? -eq 0 ]; then
+    echo "Success"
+else
+    echo "Failed with code: $?"
+fi
+
+# Better pattern:
+if command; then
+    echo "Success"
+fi
+
+# Capture and check:
+output=$(some_command)
+status=$?
+if [ $status -ne 0 ]; then
+    echo "Command failed: $output"
+    exit $status
+fi
+```
+
+**Q9: How do you create and use associative arrays?**
+
+```bash
+# Answer: Bash 4+ supports key-value arrays
+
+# Declare and initialize
+declare -A user
+user[name]="Alice"
+user[age]=25
+user[city]="Mumbai"
+
+# Or initialize at once
+declare -A config=(
+    [host]="localhost"
+    [port]="8080"
+    [debug]="true"
+)
+
+# Access values
+echo "User: ${user[name]}"
+echo "City: ${user[city]}"
+
+# Iterate over keys
+for key in "${!user[@]}"; do
+    echo "$key: ${user[$key]}"
+done
+
+# Check if key exists
+if [[ -v user[name] ]]; then
+    echo "Name exists"
+fi
+
+# Get all keys/values
+echo "Keys: ${!user[@]}"
+echo "Values: ${user[@]}"
+```
+
+**Q10: What are here documents and here strings?**
+
+```bash
+# Answer: Inline text input mechanisms
+
+# Here document (multi-line)
+cat << EOF
+Line 1
+Line 2 with variable: $HOME
+Line 3
+EOF
+
+# Here document with variable expansion disabled
+cat << 'EOF'
+$HOME won't expand
+Literal text here
+EOF
+
+# Here string (single line)
+grep "pattern" <<< "search in this string"
+
+# Use with commands
+wc -w <<< "count these words"
+
+# Common use: write config files
+cat > config.ini << EOF
+[database]
+host = localhost
+port = 3306
+EOF
+```
+
+---
+
+## 🚀 BEST PRACTICES
+
+### Code Style Guidelines
+
+```bash
+# Good: Use meaningful variable names
+user_name="Alice"
+file_count=10
+is_running=true
+
+# Bad: Cryptic variable names
+n="Alice"
+x=10
+f=true
+
+# Good: Use functions for repeated code
+check_file() {
+    [[ -f "$1" ]] || { echo "File not found: $1"; return 1; }
+}
+
+# Good: Use constants at top
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly LOG_FILE="/var/log/script.log"
+
+# Good: Proper quoting
+paths=("$dir1" "$dir2" "$dir3")
+for path in "${paths[@]}"; do
+    echo "Processing: $path"
+done
+
+# Good: Consistent indentation (2 or 4 spaces)
+function_name() {
+    if condition; then
+        do_something
+    fi
+}
+```
+
+### Performance Tips
+
+```bash
+# Avoid subshells when possible
+# Slow:
+for file in $(ls); do
+    process "$file"
+done
+
+# Fast:
+for file in *; do
+    process "$file"
+done
+
+# Use builtins over external commands
+# Slow:
+output=$(echo "$var" | sed 's/old/new/')
+# Fast:
+output="${var/old/new}"
+
+# Avoid repeated command execution
+# Slow:
+for i in {1..100}; do
+    date >> log.txt
+done
+
+# Fast:
+date > log.txt
+for i in {1..100}; do
+    cat log.txt >> log.txt
+done
+
+# Use arrays instead of space-separated strings
+files=(file1.txt file2.txt "file with spaces.txt")
+for f in "${files[@]}"; do
+    process "$f"
+done
+```
+
+### Common Mistakes to Avoid
+
+```bash
+# ❌ Mistake: Missing quotes
+for f in $files  # Breaks on spaces
+# ✅ Fix: Quote the expansion
+for f in "${files[@]}"
+
+# ❌ Mistake: Using == in [ ]
+[ "$a" == "$b" ]  # Not POSIX
+# ✅ Fix: Use = or [[ ]]
+[ "$a" = "$b" ]
+[[ "$a" == "$b" ]]
+
+# ❌ Mistake: Not checking command success
+rm "$file"
+# ✅ Fix: Check or use set -e
+rm "$file" || { echo "Failed to remove"; exit 1; }
+
+# ❌ Mistake: Using cd without checking
+cd /some/path
+# ✅ Fix: Check cd success
+cd /some/path || { echo "Cannot cd"; exit 1; }
+
+# ❌ Mistake: Unquoted variables in arithmetic
+result=$[$a + $b]
+# ✅ Fix: Use $(( )) or (( ))
+result=$((a + b))
+((result = a + b))
+
+# ❌ Mistake: Not using local in functions
+func() {
+    result=42  # Pollutes global
+}
+# ✅ Fix: Use local
+func() {
+    local result=42
+}
+```
+
+---
+
+## 📊 CODE COMPARISON
+
+### Before vs After: Bash Script Quality
+
+```bash
+# ❌ BEFORE: Messy, error-prone
+#!/bin/bash
+n=$1
+for i in `seq 1 $n`
+do
+echo $i
+done
+
+# ✅ AFTER: Clean, robust, documented
+#!/usr/bin/env bash
+# Script: Counter
+# Description: Print numbers from 1 to N
+
+set -euo pipefail
+
+count="${1:-10}"  # Default to 10
+
+# Validate input
+if ! [[ "$count" =~ ^[0-9]+$ ]]; then
+    echo "Error: '$count' is not a valid number" >&2
+    exit 1
+fi
+
+for ((i = 1; i <= count; i++)); do
+    printf "Number: %d\n" "$i"
+done
+```
+
+### Bad vs Good Practices
+
+```bash
+# ❌ BAD: No error handling
+#!/bin/bash
+cd /tmp
+rm -rf old_files
+echo "Done"
+
+# ✅ GOOD: Proper error handling
+#!/usr/bin/env bash
+set -euo pipefail
+
+log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
+error() { echo "ERROR: $*" >&2; }
+
+target_dir="/tmp/old_files"
+
+if [[ ! -d "$target_dir" ]]; then
+    error "Directory does not exist: $target_dir"
+    exit 1
+fi
+
+log "Removing files from $target_dir"
+if rm -rf "$target_dir"; then
+    log "Cleanup successful"
+else
+    error "Cleanup failed"
+    exit 1
+fi
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Topic | Relevance |
+|---------|-------|-----------|
+| Chapter 11 | Python Installation | Alternative scripting language |
+| Chapter 12 | Python Basics | Compare Python vs Bash |
+| Chapter 14 | Bash Scripting Advanced | Next level scripting |
+| Chapter 15 | Git Version Control | Version your scripts |
+| Chapter 25 | Automation Scripts | Practical Bash applications |
+| Chapter 30 | Cron Jobs | Schedule Bash scripts |
+| Chapter 35 | Termux API | Bash + Termux integration |
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+### Quiz: Bash Scripting Basics
+
+**1. What does the shebang `#!/bin/bash` do?**
+- A) Comments out the line
+- B) Specifies the script interpreter
+- C) Defines the script name
+- D) Sets execution permissions
+
+<details>
+<summary>Click for Answer</summary>
+**Answer: B) Specifies the script interpreter**
+
+The shebang tells the system which program should execute the script.
+</details>
+
+**2. Which command makes a script executable?**
+- A) `exec script.sh`
+- B) `run script.sh`
+- C) `chmod +x script.sh`
+- D) `permit script.sh`
+
+<details>
+<summary>Click for Answer</summary>
+**Answer: C) `chmod +x script.sh`**
+
+`chmod +x` adds execute permission to the file.
+</details>
+
+**3. What is the correct way to access the first argument?**
+- A) `$0`
+- B) `$1`
+- C) `$first`
+- D) `$arg`
+
+<details>
+<summary>Click for Answer</summary>
+**Answer: B) `$1`**
+
+`$1` contains the first command-line argument. `$0` is the script name.
+</details>
+
+**4. Which test checks if a file exists?**
+- A) `[ -e file ]`
+- B) `[ -f file ]`
+- C) `[ -a file ]`
+- D) Both A and B
+
+<details>
+<summary>Click for Answer</summary>
+**Answer: D) Both A and B**
+
+`-e` checks if file exists (any type), `-f` checks if it's a regular file.
+</details>
+
+**5. What does `${#var}` return?**
+- A) Variable name
+- B) Variable value
+- C) Variable length
+- D) Variable type
+
+<details>
+<summary>Click for Answer</summary>
+**Answer: C) Variable length**
+
+`${#var}` returns the number of characters in the variable.
+</details>
+
+**6. Which loop runs at least once?**
+- A) `for`
+- B) `while`
+- C) `until`
+- D) None of the above
+
+<details>
+<summary>Click for Answer</summary>
+**Answer: D) None of the above**
+
+In Bash, all loops check condition before first iteration. For at-least-once behavior, use `while true; do ... break; done`.
+</details>
+
+**7. How do you define an array in Bash?**
+- A) `arr = [1, 2, 3]`
+- B) `arr=(1 2 3)`
+- C) `arr[1, 2, 3]`
+- D) `array arr = (1 2 3)`
+
+<details>
+<summary>Click for Answer</summary>
+**Answer: B) `arr=(1 2 3)`**
+
+Bash arrays use parentheses with space-separated values.
+</details>
+
+**8. What does `$?` contain?**
+- A) Process ID
+- B) Exit status
+- C) Script name
+- D) Argument count
+
+<details>
+<summary>Click for Answer</summary>
+**Answer: B) Exit status**
+
+`$?` contains the exit status of the last executed command (0 = success).
+</details>
+
+**9. Which creates a local variable in a function?**
+- A) `var value`
+- B) `my value`
+- C) `local value`
+- D) `scope value`
+
+<details>
+<summary>Click for Answer</summary>
+**Answer: C) `local value`**
+
+The `local` keyword restricts variable scope to the function.
+</details>
+
+**10. What does `set -e` do?**
+- A) Enables echo
+- B) Exits on command failure
+- C) Enables errors
+- D) Sets environment
+
+<details>
+<summary>Click for Answer</summary>
+**Answer: B) Exits on command failure**
+
+`set -e` makes the script exit immediately if any command returns non-zero.
+</details>
+
+---
+
+## 🔧 DEBUG THIS EXERCISES
+
+### Debug This #1: Spaces in Variable Assignment
+
+```bash
+# Problem: Syntax error
+name = "John"
+echo $name
+
+# Error: command not found
+```
+
+<details>
+<summary>Click for Solution</summary>
+
+```bash
+# Solution: No spaces around = in assignments
+name="John"
+echo "$name"
+
+# Bash treats "name = "John"" as command "name" with arguments
+```
+</details>
+
+### Debug This #2: Unquoted Variable
+
+```bash
+# Problem: Fails on files with spaces
+for file in $(ls); do
+    echo "Processing: $file"
+done
+```
+
+<details>
+<summary>Click for Solution</summary>
+
+```bash
+# Solution: Use glob pattern instead of ls
+for file in *; do
+    echo "Processing: $file"
+done
+
+# Or with array
+files=(*)
+for file in "${files[@]}"; do
+    echo "Processing: $file"
+done
+```
+</details>
+
+### Debug This #3: Wrong Comparison Operator
+
+```bash
+# Problem: Always true or error
+if [ $count > 5 ]; then
+    echo "Greater"
+fi
+```
+
+<details>
+<summary>Click for Solution</summary>
+
+```bash
+# Solution 1: Use -gt for numeric comparison
+if [ "$count" -gt 5 ]; then
+    echo "Greater"
+fi
+
+# Solution 2: Use (( )) for arithmetic
+if (( count > 5 )); then
+    echo "Greater"
+fi
+```
+</details>
+
+### Debug This #4: Function Return Value
+
+```bash
+# Problem: Doesn't work as expected
+get_name() {
+    echo "John"
+    return "Alice"
+}
+
+name=$(get_name)
+echo "Name: $name"  # Prints "John", not "Alice"
+```
+
+<details>
+<summary>Click for Solution</summary>
+
+```bash
+# Solution: Bash functions return exit codes, not values
+# echo outputs to stdout (captured by $())
+
+get_name() {
+    echo "Alice"  # This is captured
+}
+
+name=$(get_name)
+echo "Name: $name"  # Alice
+
+# For multiple values:
+get_info() {
+    echo "Alice"
+    echo "25"
+}
+read name age <<< "$(get_info)"
+```
+</details>
+
+### Debug This #5: Script Continues After Failure
+
+```bash
+# Problem: Script continues even if mkdir fails
+mkdir /protected_dir
+echo "Directory created"
+touch /protected_dir/file.txt
+```
+
+<details>
+<summary>Click for Solution</summary>
+
+```bash
+# Solution 1: Use set -e at start
+#!/bin/bash
+set -e
+
+mkdir /protected_dir
+echo "Directory created"
+touch /protected_dir/file.txt
+
+# Solution 2: Check each command
+mkdir /protected_dir || { echo "Failed to create dir"; exit 1; }
+echo "Directory created"
+touch /protected_dir/file.txt || { echo "Failed to create file"; exit 1; }
+
+# Solution 3: Use && chaining
+mkdir /protected_dir && echo "Directory created" && touch /protected_dir/file.txt
+```
+</details>
+
+---
+
+## 💻 CODING CHALLENGES
+
+### Challenge 1: Log File Analyzer
+
+Create a script that analyzes a log file and reports statistics.
+
+```bash
+#!/bin/bash
+# Challenge: Complete this script to:
+# 1. Count total lines
+# 2. Count ERROR, WARNING, INFO lines
+# 3. Find most common error
+# 4. Generate summary report
+
+LOG_FILE="$1"
+
+# Your code here...
+```
+
+<details>
+<summary>Click for Solution</summary>
+
+```bash
+#!/bin/bash
+set -euo pipefail
+
+LOG_FILE="${1:-}"
+
+if [[ -z "$LOG_FILE" ]]; then
+    echo "Usage: $0 <logfile>"
+    exit 1
+fi
+
+if [[ ! -f "$LOG_FILE" ]]; then
+    echo "Error: File not found: $LOG_FILE"
+    exit 1
+fi
+
+echo "═══════════════════════════════════════"
+echo "         LOG FILE ANALYZER"
+echo "═══════════════════════════════════════"
+echo ""
+
+# Count totals
+total_lines=$(wc -l < "$LOG_FILE")
+error_count=$(grep -c "ERROR" "$LOG_FILE" || true)
+warning_count=$(grep -c "WARNING" "$LOG_FILE" || true)
+info_count=$(grep -c "INFO" "$LOG_FILE" || true)
+
+echo "📊 STATISTICS:"
+echo "   Total Lines: $total_lines"
+echo "   Errors: $error_count"
+echo "   Warnings: $warning_count"
+echo "   Info: $info_count"
+echo ""
+
+# Most common error
+echo "🔴 TOP ERRORS:"
+grep "ERROR" "$LOG_FILE" | cut -d']' -f2- | sort | uniq -c | sort -rn | head -5
+echo ""
+
+# Recent errors
+echo "⏰ LAST 5 ERRORS:"
+grep "ERROR" "$LOG_FILE" | tail -5
+```
+</details>
+
+### Challenge 2: Backup Script
+
+Create an automated backup script with compression and rotation.
+
+```bash
+#!/bin/bash
+# Challenge: Create backup script that:
+# 1. Takes source and destination directories
+# 2. Creates compressed backup with timestamp
+# 3. Rotates old backups (keeps last N)
+# 4. Logs all operations
+
+SOURCE="$1"
+DEST="$2"
+KEEP=${3:-5}
+
+# Your code here...
+```
+
+<details>
+<summary>Click for Solution</summary>
+
+```bash
+#!/bin/bash
+set -euo pipefail
+
+SOURCE="${1:?Usage: $0 <source> <dest> [keep]}"
+DEST="${2:?Usage: $0 <source> <dest> [keep]}"
+KEEP="${3:-5}"
+
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_NAME="backup_${TIMESTAMP}.tar.gz"
+LOG_FILE="${DEST}/backup.log"
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"
+}
+
+# Validate source
+if [[ ! -d "$SOURCE" ]]; then
+    log "ERROR: Source directory not found: $SOURCE"
+    exit 1
+fi
+
+# Create destination
+mkdir -p "$DEST"
+
+# Create backup
+log "Creating backup: $BACKUP_NAME"
+if tar -czf "${DEST}/${BACKUP_NAME}" -C "$SOURCE" .; then
+    log "Backup created successfully: $(du -h "${DEST}/${BACKUP_NAME}" | cut -f1)"
+else
+    log "ERROR: Backup failed"
+    exit 1
+fi
+
+# Rotate old backups
+log "Rotating backups (keeping last $KEEP)"
+cd "$DEST"
+ls -t backup_*.tar.gz 2>/dev/null | tail -n +$((KEEP + 1)) | while read -r old_backup; do
+    log "Removing old backup: $old_backup"
+    rm -f "$old_backup"
+done
+
+# Summary
+log "Backup completed. Total backups: $(ls backup_*.tar.gz 2>/dev/null | wc -l)"
+```
+</details>
+
+### Challenge 3: Process Monitor
+
+Create a script that monitors a process and restarts it if it crashes.
+
+```bash
+#!/bin/bash
+# Challenge: Create a process monitor that:
+# 1. Takes a command to run
+# 2. Restarts it if it exits
+# 3. Limits restart attempts
+# 4. Logs restart events
+
+COMMAND="$1"
+MAX_RESTARTS=5
+
+# Your code here...
+```
+
+<details>
+<summary>Click for Solution</summary>
+
+```bash
+#!/bin/bash
+set -euo pipefail
+
+COMMAND="${1:?Usage: $0 <command>}"
+MAX_RESTARTS="${2:-5}"
+LOG_FILE="/tmp/process_monitor.log"
+
+restarts=0
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"
+}
+
+cleanup() {
+    log "Monitor stopped"
+    exit 0
+}
+
+trap cleanup INT TERM
+
+log "Starting process monitor for: $COMMAND"
+log "Max restarts: $MAX_RESTARTS"
+
+while true; do
+    log "Starting process..."
+    
+    # Run the command
+    if $COMMAND; then
+        log "Process exited normally"
+        exit 0
+    else
+        exit_code=$?
+        log "Process crashed with exit code: $exit_code"
+        ((restarts++))
+        
+        if (( restarts >= MAX_RESTARTS )); then
+            log "Maximum restarts reached ($MAX_RESTARTS). Giving up."
+            exit 1
+        fi
+        
+        log "Restarting... (attempt $restarts/$MAX_RESTARTS)"
+        sleep 5  # Wait before restart
+    fi
+done
+```
+</details>
+
+---
+
 *Created by T3rmuxk1ng | Termux Full Course*
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+### Test Your Bash Scripting Knowledge!
+
+**Q1: What does `#!/bin/bash` signify?**
+- A) A comment
+- B) Shebang - interpreter path
+- C) Script name
+- D) Error handler
+
+<details>
+<summary>Answer</summary>
+**B) Shebang - interpreter path** - It tells the system which interpreter to use for executing the script.
+</details>
+
+---
+
+**Q2: How do you make a script executable?**
+- A) `exec script.sh`
+- B) `chmod +x script.sh`
+- C) `run script.sh`
+- D) `make script.sh`
+
+<details>
+<summary>Answer</summary>
+**B) `chmod +x script.sh`** - This adds execute permission to the file.
+</details>
+
+---
+
+**Q3: What is `$?` in Bash?**
+- A) Process ID
+- B) Script name
+- C) Exit status of last command
+- D) Current directory
+
+<details>
+<summary>Answer</summary>
+**C) Exit status of last command** - Returns 0 for success, non-zero for failure.
+</details>
+
+---
+
+**Q4: Which comparison checks if a file exists?**
+- A) `[ -f file ]`
+- B) `[ -e file ]`
+- C) `[ -x file ]`
+- D) Both A and B
+
+<details>
+<summary>Answer</summary>
+**D) Both A and B** - `-e` checks if exists (any type), `-f` checks if it's a regular file.
+</details>
+
+---
+
+**Q5: What does `$@` represent?**
+- A) All arguments as array
+- B) Number of arguments
+- C) Script name
+- D) Last argument
+
+<details>
+<summary>Answer</summary>
+**A) All arguments as array** - `$@` contains all positional parameters passed to the script.
+</details>
+
+---
+
+**Q6: How do you create a variable in Bash?**
+- A) `var = value`
+- B) `var=value`
+- C) `set var value`
+- D) `declare var=value`
+
+<details>
+<summary>Answer</summary>
+**B) `var=value`** - No spaces around the equals sign in Bash variable assignment.
+</details>
+
+---
+
+**Q7: What does `2>&1` do?**
+- A) Redirects stdin to stdout
+- B) Redirects stderr to stdout
+- C) Redirects stdout to stderr
+- D) Redirects both to file
+
+<details>
+<summary>Answer</summary>
+**B) Redirects stderr to stdout** - File descriptor 2 (stderr) is redirected to file descriptor 1 (stdout).
+</details>
+
+---
+
+**Q8: Which loop runs at least once?**
+- A) `for`
+- B) `while`
+- C) `until`
+- D) None of the above
+
+<details>
+<summary>Answer</summary>
+**D) None of the above** - Bash doesn't have a do-while loop that guarantees at least one iteration.
+</details>
+
+---
+
+**Q9: What is the difference between `$()` and backticks?**
+- A) No difference
+- B) `$()` is newer and nestable
+- C) Backticks are deprecated
+- D) `$()` is slower
+
+<details>
+<summary>Answer</summary>
+**B) `$()` is newer and nestable** - `$()` is POSIX standard and easier to nest than backticks.
+</details>
+
+---
+
+**Q10: How do you read user input?**
+- A) `input var`
+- B) `read var`
+- C) `get var`
+- D) `scan var`
+
+<details>
+<summary>Answer</summary>
+**B) `read var`** - The `read` command reads a line from stdin into a variable.
+</details>
+
+---
+
+**Q11: What does `set -e` do?**
+- A) Enables debug mode
+- B) Exits on any error
+- C) Shows all variables
+- D) Sets environment
+
+<details>
+<summary>Answer</summary>
+**B) Exits on any error** - Script terminates immediately if any command returns non-zero.
+</details>
+
+---
+
+**Q12: How do you define an array?**
+- A) `array = (1 2 3)`
+- B) `array=(1 2 3)`
+- C) `array[1 2 3]`
+- D) `declare array 1 2 3`
+
+<details>
+<summary>Answer</summary>
+**B) `array=(1 2 3)`** - Parentheses create an array in Bash without spaces around equals.
+</details>
+
+---
+
+## 💡 PRO TIPS
+
+### 10 Expert Bash Scripting Tips
+
+> **💡 Pro Tip #1: Always Quote Variables**
+> Prevent word splitting and globbing issues:
+> ```bash
+> # ✅ Good
+> [ "$var" = "value" ]
+> 
+> # ❌ Bad - fails with spaces
+> [ $var = value ]
+> ```
+
+> **💡 Pro Tip #2: Use `set -euo pipefail`**
+> Start scripts with strict mode:
+> ```bash
+> #!/bin/bash
+> set -euo pipefail
+> # Now: exits on error, undefined vars fail, pipe failures caught
+> ```
+
+> **💡 Pro Tip #3: Use `[[ ]]` over `[ ]`**
+> Modern test syntax is more robust:
+> ```bash
+> [[ $var == pattern* ]]  # Pattern matching
+> [[ $var =~ regex ]]     # Regex support
+> ```
+
+> **💡 Pro Tip #4: Prefer `$(command)` over Backticks**
+> More readable and nestable:
+> ```bash
+> result=$(grep "$(cat file.txt)" another.txt)
+> ```
+
+> **💡 Pro Tip #5: Use Functions for Reusability**
+> Keep code DRY (Don't Repeat Yourself):
+> ```bash
+> log() { echo "[$(date)] $*" >&2; }
+> log "Starting backup..."
+> ```
+
+> **💡 Pro Tip #6: Check Command Success**
+> Always verify critical commands:
+> ```bash
+> if ! command -v git &>/dev/null; then
+>     echo "git not installed" >&2
+>     exit 1
+> fi
+> ```
+
+> **💡 Pro Tip #7: Use `local` in Functions**
+> Avoid polluting global namespace:
+> ```bash
+> process() {
+>     local temp_file=$(mktemp)
+>     # temp_file won't affect global scope
+> }
+> ```
+
+> **💡 Pro Tip #8: Safe Temporary Files**
+> Use mktemp for security:
+> ```bash
+> tmp=$(mktemp) || exit 1
+> trap 'rm -f "$tmp"' EXIT
+> ```
+
+> **💡 Pro Tip #9: Color Output**
+> Make scripts user-friendly:
+> ```bash
+> RED='\033[0;31m'
+> GREEN='\033[0;32m'
+> NC='\033[0m' # No Color
+> echo -e "${GREEN}Success!${NC}"
+> ```
+
+> **💡 Pro Tip #10: Debug with `set -x`**
+> See what's happening:
+> ```bash
+> set -x  # Enable debug
+> # ... code ...
+> set +x  # Disable debug
+> ```
+
+---
+
+## 🔥 REAL WORLD USE CASES
+
+### Practical Bash Scripts for Termux
+
+**Use Case #1: Automated Backup Script**
+```bash
+#!/bin/bash
+# backup.sh - Automated backup script
+
+set -euo pipefail
+
+SOURCE_DIR="${1:-$HOME}"
+BACKUP_DIR="${2:-$HOME/backups}"
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_FILE="backup_${DATE}.tar.gz"
+
+# Create backup directory
+mkdir -p "$BACKUP_DIR"
+
+# Create backup
+echo "Creating backup of $SOURCE_DIR..."
+tar -czf "$BACKUP_DIR/$BACKUP_FILE" -C "$SOURCE_DIR" .
+
+# Verify backup
+if [ -f "$BACKUP_DIR/$BACKUP_FILE" ]; then
+    SIZE=$(du -h "$BACKUP_DIR/$BACKUP_FILE" | cut -f1)
+    echo "Backup created: $BACKUP_FILE"
+    echo "Size: $SIZE"
+else
+    echo "Backup failed!" >&2
+    exit 1
+fi
+
+# Keep only last 5 backups
+cd "$BACKUP_DIR"
+ls -t backup_*.tar.gz | tail -n +6 | xargs -r rm
+echo "Old backups cleaned up."
+```
+
+**Use Case #2: Network Monitor**
+```bash
+#!/bin/bash
+# network_monitor.sh - Monitor network connectivity
+
+HOST="${1:-google.com}"
+LOG_FILE="network_log.txt"
+
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+}
+
+log "Starting network monitor for $HOST"
+
+while true; do
+    if ping -c 1 -W 2 "$HOST" &>/dev/null; then
+        log "✓ $HOST is reachable"
+    else
+        log "✗ $HOST is unreachable"
+        # Optional: Send notification
+        termux-notification --title "Network Alert" --content "$HOST is down!" 2>/dev/null || true
+    fi
+    sleep 60
+done
+```
+
+**Use Case #3: File Organizer**
+```bash
+#!/bin/bash
+# organize.sh - Organize files by extension
+
+TARGET_DIR="${1:-.}"
+cd "$TARGET_DIR" || exit 1
+
+echo "Organizing files in $TARGET_DIR..."
+
+for file in *; do
+    # Skip directories
+    [ -d "$file" ] && continue
+    
+    # Get extension
+    ext="${file##*.}"
+    
+    # Skip if no extension or file is the script itself
+    [ "$ext" = "$file" ] && continue
+    [ "$file" = "$(basename "$0")" ] && continue
+    
+    # Create directory and move file
+    mkdir -p "$ext"
+    mv "$file" "$ext/"
+    echo "Moved: $file -> $ext/"
+done
+
+echo "Organization complete!"
+```
+
+**Use Case #4: Process Watchdog**
+```bash
+#!/bin/bash
+# watchdog.sh - Restart a process if it dies
+
+COMMAND="$1"
+MAX_RESTARTS=5
+restarts=0
+
+if [ -z "$COMMAND" ]; then
+    echo "Usage: $0 <command>"
+    exit 1
+fi
+
+while true; do
+    echo "Starting: $COMMAND"
+    $COMMAND
+    exit_code=$?
+    
+    if [ $exit_code -eq 0 ]; then
+        echo "Process exited normally"
+        exit 0
+    fi
+    
+    ((restarts++))
+    
+    if [ $restarts -ge $MAX_RESTARTS ]; then
+        echo "Max restarts reached. Exiting." >&2
+        exit 1
+    fi
+    
+    echo "Process crashed (exit: $exit_code). Restarting... ($restarts/$MAX_RESTARTS)"
+    sleep 5
+done
+```
+
+**Use Case #5: Log Rotation**
+```bash
+#!/bin/bash
+# rotate_logs.sh - Rotate and compress old logs
+
+LOG_DIR="${1:-$HOME/logs}"
+MAX_DAYS=7
+
+cd "$LOG_DIR" || exit 1
+
+# Compress logs older than 1 day
+find . -name "*.log" -mtime +1 -exec gzip {} \;
+
+# Delete compressed logs older than MAX_DAYS
+find . -name "*.log.gz" -mtime +$MAX_DAYS -delete
+
+echo "Log rotation complete."
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### Special Variables
+
+| Variable | Description |
+|----------|-------------|
+| `$0` | Script name |
+| `$1-$9` | Positional arguments |
+| `$#` | Number of arguments |
+| `$@` | All arguments (array) |
+| `$*` | All arguments (string) |
+| `$?` | Exit status of last command |
+| `$$` | Process ID |
+| `$!` | Last background PID |
+| `$HOME` | Home directory |
+| `$PWD` | Current directory |
+| `$USER` | Current user |
+| `$PATH` | Executable paths |
+
+### Test Operators - Files
+
+| Operator | True if |
+|----------|---------|
+| `-e` | File exists |
+| `-f` | Regular file |
+| `-d` | Directory |
+| `-r` | Readable |
+| `-w` | Writable |
+| `-x` | Executable |
+| `-s` | Not empty |
+| `-L` | Symbolic link |
+
+### Test Operators - Strings
+
+| Operator | True if |
+|----------|---------|
+| `-z` | String is empty |
+| `-n` | String is not empty |
+| `=` | Strings equal |
+| `!=` | Strings not equal |
+| `<` | Sorts before |
+| `>` | Sorts after |
+
+### Test Operators - Numbers
+
+| Operator | Meaning |
+|----------|---------|
+| `-eq` | Equal |
+| `-ne` | Not equal |
+| `-gt` | Greater than |
+| `-lt` | Less than |
+| `-ge` | Greater or equal |
+| `-le` | Less or equal |
+
+### Control Structures
+
+```bash
+# If-else
+if [ condition ]; then
+    commands
+elif [ condition ]; then
+    commands
+else
+    commands
+fi
+
+# For loop
+for item in list; do
+    commands
+done
+
+# While loop
+while [ condition ]; do
+    commands
+done
+
+# Case statement
+case $var in
+    pattern1) commands ;;
+    pattern2) commands ;;
+    *) default ;;
+esac
+```
+
+---
+
+## 🏆 BONUS CONTENT
+
+### Advanced Bash Script Template
+
+```bash
+#!/usr/bin/env bash
+#
+# Script Name: advanced_template.sh
+# Description: Production-ready Bash script template
+# Author: T3rmuxk1ng
+# Version: 1.0.0
+#
+
+set -euo pipefail
+IFS=$'\n\t'
+
+# Constants
+readonly SCRIPT_NAME=$(basename "$0")
+readonly SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+readonly VERSION="1.0.0"
+
+# Colors
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[0;33m'
+readonly BLUE='\033[0;34m'
+readonly NC='\033[0m'
+
+# Logging functions
+log() { echo -e "${BLUE}[INFO]${NC} $*"; }
+success() { echo -e "${GREEN}[SUCCESS]${NC} $*"; }
+warn() { echo -e "${YELLOW}[WARNING]${NC} $*" >&2; }
+error() { echo -e "${RED}[ERROR]${NC} $*" >&2; }
+die() { error "$*"; exit 1; }
+
+# Cleanup function
+cleanup() {
+    local exit_code=$?
+    log "Cleaning up..."
+    # Add cleanup code here
+    exit $exit_code
+}
+trap cleanup EXIT
+
+# Usage function
+usage() {
+    cat << EOF
+Usage: ${SCRIPT_NAME} [OPTIONS] <argument>
+
+Description:
+    Script description here.
+
+Options:
+    -h, --help      Show this help message
+    -v, --version   Show version
+    -q, --quiet     Suppress output
+    -d, --debug     Enable debug mode
+
+Examples:
+    ${SCRIPT_NAME} example
+    ${SCRIPT_NAME} -q example
+
+Version: ${VERSION}
+EOF
+}
+
+# Parse arguments
+parse_args() {
+    local quiet=false
+    local debug=false
+    local positional=()
+
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -h|--help) usage; exit 0 ;;
+            -v|--version) echo "${SCRIPT_NAME} ${VERSION}"; exit 0 ;;
+            -q|--quiet) quiet=true; shift ;;
+            -d|--debug) set -x; shift ;;
+            --) shift; positional+=("$@"); break ;;
+            -*) error "Unknown option: $1"; usage; exit 1 ;;
+            *) positional+=("$1"); shift ;;
+        esac
+    done
+
+    # Restore positional args
+    set -- "${positional[@]}"
+}
+
+# Main function
+main() {
+    parse_args "$@"
+    log "Starting ${SCRIPT_NAME}..."
+    
+    # Your code here
+    
+    success "Done!"
+}
+
+# Run main
+main "$@"
+```
+
+### Bash One-Liners
+
+```bash
+# Find and delete files older than 7 days
+find . -type f -mtime +7 -delete
+
+# Count lines in all .py files
+find . -name "*.py" -exec wc -l {} + | tail -1
+
+# Replace text in multiple files
+sed -i 's/old/new/g' *.txt
+
+# Get external IP
+curl -s ifconfig.me
+
+# Monitor file changes
+inotifywait -m -r -e modify,create,delete /path/to/watch
+
+# Parallel processing
+find . -type f | parallel -j 4 process_file {}
+
+# Generate random password
+openssl rand -base64 12
+
+# Check disk usage by directory
+du -h --max-depth=1 | sort -hr
+
+# Kill process by name
+pkill -f "process_name"
+
+# Watch command output
+watch -n 1 'ps aux | grep python'
+```
+
+---
+
+## 📝 CHAPTER SUMMARY
+
+### Key Takeaways
+
+| Topic | Key Points |
+|-------|------------|
+| **Shebang** | `#!/bin/bash` - specifies interpreter |
+| **Variables** | `name=value` (no spaces), `$name` to use |
+| **Arguments** | `$1`, `$2`, `$@`, `$#` |
+| **Tests** | `[ ]` or `[[ ]]` with operators |
+| **Conditions** | `if/elif/else/fi` |
+| **Loops** | `for`, `while`, `until` |
+| **Functions** | `name() { commands; }` |
+| **Arrays** | `arr=(a b c)`, `${arr[0]}` |
+| **I/O** | `>` write, `>>` append, `2>&1` redirect |
+| **Debug** | `set -x`, `bash -x script.sh` |
+
+### Essential Commands
+
+```bash
+# Script execution
+chmod +x script.sh
+./script.sh
+bash script.sh
+
+# Testing
+[ -f file ]        # File exists
+[ -d dir ]         # Directory exists
+[ "$a" = "$b" ]    # String comparison
+[ $a -eq $b ]      # Numeric comparison
+
+# Loops
+for i in {1..10}; do echo $i; done
+while read line; do echo $line; done < file
+
+# Functions
+myfunc() { echo "Hello, $1"; }
+myfunc "World"
+```
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Bash Scripting Interview Questions
+
+**Q1: What's the difference between `[ ]` and `[[ ]]`?**
+
+<details>
+<summary>Answer</summary>
+- `[ ]`: POSIX test command, limited features, word splitting occurs
+- `[[ ]]`: Bash extended test, no word splitting, supports `&&`, `||`, `=~` regex
+
+```bash
+# [ ] - issues with spaces
+[ $name = "John Doe" ]  # Fails if name has spaces
+
+# [[ ]] - handles spaces
+[[ $name == "John Doe" ]]  # Works correctly
+[[ $name =~ ^[A-Z] ]]      # Regex support
+```
+</details>
+
+**Q2: Explain `$@` vs `$*`**
+
+<details>
+<summary>Answer</summary>
+- `$*`: All arguments as single string (IFS-separated)
+- `$@`: All arguments as separate strings (preserves quoting)
+
+```bash
+# With args: a "b c" d
+for arg in "$*"; do echo "$arg"; done  # One iteration
+for arg in "$@"; do echo "$arg"; done  # Three iterations
+```
+</details>
+
+**Q3: How do you handle errors in Bash?**
+
+<details>
+<summary>Answer</summary>
+```bash
+# Method 1: set -e
+set -e  # Exit on any error
+
+# Method 2: Check return codes
+if ! command; then
+    echo "Command failed" >&2
+    exit 1
+fi
+
+# Method 3: Trap errors
+trap 'echo "Error at line $LINENO"' ERR
+
+# Method 4: Or operator
+command || exit 1
+```
+</details>
+
+**Q4: What is process substitution?**
+
+<details>
+<summary>Answer</summary>
+Process substitution treats command output as a file.
+
+```bash
+# Compare outputs
+diff <(sort file1) <(sort file2)
+
+# Read from process
+while read line; do
+    echo "$line"
+done < <(grep pattern file.txt)
+```
+</details>
+
+**Q5: Explain the `trap` command.**
+
+<details>
+<summary>Answer</summary>
+`trap` executes commands when signals are received.
+
+```bash
+# Cleanup on exit
+cleanup() { rm -f "$TEMP_FILE"; }
+trap cleanup EXIT
+
+# Handle Ctrl+C
+trap 'echo "Interrupted"; exit 130' INT
+
+# Multiple signals
+trap 'cleanup' EXIT INT TERM
+```
+</details>
+
+**Q6: What's the difference between `source` and `./script`?**
+
+<details>
+<summary>Answer</summary>
+- `source script.sh` (or `. script.sh`): Executes in current shell
+- `./script.sh`: Executes in new subprocess
+
+```bash
+# Variables set in sourced script persist
+source config.sh
+echo "$CONFIG_VAR"  # Available
+
+# Variables in subprocess don't persist
+./script.sh
+echo "$VAR"  # Not available
+```
+</details>
+
+**Q7: How do you parse command line arguments?**
+
+<details>
+<summary>Answer</summary>
+```bash
+# Using getopts (simple)
+while getopts ":f:v" opt; do
+    case $opt in
+        f) file="$OPTARG" ;;
+        v) verbose=true ;;
+        \?) echo "Invalid option: -$OPTARG" >&2 ;;
+    esac
+done
+
+# Manual parsing (flexible)
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --file) file="$2"; shift 2 ;;
+        --verbose) verbose=true; shift ;;
+        *) args+=("$1"); shift ;;
+    esac
+done
+```
+</details>
+
+**Q8: Explain IFS (Internal Field Separator).**
+
+<details>
+<summary>Answer</summary>
+IFS controls how Bash splits strings into words.
+
+```bash
+# Default IFS: space, tab, newline
+IFS=' ,' read -ra parts <<< "a,b c,d"
+# parts = (a b c d)
+
+# Parse CSV
+IFS=',' read -r col1 col2 col3 <<< "val1,val2,val3"
+
+# Preserve whitespace in read
+while IFS= read -r line; do
+    echo "$line"
+done < file.txt
+```
+</details>
+
+**Q9: What's the difference between `${var}` and `${var:-default}`?**
+
+<details>
+<summary>Answer</summary>
+- `${var}`: Returns value or empty string
+- `${var:-default}`: Returns value or "default" if unset/empty
+
+```bash
+name="John"
+echo "${name}"          # John
+echo "${name:-Guest}"    # John
+
+unset name
+echo "${name}"          # (empty)
+echo "${name:-Guest}"    # Guest
+echo "${name:=Guest}"    # Also sets name to "Guest"
+```
+</details>
+
+**Q10: How do you make scripts portable?**
+
+<details>
+<summary>Answer</summary>
+```bash
+# Use #!/usr/bin/env bash instead of #!/bin/bash
+
+# Avoid Bashisms for POSIX compatibility
+# Use [ ] instead of [[ ]]
+# Use $(command) instead of <(command)
+
+# Check for dependencies
+command -v curl >/dev/null 2>&1 || { echo "curl required"; exit 1; }
+
+# Use variables for paths
+CONFIG="${HOME}/.config/myapp"
+
+# Handle differences
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS specific
+    sed -i '' 's/old/new/g' file
+else
+    # Linux
+    sed -i 's/old/new/g' file
+fi
+```
+</details>
+
+---
+
+## 🚀 BEST PRACTICES
+
+### Script Style Guide
+
+```bash
+# ✅ GOOD: Clear naming and structure
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly SCRIPT_NAME=$(basename "$0")
+readonly SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Functions first
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >&2
+}
+
+main() {
+    local input_file="${1:-}"
+    
+    if [[ -z "$input_file" ]]; then
+        log "Error: Input file required"
+        exit 1
+    fi
+    
+    if [[ ! -f "$input_file" ]]; then
+        log "Error: File not found: $input_file"
+        exit 1
+    fi
+    
+    # Process file
+    log "Processing $input_file"
+}
+
+main "$@"
+```
+
+### Common Mistakes to Avoid
+
+| ❌ Mistake | ✅ Solution |
+|-----------|------------|
+| `var = value` | `var=value` (no spaces) |
+| Unquoted variables | `"$var"` (always quote) |
+| No error handling | `set -e` or check `$?` |
+| Hardcoded paths | Use `$HOME`, `$PWD` |
+| No cleanup | Use `trap` for cleanup |
+| Not checking deps | `command -v` check |
+
+---
+
+## 📊 CODE COMPARISON
+
+### Bad vs Good: Bash Script Examples
+
+**Variable Assignment**
+```bash
+# ❌ BAD: Spaces cause errors
+name = "John"
+
+# ✅ GOOD: No spaces
+name="John"
+```
+
+**String Comparison**
+```bash
+# ❌ BAD: Fails with spaces
+if [ $name = "John Doe" ]; then
+
+# ✅ GOOD: Quoted variables
+if [ "$name" = "John Doe" ]; then
+
+# ✅ BETTER: Using [[ ]]
+if [[ $name == "John Doe" ]]; then
+```
+
+**Error Handling**
+```bash
+# ❌ BAD: No error checking
+cd /some/path
+rm -rf *
+
+# ✅ GOOD: Check each step
+cd /some/path || exit 1
+rm -rf *
+
+# ✅ BETTER: With trap
+set -e
+cleanup() { echo "Cleaning up..."; }
+trap cleanup EXIT
+cd /some/path
+rm -rf *
+```
+
+**Loops**
+```bash
+# ❌ BAD: Parsing ls output
+for file in $(ls); do
+
+# ✅ GOOD: Glob expansion
+for file in *; do
+
+# ✅ BETTER: Handle spaces
+for file in *.txt; do
+    [[ -f "$file" ]] || continue
+    process "$file"
+done
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+### Prerequisites
+- **Chapter 2**: Basic Termux Commands
+- **Chapter 5**: Package Management
+
+### Next Steps
+- **Chapter 14**: Bash Scripting Advanced ← Continue with advanced topics
+- **Chapter 11**: Python Installation (alternative scripting)
+
+### Advanced Topics
+- **Chapter 17**: Termux API Scripts
+- **Chapter 22**: Automation Scripts
+- **Chapter 27**: Security Tools Development
+
+### Related Programming
+- **Chapter 12**: Python Basics
+- **Chapter 16**: Node.js in Termux
+
+---
+
+*Updated by T3rmuxk1ng | Termux Full Course - Module 3: Programming*

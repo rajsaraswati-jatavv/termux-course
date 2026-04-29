@@ -3071,3 +3071,475 @@ Before moving to Chapter 21, verify:
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*
+
+---
+
+## 💡 PRO TIPS BOX
+
+> 💡 **Pro Tip #1:** Always check WiFi is connected before calling `termux-wifi-connectioninfo` to avoid errors in scripts.
+
+> 💡 **Pro Tip #2:** RSSI closer to 0 is better. -30 is excellent, -80 is poor. Use this for connection quality monitoring.
+
+> 💡 **Pro Tip #3:** Use `termux-wifi-scaninfo` with `jq` filters to find open networks: `termux-wifi-scaninfo | jq '.[] | select(.capabilities | contains("ESS")) | select(.capabilities | contains("WPA") | not)'`
+
+> 💡 **Pro Tip #4:** BSSID is useful for identifying specific access points - great for location-based automation.
+
+> 💡 **Pro Tip #5:** Combine internal IP check with external IP for complete network picture.
+
+> 💡 **Pro Tip #6:** Use `curl -s ifconfig.me` for quick public IP, but add timeout for reliability.
+
+> 💡 **Pro Tip #7:** For network monitoring scripts, add error handling for offline scenarios.
+
+> 💡 **Pro Tip #8:** Android 10+ requires location permission for WiFi operations - prompt users appropriately.
+
+> 💡 **Pro Tip #9:** WPS-enabled networks may be vulnerable - flag them in security audits.
+
+> 💡 **Pro Tip #10:** Cache network scan results to avoid repeated scanning which consumes battery.
+
+---
+
+## 🔥 REAL WORLD APPLICATIONS
+
+### 1. WiFi Security Auditor
+Scan and analyze nearby networks for security assessment.
+
+```bash
+#!/bin/bash
+# wifi_audit.sh - WiFi security audit tool
+echo "=== WiFi Security Audit ==="
+echo "Date: $(date)"
+echo ""
+
+termux-wifi-scaninfo | jq -r '.[] | "
+Network: \(.ssid // "Hidden")
+BSSID: \(.bssid)
+Signal: \(.rssi) dBm
+Security: \(.capabilities)
+Risk: \(if .capabilities | contains("WPS") then "WPS VULNERABLE" else "OK" end)
+"'
+```
+
+### 2. Network Connection Monitor
+Monitor network status and alert on disconnections.
+
+```bash
+#!/bin/bash
+# network_monitor.sh - Connection monitoring
+LOG=~/network_monitor.log
+
+while true; do
+    if ping -c 1 -W 3 google.com &>/dev/null; then
+        STATUS="ONLINE"
+        WIFI=$(termux-wifi-connectioninfo 2>/dev/null | jq -r '.ssid // "N/A"')
+    else
+        STATUS="OFFLINE"
+        WIFI="N/A"
+    fi
+    
+    echo "$(date): $STATUS - WiFi: $WIFI" >> "$LOG"
+    
+    if [ "$STATUS" = "OFFLINE" ]; then
+        termux-notification --title "⚠️ Network Down" --content "Internet connection lost" --priority high
+    fi
+    
+    sleep 60
+done
+```
+
+### 3. WiFi Signal Mapper
+Track signal strength at different locations.
+
+```bash
+#!/bin/bash
+# signal_mapper.sh - Map WiFi signal strength
+OUTPUT=~/wifi_signal_map.csv
+echo "timestamp,ssid,bssid,rssi,location" > "$OUTPUT"
+
+while true; do
+    INFO=$(termux-wifi-connectioninfo 2>/dev/null)
+    SSID=$(echo "$INFO" | jq -r '.ssid // "N/A"')
+    BSSID=$(echo "$INFO" | jq -r '.bssid // "N/A"')
+    RSSI=$(echo "$INFO" | jq -r '.rssi // "N/A"')
+    LOC=$(termux-location -p network 2>/dev/null | jq -r '"\(.latitude),\(.longitude)"')
+    
+    echo "$(date -Iseconds),$SSID,$BSSID,$RSSI,$LOC" >> "$OUTPUT"
+    echo "Logged: $SSID at $RSSI dBm"
+    sleep 10
+done
+```
+
+### 4. Network Diagnostic Tool
+Complete network diagnostics in one script.
+
+```bash
+#!/bin/bash
+# network_diag.sh - Full network diagnostics
+echo "╔═══════════════════════════════════════════════╗"
+echo "║         NETWORK DIAGNOSTICS REPORT           ║"
+echo "╚═══════════════════════════════════════════════╝"
+
+echo -e "\n📡 WIFI STATUS"
+termux-wifi-connectioninfo 2>/dev/null | jq -r '
+"SSID: \(.ssid // "Not connected")",
+"IP: \(.ip // "N/A")",
+"Signal: \(.rssi) dBm",
+"Speed: \(.link_speed_mbps) Mbps"'
+
+echo -e "\n🌍 PUBLIC IP"
+curl -s --max-time 5 ifconfig.me || echo "Unable to fetch"
+
+echo -e "\n🔍 DNS TEST"
+nslookup google.com 2>/dev/null | head -5
+
+echo -e "\n📊 CONNECTIVITY TEST"
+ping -c 3 google.com 2>/dev/null && echo "✓ Internet OK" || echo "✗ No internet"
+
+echo -e "\n📶 NEARBY NETWORKS"
+termux-wifi-scaninfo 2>/dev/null | jq -r '.[0:5][] | "• \(.ssid // "Hidden") (\(.rssi) dBm)"'
+```
+
+### 5. Auto WiFi Toggle
+Smart WiFi management based on conditions.
+
+```bash
+#!/bin/bash
+# auto_wifi.sh - Intelligent WiFi management
+while true; do
+    WIFI=$(termux-wifi-connectioninfo 2>/dev/null)
+    
+    if [ -z "$WIFI" ]; then
+        # WiFi is off - check if known networks nearby
+        termux-wifi-enable true
+        sleep 5
+        NETWORKS=$(termux-wifi-scaninfo | jq -r '.[].ssid')
+        # Add logic to connect to preferred network
+    else
+        RSSI=$(echo "$WIFI" | jq -r '.rssi')
+        if [ "$RSSI" -lt -85 ]; then
+            termux-notification --title "Weak WiFi Signal" --content "Consider moving closer to router"
+        fi
+    fi
+    
+    sleep 300
+done
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+| Command | Purpose | Key Output |
+|---------|---------|------------|
+| `termux-wifi-connectioninfo` | Current WiFi details | ssid, ip, rssi, bssid |
+| `termux-wifi-enable true/false` | Toggle WiFi | N/A |
+| `termux-wifi-scaninfo` | Scan nearby networks | Array of network objects |
+| `curl -s ifconfig.me` | Get public IP | IP address |
+| `ip addr show wlan0` | Local interface info | IP, MAC |
+| `ip route` | Routing table | Gateway IP |
+| `ping -c N host` | Connectivity test | Latency, packet loss |
+
+### Network Commands Quick Reference
+
+| Task | Command |
+|------|---------|
+| Get WiFi SSID | `termux-wifi-connectioninfo \| jq -r '.ssid'` |
+| Get Local IP | `termux-wifi-connectioninfo \| jq -r '.ip'` |
+| Get MAC Address | `termux-wifi-connectioninfo \| jq -r '.mac_address'` |
+| Get Signal Strength | `termux-wifi-connectioninfo \| jq -r '.rssi'` |
+| Count Networks | `termux-wifi-scaninfo \| jq 'length'` |
+| Find Open Networks | `termux-wifi-scaninfo \| jq '.[] \| select(.capabilities \| contains("WPA") \| not)'` |
+| Get Gateway | `ip route \| grep default \| awk '{print $3}'` |
+
+### RSSI Signal Quality
+
+| RSSI Range | Quality | Bars |
+|------------|---------|------|
+| -30 to -50 | Excellent | ▂▄▆█ |
+| -50 to -60 | Good | ▂▄▆ |
+| -60 to -70 | Fair | ▂▄ |
+| -70 to -80 | Weak | ▂ |
+| Below -80 | Very Poor | ◌ |
+
+---
+
+## 🏆 BONUS: AUTOMATION IDEAS
+
+### Idea 1: Location-Based WiFi Manager
+```bash
+#!/bin/bash
+# Auto-connect to preferred networks based on location
+HOME_SSID="MyHomeWiFi"
+WORK_SSID="OfficeWiFi"
+
+LOC=$(termux-location -p network 2>/dev/null)
+LAT=$(echo "$LOC" | jq -r '.latitude')
+
+# Simplified location check
+if [ "${LAT:0:4}" = "28.6" ]; then  # Near home
+    termux-wifi-enable true
+    # Add nmcli or other connection logic
+fi
+```
+
+### Idea 2: Network Speed Logger
+```bash
+#!/bin/bash
+# Log network speed over time
+while true; do
+    SPEED=$(curl -o /dev/null -s -w '%{speed_download}' http://speedtest.tele2.net/1MB.zip)
+    echo "$(date): $((SPEED/1024)) KB/s" >> ~/speed_log.txt
+    sleep 3600
+done
+```
+
+### Idea 3: Intrusion Detection
+```bash
+#!/bin/bash
+# Alert on unknown devices on network
+KNOWN_MACS="aa:bb:cc:dd:ee:ff 11:22:33:44:55:66"
+
+# Requires root for ARP scanning
+arp_scan() {
+    su -c "arp-scan --localnet" 2>/dev/null | grep -E "([0-9A-Fa-f]{2}:){5}"
+}
+
+for mac in $(arp_scan | awk '{print $2}'); do
+    if ! echo "$KNOWN_MACS" | grep -q "$mac"; then
+        termux-notification --title "⚠️ Unknown Device" --content "MAC: $mac detected on network"
+    fi
+done
+```
+
+---
+
+## 📝 CHAPTER SUMMARY
+
+### ✅ What You Learned
+
+- **termux-wifi-connectioninfo**: Get current WiFi connection details
+- **termux-wifi-enable**: Toggle WiFi on/off
+- **termux-wifi-scaninfo**: Scan for nearby networks
+- **IP address retrieval**: Internal and external IP methods
+- **MAC address extraction**: Various methods for getting MAC
+- **Network diagnostics**: Ping, DNS, connectivity tests
+- **Security analysis**: Identifying WPS vulnerabilities
+- **Network monitoring**: Continuous status tracking
+
+### 🎯 Key Takeaways
+
+1. RSSI values closer to 0 indicate stronger signal
+2. Android 10+ requires location permission for WiFi operations
+3. BSSID uniquely identifies each access point
+4. WPS-enabled networks are potentially vulnerable
+5. Use timeouts for network operations to avoid hanging scripts
+6. Combine multiple APIs for comprehensive network analysis
+7. Public IP services have rate limits - cache when possible
+
+---
+
+## 🎯 PRACTICAL PROJECTS
+
+### Project 1: Complete Network Dashboard
+```bash
+#!/bin/bash
+# network_dashboard.sh - Full network monitoring
+
+refresh() {
+    clear
+    echo "╔═══════════════════════════════════════════════╗"
+    echo "║         NETWORK DASHBOARD - $(date +%H:%M:%S)          ║"
+    echo "╠═══════════════════════════════════════════════╣"
+    
+    WIFI=$(termux-wifi-connectioninfo 2>/dev/null)
+    if [ -n "$WIFI" ]; then
+        SSID=$(echo "$WIFI" | jq -r '.ssid')
+        IP=$(echo "$WIFI" | jq -r '.ip')
+        RSSI=$(echo "$WIFI" | jq -r '.rssi')
+        SPEED=$(echo "$WIFI" | jq -r '.link_speed_mbps')
+        
+        echo "║ 📶 WiFi: $SSID"
+        echo "║ 📊 Signal: $RSSI dBm | Speed: $SPEED Mbps"
+        echo "║ 🌐 Local IP: $IP"
+    else
+        echo "║ 📶 WiFi: Not connected"
+    fi
+    
+    PUBLIC=$(curl -s --max-time 3 ifconfig.me 2>/dev/null)
+    echo "║ 🌍 Public IP: ${PUBLIC:-Unable to fetch}"
+    
+    GATEWAY=$(ip route 2>/dev/null | grep default | awk '{print $3}')
+    echo "║ 🚪 Gateway: ${GATEWAY:-N/A}"
+    
+    NETWORKS=$(termux-wifi-scaninfo 2>/dev/null | jq 'length')
+    echo "║ 📡 Networks nearby: ${NETWORKS:-0}"
+    
+    echo "╚═══════════════════════════════════════════════╝"
+}
+
+while true; do
+    refresh
+    sleep 5
+done
+```
+
+---
+
+## 🚀 INTEGRATION TIPS
+
+### Network + Battery Optimization
+```bash
+# Turn off WiFi when battery is low and not connected
+BATTERY=$(termux-battery-status | jq -r '.percentage')
+WIFI=$(termux-wifi-connectioninfo 2>/dev/null)
+
+if [ "$BATTERY" -lt 15 ] && [ -z "$WIFI" ]; then
+    termux-wifi-enable false
+fi
+```
+
+### Network + Location Logging
+```bash
+# Log network info with location
+WIFI=$(termux-wifi-connectioninfo | jq -r '.ssid')
+LOC=$(termux-location -p network | jq -r '"\(.latitude),\(.longitude)"')
+echo "$(date): $WIFI at $LOC" >> network_locations.log
+```
+
+### Network + Notification Integration
+```bash
+# Alert on connection change
+CURRENT_SSID=$(termux-wifi-connectioninfo | jq -r '.ssid')
+if [ "$CURRENT_SSID" != "$LAST_SSID" ]; then
+    termux-notification --title "WiFi Changed" --content "Now connected to $CURRENT_SSID"
+    LAST_SSID="$CURRENT_SSID"
+fi
+```
+
+---
+
+## 📊 JSON OUTPUT GUIDE
+
+### jq Examples for Network APIs
+
+```bash
+# WiFi connection info parsing
+termux-wifi-connectioninfo | jq -r '.ssid'
+termux-wifi-connectioninfo | jq -r '"\(.ssid): \(.rssi) dBm"'
+termux-wifi-connectioninfo | jq '{network: .ssid, signal: .rssi, ip: .ip}'
+
+# Network scan parsing
+termux-wifi-scaninfo | jq '.[] | select(.rssi > -70) | .ssid'
+termux-wifi-scaninfo | jq 'sort_by(.rssi) | reverse | .[0:5]'
+termux-wifi-scaninfo | jq '[.[] | {ssid, rssi, security: .capabilities}]'
+
+# Filter by security
+termux-wifi-scaninfo | jq '.[] | select(.capabilities | contains("WPS"))'
+termux-wifi-scaninfo | jq '.[] | select(.capabilities | contains("WPA2"))'
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Topic | Relation |
+|---------|-------|----------|
+| Chapter 17 | File Operations | Export network logs |
+| Chapter 18 | Device Info | Telephony network info |
+| Chapter 19 | Camera & Media | Network for streaming |
+| Chapter 21 | Notifications | Alert on network changes |
+| Chapter 22 | Contacts & SMS | Share network info |
+| Chapter 23 | Clipboard & Share | Share network details |
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+### Test Your Knowledge!
+
+**Q1.** Which command returns current WiFi connection details?
+- A) `termux-wifi-info`
+- B) `termux-wifi-connectioninfo`
+- C) `termux-network-status`
+- D) `termux-wifi-status`
+
+**Q2.** What RSSI value indicates excellent WiFi signal?
+- A) -90 dBm
+- B) -70 dBm
+- C) -40 dBm
+- D) 100 dBm
+
+**Q3.** How do you enable WiFi via Termux?
+- A) `termux-wifi on`
+- B) `termux-wifi-enable true`
+- C) `termux-wifi-start`
+- D) `termux-wifi-connect`
+
+**Q4.** What does BSSID represent?
+- A) Network name
+- B) Router MAC address
+- C) Device IP
+- D) Password hash
+
+**Q5.** Which command scans for nearby networks?
+- A) `termux-wifi-scan`
+- B) `termux-wifi-scaninfo`
+- C) `termux-network-scan`
+- D) `termux-wifi-discover`
+
+**Q6.** What is a security concern with WPS?
+- A) Slow connection
+- B) Vulnerable to brute force
+- C) No encryption
+- D) High power consumption
+
+**Q7.** How do you get your public IP address?
+- A) `ip addr`
+- B) `ifconfig`
+- C) `curl -s ifconfig.me`
+- D) `termux-ip`
+
+**Q8.** What does RSSI stand for?
+- A) Received Signal Strength Indicator
+- B) Radio Signal Strength Index
+- C) Relative Signal Strength Indication
+- D) Router Signal Strength Info
+
+**Q9.** Which Android version requires location permission for WiFi?
+- A) Android 8+
+- B) Android 10+
+- C) Android 12+
+- D) All versions
+
+**Q10.** What command gets the default gateway?
+- A) `ip gateway`
+- B) `ip route | grep default`
+- C) `route -n`
+- D) Both B and C
+
+**Q11.** Which capability indicates WPA2 security?
+- A) `[WPA-PSK]`
+- B) `[WPA2-PSK]`
+- C) `[SECURE]`
+- D) `[ENCRYPTED]`
+
+**Q12.** Hidden networks show what in SSID field?
+- A) "Hidden"
+- B) Empty string
+- C) "Unknown"
+- D) BSSID value
+
+### Quiz Answers
+
+1. **B** - `termux-wifi-connectioninfo` returns current WiFi details
+2. **C** - RSSI -40 dBm (between -30 and -50) is excellent
+3. **B** - `termux-wifi-enable true` enables WiFi
+4. **B** - BSSID is the router's MAC address
+5. **B** - `termux-wifi-scaninfo` scans for nearby networks
+6. **B** - WPS is vulnerable to brute force PIN attacks
+7. **C** - `curl -s ifconfig.me` fetches public IP
+8. **A** - RSSI = Received Signal Strength Indicator
+9. **B** - Android 10+ requires location permission for WiFi APIs
+10. **D** - Both `ip route | grep default` and `route -n` work
+11. **B** - `[WPA2-PSK]` indicates WPA2 security
+12. **B** - Hidden networks have empty SSID string
+

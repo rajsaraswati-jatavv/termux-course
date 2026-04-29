@@ -1766,6 +1766,770 @@ Before moving to Chapter 3, verify:
 
 ---
 
+## 💡 PRO TIPS - MASTER THESE!
+
+> 💡 **Pro Tip #1:** Always backup your .bashrc before making changes: `cp ~/.bashrc ~/.bashrc.backup`
+
+> 💡 **Pro Tip #2:** Use `reload` alias after editing .bashrc instead of restarting Termux - saves time!
+
+> 💡 **Pro Tip #3:** Add your custom scripts folder to PATH: `export PATH="$HOME/scripts:$PATH"` in .bashrc
+
+> 💡 **Pro Tip #4:** Use `HISTCONTROL=ignoreboth:erasedups` to avoid duplicate commands in history
+
+> 💡 **Pro Tip #5:** Set `back-key=escape` in termux.properties - makes Vim/NeoVim much easier to use
+
+> 💡 **Pro Tip #6:** Create a `~/.bash_aliases` file for aliases and source it from .bashrc for better organization
+
+> 💡 **Pro Tip #7:** Use `shopt -s cdspell` in .bashrc to autocorrect minor typos in cd command
+
+> 💡 **Pro Tip #8:** Add extra keys row with most-used keys (ESC, TAB, CTRL, ALT) for faster typing
+
+> 💡 **Pro Tip #9:** Comment your aliases in .bashrc - future you will thank you!
+
+> 💡 **Pro Tip #10:** Use functions instead of aliases for complex operations - they can take arguments!
+
+---
+
+## 🔥 REAL WORLD APPLICATIONS
+
+### Where This Knowledge Applies:
+
+**1. DevOps & System Administration**
+- Customize shell for different environments
+- Create aliases for frequent server commands
+- Set up consistent environment across machines
+
+**2. Penetration Testing**
+- Quick access to security tools via aliases
+- Custom welcome message with system info
+- Efficient navigation through scan results
+
+**3. Software Development**
+- Git aliases for faster version control
+- Project navigation shortcuts
+- Development environment setup
+
+**4. Automation Scripting**
+- Functions in .bashrc for reusable code
+- PATH modifications for custom tools
+- History configuration for debugging
+
+**5. Daily Productivity**
+- Shortcuts for common tasks
+- Custom prompt showing current directory
+- Quick commands for file management
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CONFIGURATION IMPACT DIAGRAM                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ~/.termux/                     ~/.bashrc                               │
+│   ┌─────────────┐               ┌─────────────┐                         │
+│   │ App Settings│               │Shell Config │                         │
+│   │ • Keys      │               │ • Aliases   │                         │
+│   │ • Bell      │               │ • Functions │                         │
+│   │ • Colors    │               │ • Prompt    │                         │
+│   └──────┬──────┘               └──────┬──────┘                         │
+│          │                             │                                 │
+│          └──────────┬──────────────────┘                                 │
+│                     │                                                    │
+│                     ▼                                                    │
+│          ┌─────────────────────┐                                        │
+│          │  PRODUCTIVITY BOOST │                                        │
+│          │  ↑ 50% faster       │                                        │
+│          │  ↑ Less typing      │                                        │
+│          │  ↑ Fewer errors     │                                        │
+│          └─────────────────────┘                                        │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### Configuration Files
+
+| File | Purpose | Location |
+|------|---------|----------|
+| `termux.properties` | App settings | `~/.termux/termux.properties` |
+| `.bashrc` | Shell configuration | `~/.bashrc` |
+| `.bash_history` | Command history | `~/.bash_history` |
+| `.profile` | Login settings | `~/.profile` |
+
+### Essential Commands
+
+| Command | Description |
+|---------|-------------|
+| `source ~/.bashrc` | Reload shell config |
+| `termux-reload-settings` | Apply termux.properties changes |
+| `nano ~/.bashrc` | Edit bash configuration |
+| `nano ~/.termux/termux.properties` | Edit Termux settings |
+| `alias` | List all aliases |
+| `unalias <name>` | Remove an alias |
+| `export VAR=value` | Set environment variable |
+| `echo $VAR` | Display variable value |
+| `env` | Show all environment variables |
+
+### Prompt Escape Sequences
+
+| Code | Meaning |
+|------|---------|
+| `\u` | Username |
+| `\h` | Hostname |
+| `\w` | Full working directory |
+| `\W` | Current directory name |
+| `\t` | Time (24-hour) |
+| `\d` | Date |
+| `\$` | $ (normal) or # (root) |
+
+### Color Codes for PS1
+
+| Color | Code |
+|-------|------|
+| Red | `\[\033[0;31m\]` |
+| Green | `\[\033[0;32m\]` |
+| Yellow | `\[\033[0;33m\]` |
+| Blue | `\[\033[0;34m\]` |
+| Purple | `\[\033[0;35m\]` |
+| Cyan | `\[\033[0;36m\]` |
+| White | `\[\033[0;37m\]` |
+| Reset | `\[\033[0m\]` |
+
+---
+
+## 🏆 BONUS: ADVANCED TIPS
+
+### Extra Configuration Options
+
+```bash
+# Advanced .bashrc additions
+
+# === GIT BRANCH IN PROMPT ===
+parse_git_branch() {
+    git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+# Prompt with git branch
+export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
+
+# === AUTO-COMPLETION FOR ALIASES ===
+# Enable completion for aliases
+complete -o default -F _command apt
+complete -o default -F _command pkg
+
+# === DIRECTORY BOOKMARKS ===
+# Quick directory navigation
+export DIR1=~/
+export DIR2=~/projects
+export DIR3=~/storage/downloads
+
+# Usage: cd $DIR1, cd $DIR2, etc.
+
+# === ADVANCED HISTORY ===
+# Ignore specific commands
+export HISTIGNORE="ls:cd:clear:exit"
+
+# Append to history, don't overwrite
+shopt -s histappend
+
+# Save multi-line commands
+shopt -s lithist
+
+# === AUTO-CD (type directory name to cd) ===
+shopt -s autocd
+
+# === SPELL CORRECTION ===
+shopt -s cdspell
+shopt -s dirspell
+
+# === COLORFUL LESS ===
+export LESS="-R"
+export LESS_TERMCAP_mb=$'\E[1;31m'
+export LESS_TERMCAP_md=$'\E[1;36m'
+export LESS_TERMCAP_me=$'\E[0m'
+
+# === CUSTOM BINARY PATH ===
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+```
+
+### Advanced termux.properties
+
+```properties
+# ═══════════════════════════════════════════════════════════════
+# ADVANCED TERMUX.PROPERTIES
+# ═══════════════════════════════════════════════════════════════
+
+# Full extra keys with all modifiers
+extra-keys = [[ \
+  {key: ESC, popup: {macro: "CTRL d", display: "exit"}}, \
+  {key: CTRL, popup: {macro: "CTRL c", display: "cancel"}}, \
+  {key: ALT, popup: {macro: "CTRL z", display: "undo"}}, \
+  {key: TAB, popup: {macro: "CTRL a", display: "all"}}, \
+  {key: '/', popup: '~'}, \
+  {key: '-', popup: '_'}, \
+  {key: HOME, popup: END}, \
+  {key: UP, popup: PGUP}, \
+  {key: DOWN, popup: PGDN}, \
+  {key: LEFT, popup: HOME}, \
+  {key: RIGHT, popup: END} \
+]]
+
+# Second row with symbols
+extra-keys = [[ \
+  {key: ESC, popup: '~'}, \
+  {key: '/', popup: '_'}, \
+  {key: '-', popup: '+'}, \
+  {key: HOME, popup: END}, \
+  {key: UP, popup: PGUP}, \
+  {key: DOWN, popup: PGDN} \
+], [ \
+  {key: TAB}, \
+  {key: CTRL}, \
+  {key: ALT}, \
+  {key: '|', popup: '&'}, \
+  {key: '>', popup: '<'}, \
+  {key: '"', popup: "'"} \
+]]
+```
+
+### Useful Functions to Add
+
+```bash
+# === DIRECTORY SIZE ===
+dirsize() {
+    du -sh "${1:-.}" 2>/dev/null
+}
+
+# === QUICK FIND ===
+qfind() {
+    find . -name "*$1*" 2>/dev/null
+}
+
+# === EXTRACT ANY ARCHIVE ===
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.tar.xz)    tar xJf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *)           echo "'$1' cannot be extracted" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# === NETWORK INFO ===
+netinfo() {
+    echo "Public IP: $(curl -s ifconfig.me)"
+    echo "Local IP: $(hostname -I 2>/dev/null || echo 'N/A')"
+}
+
+# === SYSTEM INFO ===
+sysinfo() {
+    echo "=== SYSTEM INFO ==="
+    echo "User: $(whoami)"
+    echo "Home: $HOME"
+    echo "Shell: $SHELL"
+    echo "Termux: $TERMUX_VERSION"
+    echo "Prefix: $PREFIX"
+    echo "==================="
+}
+```
+
+---
+
+## 📝 CHAPTER SUMMARY: What You Learned
+
+### ✅ Key Takeaways
+
+- **`~/.termux/`** directory contains Termux app configuration files
+- **`termux.properties`** controls Termux app behavior (keys, bell, etc.)
+- **`~/.bashrc`** is the main shell configuration file
+- **Environment variables** store system-wide values accessible by programs
+- **Aliases** are shortcuts for frequently used commands
+- **PS1 variable** customizes your command prompt
+- **`termux-reload-settings`** applies termux.properties changes
+- **`source ~/.bashrc`** reloads shell configuration
+- **Functions** in .bashrc enable complex reusable commands
+- **History settings** control command history behavior
+
+### 🎯 Skills Acquired
+
+- [ ] Create and edit termux.properties file
+- [ ] Configure extra keys row
+- [ ] Understand and use environment variables
+- [ ] Create a comprehensive .bashrc file
+- [ ] Write and use aliases for common tasks
+- [ ] Customize the PS1 prompt
+- [ ] Add welcome message functions
+- [ ] Reload configuration without restarting Termux
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Test Your Knowledge (With Answers)
+
+**Q1: What is the difference between ~/.bashrc and ~/.bash_profile?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:** In Termux, `.bashrc` is used for interactive non-login shells (which is how Termux starts), while `.bash_profile` is for login shells. Termux typically uses `.bashrc`. On desktop Linux, `.bash_profile` runs once at login, while `.bashrc` runs every time you open a new terminal.
+</details>
+
+**Q2: How do you make an alias permanent in Termux?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:** Add the alias command to your `~/.bashrc` file:
+```bash
+echo "alias ll='ls -la'" >> ~/.bashrc
+source ~/.bashrc
+```
+The alias will now persist across Termux restarts.
+</details>
+
+**Q3: What does the PS1 variable control in Bash?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:** PS1 controls the primary prompt string - what you see before typing commands. It can include escape sequences for username (`\u`), hostname (`\h`), current directory (`\w`), time (`\t`), and colors using ANSI escape codes.
+</details>
+
+**Q4: How do you apply changes made to termux.properties?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:** Run `termux-reload-settings` command, or completely close Termux (swipe away from recent apps) and reopen it.
+</details>
+
+**Q5: What is the purpose of $PATH environment variable?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:** `$PATH` contains a list of directories where the shell looks for executable commands. When you type a command, the shell searches these directories in order. Adding custom directories to PATH allows you to run scripts from anywhere.
+</details>
+
+**Q6: How would you add a custom scripts directory to PATH?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:** Add this line to `.bashrc`:
+```bash
+export PATH="$HOME/scripts:$PATH"
+```
+This prepends your scripts directory to the existing PATH.
+</details>
+
+**Q7: What is the difference between an alias and a function in Bash?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:** 
+- **Aliases** are simple text substitutions, cannot take arguments directly
+- **Functions** can take arguments, contain complex logic, and use variables
+- Example: An alias `alias ll='ls -la'` vs a function:
+```bash
+mkcd() { mkdir -p "$1" && cd "$1"; }
+```
+</details>
+
+**Q8: How do you disable the terminal bell in Termux?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:** Add to `~/.termux/termux.properties`:
+```
+bell-character=ignore
+```
+Then run `termux-reload-settings`.
+</details>
+
+**Q9: What does `shopt -s cdspell` do?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:** It enables automatic spelling correction for the `cd` command. If you make a minor typo in directory name, Bash will try to correct it. Example: `cd Documnts` might automatically become `cd Documents`.
+</details>
+
+**Q10: How would you display current git branch in your prompt?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:** Add a function to parse git branch and include it in PS1:
+```bash
+parse_git_branch() {
+    git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+PS1="\w\$(parse_git_branch)\$ "
+```
+</details>
+
+---
+
+## 🚀 NEXT LEVEL TIPS
+
+### Performance Optimization
+
+```bash
+# Speed up bash startup by loading completions on demand
+# Add to .bashrc:
+
+# Lazy load nvm (if using Node.js)
+# Instead of: source ~/.nvm/nvm.sh
+# Use a function that loads it when needed
+node() {
+    unset -f node
+    source ~/.nvm/nvm.sh
+    node "$@"
+}
+```
+
+### Best Practices
+
+1. **Organize .bashrc** - Use clear sections with comments
+2. **Keep a backup** - Version control your dotfiles with Git
+3. **Test before applying** - Use `source ~/.bashrc` to test, then fix errors
+4. **Document aliases** - Comment what each alias does
+5. **Use functions over aliases** - For complex operations
+6. **Set proper history** - `HISTSIZE=10000` and `HISTFILESIZE=20000`
+7. **Use `||` and `&&`** - Chain commands safely
+
+### Common Mistakes to Avoid
+
+| ❌ Mistake | ✅ Correct Approach |
+|-----------|---------------------|
+| Editing .bashrc without backup | Always backup first: `cp ~/.bashrc ~/.bashrc.backup` |
+| Forgetting to reload | Use `source ~/.bashrc` after edits |
+| Overwriting PATH | Append/prepend: `export PATH="$HOME/bin:$PATH"` |
+| Spaces around `=` in assignments | No spaces: `VAR=value` not `VAR = value` |
+| Not quoting variables | Always quote: `"$VAR"` not `$VAR` |
+| Ignoring errors in .bashrc | Test with `bash -c "source ~/.bashrc"` |
+
+### Pro Configuration Workflow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CONFIGURATION BEST PRACTICES                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   1. BACKUP                     2. EDIT                                  │
+│   ┌─────────┐                  ┌─────────┐                              │
+│   │ cp      │                  │ nano    │                              │
+│   │ ~/.bashrc│                  │ ~/.bashrc│                              │
+│   │ ~/.bashrc│──►               │         │──►                           │
+│   │ .backup  │                  │         │                              │
+│   └─────────┘                  └─────────┘                              │
+│                                                                          │
+│   3. TEST                      4. RELOAD                                 │
+│   ┌─────────┐                  ┌─────────┐                              │
+│   │ source  │                  │ reload  │                              │
+│   │ ~/.bashrc│                  │         │                              │
+│   │ (check  │──►               │ (or     │──►  Done!                    │
+│   │ errors) │                  │ restart)│                              │
+│   └─────────┘                  └─────────┘                              │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🎮 INTERACTIVE ELEMENTS
+
+### 📝 Quiz: Test Your Knowledge
+
+**Score yourself: 10 points per correct answer**
+
+1. Which file is the main Termux app configuration?
+   - a) ~/.bashrc
+   - b) ~/.termux/termux.properties
+   - c) ~/.profile
+   - d) /etc/config
+
+2. How do you reload termux.properties changes?
+   - a) source ~/.termux/termux.properties
+   - b) termux-reload-settings
+   - c) restart phone
+   - d) pkg update
+
+3. What does `\w` mean in PS1 prompt?
+   - a) Username
+   - b) Working directory (full path)
+   - c) Week number
+   - d) Word count
+
+4. Which command shows all defined aliases?
+   - a) show aliases
+   - b) alias
+   - c) list alias
+   - d) cat ~/.aliases
+
+5. How do you make a variable available to child processes?
+   - a) var=value
+   - b) set var=value
+   - c) export var=value
+   - d) global var=value
+
+6. What does `HISTSIZE=10000` control?
+   - a) File size limit
+   - b) Number of commands in memory history
+   - c) History file size on disk
+   - d) Screen width
+
+7. Which is NOT a valid alias syntax?
+   - a) alias ll='ls -la'
+   - b) alias ls ls --color=auto
+   - c) alias c='clear'
+   - d) alias ..='cd ..'
+
+8. What color code is `\[\033[0;32m\]`?
+   - a) Red
+   - b) Green
+   - c) Blue
+   - d) Yellow
+
+9. How do you remove an alias?
+   - a) rm alias <name>
+   - b) unalias <name>
+   - c) del alias <name>
+   - d) alias -d <name>
+
+10. What is the default location of .bashrc in Termux?
+    - a) /etc/bashrc
+    - b) ~/.bashrc (~/ = /data/data/com.termux/files/home)
+    - c) /root/.bashrc
+    - d) /usr/share/bashrc
+
+**Answers:** 1-b, 2-b, 3-b, 4-b, 5-c, 6-b, 7-b, 8-b, 9-b, 10-b
+
+---
+
+### 🛠️ Try It Yourself Challenges
+
+**Challenge 1: Create Your First Alias**
+```bash
+# Task: Create a custom alias for checking disk usage
+# Steps:
+# 1. Open .bashrc
+nano ~/.bashrc
+
+# 2. Add this line at the end
+alias du='du -h'
+
+# 3. Save and reload
+source ~/.bashrc
+
+# 4. Test
+du -sh ~
+# Expected: Human-readable disk usage of home directory
+```
+
+**Challenge 2: Customize Your Prompt**
+```bash
+# Task: Create a colorful two-line prompt
+# Steps:
+# 1. Edit .bashrc
+nano ~/.bashrc
+
+# 2. Find PS1 and change to:
+PS1="\[\033[1;34m\]\w\[\033[0m\]\n\[\033[1;32m\]┌─$\[\033[0m\] "
+
+# 3. Reload and see the new prompt
+source ~/.bashrc
+
+# Expected: Blue current directory, green prompt on new line
+```
+
+**Challenge 3: Create a Function**
+```bash
+# Task: Create a function that creates and enters a directory
+# Steps:
+# 1. Edit .bashrc
+nano ~/.bashrc
+
+# 2. Add this function
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# 3. Reload
+source ~/.bashrc
+
+# 4. Test
+mkcd ~/test_project
+pwd
+# Expected: You should be in ~/test_project
+```
+
+**Challenge 4: Configure Extra Keys**
+```bash
+# Task: Add custom extra keys row
+# Steps:
+# 1. Create/edit termux.properties
+nano ~/.termux/termux.properties
+
+# 2. Add this content
+extra-keys = [[ \
+  {key: ESC}, \
+  {key: CTRL}, \
+  {key: ALT}, \
+  {key: TAB}, \
+  {key: '/', popup: '~'}, \
+  {key: '-', popup: '_'} \
+]]
+
+# 3. Apply changes
+termux-reload-settings
+
+# Expected: See new keys row above keyboard
+```
+
+---
+
+### ✅ Skill Check Checkpoints
+
+**Checkpoint 1: Configuration Files**
+- [ ] Can locate ~/.termux/ directory
+- [ ] Created/edited termux.properties
+- [ ] Used termux-reload-settings
+- [ ] Created/edited ~/.bashrc
+
+**Checkpoint 2: Aliases**
+- [ ] Created at least 5 custom aliases
+- [ ] Used alias command to list aliases
+- [ ] Aliases work after restart
+- [ ] Used reload alias successfully
+
+**Checkpoint 3: Prompt Customization**
+- [ ] Modified PS1 variable
+- [ ] Used color codes correctly
+- [ ] Created a two-line prompt
+- [ ] Prompt shows useful information
+
+**Checkpoint 4: Environment Variables**
+- [ ] Understand $HOME, $PATH, $PREFIX
+- [ ] Added custom variables to .bashrc
+- [ ] Used export correctly
+- [ ] Variables persist after restart
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+### Cross-Reference Guide
+
+| This Chapter | Related Chapter | Why Related |
+|-------------|-----------------|-------------|
+| Ch02: Configuration | **Ch01: Installation** | Requires Termux installed |
+| Ch02: Aliases | **Ch03: Linux Basics 1** | Commands referenced in aliases |
+| Ch02: Functions | **Ch07: Bash Scripting** | Functions are mini-scripts |
+| Ch02: PATH | **Ch05: Package Management** | Packages add to PATH |
+| Ch02: Git Aliases | **Ch08: Git in Termux** | Git configuration |
+
+### Next Steps Flowchart
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    YOUR LEARNING PATH                                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   Chapter 1 ──→ Chapter 2 ──→ Chapter 3 ──→ Chapter 4 ──→ Chapter 5   │
+│   (Install)    (You are     (Linux       (Linux       (Package         │
+│                 here)        Basics 1)   Basics 2)    Mgmt)            │
+│                                                                          │
+│   After this chapter, practice:                                         │
+│   • Create 10+ custom aliases                                          │
+│   • Design your perfect prompt                                          │
+│   • Set up a project workspace                                          │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 VISUAL DIAGRAMS
+
+### Bash Configuration Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    BASH STARTUP PROCESS                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   Termux Opens                                                          │
+│        │                                                                 │
+│        ▼                                                                 │
+│   ┌─────────────┐                                                       │
+│   │ Bash Starts │                                                       │
+│   └──────┬──────┘                                                       │
+│          │                                                               │
+│          ▼                                                               │
+│   ┌─────────────────────┐                                               │
+│   │ Read ~/.bashrc      │                                               │
+│   │ • Set variables     │                                               │
+│   │ • Define aliases    │                                               │
+│   │ • Define functions  │                                               │
+│   │ • Set PS1 prompt    │                                               │
+│   │ • Run welcome msg   │                                               │
+│   └──────────┬──────────┘                                               │
+│             │                                                            │
+│             ▼                                                            │
+│   ┌─────────────────────┐                                               │
+│   │ Ready for Commands! │                                               │
+│   └─────────────────────┘                                               │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Configuration Structure
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    TERMUX CONFIGURATION LAYERS                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   Layer 1: App Configuration                                            │
+│   ┌─────────────────────────────────────────────┐                       │
+│   │ ~/.termux/termux.properties                 │                       │
+│   │ • Extra keys row                            │                       │
+│   │ • Back key behavior                         │                       │
+│   │ • Bell character                            │                       │
+│   └─────────────────────────────────────────────┘                       │
+│                                                                          │
+│   Layer 2: Shell Configuration                                          │
+│   ┌─────────────────────────────────────────────┐                       │
+│   │ ~/.bashrc                                   │                       │
+│   │ • Environment variables                     │                       │
+│   │ • Aliases                                   │                       │
+│   │ • Functions                                 │                       │
+│   │ • Prompt (PS1)                              │                       │
+│   │ • Welcome message                           │                       │
+│   └─────────────────────────────────────────────┘                       │
+│                                                                          │
+│   Layer 3: User Data                                                    │
+│   ┌─────────────────────────────────────────────┐                       │
+│   │ ~/.bash_history                             │                       │
+│   │ ~/.bashrc.backup                            │                       │
+│   │ ~/scripts/                                  │                       │
+│   └─────────────────────────────────────────────┘                       │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*

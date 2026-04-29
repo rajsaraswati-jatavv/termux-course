@@ -2297,3 +2297,891 @@ Before moving to Chapter 50, verify:
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*
+
+---
+
+## 💡 PRO TIPS BOXES
+
+> 💡 **Pro Tip #1:** Always use `--shared-tmp` when logging in for better integration between Termux and proot distro
+
+> 💡 **Pro Tip #2:** Keep multiple distros! Use Alpine for speed, Ubuntu for compatibility, Kali for security tools
+
+> 💡 **Pro Tip #3:** Create a backup immediately after setup: `proot-distro backup distro --output my-setup.tar.gz`
+
+> 💡 **Pro Tip #4:** Use `termux-wake-lock` before long operations to prevent Android from killing Termux
+
+> 💡 **Pro Tip #5:** For GUI apps, start with XFCE or LXQt - they're lightweight and work well on mobile
+
+> 💡 **Pro Tip #6:** Mount shared directories with `--bind` for easy file transfer between Termux and proot
+
+> 💡 **Pro Tip #7:** Use `proot-distro login distro --user username` to avoid running as root in proot
+
+> 💡 **Pro Tip #8:** Clean package cache regularly to save space: `apt clean` or `pacman -Sc`
+
+> 💡 **Pro Tip #9:** VNC resolution matters! Lower resolution (1280x720) = better performance on mobile
+
+> 💡 **Pro Tip #10:** Use aliases in ~/.bashrc for quick distro access: `alias ubuntu='proot-distro login ubuntu'`
+
+---
+
+## 🔥 REAL WORLD USE CASES
+
+### Development Environment Setup
+
+```bash
+# Complete development environment in Ubuntu proot
+
+# 1. Install Ubuntu
+proot-distro install ubuntu
+
+# 2. Login with shared tmp
+proot-distro login ubuntu --shared-tmp
+
+# 3. Update and install development tools
+apt update && apt upgrade -y
+apt install -y build-essential git curl wget vim nano
+
+# 4. Install Node.js
+curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+apt install -y nodejs
+
+# 5. Install Python with pip
+apt install -y python3 python3-pip python3-venv
+
+# 6. Install Docker-like tools (Podman alternative)
+apt install -y podman  # May have limitations in proot
+
+# 7. Setup development directories
+mkdir -p ~/projects/{web,scripts,configs}
+
+# 8. Configure git
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+
+# 9. Create development user
+useradd -m -s /bin/bash devuser
+usermod -aG sudo devuser
+passwd devuser
+
+# 10. Exit and reconnect as devuser
+exit
+proot-distro login ubuntu --user devuser
+```
+
+### Security Testing Lab Setup
+
+```bash
+# Kali Linux security testing setup
+
+# 1. Install Kali
+proot-distro install kali
+
+# 2. Login
+proot-distro login kali --shared-tmp
+
+# 3. Update
+apt update && apt upgrade -y
+
+# 4. Install essential security tools
+apt install -y nmap
+apt install -y sqlmap
+apt install -y hydra
+apt install -y john
+apt install -y wireshark  # CLI tools only
+apt install -y masscan
+apt install -y dirb
+apt install -y nikto
+apt install -y gobuster
+
+# 5. Install network tools
+apt install -y netcat-openbsd
+apt install -y tcpdump
+apt install -y ettercap-text-only
+
+# 6. Install password tools
+apt install -y hashcat  # May have GPU limitations
+apt install -y john-the-ripper
+
+# 7. Create wordlists directory
+mkdir -p ~/wordlists
+apt install -y wordlists
+gunzip /usr/share/wordlists/rockyou.txt.gz 2>/dev/null
+
+# 8. Setup workspace
+mkdir -p ~/pentest/{scans,exploits,reports}
+
+# 9. Create aliases
+cat >> ~/.bashrc << 'EOF'
+alias nmap-fast='nmap -T4 -F'
+alias nmap-full='nmap -p- -T4'
+alias sqlmap-auto='sqlmap --batch --random-agent'
+EOF
+
+# 10. Backup the setup
+exit
+proot-distro backup kali --output kali-$(date +%Y%m%d).tar.gz
+```
+
+### Containerized Application Server
+
+```bash
+# Alpine-based application server
+
+# 1. Install Alpine (smallest footprint)
+proot-distro install alpine
+
+# 2. Login
+proot-distro login alpine
+
+# 3. Update
+apk update && apk upgrade
+
+# 4. Install essential packages
+apk add bash curl wget git vim
+
+# 5. Install Node.js
+apk add nodejs npm
+
+# 6. Install Python
+apk add python3 py3-pip
+
+# 7. Install databases
+apk add sqlite postgresql redis
+
+# 8. Install web server
+apk add nginx
+
+# 9. Create application directory
+mkdir -p /app
+
+# 10. Setup nginx
+cat > /etc/nginx/http.d/default.conf << 'EOF'
+server {
+    listen 8080;
+    server_name localhost;
+    
+    location / {
+        root /app/public;
+        index index.html;
+    }
+    
+    location /api {
+        proxy_pass http://127.0.0.1:3000;
+    }
+}
+EOF
+
+# 11. Start services
+nginx
+redis-server --daemonize yes
+
+# Alpine is perfect for:
+# - Microservices
+# - API servers
+# - Development testing
+# - Resource-constrained environments
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+| Category | Command | Description |
+|----------|---------|-------------|
+| **Installation** | `proot-distro install ubuntu` | Install Ubuntu |
+| | `proot-distro install kali` | Install Kali Linux |
+| | `proot-distro install arch` | Install Arch Linux |
+| | `proot-distro install alpine` | Install Alpine |
+| **Management** | `proot-distro list` | List available distros |
+| | `proot-distro list --installed` | List installed distros |
+| | `proot-distro remove ubuntu` | Remove distro |
+| | `proot-distro backup ubuntu` | Backup distro |
+| | `proot-distro restore ubuntu file.tar.gz` | Restore distro |
+| **Login** | `proot-distro login ubuntu` | Login to distro |
+| | `proot-distro login ubuntu --shared-tmp` | With shared tmp |
+| | `proot-distro login ubuntu --user name` | As specific user |
+| | `proot-distro login ubuntu --bind /src:/dest` | Mount directory |
+| **Package Managers** | `apt install package` | Ubuntu/Debian/Kali |
+| | `pacman -S package` | Arch Linux |
+| | `dnf install package` | Fedora |
+| | `apk add package` | Alpine |
+| **VNC/GUI** | `vncserver :1` | Start VNC server |
+| | `vncserver -kill :1` | Stop VNC server |
+| | `vncpasswd` | Set VNC password |
+
+---
+
+## 🏆 BONUS: PRODUCTION TIPS
+
+### Proot Security Hardening
+
+```bash
+# Security best practices for proot environments
+
+# 1. Create non-root user (inside proot)
+useradd -m -s /bin/bash secureuser
+passwd secureuser
+usermod -aG sudo secureuser
+
+# 2. Login as non-root user
+exit
+proot-distro login ubuntu --user secureuser
+
+# 3. Configure SSH (if running services)
+# Don't expose directly - use Termux SSH for external access
+
+# 4. Limit installed packages
+# Only install what you need
+apt autoremove
+apt clean
+
+# 5. Use firewall (if iptables available)
+# Limit outbound connections
+
+# 6. Regular updates
+apt update && apt upgrade -y
+
+# 7. Audit installed packages
+dpkg -l | grep -i sensitive
+
+# 8. Environment isolation
+# Don't share sensitive Termux directories
+# Use --bind carefully
+
+# 9. Secure backup storage
+# Encrypt backups before storing
+proot-distro backup ubuntu | gpg -c > ubuntu-backup.tar.gz.gpg
+
+# 10. Resource monitoring
+# Keep an eye on storage usage
+du -sh ~/.proot-distro/installed-rootfs/*
+```
+
+### Access Control
+
+```bash
+# User and permission management in proot
+
+# Inside proot distro:
+
+# 1. Create users for different purposes
+useradd -m -s /bin/bash developer
+useradd -m -s /bin/bash deployer
+
+# 2. Create groups
+groupadd developers
+groupadd deployers
+
+# 3. Add users to groups
+usermod -aG developers developer
+usermod -aG deployers deployer
+
+# 4. Set directory permissions
+mkdir -p /var/www /opt/apps
+chown -R developer:developers /var/www
+chown -R deployer:deployers /opt/apps
+chmod 775 /var/www /opt/apps
+
+# 5. Configure sudo access
+visudo
+# Add:
+# developer ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart *
+# deployer ALL=(ALL) NOPASSWD: /usr/bin/systemctl status *
+
+# 6. Restrict user capabilities
+# Remove shell access for service accounts
+usermod -s /usr/sbin/nologin serviceaccount
+
+# 7. Set umask
+echo "umask 027" >> /etc/profile
+
+# 8. Create login banners
+cat > /etc/motd << 'EOF'
+Authorized access only!
+All activities are logged.
+EOF
+```
+
+### Secure Configuration
+
+```bash
+# Secure proot environment configuration
+
+# 1. Disable unnecessary services (inside proot)
+systemctl disable bluetooth 2>/dev/null
+systemctl disable cups 2>/dev/null
+
+# 2. Configure secure SSH (if running SSH in proot)
+cat >> /etc/ssh/sshd_config << 'EOF'
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+AllowUsers specificuser
+EOF
+
+# 3. Secure tmp directory
+# Already isolated in proot, but ensure permissions
+chmod 1777 /tmp
+
+# 4. Configure secure umask globally
+echo "session optional pam_umask.so umask=027" >> /etc/pam.d/common-session
+
+# 5. Restrict cron access
+echo "root" > /etc/cron.allow
+echo "developer" >> /etc/cron.allow
+chmod 600 /etc/cron.allow
+
+# 6. Secure log files
+chmod 640 /var/log/*
+chown root:adm /var/log/*
+
+# 7. Environment variables
+# Don't store sensitive data in shell history
+export HISTIGNORE="*password*:*secret*:*key*"
+export HISTSIZE=100
+
+# 8. Create security aliases
+cat >> ~/.bashrc << 'EOF'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias ls='ls --color=auto'
+alias ll='ls -la'
+alias ports='netstat -tulanp'
+EOF
+```
+
+---
+
+## 📝 CHAPTER SUMMARY
+
+### What You Learned
+
+- ✅ **Proot Basics**: User-space virtualization without root
+- ✅ **Distro Installation**: Ubuntu, Kali, Arch, Debian, Alpine, Fedora
+- ✅ **Package Management**: apt, pacman, dnf, apk
+- ✅ **GUI Applications**: VNC setup and desktop environments
+- ✅ **File Sharing**: Bind mounts between Termux and proot
+- ✅ **Backup & Restore**: Complete distro backup procedures
+- ✅ **User Management**: Creating users and managing permissions
+- ✅ **Performance Tips**: Optimization for better experience
+
+### Key Takeaways
+
+1. **No root needed**: Proot provides safe virtualization
+2. **Multiple distros**: Run several Linux distros simultaneously
+3. **Isolated environments**: Each distro is self-contained
+4. **Backup regularly**: Saves hours of setup time
+5. **Choose wisely**: Alpine for speed, Ubuntu for compatibility
+
+---
+
+## 📈 PERFORMANCE TUNING
+
+### Storage Optimization
+
+```bash
+# Optimize proot storage usage
+
+# 1. Check distro sizes
+du -sh ~/.proot-distro/installed-rootfs/*
+
+# 2. Clean package cache (inside each distro)
+# Ubuntu/Debian/Kali:
+apt clean
+apt autoclean
+apt autoremove --purge
+
+# Arch:
+pacman -Sc
+pacman -Qdtq | pacman -Rs - 2>/dev/null
+
+# Fedora:
+dnf clean all
+dnf autoremove
+
+# Alpine:
+apk cache clean
+
+# 3. Remove unused packages
+# List large packages:
+dpkg-query -W --showformat='${Installed-Size}\t${Package}\n' | sort -nr | head -20
+
+# 4. Clean logs
+rm -rf /var/log/*.gz /var/log/*.1
+
+# 5. Compress backups
+proot-distro backup ubuntu | gzip > ubuntu-backup.tar.gz
+
+# 6. Remove old backups
+find ~/.proot-distro -name "backup-*.tar.gz" -mtime +30 -delete
+
+# 7. Clear cache directory
+rm -rf ~/.proot-distro/cache/*
+
+# 8. Monitor storage
+df -h ~/.proot-distro
+```
+
+### Memory Optimization
+
+```bash
+# Optimize memory usage for proot
+
+# 1. Use lightweight distros for memory-intensive tasks
+proot-distro install alpine  # Only ~5MB base
+
+# 2. Limit concurrent processes
+# Inside proot, avoid running too many services
+
+# 3. Use lightweight desktop environments
+apt install xfce4  # Instead of gnome/kde
+
+# 4. Limit VNC resolution
+vncserver :1 -geometry 1280x720 -depth 16
+
+# 5. Disable unnecessary services
+systemctl disable service-name 2>/dev/null
+
+# 6. Use swap if available (Termux level)
+# Check: cat /proc/swaps
+
+# 7. Monitor memory usage
+free -h
+top
+
+# 8. Kill memory hogs
+pkill -f chrome  # Example
+pkill -f firefox
+
+# 9. Use termux-wake-lock wisely
+# Only when needed, releases resources when not
+
+# 10. Restart proot if sluggish
+exit
+proot-distro login ubuntu
+```
+
+### Network Optimization
+
+```bash
+# Network performance in proot
+
+# 1. Use local mirrors for faster package downloads
+# Ubuntu: Edit /etc/apt/sources.list
+sed -i 's/archive.ubuntu.com/mirror.example.com/g' /etc/apt/sources.list
+
+# 2. Parallel package downloads
+# In /etc/apt/apt.conf.d/99parallel:
+Acquire::Queue-Mode "host";
+Acquire::http::Timeout "10";
+
+# 3. Use faster DNS
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+
+# 4. Disable IPv6 if not needed
+# In /etc/sysctl.conf (may not work in proot):
+net.ipv6.conf.all.disable_ipv6 = 1
+
+# 5. Optimize wget/curl
+# Use parallel downloads
+wget -c --tries=3 --timeout=15 URL
+
+# 6. Cache DNS lookups
+# Already done by Android
+
+# 7. Use local package cache (apt-cacher-ng)
+# Advanced: Setup local cache server
+```
+
+---
+
+## 🔄 BACKUP & RECOVERY
+
+### Comprehensive Backup System
+
+```bash
+#!/bin/bash
+# proot-backup-system.sh - Complete backup solution
+
+BACKUP_DIR=~/proot-backups
+LOG_FILE=~/backup.log
+RETENTION_DAYS=30
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a $LOG_FILE
+}
+
+# Create backup directory
+mkdir -p $BACKUP_DIR
+
+# Backup all installed distros
+backup_all_distros() {
+    log "Starting backup of all distros..."
+    
+    for distro in $(proot-distro list --installed | awk '{print $1}'); do
+        log "Backing up $distro..."
+        BACKUP_FILE="$BACKUP_DIR/${distro}-$(date +%Y%m%d_%H%M%S).tar.gz"
+        
+        proot-distro backup $distro --output $BACKUP_FILE 2>&1 | tee -a $LOG_FILE
+        
+        # Encrypt backup
+        gpg --batch --passphrase "$BACKUP_PASSWORD" -c $BACKUP_FILE 2>/dev/null
+        rm $BACKUP_FILE
+        
+        log "Backup encrypted: ${BACKUP_FILE}.gpg"
+    done
+}
+
+# Backup specific files from each distro
+backup_config_files() {
+    log "Backing up config files..."
+    
+    CONFIG_BACKUP="$BACKUP_DIR/configs-$(date +%Y%m%d).tar.gz"
+    
+    tar czf $CONFIG_BACKUP \
+        -C ~/.proot-distro/installed-rootfs \
+        --transform 's,^ubuntu,,' \
+        ubuntu/etc/ssh \
+        ubuntu/etc/nginx \
+        ubuntu/etc/apache2 \
+        ubuntu/home 2>/dev/null
+    
+    log "Config backup: $CONFIG_BACKUP"
+}
+
+# Backup Termux-proot integration
+backup_integration() {
+    log "Backing up Termux integration..."
+    
+    INTEGRATION_BACKUP="$BACKUP_DIR/termux-integration-$(date +%Y%m%d).tar.gz"
+    
+    tar czf $INTEGRATION_BACKUP \
+        ~/.bashrc \
+        ~/.bash_aliases \
+        ~/.termux \
+        ~/.proot-distro/lion 2>/dev/null
+    
+    log "Integration backup: $INTEGRATION_BACKUP"
+}
+
+# Cleanup old backups
+cleanup_old_backups() {
+    log "Cleaning up old backups..."
+    find $BACKUP_DIR -type f -mtime +$RETENTION_DAYS -delete
+    log "Cleanup completed"
+}
+
+# Generate report
+generate_report() {
+    log "=== Backup Report ==="
+    log "Total backup size:"
+    du -sh $BACKUP_DIR
+    log "Number of backups:"
+    ls $BACKUP_DIR/*.tar.gz* | wc -l
+    log "==================="
+}
+
+# Main
+log "=== Starting Proot Backup System ==="
+backup_all_distros
+backup_config_files
+backup_integration
+cleanup_old_backups
+generate_report
+log "=== Backup completed ==="
+```
+
+### Disaster Recovery
+
+```bash
+#!/bin/bash
+# proot-disaster-recovery.sh
+
+BACKUP_DIR=~/proot-backups
+LOG_FILE=~/recovery.log
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a $LOG_FILE
+}
+
+# List available backups
+list_backups() {
+    echo "Available backups:"
+    echo "=================="
+    ls -lh $BACKUP_DIR/*.tar.gz* 2>/dev/null
+    echo ""
+}
+
+# Restore a distro
+restore_distro() {
+    local distro=$1
+    local backup_file=$(ls -t $BACKUP_DIR/${distro}-*.tar.gz* | head -1)
+    
+    if [ -z "$backup_file" ]; then
+        log "No backup found for $distro"
+        return 1
+    fi
+    
+    log "Restoring $distro from $backup_file"
+    
+    # Decrypt if needed
+    if [[ "$backup_file" == *.gpg ]]; then
+        gpg --batch --passphrase "$BACKUP_PASSWORD" -d $backup_file > /tmp/restore.tar.gz
+        backup_file=/tmp/restore.tar.gz
+    fi
+    
+    # Remove existing distro
+    proot-distro remove $distro 2>/dev/null
+    
+    # Restore
+    proot-distro restore $distro $backup_file
+    
+    # Cleanup
+    rm -f /tmp/restore.tar.gz
+    
+    log "Restore completed for $distro"
+}
+
+# Verify backup integrity
+verify_backup() {
+    local backup_file=$1
+    
+    log "Verifying $backup_file..."
+    
+    if [[ "$backup_file" == *.gpg ]]; then
+        gpg --batch --passphrase "$BACKUP_PASSWORD" -d $backup_file | tar tzf - > /dev/null 2>&1
+    else
+        tar tzf $backup_file > /dev/null 2>&1
+    fi
+    
+    if [ $? -eq 0 ]; then
+        log "✓ Backup is valid"
+        return 0
+    else
+        log "✗ Backup is corrupted"
+        return 1
+    fi
+}
+
+# Emergency full restore
+emergency_restore() {
+    log "=== Emergency Full Restore ==="
+    
+    # Restore all distros from latest backups
+    for distro in ubuntu kali arch alpine debian; do
+        if [ -f $BACKUP_DIR/${distro}-*.tar.gz.gpg ] || [ -f $BACKUP_DIR/${distro}-*.tar.gz ]; then
+            restore_distro $distro
+        fi
+    done
+    
+    log "=== Emergency restore completed ==="
+}
+
+# Menu
+echo "=== Proot Disaster Recovery ==="
+echo "1. List available backups"
+echo "2. Verify backup"
+echo "3. Restore specific distro"
+echo "4. Emergency full restore"
+echo "Choose option:"
+read choice
+
+case $choice in
+    1) list_backups ;;
+    2) 
+        echo "Enter backup filename:"
+        read filename
+        verify_backup "$BACKUP_DIR/$filename"
+        ;;
+    3)
+        echo "Enter distro name (ubuntu/kali/arch/alpine/debian):"
+        read distro
+        restore_distro $distro
+        ;;
+    4) emergency_restore ;;
+    *) echo "Invalid option" ;;
+esac
+```
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+### Quiz: Proot Distro Mastery
+
+**Question 1:** What command installs Ubuntu in proot?
+- A) `pkg install ubuntu`
+- B) `proot-distro install ubuntu`
+- C) `apt install ubuntu-proot`
+- D) `install-proot ubuntu`
+
+**Question 2:** What flag shares Termux tmp with proot?
+- A) `--tmp`
+- B) `--shared-tmp`
+- C) `--tmpfs`
+- D) `--share`
+
+**Question 3:** What package manager does Arch Linux use?
+- A) `apt`
+- B) `dnf`
+- C) `pacman`
+- D) `apk`
+
+**Question 4:** Which distro is smallest and fastest?
+- A) Ubuntu
+- B) Debian
+- C) Kali
+- D) Alpine
+
+**Question 5:** What command backs up a distro?
+- A) `proot-distro save ubuntu`
+- B) `proot-distro backup ubuntu`
+- C) `proot-distro export ubuntu`
+- D) `proot-distro archive ubuntu`
+
+**Question 6:** How to start VNC server?
+- A) `vnc start :1`
+- B) `vncserver :1`
+- C) `start-vnc :1`
+- D) `vnc :1`
+
+**Question 7:** What is the smallest desktop environment?
+- A) GNOME
+- B) KDE
+- C) XFCE
+- D) LXQt/LXDE
+
+**Question 8:** What command lists installed distros?
+- A) `proot-distro list`
+- B) `proot-distro --installed`
+- C) `proot-distro list --installed`
+- D) `proot-distro show`
+
+**Question 9:** Which flag mounts a directory in proot?
+- A) `--mount`
+- B) `--bind`
+- C) `--link`
+- D) `--share-dir`
+
+**Question 10:** What is Alpine's package manager?
+- A) `apt`
+- B) `pacman`
+- C) `apk`
+- D) `dnf`
+
+**Question 11:** How to login as non-root user?
+- A) `proot-distro login ubuntu -u username`
+- B) `proot-distro login ubuntu --user username`
+- C) `proot-distro login ubuntu username`
+- D) `proot-distro login ubuntu --as username`
+
+**Question 12:** What command removes a distro?
+- A) `proot-distro delete ubuntu`
+- B) `proot-distro remove ubuntu`
+- C) `proot-distro uninstall ubuntu`
+- D) `proot-distro purge ubuntu`
+
+### Answers
+
+| Q | A | Q | A | Q | A | Q | A |
+|---|---|---|---|---|---|---|---|
+| 1 | B | 4 | D | 7 | D | 10 | C |
+| 2 | B | 5 | B | 8 | C | 11 | B |
+| 3 | C | 6 | B | 9 | B | 12 | B |
+
+---
+
+## 🎯 DISTRO SETUP CHALLENGES
+
+### Challenge 1: Basic Ubuntu Setup
+```bash
+# Task: Install and configure Ubuntu
+
+# Steps:
+proot-distro install ubuntu
+proot-distro login ubuntu --shared-tmp
+
+# Inside Ubuntu:
+apt update && apt upgrade -y
+apt install -y neofetch git curl
+
+# Create user
+useradd -m -s /bin/bash myuser
+passwd myuser
+
+# Verify:
+neofetch
+whoami
+
+# Expected: Ubuntu running with neofetch showing system info
+```
+
+### Challenge 2: Security Tools Setup
+```bash
+# Task: Setup Kali with essential tools
+
+# Steps:
+proot-distro install kali
+proot-distro login kali --shared-tmp
+
+# Inside Kali:
+apt update && apt upgrade -y
+apt install -y nmap sqlmap hydra
+
+# Verify:
+nmap --version
+sqlmap --version
+hydra -h
+
+# Test scan:
+nmap -sV localhost
+
+# Expected: All tools installed and working
+```
+
+### Challenge 3: GUI Setup
+```bash
+# Task: Setup XFCE desktop with VNC
+
+# Steps:
+proot-distro login ubuntu --shared-tmp
+
+# Install XFCE
+apt update
+apt install -y xfce4 xfce4-goodies tigervnc-standalone-server
+
+# Configure VNC
+vncpasswd
+mkdir -p ~/.vnc
+echo "startxfce4" > ~/.vnc/xstartup
+chmod +x ~/.vnc/xstartup
+
+# Start VNC
+vncserver :1 -geometry 1280x720
+
+# Verify:
+vncserver -list
+
+# Expected: VNC server running on display :1
+# Connect with VNC viewer to localhost:5901
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Title | Relevance |
+|---------|-------|-----------|
+| **Chapter 50** | Metasploit in Proot | Full Metasploit setup in Kali |
+| **Chapter 47** | Web Server | Run full web servers in proot |
+| **Chapter 48** | Database | Full database servers in proot |
+| **Chapter 45** | SSH Server | Access proot distros via SSH |
+| **Chapter 46** | SSH Client | Tunnel to proot services |
+| **Chapter 38** | Network Tools | Network testing in proot |
+
+---
+
+**🎉 Chapter 49 Upgraded Successfully!**
+

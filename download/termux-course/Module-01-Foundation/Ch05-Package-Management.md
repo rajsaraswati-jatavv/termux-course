@@ -1956,6 +1956,841 @@ Before moving to Chapter 6, verify:
 
 ---
 
+## 💡 PRO TIPS - MASTER THESE!
+
+> 💡 **Pro Tip #1:** Always run `pkg update` before installing new packages to get the latest versions.
+
+> 💡 **Pro Tip #2:** Use `pkg install package1 package2 package3` to install multiple packages at once.
+
+> 💡 **Pro Tip #3:** `pkg show <package>` before installing shows size, dependencies, and description.
+
+> 💡 **Pro Tip #4:** Use `apt-mark hold <package>` to prevent a package from being auto-updated.
+
+> 💡 **Pro Tip #5:** `pkg list-installed | wc -l` counts total installed packages.
+
+> 💡 **Pro Tip #6:** Install `apt-file` to search which package provides a specific file.
+
+> 💡 **Pro Tip #7:** Use `pkg autoclean` regularly to free up disk space from cached packages.
+
+> 💡 **Pro Tip #8:** `apt --fix-broken install` fixes most package dependency issues.
+
+> 💡 **Pro Tip #9:** Use `-y` flag for unattended installations: `pkg install python -y`
+
+> 💡 **Pro Tip #10:** Check package details with `apt-cache show <package>` for more info than pkg show.
+
+---
+
+## 🔥 REAL WORLD APPLICATIONS
+
+### Where This Knowledge Applies:
+
+**1. Development Environment Setup**
+- Install programming languages (Python, Node.js, Go)
+- Set up development tools (Git, Vim, compilers)
+- Manage project dependencies
+
+**2. Security Tools Installation**
+- Install penetration testing tools
+- Network analysis utilities
+- Forensic tools
+
+**3. Server Management**
+- Install web servers (Apache, Nginx)
+- Database systems (MySQL, SQLite)
+- Process managers
+
+**4. Automation & Scripting**
+- Install scripting language runtimes
+- Add automation tools
+- Configure cron jobs
+
+**5. Media Processing**
+- FFmpeg for video/audio
+- ImageMagick for images
+- Download tools (yt-dlp, wget)
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PACKAGE MANAGEMENT WORKFLOW                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌───────────────┐     ┌───────────────┐     ┌───────────────┐        │
+│   │   pkg update  │────►│ pkg install   │────►│    Verify     │        │
+│   │               │     │               │     │               │        │
+│   └───────────────┘     └───────────────┘     └───────────────┘        │
+│          │                     │                     │                  │
+│          ▼                     ▼                     ▼                  │
+│   ┌───────────────┐     ┌───────────────┐     ┌───────────────┐        │
+│   │ Refresh       │     │ Download &    │     │ Test with     │        │
+│   │ Package List  │     │ Install       │     │ --version     │        │
+│   └───────────────┘     └───────────────┘     └───────────────┘        │
+│                                                                          │
+│   MAINTENANCE:                                                           │
+│   • pkg upgrade    - Update all packages                                │
+│   • pkg clean      - Free cache space                                   │
+│   • pkg autoclean  - Remove obsolete packages                           │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### pkg Commands
+
+| Command | Description |
+|---------|-------------|
+| `pkg update` | Update package list |
+| `pkg upgrade` | Upgrade all packages |
+| `pkg install <name>` | Install package |
+| `pkg uninstall <name>` | Remove package |
+| `pkg search <term>` | Search packages |
+| `pkg show <name>` | Package details |
+| `pkg list-installed` | List installed |
+| `pkg list-all` | List all available |
+| `pkg clean` | Clear cache |
+| `pkg autoclean` | Remove obsolete |
+| `pkg hold <name>` | Lock package version |
+| `pkg unhold <name>` | Unlock package |
+
+### apt Commands
+
+| Command | Description |
+|---------|-------------|
+| `apt update` | Update package list |
+| `apt upgrade` | Upgrade packages |
+| `apt install <name>` | Install package |
+| `apt remove <name>` | Remove package |
+| `apt purge <name>` | Remove + config |
+| `apt autoremove` | Remove dependencies |
+| `apt full-upgrade` | Full system upgrade |
+| `apt --fix-broken install` | Fix dependencies |
+
+### dpkg Commands
+
+| Command | Description |
+|---------|-------------|
+| `dpkg -i file.deb` | Install .deb file |
+| `dpkg -r <name>` | Remove package |
+| `dpkg -l` | List all packages |
+| `dpkg -L <name>` | List package files |
+| `dpkg -s <name>` | Package status |
+| `dpkg -I file.deb` | .deb file info |
+| `dpkg --configure -a` | Configure pending |
+
+### Repository Commands
+
+| Command | Description |
+|---------|-------------|
+| `pkg install x11-repo` | Add X11 repository |
+| `pkg install root-repo` | Add root repository |
+| `pkg install game-repo` | Add games repository |
+| `pkg install science-repo` | Add science repository |
+
+---
+
+## 🏆 BONUS: ADVANCED TIPS
+
+### Advanced Package Operations
+
+```bash
+# === INSTALL SPECIFIC VERSION ===
+apt install python=3.11.0
+
+# === DOWNLOAD WITHOUT INSTALLING ===
+apt download python
+# Creates: python_3.11.0_aarch64.deb
+
+# === REINSTALL PACKAGE ===
+pkg install python --reinstall
+
+# === INSTALL FROM LOCAL .DEB ===
+dpkg -i package.deb
+apt --fix-broken install  # If dependencies missing
+
+# === REMOVE WITH ALL DEPENDENCIES ===
+apt purge python
+apt autoremove
+
+# === CHECK PACKAGE DEPENDENCIES ===
+apt-cache depends python
+
+# === CHECK REVERSE DEPENDENCIES ===
+apt-cache rdepends python
+
+# === FIND WHICH PACKAGE PROVIDES A FILE ===
+pkg install apt-file
+apt-file update
+apt-file search /usr/bin/python
+
+# === SHOW PACKAGE SIZES ===
+dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
+
+# === LIST LARGEST PACKAGES ===
+dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -nr | head -20
+```
+
+### Repository Management
+
+```bash
+# === VIEW CURRENT REPOSITORIES ===
+cat $PREFIX/etc/apt/sources.list
+
+# === ADD CUSTOM REPOSITORY ===
+echo "deb [arch=all] https://example.com/repo stable main" >> $PREFIX/etc/apt/sources.list
+pkg update
+
+# === LIST REPOSITORY FILES ===
+ls $PREFIX/etc/apt/sources.list.d/
+
+# === ENABLE DEBUG REPO ===
+# Add to sources.list:
+# deb https://packages.termux.dev/termux-main stable main debug
+
+# === MIRROR SELECTION ===
+# For faster downloads, try alternative mirrors:
+# pkg install mirrors
+# mirrors  # Interactive mirror selection tool
+```
+
+### Package Troubleshooting Deep Dive
+
+```bash
+# === FULL REPAIR SEQUENCE ===
+pkg update
+apt --fix-broken install
+dpkg --configure -a
+pkg clean
+pkg upgrade
+
+# === REMOVE PROBLEMATIC PACKAGE ===
+# If normal remove fails:
+dpkg --force-remove-reinstreq -r package-name
+
+# === RESET PACKAGE DATABASE ===
+# WARNING: Use only as last resort!
+rm $PREFIX/var/lib/dpkg/lock*
+dpkg --configure -a
+
+# === CLEAR ALL CACHE ===
+rm -rf $PREFIX/var/cache/apt/archives/*.deb
+pkg update
+
+# === REINSTALL ALL PACKAGES ===
+# WARNING: This reinstalls everything!
+pkg list-installed | cut -d/ -f1 | xargs pkg install --reinstall
+
+# === BACKUP INSTALLED PACKAGES LIST ===
+pkg list-installed > ~/installed_packages.txt
+
+# === RESTORE FROM BACKUP ===
+# On new installation:
+xargs pkg install -y < installed_packages.txt
+```
+
+### Package Building from Source
+
+```bash
+# === ESSENTIAL BUILD TOOLS ===
+pkg install build-essential git cmake autoconf automake
+
+# === TYPICAL BUILD PROCESS ===
+# 1. Clone repository
+git clone https://github.com/user/project.git
+cd project
+
+# 2. Check build instructions
+cat README.md
+cat INSTALL.md
+
+# 3. Common build commands
+mkdir build && cd build
+cmake ..
+make -j$(nproc)  # Use all CPU cores
+make install
+
+# === AUTOTOOLS BUILD ===
+./autogen.sh       # Generate configure script
+./configure        # Configure build
+make              # Compile
+make install      # Install
+
+# === PYTHON PACKAGE FROM SOURCE ===
+pkg install python
+pip install --upgrade pip
+pip install package-name
+
+# === NODE.JS PACKAGE ===
+pkg install nodejs
+npm install -g package-name
+```
+
+---
+
+## 📝 CHAPTER SUMMARY: What You Learned
+
+### ✅ Key Takeaways
+
+- **pkg** is Termux's native package manager (wrapper around apt)
+- **apt** provides more advanced package management options
+- **dpkg** handles low-level .deb file operations
+- **Repositories** contain packages: main, games, science, root, x11
+- **Dependencies** are automatically handled by package managers
+- **Holding** packages prevents automatic updates
+- **Fix broken** command resolves dependency issues
+- **Cache cleanup** frees disk space
+- **Building from source** is needed for some packages
+
+### 🎯 Skills Acquired
+
+- [ ] Use pkg for daily package operations
+- [ ] Use apt for advanced operations
+- [ ] Install from .deb files
+- [ ] Add and remove repositories
+- [ ] Fix broken packages
+- [ ] Hold/unhold packages
+- [ ] Build packages from source
+- [ ] Perform system maintenance
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Test Your Knowledge (With Answers)
+
+**Q1: What is the difference between pkg and apt in Termux?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+- `pkg` is Termux's native wrapper around apt - simpler, beginner-friendly
+- `apt` is Advanced Package Tool - more options, advanced features
+- `pkg` commands: install, uninstall, update, upgrade, search, show
+- `apt` has extra features: --fix-broken, download, changelog, policy, hold
+- Both work similarly for basic operations
+</details>
+
+**Q2: How do you fix "dpkg was interrupted" error?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+```bash
+dpkg --configure -a
+```
+This command configures any packages that were left unconfigured after an interrupted installation.
+</details>
+
+**Q3: What does `apt --fix-broken install` do?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+It attempts to fix broken dependencies by:
+- Downloading and installing missing dependencies
+- Resolving version conflicts
+- Repairing broken package states
+- Should be followed by `pkg upgrade` to complete fixes
+</details>
+
+**Q4: How do you prevent a package from being upgraded?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+```bash
+pkg hold package-name
+# or
+apt-mark hold package-name
+```
+To allow upgrades again:
+```bash
+pkg unhold package-name
+# or
+apt-mark unhold package-name
+```
+</details>
+
+**Q5: What is the purpose of `pkg autoclean` vs `pkg clean`?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+- `pkg clean` - Removes ALL cached .deb files from `/var/cache/apt/archives/`
+- `pkg autoclean` - Only removes cache files for packages that are no longer available in repositories
+- Use `autoclean` for regular maintenance, `clean` when you need maximum disk space
+</details>
+
+**Q6: How do you install a package from a .deb file?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+```bash
+dpkg -i package_file.deb
+# If dependency errors:
+apt --fix-broken install
+```
+dpkg doesn't automatically resolve dependencies, so apt --fix-broken may be needed.
+</details>
+
+**Q7: What repositories are available in Termux?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+- **main** - Default, core packages and tools
+- **games** - Game packages
+- **science** - Scientific computing tools
+- **root** - Root-requiring packages (needs rooted device)
+- **x11** - GUI applications and X11 tools
+- Install with: `pkg install x11-repo`, `pkg install root-repo`, etc.
+</details>
+
+**Q8: How do you find which package provides a specific command?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+```bash
+# Method 1: Search for package
+pkg search nmap
+
+# Method 2: Use apt-file (install first)
+pkg install apt-file
+apt-file update
+apt-file search /usr/bin/nmap
+
+# Method 3: Check if already installed
+which nmap
+dpkg -S $(which nmap)
+```
+</details>
+
+**Q9: What is the difference between `apt remove` and `apt purge`?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+- `apt remove package` - Removes package but keeps configuration files
+- `apt purge package` - Removes package AND configuration files
+- Use purge when you want a complete clean removal
+- Configuration files include settings in /etc/, user preferences, etc.
+</details>
+
+**Q10: How would you backup and restore your Termux packages?**
+<details>
+<summary>Click to reveal answer</summary>
+
+**Answer:**
+```bash
+# Backup installed packages list
+pkg list-installed | cut -d/ -f1 > ~/installed_packages.txt
+
+# Save to downloads
+cp ~/installed_packages.txt ~/storage/downloads/
+
+# On new installation, restore:
+xargs pkg install -y < ~/installed_packages.txt
+```
+</details>
+
+---
+
+## 🚀 NEXT LEVEL TIPS
+
+### Performance Optimization
+
+```bash
+# === FASTER MIRRORS ===
+# Install mirrors tool
+pkg install mirrors
+mirrors  # Select fastest mirror
+
+# === PARALLEL DOWNLOADS ===
+# Create apt config
+echo 'Acquire::Queue-Mode "host";' > $PREFIX/etc/apt/apt.conf.d/99parallel
+
+# === CLEAN BEFORE BIG INSTALLS ===
+pkg clean && pkg autoclean
+pkg update
+
+# === REDUCE CACHE SIZE ===
+echo 'APT::Cache-Start "0";' > $PREFIX/etc/apt/apt.conf.d/99cachestart
+```
+
+### Best Practices
+
+1. **Update before installing** - Always `pkg update` first
+2. **Read package info** - `pkg show <name>` before installing
+3. **Use -y for scripts** - Automate with `pkg install -y`
+4. **Clean regularly** - Run `pkg clean` monthly
+5. **Hold critical packages** - Prevent breaking changes
+6. **Backup package list** - Save installed packages for recovery
+7. **Check disk space** - `df -h` before large installations
+
+### Common Mistakes to Avoid
+
+| ❌ Mistake | ✅ Correct Approach |
+|-----------|---------------------|
+| Using Play Store version | Install from F-Droid only |
+| Ignoring updates | Update weekly: `pkg update && pkg upgrade` |
+| Not fixing broken packages | Run `apt --fix-broken install` |
+| Removing needed dependencies | Use `apt autoremove` carefully |
+| Installing from unknown sources | Use official Termux repositories |
+| Forgetting to update | `pkg update` before `pkg install` |
+
+### Package Management Decision Tree
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PACKAGE MANAGEMENT FLOWCHART                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│                    Need to manage packages?                               │
+│                           │                                              │
+│           ┌───────────────┼───────────────┐                              │
+│           │               │               │                              │
+│       INSTALL          REMOVE         UPDATE/MAINTAIN                     │
+│           │               │               │                              │
+│           ▼               ▼               ▼                              │
+│   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                      │
+│   │ pkg update  │  │ pkg remove  │  │ pkg update  │                      │
+│   │ pkg install │  │ or          │  │ pkg upgrade │                      │
+│   │ <package>   │  │ apt purge   │  │ pkg clean   │                      │
+│   └─────────────┘  └─────────────┘  └─────────────┘                      │
+│                                                                          │
+│   PROBLEMS?            ADVANCED NEEDS                                    │
+│   ┌─────────────┐     ┌─────────────┐                                    │
+│   │ apt         │     │ Build from │                                    │
+│   │ --fix-broken│     │ source     │                                    │
+│   │ install     │     │ dpkg -i    │                                    │
+│   │ dpkg        │     │ .deb files │                                    │
+│   │ --configure │     │ apt hold   │                                    │
+│   │ -a         │     │ packages   │                                    │
+│   └─────────────┘     └─────────────┘                                    │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🎮 INTERACTIVE ELEMENTS
+
+### 📝 Quiz: Test Your Knowledge
+
+**Score yourself: 10 points per correct answer**
+
+1. Which command updates the package list?
+   - a) pkg upgrade
+   - b) pkg update
+   - c) pkg refresh
+   - d) pkg sync
+
+2. How do you install multiple packages at once?
+   - a) pkg install pkg1; pkg install pkg2
+   - b) pkg install pkg1 pkg2 pkg3
+   - c) pkg install-all pkg1 pkg2
+   - d) pkg multi-install pkg1 pkg2
+
+3. What does `pkg hold <package>` do?
+   - a) Pauses installation
+   - b) Prevents package from updating
+   - c) Locks package for exclusive use
+   - d) Shows package info
+
+4. Which fixes broken dependencies?
+   - a) pkg fix
+   - b) apt --fix-broken install
+   - c) pkg repair
+   - d) dpkg fix
+
+5. What does `pkg clean` do?
+   - a) Removes unused packages
+   - b) Clears package cache
+   - c) Fixes package errors
+   - d) Updates package list
+
+6. How do you install a .deb file?
+   - a) pkg install file.deb
+   - b) apt install file.deb
+   - c) dpkg -i file.deb
+   - d) install file.deb
+
+7. Which repository contains GUI apps?
+   - a) main-repo
+   - b) gui-repo
+   - c) x11-repo
+   - d) desktop-repo
+
+8. What shows all installed packages?
+   - a) pkg list
+   - b) pkg list-installed
+   - c) pkg installed
+   - d) pkg show-all
+
+9. How do you remove a package with config files?
+   - a) pkg remove package
+   - b) pkg uninstall package
+   - c) apt purge package
+   - d) dpkg remove package
+
+10. What does `apt autoremove` do?
+    - a) Removes all packages
+    - b) Auto-updates packages
+    - c) Removes unused dependencies
+    - d) Cleans cache
+
+**Answers:** 1-b, 2-b, 3-b, 4-b, 5-b, 6-c, 7-c, 8-b, 9-c, 10-c
+
+---
+
+### 🛠️ Try It Yourself Challenges
+
+**Challenge 1: Package Installation**
+```bash
+# Task: Install and verify Python
+# Steps:
+# 1. Update package list
+pkg update
+
+# 2. Search for Python
+pkg search python
+
+# 3. Install Python
+pkg install python -y
+
+# 4. Verify installation
+python --version
+which python
+
+# 5. Show package info
+pkg show python
+
+# Expected: Python installed and working
+```
+
+**Challenge 2: Package Management**
+```bash
+# Task: Practice package operations
+# Steps:
+# 1. Install a small package
+pkg install cowsay -y
+
+# 2. Test it
+cowsay "Hello Termux!"
+
+# 3. Check installed size
+dpkg-query -Wf '${Installed-Size}\t${Package}\n' | grep cowsay
+
+# 4. Remove it
+pkg uninstall cowsay
+
+# 5. Verify removal
+pkg list-installed | grep cowsay
+
+# Expected: Package installed, tested, and removed
+```
+
+**Challenge 3: Repository Management**
+```bash
+# Task: Add and explore repositories
+# Steps:
+# 1. Check current repos
+cat $PREFIX/etc/apt/sources.list
+
+# 2. Add game repository
+pkg install game-repo
+
+# 3. Update and search for a game
+pkg update
+pkg search nethack
+
+# 4. Check updated sources
+cat $PREFIX/etc/apt/sources.list
+
+# Expected: Game repository added
+```
+
+**Challenge 4: Troubleshooting Practice**
+```bash
+# Task: Practice fixing packages
+# Steps:
+# 1. Clean cache
+pkg clean
+
+# 2. Update
+pkg update
+
+# 3. Fix any broken
+apt --fix-broken install
+
+# 4. Configure any pending
+dpkg --configure -a
+
+# 5. Verify system health
+pkg list-installed | head -10
+
+# Expected: Clean package system
+```
+
+---
+
+### ✅ Skill Check Checkpoints
+
+**Checkpoint 1: Basic Package Operations**
+- [ ] Can update package list
+- [ ] Can install packages
+- [ ] Can remove packages
+- [ ] Can search for packages
+
+**Checkpoint 2: Advanced Operations**
+- [ ] Can use apt for advanced features
+- [ ] Can hold/unhold packages
+- [ ] Can fix broken packages
+- [ ] Can install from .deb files
+
+**Checkpoint 3: Repository Management**
+- [ ] Knows available repositories
+- [ ] Can add repositories
+- [ ] Can view repository configuration
+- [ ] Understands repository sources
+
+**Checkpoint 4: Maintenance**
+- [ ] Can clean package cache
+- [ ] Can perform system updates
+- [ ] Can backup package list
+- [ ] Can restore packages
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+### Cross-Reference Guide
+
+| This Chapter | Related Chapter | Why Related |
+|-------------|-----------------|-------------|
+| Ch05: Package Mgmt | **Ch01: Installation** | Requires Termux installed |
+| Ch05: apt/pkg | **Ch02: Configuration** | Package configuration |
+| Ch05: Paths | **Ch03: Linux Basics 1** | Directory navigation |
+| Ch05: Build Tools | **Ch04: Linux Basics 2** | File permissions for scripts |
+| Ch05: Tools | **Ch06: File System** | Package file locations |
+
+### Next Steps Flowchart
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    YOUR LEARNING PATH                                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   Chapter 1 ──→ Chapter 2 ──→ Chapter 3 ──→ Chapter 4 ──→ Chapter 5   │
+│   (Install)    (Config)      (Linux 1)     (Linux 2)     (You are      │
+│                              Basics)       Basics)       here)         │
+│                                                                          │
+│   Module 1 COMPLETE! 🎉                                                  │
+│                                                                          │
+│   Ready for Module 2:                                                   │
+│   • Python Programming                                                  │
+│   • Bash Scripting                                                       │
+│   • Git Version Control                                                  │
+│   • Advanced Termux Features                                            │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 VISUAL DIAGRAMS
+
+### Package Manager Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PACKAGE MANAGER HIERARCHY                             │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│                          User                                            │
+│                           │                                              │
+│                           ▼                                              │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                      HIGH LEVEL                                  │   │
+│   │   ┌───────────┐         ┌───────────┐                           │   │
+│   │   │    pkg    │────────►│    apt    │                           │   │
+│   │   │ (wrapper) │         │  (full)   │                           │   │
+│   │   └───────────┘         └───────────┘                           │   │
+│   │         │                     │                                  │   │
+│   │         └──────────┬──────────┘                                  │   │
+│   │                    │                                              │   │
+│   └────────────────────┼──────────────────────────────────────────────┘   │
+│                        │                                                │
+│                        ▼                                                │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                      LOW LEVEL                                   │   │
+│   │                    ┌───────────┐                                  │   │
+│   │                    │   dpkg    │                                  │   │
+│   │                    │ (.deb)    │                                  │   │
+│   │                    └───────────┘                                  │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                        │                                                │
+│                        ▼                                                │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                   REPOSITORIES                                   │   │
+│   │   ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐            │   │
+│   │   │ main  │ │ games │ │science│ │ root  │ │  x11  │            │   │
+│   │   └───────┘ └───────┘ └───────┘ └───────┘ └───────┘            │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Installation Process Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PACKAGE INSTALLATION FLOW                             │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   pkg install python                                                    │
+│         │                                                                │
+│         ▼                                                                │
+│   ┌─────────────┐                                                       │
+│   │ Update repo │  ◄── pkg update (if needed)                           │
+│   │ cache       │                                                       │
+│   └──────┬──────┘                                                       │
+│          │                                                               │
+│          ▼                                                               │
+│   ┌─────────────┐                                                       │
+│   │ Download    │                                                       │
+│   │ .deb files  │                                                       │
+│   └──────┬──────┘                                                       │
+│          │                                                               │
+│          ▼                                                               │
+│   ┌─────────────┐                                                       │
+│   │ Resolve     │  ◄── Check & install dependencies                     │
+│   │ dependencies│                                                       │
+│   └──────┬──────┘                                                       │
+│          │                                                               │
+│          ▼                                                               │
+│   ┌─────────────┐                                                       │
+│   │ Extract &   │                                                       │
+│   │ Install     │                                                       │
+│   └──────┬──────┘                                                       │
+│          │                                                               │
+│          ▼                                                               │
+│   ┌─────────────┐                                                       │
+│   │ Configure   │  ◄── Set up config files                              │
+│   │ package     │                                                       │
+│   └──────┬──────┘                                                       │
+│          │                                                               │
+│          ▼                                                               │
+│   ✅ Package Ready!                                                     │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*

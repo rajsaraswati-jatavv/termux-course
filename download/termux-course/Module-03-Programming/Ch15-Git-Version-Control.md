@@ -2202,4 +2202,1388 @@ Before moving to Chapter 16, verify:
 
 **Chapter Complete! 🎉**
 
+---
+
+## 💡 PRO TIPS BOX
+
+> 💡 **Pro Tip #1:** Always create a `.gitignore` file at the start of a project - it's harder to remove tracked files later.
+
+> 💡 **Pro Tip #2:** Use meaningful commit messages following conventional commits format: `type(scope): description` (e.g., `feat(auth): add login functionality`).
+
+> 💡 **Pro Tip #3:** Never commit directly to `main` branch - always create a feature branch and use pull requests.
+
+> 💡 **Pro Tip #4:** Use `git stash -u` to stash both tracked and untracked files when you need a clean working directory.
+
+> 💡 **Pro Tip #5:** Set up SSH keys for GitHub instead of HTTPS - it's more secure and convenient (no password prompts).
+
+> 💡 **Pro Tip #6:** Use `git log --oneline --graph --all` to visualize your branch history beautifully.
+
+> 💡 **Pro Tip #7:** Always pull before you push to avoid merge conflicts: `git pull --rebase origin main`.
+
+> 💡 **Pro Tip #8:** Use `git diff --staged` to review your staged changes before committing.
+
+> 💡 **Pro Tip #9:** Protect your main branch by enabling branch protection rules in GitHub settings.
+
+> 💡 **Pro Tip #10:** Use `git reflog` to recover from mistakes - it shows all HEAD movements even after resets.
+
+---
+
+## 🔥 REAL WORLD APPLICATIONS
+
+### Where Git Skills Apply in Real Life
+
+**1. Team Collaboration**
+- Coordinating code changes with multiple developers
+- Code review workflows with pull requests
+- Managing feature releases and hotfixes
+
+**2. Open Source Contributions**
+- Forking repositories and submitting PRs
+- Maintaining your own open source projects
+- Tracking issues and feature requests
+
+**3. DevOps & CI/CD**
+- Automated deployments triggered by git pushes
+- Version control for infrastructure as code
+- Release management and versioning
+
+**4. Personal Projects**
+- Tracking changes over time
+- Experimenting with features in branches
+- Rolling back to stable versions
+
+**5. Career Development**
+- Building a public portfolio on GitHub
+- Demonstrating coding skills to employers
+- Contributing to the developer community
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### Git Commands Quick Reference
+
+| Task | Command |
+|------|---------|
+| Initialize repo | `git init` |
+| Clone repo | `git clone <url>` |
+| Add all files | `git add .` |
+| Commit changes | `git commit -m "msg"` |
+| Push to remote | `git push origin main` |
+| Pull changes | `git pull origin main` |
+| Check status | `git status` |
+| View history | `git log --oneline` |
+| Create branch | `git branch <name>` |
+| Switch branch | `git checkout <name>` |
+| Create & switch | `git checkout -b <name>` |
+| Merge branch | `git merge <name>` |
+| Delete branch | `git branch -d <name>` |
+| Stash changes | `git stash` |
+| Apply stash | `git stash pop` |
+| Create tag | `git tag v1.0.0` |
+| Push tags | `git push --tags` |
+| View remotes | `git remote -v` |
+| Add remote | `git remote add origin <url>` |
+| Reset changes | `git reset --hard HEAD` |
+| Undo last commit | `git reset --soft HEAD~1` |
+
+---
+
+## 🏆 BONUS: ADVANCED TIPS
+
+### Git Aliases for Productivity
+
+```bash
+# Add to ~/.gitconfig
+[alias]
+    co = checkout
+    br = branch
+    ci = commit
+    st = status
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    visual = log --oneline --graph --all
+    amend = commit --amend --no-edit
+    undo = reset --soft HEAD~1
+
+# Usage
+git co main
+git st
+git visual
+```
+
+### Advanced Git Workflows
+
+```bash
+# Interactive rebase to squash commits
+git rebase -i HEAD~5
+
+# Cherry-pick specific commit
+git cherry-pick <commit-hash>
+
+# Bisect to find bug-introducing commit
+git bisect start
+git bisect bad          # Current version is bad
+git bisect good v1.0.0  # This version was good
+# Git will guide you through binary search
+
+# Worktree for parallel development
+git worktree add ../my-feature feature-branch
+
+# Submodules for dependencies
+git submodule add https://github.com/user/repo.git
+
+# Filter branch to remove sensitive data
+git filter-branch --force --index-filter \
+  'git rm --cached --ignore-unmatch secrets.txt' \
+  --prune-empty --tag-name-filter cat -- --all
+```
+
+### Git Hooks
+
+```bash
+# Pre-commit hook (.git/hooks/pre-commit)
+#!/bin/bash
+# Run tests before commit
+npm test || exit 1
+
+# Pre-push hook (.git/hooks/pre-push)
+#!/bin/bash
+# Run linting before push
+npm run lint || exit 1
+
+# Make hooks executable
+chmod +x .git/hooks/*
+```
+
+---
+
+## 📝 CHAPTER SUMMARY
+
+### What You Learned
+
+- ✅ Git installation and configuration in Termux
+- ✅ Creating and cloning repositories
+- ✅ Basic workflow: add, commit, push, pull
+- ✅ Branching and merging strategies
+- ✅ Handling merge conflicts
+- ✅ SSH key authentication with GitHub
+- ✅ GitHub CLI (gh) for workflow automation
+- ✅ Git stash for temporary saves
+- ✅ Tags for version management
+- ✅ .gitignore for clean repositories
+
+### Key Takeaways
+
+1. **Commit often** - Small, focused commits are easier to review and revert
+2. **Use branches** - Keep main stable, develop features in branches
+3. **Write good messages** - Future you will thank present you
+4. **Pull before push** - Avoid unnecessary conflicts
+5. **Protect main branch** - Use branch protection rules
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Git Interview Questions
+
+**Q1: What is the difference between `git merge` and `git rebase`?**
+
+```text
+Answer:
+git merge: Creates a new merge commit combining branches
+- Preserves complete history
+- Shows branch structure clearly
+- Can create "diamond" patterns in history
+
+git rebase: Rewrites commits onto another branch
+- Creates linear history
+- No merge commits
+- Cleaner but rewrites history (dangerous on shared branches)
+
+When to use:
+- merge: For feature branches into main
+- rebase: For local cleanup before pushing
+```
+
+**Q2: Explain the difference between `git reset --soft`, `--mixed`, and `--hard`.**
+
+```bash
+# Answer:
+git reset --soft HEAD~1   # Undo commit, keep changes staged
+git reset --mixed HEAD~1  # Undo commit + unstage (default)
+git reset --hard HEAD~1   # Undo commit + discard all changes
+
+# Use cases:
+# --soft: Fix commit message or add forgotten files
+# --mixed: Start over with staging
+# --hard: Discard experimental changes completely
+```
+
+**Q3: What is a merge conflict and how do you resolve it?**
+
+```text
+Answer: Merge conflicts occur when the same lines are modified in different branches.
+
+Resolution steps:
+1. Open conflicted files
+2. Look for conflict markers (<<<<, ====, >>>>)
+3. Edit to keep desired changes
+4. Remove conflict markers
+5. Stage and commit
+
+Tools to help:
+- git mergetool
+- VS Code conflict resolution
+- git checkout --ours/--theirs <file>
+```
+
+**Q4: How do you undo the last commit without losing changes?**
+
+```bash
+# Answer: Multiple approaches based on need
+
+# Undo commit, keep changes staged
+git reset --soft HEAD~1
+
+# Undo commit, keep changes unstaged
+git reset HEAD~1
+
+# Create new commit that undoes previous
+git revert HEAD
+
+# For pushed commits, use revert (safer)
+git revert <commit-hash>
+```
+
+**Q5: Explain Git workflow strategies.**
+
+```text
+Answer: Common workflows:
+
+1. Centralized Workflow:
+   - Single main branch
+   - Direct commits to main
+   - Good for small teams
+
+2. Feature Branch Workflow:
+   - Create branch for each feature
+   - Merge via pull requests
+   - Good for code review
+
+3. Gitflow:
+   - main, develop, feature, release, hotfix branches
+   - Structured release process
+   - Good for scheduled releases
+
+4. GitHub Flow:
+   - main is always deployable
+   - Feature branches with PRs
+   - Good for continuous deployment
+```
+
+---
+
+## 🚀 BEST PRACTICES
+
+### Commit Message Guidelines
+
+```text
+# Format
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+
+# Types
+feat: New feature
+fix: Bug fix
+docs: Documentation changes
+style: Formatting (no code change)
+refactor: Code refactoring
+test: Adding tests
+chop: Maintenance tasks
+
+# Examples
+feat(auth): add OAuth2 login support
+
+fix(api): resolve null pointer exception in user service
+
+docs(readme): update installation instructions
+
+# Good practices:
+- Use imperative mood ("add" not "added")
+- First line should be 50 chars or less
+- Body explains what and why, not how
+- Reference issues: "Closes #123"
+```
+
+### Branch Naming Conventions
+
+```bash
+# Feature branches
+feature/user-authentication
+feature/shopping-cart
+
+# Bug fixes
+fix/login-error
+fix/payment-timeout
+
+# Hotfixes
+hotfix/security-patch
+hotfix/critical-bug
+
+# Releases
+release/v1.2.0
+
+# Personal/Experimental
+username/description
+wip/experiment-name
+```
+
+### Common Mistakes to Avoid
+
+```bash
+# ❌ Mistake: Committing sensitive data
+git add .  # Includes .env file with secrets!
+
+# ✅ Fix: Use .gitignore and check before commit
+git status
+git add .gitignore
+git add src/
+
+# ❌ Mistake: Large binary files
+git add huge_video.mp4
+
+# ✅ Fix: Use Git LFS for large files
+git lfs install
+git lfs track "*.mp4"
+
+# ❌ Mistake: Force pushing to shared branches
+git push --force origin main
+
+# ✅ Fix: Use --force-with-lease
+git push --force-with-lease origin feature-branch
+
+# ❌ Mistake: Committing directly to main
+git commit -m "fix"
+
+# ✅ Fix: Always use feature branches
+git checkout -b fix/description
+```
+
+---
+
+## 📊 CODE COMPARISON
+
+### Before vs After: Git Workflow
+
+```bash
+# ❌ BEFORE: Chaotic workflow
+git add .
+git commit -m "fix"
+git push
+git commit -m "more changes"
+git push
+# No branches, no review, breaking main
+
+# ✅ AFTER: Professional workflow
+git checkout -b feature/user-auth
+git add src/auth/
+git commit -m "feat(auth): implement OAuth2 login"
+git push origin feature/user-auth
+gh pr create --title "Add OAuth2 login" --body "Implements secure login"
+# After review and approval:
+gh pr merge --squash
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Topic | Relevance |
+|---------|-------|-----------|
+| Chapter 11 | Python Installation | Version control Python projects |
+| Chapter 12 | Python Basics | Python + Git workflow |
+| Chapter 13 | Bash Scripting | Git hooks in Bash |
+| Chapter 14 | Advanced Bash | Git automation scripts |
+| Chapter 16 | Node.js | Version control for Node projects |
+| Chapter 25 | DevOps | Git in CI/CD pipelines |
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+**1. What command creates a new branch and switches to it?**
+- A) `git branch <name> && git checkout <name>`
+- B) `git checkout -b <name>`
+- C) `git new <name>`
+- D) Both A and B
+
+<details>
+<summary>Answer</summary>
+**D) Both A and B** - `git checkout -b` is shorthand for creating and switching.
+</details>
+
+**2. Which command stages all changes?**
+- A) `git stage .`
+- B) `git add .`
+- C) `git commit .`
+- D) `git push .`
+
+<details>
+<summary>Answer</summary>
+**B) `git add .`** - `git add` stages changes, `.` means all files in current directory.
+</details>
+
+**3. What does `git stash` do?**
+- A) Deletes uncommitted changes
+- B) Saves uncommitted changes temporarily
+- C) Commits changes to a temporary branch
+- D) Pushes changes to remote
+
+<details>
+<summary>Answer</summary>
+**B) Saves uncommitted changes temporarily** - Stash stores changes for later retrieval.
+</details>
+
+---
+
+## 🔧 DEBUG THIS EXERCISES
+
+### Debug This #1: Authentication Failed
+
+```bash
+# Problem: Push fails with authentication error
+git push origin main
+# fatal: Authentication failed for 'https://github.com/...'
+```
+
+<details>
+<summary>Solution</summary>
+
+```bash
+# Solution 1: Use SSH URL instead of HTTPS
+git remote set-url origin git@github.com:username/repo.git
+
+# Solution 2: Use personal access token
+# Generate token at github.com/settings/tokens
+git push
+# Enter username and token as password
+
+# Solution 3: Configure credential helper
+git config --global credential.helper store
+```
+</details>
+
+### Debug This #2: Merge Conflict
+
+```bash
+# Problem: Merge conflict when pulling
+git pull origin main
+# CONFLICT (content): Merge conflict in app.js
+```
+
+<details>
+<summary>Solution</summary>
+
+```bash
+# Solution: Resolve conflict step by step
+
+# 1. View conflicted files
+git status
+
+# 2. Open file and look for markers
+# <<<<<<< HEAD
+# your changes
+# =======
+# remote changes
+# >>>>>>> main
+
+# 3. Edit file to resolve
+# Remove markers and keep desired code
+
+# 4. Stage resolved files
+git add app.js
+
+# 5. Complete merge
+git commit -m "Resolve merge conflict in app.js"
+```
+</details>
+
+---
+
+## 💻 CODING CHALLENGES
+
+### Challenge 1: Git Branch Manager
+
+Create a script that manages git branches efficiently.
+
+```bash
+#!/bin/bash
+# Challenge: Create a script that:
+# 1. Lists all branches with last commit dates
+# 2. Identifies stale branches (no commits in 30 days)
+# 3. Offers to delete merged branches
+```
+
+<details>
+<summary>Solution</summary>
+
+```bash
+#!/bin/bash
+
+list_branches() {
+    echo "=== Branch Overview ==="
+    git for-each-ref --sort=committerdate refs/heads/ --format='%(refname:short) - %(committerdate:relative)'
+}
+
+find_stale() {
+    echo ""
+    echo "=== Stale Branches (>30 days) ==="
+    git for-each-ref --sort=committerdate refs/heads/ --format='%(refname:short) %(committerdate:unix)' | \
+    while read branch timestamp; do
+        current=$(date +%s)
+        diff=$(( (current - timestamp) / 86400 ))
+        if (( diff > 30 )); then
+            echo "$branch - ${diff} days old"
+        fi
+    done
+}
+
+clean_merged() {
+    echo ""
+    echo "=== Merged Branches ==="
+    git branch --merged main | grep -v "main\|master\|\*" | while read branch; do
+        echo "Delete $branch? (y/n)"
+        read -r response
+        [[ "$response" == "y" ]] && git branch -d "$branch"
+    done
+}
+
+list_branches
+find_stale
+clean_merged
+```
+</details>
+
+---
+
 *Created by T3rmuxk1ng | Termux Full Course*
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+### Test Your Git Knowledge!
+
+**Q1: What command creates a new Git repository?**
+- A) `git create`
+- B) `git init`
+- C) `git new`
+- D) `git start`
+
+<details>
+<summary>Answer</summary>
+**B) `git init`** - Initializes a new Git repository in the current directory.
+</details>
+
+---
+
+**Q2: What does `git clone` do?**
+- A) Creates a branch
+- B) Copies a repository
+- C) Commits changes
+- D) Merges branches
+
+<details>
+<summary>Answer</summary>
+**B) Copies a repository** - Downloads a complete copy of a remote repository to your local machine.
+</details>
+
+---
+
+**Q3: Which command stages files for commit?**
+- A) `git stage`
+- B) `git add`
+- C) `git commit`
+- D) `git push`
+
+<details>
+<summary>Answer</summary>
+**B) `git add`** - Moves changes from working directory to staging area.
+</details>
+
+---
+
+**Q4: What is the difference between `git pull` and `git fetch`?**
+- A) No difference
+- B) `pull` = `fetch` + `merge`
+- C) `fetch` downloads, `pull` doesn't
+- D) `pull` is faster
+
+<details>
+<summary>Answer</summary>
+**B) `pull` = `fetch` + `merge`** - `fetch` only downloads, `pull` downloads and merges.
+</details>
+
+---
+
+**Q5: What does `git stash` do?**
+- A) Deletes changes
+- B) Saves changes temporarily
+- C) Commits changes
+- D) Pushes to remote
+
+<details>
+<summary>Answer</summary>
+**B) Saves changes temporarily** - Stores uncommitted changes for later retrieval.
+</details>
+
+---
+
+**Q6: How do you see commit history?**
+- A) `git history`
+- B) `git log`
+- C) `git show`
+- D) `git commits`
+
+<details>
+<summary>Answer</summary>
+**B) `git log`** - Shows the commit history of the repository.
+</details>
+
+---
+
+**Q7: What is a merge conflict?**
+- A) Git error
+- B) Conflicting changes in same file
+- C) Network issue
+- D) Permission problem
+
+<details>
+<summary>Answer</summary>
+**B) Conflicting changes in same file** - Occurs when different branches modify the same lines.
+</details>
+
+---
+
+**Q8: How do you create AND switch to a new branch?**
+- A) `git branch new-name`
+- B) `git checkout new-name`
+- C) `git checkout -b new-name`
+- D) `git new-branch new-name`
+
+<details>
+<summary>Answer</summary>
+**C) `git checkout -b new-name`** - Creates and switches in one command. Also: `git switch -c new-name`.
+</details>
+
+---
+
+**Q9: What is `.gitignore`?**
+- A) Git config file
+- B) File to specify ignored files
+- C) Error log
+- D) Branch list
+
+<details>
+<summary>Answer</summary>
+**B) File to specify ignored files** - Lists files/patterns Git should not track.
+</details>
+
+---
+
+**Q10: What does `git rebase` do?**
+- A) Deletes commits
+- B) Moves branch to new base
+- C) Creates merge commit
+- D) Pushes to remote
+
+<details>
+<summary>Answer</summary>
+**B) Moves branch to new base** - Rewrites commit history to apply changes on top of another branch.
+</details>
+
+---
+
+**Q11: How do you undo the last commit (keep changes)?**
+- A) `git reset --hard HEAD~1`
+- B) `git reset --soft HEAD~1`
+- C) `git undo`
+- D) `git revert HEAD`
+
+<details>
+<summary>Answer</summary>
+**B) `git reset --soft HEAD~1`** - Undoes commit but keeps changes staged. `--hard` would delete changes.
+</details>
+
+---
+
+**Q12: What is a remote repository?**
+- A) Local branch
+- A) Hosted version of repository
+- C) Git config
+- D) Stash location
+
+<details>
+<summary>Answer</summary>
+**B) Hosted version of repository** - A version of your repo stored on a server (like GitHub).
+</details>
+
+---
+
+## 💡 PRO TIPS
+
+### 10 Git Pro Tips
+
+> **💡 Pro Tip #1: Write Meaningful Commit Messages**
+> Follow conventional commits format:
+> ```bash
+> git commit -m "feat: add user authentication"
+> git commit -m "fix: resolve login redirect bug"
+> git commit -m "docs: update README with API docs"
+> ```
+
+> **💡 Pro Tip #2: Use Git Aliases**
+> Speed up common commands:
+> ```bash
+> git config --global alias.co checkout
+> git config --global alias.br branch
+> git config --global alias.st status
+> git config --global alias.lg "log --oneline --graph"
+> ```
+
+> **💡 Pro Tip #3: Interactive Staging**
+> Stage changes interactively:
+> ```bash
+> git add -p  # Review each hunk before staging
+> ```
+
+> **💡 Pro Tip #4: Use Git Stash Effectively**
+> Save work-in-progress:
+> ```bash
+> git stash push -m "work in progress on feature X"
+> git stash list
+> git stash pop stash@{0}
+> ```
+
+> **💡 Pro Tip #5: Check What Changed**
+> See changes before committing:
+> ```bash
+> git diff              # Working directory changes
+> git diff --staged     # Staged changes
+> git diff HEAD~3       # Compare with 3 commits ago
+> ```
+
+> **💡 Pro Tip #6: Cherry-Pick Commits**
+> Apply specific commits:
+> ```bash
+> git cherry-pick abc123  # Apply specific commit
+> git cherry-pick abc123..def456  # Range
+> ```
+
+> **💡 Pro Tip #7: Use .gitignore Properly**
+> Ignore common files:
+> ```bash
+> # .gitignore
+> *.log
+> node_modules/
+> .env
+> __pycache__/
+> .DS_Store
+> ```
+
+> **💡 Pro Tip #8: Recover Deleted Commits**
+> Use reflog to recover:
+> ```bash
+> git reflog
+> git reset --hard abc123  # Recover specific state
+> ```
+
+> **💡 Pro Tip #9: Bisect to Find Bugs**
+> Find which commit introduced a bug:
+> ```bash
+> git bisect start
+> git bisect bad          # Current commit has bug
+> git bisect good v1.0    # This version was good
+> # Git will guide you through binary search
+> ```
+
+> **💡 Pro Tip #10: Squash Commits**
+> Clean up history before pushing:
+> ```bash
+> git rebase -i HEAD~3  # Interactive rebase last 3 commits
+> # Mark commits to squash
+> ```
+
+---
+
+## 🔥 REAL WORLD USE CASES
+
+### Git Workflows for Real Projects
+
+**Use Case #1: Feature Branch Workflow**
+```bash
+# Start new feature
+git checkout main
+git pull origin main
+git checkout -b feature/user-auth
+
+# Work on feature
+git add .
+git commit -m "feat: implement login page"
+git add .
+git commit -m "feat: add password validation"
+
+# Keep updated with main
+git fetch origin
+git rebase origin/main
+
+# Push and create PR
+git push -u origin feature/user-auth
+gh pr create --title "Add user authentication"
+```
+
+**Use Case #2: Bug Fix Workflow**
+```bash
+# Create hotfix branch
+git checkout main
+git checkout -b hotfix/login-redirect
+
+# Fix bug
+git add src/auth.js
+git commit -m "fix: correct redirect after login"
+
+# Merge back
+git checkout main
+git merge hotfix/login-redirect
+git push origin main
+
+# Also update develop
+git checkout develop
+git merge hotfix/login-redirect
+git push origin develop
+
+# Cleanup
+git branch -d hotfix/login-redirect
+```
+
+**Use Case #3: Git Flow Release**
+```bash
+# Start release
+git checkout develop
+git checkout -b release/v1.2.0
+
+# Bump version, update changelog
+git add package.json CHANGELOG.md
+git commit -m "chore: bump version to 1.2.0"
+
+# Merge to main
+git checkout main
+git merge --no-ff release/v1.2.0
+git tag -a v1.2.0 -m "Release 1.2.0"
+git push origin main --tags
+
+# Merge back to develop
+git checkout develop
+git merge --no-ff release/v1.2.0
+git push origin develop
+
+# Cleanup
+git branch -d release/v1.2.0
+```
+
+**Use Case #4: Undo Mistakes**
+```bash
+# Undo last commit (keep changes)
+git reset --soft HEAD~1
+
+# Undo last commit (discard changes)
+git reset --hard HEAD~1
+
+# Undo pushed commit (create new commit)
+git revert abc123
+
+# Fix last commit message
+git commit --amend -m "New message"
+
+# Unstage file
+git reset HEAD file.txt
+```
+
+**Use Case #5: Collaboration Cleanup**
+```bash
+# Remove deleted remote branches
+git fetch -p
+
+# Clean up local branches
+git branch --merged main | grep -v "^\*\|main" | xargs -n 1 git branch -d
+
+# Interactive rebase to clean history
+git rebase -i HEAD~5
+
+# Squash merge feature
+git merge --squash feature/new-ui
+git commit -m "feat: complete new UI feature"
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+### Essential Git Commands
+
+| Command | Description |
+|---------|-------------|
+| `git init` | Initialize repository |
+| `git clone <url>` | Clone repository |
+| `git status` | Check status |
+| `git add <file>` | Stage file |
+| `git add .` | Stage all |
+| `git commit -m "msg"` | Commit staged |
+| `git push` | Push to remote |
+| `git pull` | Pull from remote |
+| `git fetch` | Download updates |
+| `git branch` | List branches |
+| `git checkout -b <name>` | Create & switch |
+| `git merge <branch>` | Merge branch |
+| `git log --oneline` | View history |
+| `git diff` | View changes |
+| `git stash` | Save changes |
+| `git reset --soft HEAD~1` | Undo commit |
+| `git revert <commit>` | Revert commit |
+
+### Branch Commands
+
+| Command | Description |
+|---------|-------------|
+| `git branch` | List branches |
+| `git branch <name>` | Create branch |
+| `git branch -d <name>` | Delete branch |
+| `git checkout <name>` | Switch branch |
+| `git checkout -b <name>` | Create & switch |
+| `git switch <name>` | Switch (modern) |
+| `git switch -c <name>` | Create & switch |
+| `git merge <name>` | Merge into current |
+| `git branch -m old new` | Rename branch |
+
+### Remote Commands
+
+| Command | Description |
+|---------|-------------|
+| `git remote -v` | List remotes |
+| `git remote add origin <url>` | Add remote |
+| `git push -u origin main` | Push & set upstream |
+| `git push origin <branch>` | Push branch |
+| `git pull origin <branch>` | Pull branch |
+| `git remote set-url origin <url>` | Change URL |
+
+### Log Commands
+
+| Command | Description |
+|---------|-------------|
+| `git log` | Full history |
+| `git log --oneline` | Compact |
+| `git log --graph` | Visual graph |
+| `git log -p` | With patches |
+| `git log --since="2 weeks"` | Time filter |
+| `git log --author="name"` | Author filter |
+| `git show <commit>` | Show commit |
+
+---
+
+## 🏆 BONUS CONTENT
+
+### Git Configuration Best Practices
+
+```bash
+# Essential global config
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+git config --global init.defaultBranch main
+git config --global core.editor nano
+git config --global pull.rebase false
+
+# Useful aliases
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.st status
+git config --global alias.cm commit
+git config --global alias.lg "log --oneline --graph --all"
+git config --global alias.last 'log -1 HEAD'
+git config --global alias.undo 'reset --soft HEAD~1'
+git config --global alias.wip '!git add . && git commit -m "WIP"'
+
+# Better diffs
+git config --global diff.tool vimdiff
+git config --global merge.tool vimdiff
+
+# Colors
+git config --global color.ui auto
+
+# Credential helper (HTTPS)
+git config --global credential.helper store
+```
+
+### .gitignore Templates
+
+```gitignore
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+.env
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.local
+*.pem
+*.key
+
+# Build outputs
+dist/
+build/
+*.min.js
+*.min.css
+```
+
+### Git Hooks Example
+
+```bash
+#!/bin/bash
+# .git/hooks/pre-commit
+# Run tests before commit
+
+echo "Running pre-commit checks..."
+
+# Run linting
+npm run lint
+if [ $? -ne 0 ]; then
+    echo "Linting failed! Fix errors before committing."
+    exit 1
+fi
+
+# Run tests
+npm test
+if [ $? -ne 0 ]; then
+    echo "Tests failed! Fix tests before committing."
+    exit 1
+fi
+
+echo "All checks passed!"
+exit 0
+```
+
+---
+
+## 📝 CHAPTER SUMMARY
+
+### Key Takeaways
+
+| Topic | Key Points |
+|-------|------------|
+| **Setup** | `git init`, `git clone` |
+| **Basics** | `add`, `commit`, `push`, `pull` |
+| **Branching** | `branch`, `checkout`, `merge` |
+| **Remote** | `remote add`, `push`, `pull` |
+| **History** | `log`, `diff`, `show` |
+| **Undo** | `reset`, `revert`, `stash` |
+| **Collaboration** | Branches, PRs, merge |
+
+### Common Workflows
+
+```bash
+# Start project
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin <url>
+git push -u origin main
+
+# Daily work
+git pull
+git checkout -b feature/new
+# ... make changes ...
+git add .
+git commit -m "feat: add feature"
+git push -u origin feature/new
+
+# Merge
+git checkout main
+git merge feature/new
+git push
+```
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Git Interview Questions
+
+**Q1: What's the difference between `git merge` and `git rebase`?**
+
+<details>
+<summary>Answer</summary>
+- **Merge**: Creates a merge commit, preserves history
+- **Rebase**: Rewrites history, applies commits on top
+
+```bash
+# Merge - keeps branch history
+git merge feature
+
+# Rebase - linear history
+git rebase main
+```
+Use merge for public branches, rebase for local cleanup.
+</details>
+
+**Q2: Explain the Git workflow areas.**
+
+<details>
+<summary>Answer</summary>
+1. **Working Directory**: Your actual files
+2. **Staging Area (Index)**: Files ready to commit
+3. **Local Repository**: Your local `.git` database
+4. **Remote Repository**: Server-hosted repository
+
+```bash
+# Files flow: Working → Staging → Local → Remote
+git add .        # Working → Staging
+git commit       # Staging → Local
+git push         # Local → Remote
+```
+</details>
+
+**Q3: How do you resolve merge conflicts?**
+
+<details>
+<summary>Answer</summary>
+1. Identify conflicting files: `git status`
+2. Open files and look for markers: `<<<<<<<`, `=======`, `>>>>>>>`
+3. Edit to resolve the conflict
+4. Stage resolved files: `git add <file>`
+5. Complete merge: `git commit`
+
+```bash
+# Or use merge tool
+git mergetool
+
+# Or abort merge
+git merge --abort
+```
+</details>
+
+**Q4: What is `git cherry-pick`?**
+
+<details>
+<summary>Answer</summary>
+Applies specific commits from one branch to another without merging.
+
+```bash
+# Apply single commit
+git cherry-pick abc123
+
+# Apply range
+git cherry-pick abc123..def456
+
+# Use case: Hotfix from release to main
+```
+</details>
+
+**Q5: Explain Git HEAD.**
+
+<details>
+<summary>Answer</summary>
+`HEAD` is a pointer to the current branch/commit.
+
+```bash
+# Normal: HEAD points to branch
+HEAD → main → abc123
+
+# Detached HEAD: HEAD points directly to commit
+HEAD → abc123
+
+# Relative references
+HEAD~1  # Parent commit
+HEAD~2  # Grandparent
+HEAD^   # First parent (merge commits)
+```
+</details>
+
+**Q6: What's the difference between `git reset` options?**
+
+<details>
+<summary>Answer</summary>
+- `--soft`: Moves HEAD, keeps changes staged
+- `--mixed` (default): Moves HEAD, unstages changes
+- `--hard`: Moves HEAD, discards all changes
+
+```bash
+git reset --soft HEAD~1   # Undo commit, keep staged
+git reset HEAD~1          # Undo commit, unstage
+git reset --hard HEAD~1   # Undo commit, discard
+```
+</details>
+
+**Q7: How do you revert a pushed commit?**
+
+<details>
+<summary>Answer</summary>
+Use `git revert` to create a new commit that undoes changes.
+
+```bash
+# Don't use reset on shared branches
+# Use revert instead
+git revert abc123
+git push origin main
+
+# Revert multiple commits
+git revert HEAD~3..HEAD
+```
+</details>
+
+**Q8: What is Git bisect?**
+
+<details>
+<summary>Answer</summary>
+Binary search through commit history to find bugs.
+
+```bash
+git bisect start
+git bisect bad          # Current is broken
+git bisect good v1.0    # This version works
+# Git checks out middle commit
+# Test and mark:
+git bisect good  # or bad
+# Repeat until found
+git bisect reset
+```
+</details>
+
+---
+
+## 🚀 BEST PRACTICES
+
+### Commit Message Convention
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+Types:
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation
+- `style`: Formatting
+- `refactor`: Code restructuring
+- `test`: Tests
+- `chore`: Maintenance
+
+Examples:
+```bash
+git commit -m "feat(auth): add OAuth login"
+git commit -m "fix: resolve null pointer in login"
+git commit -m "docs: update API documentation"
+```
+
+### Branch Naming Convention
+
+```
+feature/user-authentication
+bugfix/login-redirect
+hotfix/security-patch
+release/v1.2.0
+```
+
+---
+
+## 📊 CODE COMPARISON
+
+### Bad vs Good: Git Practices
+
+**Commit Messages**
+```bash
+# ❌ BAD: Vague messages
+git commit -m "fix"
+git commit -m "updates"
+git commit -m "changes"
+
+# ✅ GOOD: Descriptive messages
+git commit -m "fix: resolve null pointer exception in login"
+git commit -m "feat: add password validation to registration"
+```
+
+**Branching**
+```bash
+# ❌ BAD: Commit directly to main
+git checkout main
+# make changes
+git commit -m "new feature"
+git push
+
+# ✅ GOOD: Use feature branches
+git checkout -b feature/new-feature
+# make changes
+git commit -m "feat: add new feature"
+git push -u origin feature/new-feature
+# Create PR for review
+```
+
+**History**
+```bash
+# ❌ BAD: Messy history with many small commits
+git commit -m "wip"
+git commit -m "typo"
+git commit -m "actually fixed"
+
+# ✅ GOOD: Clean, squashed commits
+git rebase -i HEAD~3
+# Squash into single commit
+git commit -m "feat: complete user authentication"
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+### Prerequisites
+- **Chapter 2**: Basic Termux Commands
+- **Chapter 5**: Package Management
+
+### Related Topics
+- **Chapter 13**: Bash Scripting (Git hooks)
+- **Chapter 16**: Node.js (npm + Git)
+
+### Advanced Topics
+- **Chapter 22**: CI/CD Pipelines
+- **Chapter 27**: Open Source Contribution
+
+---
+
+*Updated by T3rmuxk1ng | Termux Full Course - Module 3: Programming*

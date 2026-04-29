@@ -3014,3 +3014,855 @@ Before moving to Chapter 49, verify:
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*
+
+---
+
+## 💡 PRO TIPS BOXES
+
+> 💡 **Pro Tip #1:** Always use transactions for multiple related operations - it ensures data integrity and allows rollback on errors
+
+> 💡 **Pro Tip #2:** Index frequently queried columns! `CREATE INDEX idx_email ON users(email)` can speed up searches 100x
+
+> 💡 **Pro Tip #3:** Use connection pooling in applications - creating new connections is expensive, reuse them!
+
+> 💡 **Pro Tip #4:** Regular `VACUUM` in SQLite and `OPTIMIZE TABLE` in MySQL keeps databases fast
+
+> 💡 **Pro Tip #5:** Use `EXPLAIN QUERY` before running slow queries to understand execution plan
+
+> 💡 **Pro Tip #6:** For SQLite, enable WAL mode: `PRAGMA journal_mode=WAL` - better concurrent performance
+
+> 💡 **Pro Tip #7:** Set appropriate data types - INT for IDs, VARCHAR(n) for strings, DATETIME for timestamps
+
+> 💡 **Pro Tip #8:** Use prepared statements to prevent SQL injection - NEVER concatenate user input into queries!
+
+> 💡 **Pro Tip #9:** Redis for sessions/cache, SQLite for local data, MySQL/PostgreSQL for web apps - use the right tool!
+
+> 💡 **Pro Tip #10:** Automate backups with cron jobs or scripts - databases should be backed up daily!
+
+---
+
+## 🔥 REAL WORLD USE CASES
+
+### Production Database Setup
+
+```sql
+-- Complete production database setup script
+
+-- MySQL/MariaDB Production Setup
+-- 1. Create databases
+CREATE DATABASE production_app;
+CREATE DATABASE production_app_test;
+
+-- 2. Create users with specific privileges
+CREATE USER 'app_user'@'localhost' IDENTIFIED BY 'StrongPassword123!';
+CREATE USER 'readonly_user'@'localhost' IDENTIFIED BY 'ReadOnlyPass456!';
+
+-- 3. Grant minimal required privileges
+GRANT SELECT, INSERT, UPDATE, DELETE ON production_app.* TO 'app_user'@'localhost';
+GRANT SELECT ON production_app.* TO 'readonly_user'@'localhost';
+
+-- 4. Create schema
+USE production_app;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    uuid CHAR(36) NOT NULL DEFAULT (UUID()),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    last_login TIMESTAMP NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    INDEX idx_email (email),
+    INDEX idx_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_token (token),
+    INDEX idx_expires (expires_at)
+);
+
+CREATE TABLE audit_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    action VARCHAR(50) NOT NULL,
+    table_name VARCHAR(50),
+    record_id INT,
+    old_values JSON,
+    new_values JSON,
+    ip_address VARCHAR(45),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_user_action (user_id, action),
+    INDEX idx_created (created_at)
+);
+```
+
+### Development Environment Database
+
+```bash
+#!/bin/bash
+# dev-db-setup.sh - Quick development database setup
+
+# Start MariaDB
+mysqld_safe > /dev/null 2>&1 &
+sleep 3
+
+# Create development databases
+mysql -u root << 'SQL'
+CREATE DATABASE IF NOT EXISTS dev_app;
+CREATE DATABASE IF NOT EXISTS test_app;
+CREATE USER IF NOT EXISTS 'dev'@'localhost' IDENTIFIED BY 'dev123';
+GRANT ALL PRIVILEGES ON dev_app.* TO 'dev'@'localhost';
+GRANT ALL PRIVILEGES ON test_app.* TO 'dev'@'localhost';
+FLUSH PRIVILEGES;
+SQL
+
+# Initialize SQLite databases
+sqlite3 dev_local.db << 'SQL'
+CREATE TABLE config (
+    key TEXT PRIMARY KEY,
+    value TEXT,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO config (key, value) VALUES 
+    ('app_name', 'Development App'),
+    ('debug_mode', 'true'),
+    ('version', '1.0.0');
+SQL
+
+echo "Development databases created!"
+echo "MySQL: dev_app, test_app (user: dev, pass: dev123)"
+echo "SQLite: dev_local.db"
+```
+
+### Analytics Database Schema
+
+```sql
+-- PostgreSQL Analytics Setup
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE events (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    event_type VARCHAR(100) NOT NULL,
+    user_id UUID,
+    session_id UUID,
+    properties JSONB DEFAULT '{}',
+    metadata JSONB DEFAULT '{}',
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ip_address INET,
+    user_agent TEXT
+);
+
+-- Create hypertable for time-series data (if TimescaleDB available)
+-- SELECT create_hypertable('events', 'timestamp');
+
+-- Indexes for common queries
+CREATE INDEX idx_events_type ON events(event_type);
+CREATE INDEX idx_events_user ON events(user_id);
+CREATE INDEX idx_events_timestamp ON events(timestamp);
+CREATE INDEX idx_events_props ON events USING GIN(properties);
+
+-- Materialized view for daily aggregates
+CREATE MATERIALIZED VIEW daily_event_counts AS
+SELECT 
+    event_type,
+    DATE(timestamp) as event_date,
+    COUNT(*) as event_count,
+    COUNT(DISTINCT user_id) as unique_users
+FROM events
+GROUP BY event_type, DATE(timestamp);
+
+-- Refresh materialized view
+REFRESH MATERIALIZED VIEW daily_event_counts;
+
+-- Function to aggregate events
+CREATE OR REPLACE FUNCTION aggregate_events()
+RETURNS void AS $$
+BEGIN
+    REFRESH MATERIALIZED VIEW daily_event_counts;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+---
+
+## ⚡ QUICK REFERENCE CARD
+
+| Category | Command | Description |
+|----------|---------|-------------|
+| **SQLite** | `sqlite3 mydb.db` | Open/create database |
+| | `.tables` | List tables |
+| | `.schema table` | Show table structure |
+| | `.dump > backup.sql` | Export database |
+| | `.read backup.sql` | Import database |
+| **MySQL/MariaDB** | `mysqld_safe &` | Start server |
+| | `mysql -u root` | Connect as root |
+| | `mysql -u user -p db` | Connect with password |
+| | `mysqldump db > file.sql` | Backup database |
+| | `mysql db < file.sql` | Restore database |
+| **PostgreSQL** | `pg_ctl start` | Start server |
+| | `psql` | Connect to database |
+| | `pg_dump db > file.sql` | Backup database |
+| | `psql db < file.sql` | Restore database |
+| **Redis** | `redis-server` | Start Redis |
+| | `redis-cli` | Connect to Redis |
+| | `SET key value` | Store value |
+| | `GET key` | Retrieve value |
+| | `KEYS *` | List all keys |
+| **CRUD** | `INSERT INTO t VALUES` | Create record |
+| | `SELECT * FROM t` | Read records |
+| | `UPDATE t SET col=val` | Update records |
+| | `DELETE FROM t WHERE` | Delete records |
+
+---
+
+## 🏆 BONUS: PRODUCTION TIPS
+
+### Database Security Hardening
+
+```sql
+-- MySQL Security Configuration
+
+-- 1. Remove anonymous users
+DELETE FROM mysql.user WHERE User='';
+
+-- 2. Remove test database
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+
+-- 3. Disable remote root access
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+
+-- 4. Set strong passwords
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'VeryStrongPassword!234';
+
+-- 5. Create limited users
+CREATE USER 'app_readonly'@'localhost' IDENTIFIED BY 'ReadOnlyPass!';
+GRANT SELECT ON production.* TO 'app_readonly'@'localhost';
+
+CREATE USER 'app_readwrite'@'localhost' IDENTIFIED BY 'ReadWritePass!';
+GRANT SELECT, INSERT, UPDATE, DELETE ON production.* TO 'app_readwrite'@'localhost';
+
+-- 6. Disable LOAD DATA LOCAL
+-- In my.cnf:
+-- local-infile=0
+
+-- 7. Enable SSL connections
+-- ALTER USER 'app_user'@'%' REQUIRE SSL;
+
+-- 8. Apply changes
+FLUSH PRIVILEGES;
+```
+
+### Backup Security
+
+```bash
+#!/bin/bash
+# secure-backup.sh - Encrypted database backup
+
+# Configuration
+DB_NAME="production_app"
+DB_USER="backup_user"
+DB_PASS="backup_password"
+BACKUP_DIR=~/secure-backups
+ENCRYPTION_KEY="your-encryption-passphrase"
+
+# Create backup directory
+mkdir -p $BACKUP_DIR
+
+# Create backup
+BACKUP_FILE="$BACKUP_DIR/$(date +%Y%m%d_%H%M%S)_$DB_NAME.sql.gz.gpg"
+
+# Backup and encrypt in one pipeline
+mysqldump -u $DB_USER -p$DB_PASS $DB_NAME | gzip | gpg --batch --passphrase "$ENCRYPTION_KEY" -c > "$BACKUP_FILE"
+
+# Set restrictive permissions
+chmod 600 "$BACKUP_FILE"
+
+# Verify backup
+echo "Backup created: $BACKUP_FILE"
+ls -la "$BACKUP_FILE"
+
+# To restore:
+# gpg --batch --passphrase "$ENCRYPTION_KEY" -d backup.sql.gz.gpg | gunzip | mysql -u root db_name
+
+# Cleanup old backups (keep last 30 days)
+find $BACKUP_DIR -name "*.sql.gz.gpg" -mtime +30 -delete
+```
+
+### Access Control Matrix
+
+```sql
+-- Implement role-based access control
+
+-- Create roles
+CREATE ROLE app_readonly;
+CREATE ROLE app_readwrite;
+CREATE ROLE app_admin;
+
+-- Grant privileges to roles
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO app_readonly;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO app_readwrite;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO app_admin;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO app_admin;
+
+-- Create users and assign roles
+CREATE USER api_service WITH PASSWORD 'secure_pass';
+GRANT app_readwrite TO api_service;
+
+CREATE USER reporting_service WITH PASSWORD 'secure_pass';
+GRANT app_readonly TO reporting_service;
+
+CREATE USER admin_user WITH PASSWORD 'very_secure_pass';
+GRANT app_admin TO admin_user;
+
+-- Row-level security (PostgreSQL)
+ALTER TABLE sensitive_data ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY user_policy ON sensitive_data
+    USING (user_id = current_user_id());
+```
+
+---
+
+## 📝 CHAPTER SUMMARY
+
+### What You Learned
+
+- ✅ **SQLite**: Lightweight embedded database for local storage
+- ✅ **MySQL/MariaDB**: Popular relational database for web apps
+- ✅ **PostgreSQL**: Advanced database with JSON and GIS support
+- ✅ **Redis**: In-memory caching and sessions
+- ✅ **MongoDB**: NoSQL document store
+- ✅ **CRUD Operations**: Create, Read, Update, Delete
+- ✅ **User Management**: Creating users and granting permissions
+- ✅ **Backup Strategies**: Complete backup and restore procedures
+- ✅ **Python Connectivity**: Using databases from Python applications
+- ✅ **Security Best Practices**: Hardening database installations
+
+### Key Takeaways
+
+1. **Choose wisely**: SQLite for local, MySQL for web, PostgreSQL for complex apps
+2. **Backup regularly**: Data loss is irreversible without backups
+3. **Secure access**: Use strong passwords and minimal privileges
+4. **Monitor performance**: Index frequently queried columns
+5. **Use transactions**: Ensure data integrity for critical operations
+
+---
+
+## 📈 PERFORMANCE TUNING
+
+### SQLite Optimization
+
+```sql
+-- SQLite Performance Optimization
+
+-- Enable WAL mode for better concurrency
+PRAGMA journal_mode=WAL;
+
+-- Increase cache size (in pages, 1 page = 4KB typically)
+PRAGMA cache_size=-64000;  -- 256MB cache
+
+-- Synchronous mode (balance safety vs speed)
+PRAGMA synchronous=NORMAL;  -- Options: OFF, NORMAL, FULL
+
+-- Temp store in memory
+PRAGMA temp_store=MEMORY;
+
+-- Optimize database
+ANALYZE;
+VACUUM;
+
+-- Check integrity
+PRAGMA integrity_check;
+
+-- Query optimization
+EXPLAIN QUERY PLAN SELECT * FROM users WHERE email = 'test@test.com';
+
+-- Create appropriate indexes
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_created ON users(created_at);
+```
+
+### MySQL Optimization
+
+```sql
+-- MySQL Performance Tuning
+
+-- Check current settings
+SHOW VARIABLES LIKE 'innodb_buffer_pool_size';
+SHOW VARIABLES LIKE 'query_cache%';
+
+-- Optimize tables
+OPTIMIZE TABLE users;
+OPTIMIZE TABLE sessions;
+
+-- Analyze tables for query optimizer
+ANALYZE TABLE users;
+ANALYZE TABLE orders;
+
+-- Check slow queries
+SET GLOBAL slow_query_log = 'ON';
+SET GLOBAL long_query_time = 2;
+SHOW VARIABLES LIKE 'slow_query%';
+
+-- Index analysis
+SHOW INDEX FROM users;
+
+-- Query optimization
+EXPLAIN SELECT * FROM users WHERE email = 'test@test.com';
+
+-- Table status
+SHOW TABLE STATUS\G
+
+-- Performance schema
+SELECT * FROM performance_schema.events_waits_summary_by_instance
+ORDER BY SUM_TIMER_WAIT DESC LIMIT 10;
+```
+
+### Redis Optimization
+
+```bash
+# Redis Performance Configuration
+
+# In redis.conf or runtime:
+
+# Maximum memory
+CONFIG SET maxmemory 256mb
+CONFIG SET maxmemory-policy allkeys-lru
+
+# Persistence options
+# RDB snapshots
+CONFIG SET save "900 1 300 10 60 10000"
+
+# AOF persistence
+CONFIG SET appendonly yes
+CONFIG SET appendfsync everysec
+
+# Disable expensive commands
+CONFIG SET rename-command FLUSHALL ""
+CONFIG SET rename-command FLUSHDB ""
+CONFIG SET rename-command KEYS ""
+
+# Monitor commands
+MONITOR
+
+# Check memory usage
+MEMORY USAGE mykey
+MEMORY STATS
+
+# Benchmark
+redis-benchmark -t set,get -n 100000 -c 50
+```
+
+---
+
+## 🔄 BACKUP & RECOVERY
+
+### Complete Backup Strategy
+
+```bash
+#!/bin/bash
+# complete-db-backup.sh - Multi-database backup script
+
+BACKUP_DIR=~/db-backups
+DATE=$(date +%Y%m%d_%H%M%S)
+RETENTION_DAYS=30
+
+mkdir -p $BACKUP_DIR/{mysql,sqlite,postgres,redis}
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+}
+
+# MySQL Backup
+backup_mysql() {
+    log "Starting MySQL backup..."
+    mysqldump -u root --all-databases --single-transaction --routines --triggers | gzip > "$BACKUP_DIR/mysql/all-databases-$DATE.sql.gz"
+    
+    # Individual databases
+    for db in $(mysql -u root -e "SHOW DATABASES" | grep -v Database | grep -v information_schema | grep -v mysql | grep -v performance_schema); do
+        mysqldump -u root $db | gzip > "$BACKUP_DIR/mysql/$db-$DATE.sql.gz"
+    done
+    log "MySQL backup completed"
+}
+
+# SQLite Backup
+backup_sqlite() {
+    log "Starting SQLite backup..."
+    for db in $(find ~ -name "*.db" -type f 2>/dev/null); do
+        dbname=$(basename $db .db)
+        sqlite3 $db ".backup '$BACKUP_DIR/sqlite/$dbname-$DATE.db'"
+    done
+    log "SQLite backup completed"
+}
+
+# PostgreSQL Backup
+backup_postgres() {
+    log "Starting PostgreSQL backup..."
+    pg_dumpall | gzip > "$BACKUP_DIR/postgres/all-databases-$DATE.sql.gz"
+    log "PostgreSQL backup completed"
+}
+
+# Redis Backup
+backup_redis() {
+    log "Starting Redis backup..."
+    redis-cli BGSAVE
+    sleep 5
+    cp ~/redis-data/dump.rdb "$BACKUP_DIR/redis/dump-$DATE.rdb"
+    log "Redis backup completed"
+}
+
+# Cleanup old backups
+cleanup() {
+    log "Cleaning up old backups..."
+    find $BACKUP_DIR -type f -mtime +$RETENTION_DAYS -delete
+    log "Cleanup completed"
+}
+
+# Main execution
+log "=== Starting database backups ==="
+backup_mysql
+backup_sqlite
+backup_postgres
+backup_redis
+cleanup
+log "=== All backups completed ==="
+
+# List current backups
+echo -e "\nCurrent backups:"
+du -sh $BACKUP_DIR/*/
+```
+
+### Disaster Recovery
+
+```bash
+#!/bin/bash
+# disaster-recovery.sh - Database recovery script
+
+BACKUP_DIR=~/db-backups
+RESTORE_LOG=~/restore.log
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a $RESTORE_LOG
+}
+
+# Find latest backup
+find_latest() {
+    ls -t $1 | head -1
+}
+
+# Restore MySQL
+restore_mysql() {
+    local backup_file=$(find_latest "$BACKUP_DIR/mysql/all-databases-*.sql.gz")
+    log "Restoring MySQL from: $backup_file"
+    
+    # Stop any running instance
+    pkill mysql
+    
+    # Start fresh
+    mysql_install_db --force
+    mysqld_safe > /dev/null 2>&1 &
+    sleep 5
+    
+    # Restore
+    gunzip -c $backup_file | mysql -u root
+    
+    log "MySQL restore completed"
+}
+
+# Restore SQLite
+restore_sqlite() {
+    log "Restoring SQLite databases..."
+    
+    for backup in $BACKUP_DIR/sqlite/*-$(date +%Y%m%d)*.db; do
+        dbname=$(basename $backup | sed 's/-[0-9]*\.db$//')
+        cp $backup ~/$dbname.db
+        log "Restored: $dbname.db"
+    done
+}
+
+# Restore PostgreSQL
+restore_postgres() {
+    local backup_file=$(find_latest "$BACKUP_DIR/postgres/all-databases-*.sql.gz")
+    log "Restoring PostgreSQL from: $backup_file"
+    
+    # Initialize fresh cluster
+    rm -rf ~/postgres-data
+    initdb ~/postgres-data
+    pg_ctl -D ~/postgres-data -l ~/postgres-log start
+    sleep 3
+    
+    # Restore
+    gunzip -c $backup_file | psql -U $(whoami)
+    
+    log "PostgreSQL restore completed"
+}
+
+# Restore Redis
+restore_redis() {
+    local backup_file=$(find_latest "$BACKUP_DIR/redis/dump-*.rdb")
+    log "Restoring Redis from: $backup_file"
+    
+    pkill redis-server
+    
+    mkdir -p ~/redis-data
+    cp $backup_file ~/redis-data/dump.rdb
+    
+    redis-server --daemonize yes --dir ~/redis-data
+    
+    log "Redis restore completed"
+}
+
+# Main menu
+echo "=== Database Disaster Recovery ==="
+echo "1. Restore MySQL"
+echo "2. Restore SQLite"
+echo "3. Restore PostgreSQL"
+echo "4. Restore Redis"
+echo "5. Restore All"
+echo "Choose option:"
+read choice
+
+case $choice in
+    1) restore_mysql ;;
+    2) restore_sqlite ;;
+    3) restore_postgres ;;
+    4) restore_redis ;;
+    5)
+        restore_mysql
+        restore_sqlite
+        restore_postgres
+        restore_redis
+        ;;
+    *) echo "Invalid option" ;;
+esac
+
+log "Recovery process completed"
+```
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+### Quiz: Database Mastery
+
+**Question 1:** What command opens a SQLite database file?
+- A) `sqlite open mydb.db`
+- B) `sqlite3 mydb.db`
+- C) `sql mydb.db`
+- D) `sqlite -o mydb.db`
+
+**Question 2:** How do you start MariaDB server?
+- A) `service mysql start`
+- B) `mysqld_safe &`
+- C) `mysql start`
+- D) `systemctl start mariadb`
+
+**Question 3:** What SQLite command shows all tables?
+- A) `SHOW TABLES`
+- B) `.tables`
+- C) `LIST TABLES`
+- D) `.list`
+
+**Question 4:** What Redis command stores a value?
+- A) `STORE key value`
+- B) `SET key value`
+- C) `PUT key value`
+- D) `SAVE key value`
+
+**Question 5:** How do you backup a MySQL database?
+- A) `mysql backup db > file.sql`
+- B) `mysqldump db > file.sql`
+- C) `mysql --backup db > file.sql`
+- D) `dump mysql db > file.sql`
+
+**Question 6:** What is the default MySQL port?
+- A) 1433
+- B) 3306
+- C) 5432
+- D) 6379
+
+**Question 7:** What command connects to PostgreSQL?
+- A) `postgres`
+- B) `psql`
+- C) `pg_connect`
+- D) `postgresql`
+
+**Question 8:** How to create a MySQL user?
+- A) `ADD USER 'user'@'localhost'`
+- B) `CREATE USER 'user'@'localhost'`
+- C) `NEW USER 'user'@'localhost'`
+- D) `MAKE USER 'user'@'localhost'`
+
+**Question 9:** What Redis data type stores key-value pairs?
+- A) List
+- B) Set
+- C) Hash
+- D) String
+
+**Question 10:** What SQLite command shows table structure?
+- A) `.structure table`
+- B) `DESCRIBE table`
+- C) `.schema table`
+- D) `SHOW table`
+
+**Question 11:** How to grant all privileges in MySQL?
+- A) `GRANT ALL ON db.* TO user`
+- B) `GIVE ALL ON db.* TO user`
+- C) `ALLOW ALL ON db.* TO user`
+- D) `PERMIT ALL ON db.* TO user`
+
+**Question 12:** What is Redis default port?
+- A) 3306
+- B) 5432
+- C) 6379
+- D) 27017
+
+### Answers
+
+| Q | A | Q | A | Q | A | Q | A |
+|---|---|---|---|---|---|---|---|
+| 1 | B | 4 | B | 7 | B | 10 | C |
+| 2 | B | 5 | B | 8 | B | 11 | A |
+| 3 | B | 6 | B | 9 | D | 12 | C |
+
+---
+
+## 🎯 DATABASE EXERCISES
+
+### Exercise 1: SQLite CRUD Operations
+```sql
+-- Task: Create and manage a contacts database
+
+-- 1. Create database and table
+sqlite3 contacts.db
+CREATE TABLE contacts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE,
+    phone TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Insert records
+INSERT INTO contacts (name, email, phone) VALUES 
+    ('John Doe', 'john@example.com', '555-0100'),
+    ('Jane Smith', 'jane@example.com', '555-0200'),
+    ('Bob Wilson', 'bob@example.com', '555-0300');
+
+-- 3. Query all
+SELECT * FROM contacts;
+
+-- 4. Update a record
+UPDATE contacts SET phone = '555-0199' WHERE name = 'John Doe';
+
+-- 5. Delete a record
+DELETE FROM contacts WHERE name = 'Bob Wilson';
+
+-- Verification: 2 records should remain
+SELECT COUNT(*) FROM contacts;
+```
+
+### Exercise 2: MySQL User Management
+```sql
+-- Task: Create users with specific permissions
+
+-- 1. Connect as root
+mysql -u root
+
+-- 2. Create database
+CREATE DATABASE company;
+
+-- 3. Create users
+CREATE USER 'hr_user'@'localhost' IDENTIFIED BY 'hr123';
+CREATE USER 'finance_user'@'localhost' IDENTIFIED BY 'fin123';
+CREATE USER 'admin_user'@'localhost' IDENTIFIED BY 'admin123';
+
+-- 4. Create tables
+USE company;
+CREATE TABLE employees (id INT PRIMARY KEY, name VARCHAR(100), department VARCHAR(50));
+CREATE TABLE salaries (id INT PRIMARY KEY, employee_id INT, amount DECIMAL(10,2));
+
+-- 5. Grant permissions
+GRANT SELECT, INSERT, UPDATE ON company.employees TO 'hr_user'@'localhost';
+GRANT SELECT ON company.salaries TO 'finance_user'@'localhost';
+GRANT ALL PRIVILEGES ON company.* TO 'admin_user'@'localhost';
+
+-- 6. Test access (as hr_user)
+-- mysql -u hr_user -p
+-- SELECT * FROM employees;  -- Should work
+-- SELECT * FROM salaries;   -- Should fail (access denied)
+
+-- Verification: Check grants
+SHOW GRANTS FOR 'hr_user'@'localhost';
+```
+
+### Exercise 3: Redis Caching
+```bash
+# Task: Implement basic caching with Redis
+
+# 1. Start Redis
+redis-server --daemonize yes
+
+# 2. Connect
+redis-cli
+
+# 3. Set values with expiry
+SET session:user1 '{"name":"John","role":"admin"}'
+EXPIRE session:user1 3600
+
+# Or in one command
+SETEX cache:homepage 300 "<html>...</html>"
+
+# 4. Get values
+GET session:user1
+GET cache:homepage
+
+# 5. Check expiry
+TTL session:user1
+
+# 6. Increment counter
+SET page_views 0
+INCR page_views
+INCR page_views
+GET page_views
+
+# 7. Hash operations
+HSET user:1 name "John" email "john@example.com"
+HGET user:1 name
+HGETALL user:1
+
+# 8. List operations
+LPUSH notifications "New message"
+LPUSH notifications "Update available"
+LRANGE notifications 0 -1
+
+# Verification: Check all keys
+KEYS *
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Title | Relevance |
+|---------|-------|-----------|
+| **Chapter 47** | Web Server | Connect databases to web applications |
+| **Chapter 45** | SSH Server | Secure remote database access |
+| **Chapter 46** | SSH Client | Tunnel to remote databases |
+| **Chapter 49** | Proot Distros | Run full database servers |
+| **Chapter 38** | Network Tools | Monitor database network traffic |
+| **Chapter 22** | Users & Permissions | Database user management |
+
+---
+
+**🎉 Chapter 48 Upgraded Successfully!**
+
