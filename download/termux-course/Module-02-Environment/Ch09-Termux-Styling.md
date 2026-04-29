@@ -1,5 +1,28 @@
 # Chapter 9: Termux Styling & Customization
 
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗            ║
+║   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║            ║
+║      ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║            ║
+║      ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║            ║
+║      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗       ║
+║      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝       ║
+║                                                                           ║
+║   ███████╗████████╗ █████╗ ██████╗ ████████╗███████╗██████╗               ║
+║   ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔══██╗              ║
+║   ███████╗   ██║   ███████║██████╔╝   ██║   █████╗  ██████╔╝              ║
+║   ╚════██║   ██║   ██╔══██║██╔══██╗   ██║   ██╔══╝  ██╔══██╗              ║
+║   ███████║   ██║   ██║  ██║██║  ██║   ██║   ███████╗██║  ██║              ║
+║   ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝              ║
+║                                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                   🎨 CUSTOMIZE YOUR TERMINAL LOOK 🎨                      ║
+║                       Themes • Fonts • Prompts                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
 > **Module:** 2 - Environment  
 > **Chapter:** 9 of 61  
 > **Duration:** 15-20 Minutes  
@@ -1626,6 +1649,854 @@ Before moving to Chapter 10, verify:
 
 ---
 
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>Q1. What app is used to change Termux themes?</b></summary>
+
+**Answer:** Termux:Styling app - an official add-on from the Termux team. Install it from F-Droid, then long-press on the Termux screen and select "Style" to access color schemes and fonts.
+</details>
+
+<details>
+<summary><b>Q2. Which file controls Termux configuration settings?</b></summary>
+
+**Answer:** `~/.termux/termux.properties` - This file contains all Termux settings including font size, cursor style, extra keys, and behavior options. After editing, run `termux-reload-settings` to apply changes.
+</details>
+
+<details>
+<summary><b>Q3. What is the Dracula theme known for?</b></summary>
+
+**Answer:** The Dracula theme is a dark purple-based color scheme popular among developers and hackers. It features:
+- Dark purple background (#282a36)
+- Green, pink, yellow, and cyan accents
+- Eye-friendly for long coding sessions
+- Available across many editors and terminals
+</details>
+
+<details>
+<summary><b>Q4. How do you apply custom colors in Termux?</b></summary>
+
+**Answer:** Create/edit the file `~/.termux/colors.properties` with your color definitions:
+
+```properties
+background=#1e1e2e
+foreground=#cdd6f4
+cursor=#f5e0dc
+color0=#45475a
+# ... (colors 0-15 for ANSI palette)
+```
+Then run `termux-reload-settings` to apply.
+</details>
+
+<details>
+<summary><b>Q5. What variable controls the command prompt appearance?</b></summary>
+
+**Answer:** The `PS1` environment variable controls the shell prompt. Set it in `~/.bashrc`:
+
+```bash
+PS1="\[\033[0;32m\]\u@\h:\w\$\[\033[0m\] "
+```
+This example shows username@hostname:working_directory$
+</details>
+
+<details>
+<summary><b>Q6. Which fonts are recommended for coding in Termux?</b></summary>
+
+**Answer:** Top coding fonts include:
+- **JetBrains Mono** - Excellent readability, designed for developers
+- **Fira Code** - Supports ligatures, modern look
+- **Hack** - Classic monospace, very clean
+- **Source Code Pro** - Adobe's professional coding font
+- **Powerline fonts** - For fancy prompts with icons
+</details>
+
+<details>
+<summary><b>Q7. What is Solarized theme's main benefit?</b></summary>
+
+**Answer:** Solarized is scientifically designed for:
+- Reduced eye strain during long sessions
+- Precise color relationships for syntax highlighting
+- Both dark and light variants
+- Works well in various lighting conditions
+- 16-color palette optimized for both CRT and LCD screens
+</details>
+
+<details>
+<summary><b>Q8. How do you change font size in Termux?</b></summary>
+
+**Answer:** Three methods:
+1. **Pinch gesture** - Two-finger pinch on screen
+2. **Settings menu** - Long press → More → Preferences → Font size slider
+3. **termux.properties** - Add `termux.font.size=14` and reload
+</details>
+
+<details>
+<summary><b>Q9. What command applies termux.properties changes?</b></summary>
+
+**Answer:** `termux-reload-settings` - This command tells Termux to re-read the configuration files and apply the new settings immediately without restarting.
+</details>
+
+<details>
+<summary><b>Q10. What is the Nord theme's visual characteristic?</b></summary>
+
+**Answer:** Nord is an arctic-inspired theme with:
+- Dark bluish-gray background (#2E3440)
+- Blue, cyan, and white accents
+- Calming, cold color palette
+- Clean, minimal aesthetic
+- Popular for its soothing appearance
+</details>
+
+<details>
+<summary><b>Q11. What does PS1 special code \w display?</b></summary>
+
+**Answer:** `\w` displays the full working directory path in the prompt. For example, if you're in `/home/user/projects`, the prompt would show that full path. Use `\W` (uppercase) to show only the current directory name.
+</details>
+
+<details>
+<summary><b>Q12. Where should Termux:Styling app be installed from?</b></summary>
+
+**Answer:** F-Droid - The F-Droid version is compatible with the F-Droid Termux app. The Play Store version may have compatibility issues. Always match your Termux and add-on sources.
+</details>
+
+<details>
+<summary><b>Q13. What are Powerline fonts used for?</b></summary>
+
+**Answer:** Powerline fonts contain special symbols and icons used in fancy shell prompts:
+- Git branch indicators
+- Arrow separators
+- Lock, network, and other icons
+- Enhanced visual prompts like:
+
+```
+ main  ~/project  ✓
+```
+</details>
+
+<details>
+<summary><b>Q14. How do you create a theme switcher function?</b></summary>
+
+**Answer:** Add a function to your `~/.bashrc`:
+
+```bash
+theme() {
+    case "$1" in
+        dark) cp ~/.termux/themes/dark.colors ~/.termux/colors.properties ;;
+        light) cp ~/.termux/themes/light.colors ~/.termux/colors.properties ;;
+        hacker) cp ~/.termux/themes/hacker.colors ~/.termux/colors.properties ;;
+        *) echo "Usage: theme {dark|light|hacker}" ;;
+    esac
+    termux-reload-settings
+}
+```
+Then use: `theme dark` or `theme hacker`
+</details>
+
+<details>
+<summary><b>Q15. What file format is used for custom colors?</b></summary>
+
+**Answer:** The `~/.termux/colors.properties` file uses a simple key-value format:
+
+```properties
+# Basic colors
+background=#HEXCODE
+foreground=#HEXCODE
+cursor=#HEXCODE
+
+# 16 ANSI colors (0-15)
+color0=#HEXCODE
+color1=#HEXCODE
+# ... up to color15
+```
+Colors are specified in hexadecimal format (e.g., #FF0000 for red).
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Q1: Why would you customize your terminal appearance in a professional setting?
+
+**Answer:**
+Terminal customization in professional settings provides:
+1. **Productivity** - Custom prompts show relevant information (git branch, Python venv, etc.)
+2. **Reduced eye strain** - Dark themes for long coding sessions
+3. **Consistency** - Same environment across different machines
+4. **Accessibility** - Larger fonts and high-contrast themes for visibility needs
+5. **Efficiency** - Color-coded outputs help identify errors quickly
+6. **Professional appearance** - Clean, organized workspace for screen sharing
+
+A well-configured terminal demonstrates attention to detail and workflow optimization.
+
+### Q2: Explain the difference between terminal color schemes and shell prompt customization.
+
+**Answer:**
+**Terminal Color Schemes:**
+- Control the appearance of the terminal emulator itself
+- Define 16 ANSI colors used by all terminal applications
+- Set background, foreground (text), and cursor colors
+- Applied at the terminal level via `colors.properties`
+- Affects how ALL programs display colored output
+
+**Shell Prompt Customization (PS1):**
+- Controls the command line prompt appearance
+- Defined in shell configuration (`.bashrc`, `.zshrc`)
+- Can show dynamic information (user, host, directory, git status)
+- Uses ANSI escape codes for colors
+- Only affects the shell prompt, not other programs
+
+Both work together for a complete customization experience.
+
+### Q3: How would you set up a development environment that works consistently across multiple machines?
+
+**Answer:**
+Create a portable configuration:
+
+1. **Version control your dotfiles:**
+```bash
+# Create a dotfiles repository
+mkdir ~/dotfiles
+cp ~/.bashrc ~/dotfiles/
+cp ~/.termux/termux.properties ~/dotfiles/
+cp ~/.termux/colors.properties ~/dotfiles/
+git init ~/dotfiles
+```
+
+2. **Create an install script:**
+```bash
+#!/bin/bash
+# link.sh - Run on new machine
+ln -sf ~/dotfiles/.bashrc ~/.bashrc
+mkdir -p ~/.termux
+ln -sf ~/dotfiles/termux.properties ~/.termux/
+ln -sf ~/dotfiles/colors.properties ~/.termux/
+termux-reload-settings
+```
+
+3. **Document your setup** in a README.md with:
+   - Required packages
+   - Installation steps
+   - Theme screenshots
+   - Troubleshooting tips
+
+### Q4: What considerations should be made when choosing terminal fonts for coding?
+
+**Answer:**
+Key considerations for terminal fonts:
+
+1. **Monospace requirement** - All characters must be equal width for alignment
+2. **Character differentiation** - Clear distinction between similar characters (0/O, 1/l/I, {/[)
+3. **Ligature support** - Some fonts combine character sequences (=>, !=) for readability
+4. **Unicode coverage** - Support for special symbols, icons, and non-ASCII characters
+5. **Size availability** - Multiple weights (regular, bold) and good rendering at various sizes
+6. **Screen compatibility** - Good readability on different screen densities
+7. **Powerline support** - Special glyphs for enhanced prompts
+
+Recommended fonts: JetBrains Mono, Fira Code, Hack, Source Code Pro
+
+### Q5: How do ANSI escape codes work for terminal colors?
+
+**Answer:**
+ANSI escape codes control terminal formatting:
+
+**Format:** `\033[<style>;<color>m`
+
+**Colors (foreground):**
+- 30-37: Standard colors (black, red, green, yellow, blue, magenta, cyan, white)
+- 90-97: Bright versions
+- 38;5;N: 256-color mode
+- 38;2;R;G;B: True color (24-bit)
+
+**Styles:**
+- 0: Reset/Normal
+- 1: Bold
+- 4: Underline
+- 7: Reverse (swap fg/bg)
+
+**Example in bash:**
+```bash
+# Red bold text
+echo -e "\033[1;31mError:\033[0m File not found"
+
+# Green text with path
+PS1="\[\033[0;32m\]\u@\h\[\033[0m\]:\[\033[0;34m\]\w\[\033[0m\]\$ "
+```
+
+The `\[ \]` brackets in PS1 tell bash that these codes don't take up screen space.
+
+### Q6: What is the purpose of termux-reload-settings command?
+
+**Answer:**
+`termux-reload-settings` is a Termux-specific command that:
+
+1. **Re-reads configuration files:**
+   - `~/.termux/termux.properties`
+   - `~/.termux/colors.properties`
+   - Custom font files
+
+2. **Applies changes immediately** without:
+   - Restarting Termux
+   - Losing current session
+   - Closing running processes
+
+3. **Updates terminal behavior:**
+   - New key shortcuts
+   - Modified bell behavior
+   - Updated cursor style
+   - Changed color schemes
+
+4. **Use workflow:**
+```bash
+nano ~/.termux/termux.properties
+# Make changes...
+termux-reload-settings  # Apply instantly
+```
+
+### Q7: How would you implement automatic theme switching based on time of day?
+
+**Answer:**
+Create an auto-theme script:
+
+```bash
+# Add to ~/.bashrc or run via cron
+auto_theme() {
+    local hour=$(date +%H)
+    local theme_dir="$HOME/.termux/themes"
+    
+    if [ "$hour" -ge 20 ] || [ "$hour" -lt 6 ]; then
+        # Night mode (8 PM - 6 AM)
+        cp "$theme_dir/dark.colors" ~/.termux/colors.properties
+    elif [ "$hour" -ge 6 ] && [ "$hour" -lt 10 ]; then
+        # Morning transition
+        cp "$theme_dir/solarized-light.colors" ~/.termux/colors.properties
+    elif [ "$hour" -ge 16 ] && [ "$hour" -lt 20 ]; then
+        # Evening transition
+        cp "$theme_dir/solarized-dark.colors" ~/.termux/colors.properties
+    else
+        # Day mode (10 AM - 4 PM)
+        cp "$theme_dir/light.colors" ~/.termux/colors.properties
+    fi
+    
+    termux-reload-settings
+}
+
+# Call on shell start
+auto_theme
+```
+
+For automatic execution, use Termux cron jobs or Tasker integration.
+
+### Q8: What are the benefits and drawbacks of fancy shell prompts?
+
+**Answer:**
+**Benefits:**
+- Visual information at a glance (git status, Python venv, current directory)
+- Reduced typing (prompts that show context)
+- Better workflow awareness
+- Professional appearance
+- Error indicators (exit codes, failed commands)
+
+**Drawbacks:**
+- Performance impact on slow systems
+- Can break with long paths or names
+- May not render correctly on all terminals
+- Learning curve for understanding symbols
+- Distracting if overly complex
+- Compatibility issues when sharing scripts
+
+**Best practice:** Keep prompts informative but minimal. Only show what you actually use.
+
+### Q9: How would you troubleshoot theme changes not applying?
+
+**Answer:**
+Troubleshooting steps:
+
+1. **Verify file locations:**
+```bash
+ls -la ~/.termux/
+# Should show termux.properties and colors.properties
+```
+
+2. **Check file syntax:**
+```bash
+cat ~/.termux/colors.properties
+# Verify no typos, correct hex codes
+```
+
+3. **Run reload command:**
+```bash
+termux-reload-settings
+# Check for any error output
+```
+
+4. **Verify Termux:Styling installation:**
+- Check app is installed from F-Droid
+- Check app matches Termux source (both from same place)
+
+5. **Check for conflicts:**
+```bash
+# Ensure only one colors.properties exists
+find ~ -name "colors.properties" 2>/dev/null
+```
+
+6. **Restart Termux completely:**
+- Exit all sessions
+- Force-stop the app
+- Reopen
+
+### Q10: Explain how you would create a "Hacker" theme with green text on black background.
+
+**Answer:**
+Create the classic Matrix-style theme:
+
+```bash
+# Create colors.properties
+cat > ~/.termux/colors.properties << 'EOF'
+# Hacker/Matrix Theme
+background=#000000
+foreground=#00FF00
+cursor=#00FF00
+
+# Standard colors
+color0=#000000
+color1=#FF0000
+color2=#00FF00
+color3=#FFFF00
+color4=#0000FF
+color5=#FF00FF
+color6=#00FFFF
+color7=#FFFFFF
+
+# Bright colors
+color8=#808080
+color9=#FF0000
+color10=#00FF00
+color11=#FFFF00
+color12=#0000FF
+color13=#FF00FF
+color14=#00FFFF
+color15=#FFFFFF
+EOF
+
+# Create matching prompt
+cat >> ~/.bashrc << 'EOF'
+# Hacker prompt
+PS1="\[\033[0;32m\]┌─[\[\033[1;32m\]\u@\h\[\033[0;32m\]]─[\[\033[1;34m\]\w\[\033[0;32m\]]\n\[\033[0;32m\]└──╼ \[\033[1;32m\]\$\[\033[0m\] "
+EOF
+
+# Apply changes
+termux-reload-settings
+source ~/.bashrc
+```
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                   SCENARIO 1: DEVELOPER WORKSPACE SETUP                    │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  SITUATION: New developer joins a team and needs to configure Termux    │
+│  for daily coding work with professional appearance                      │
+│                                                                           │
+│  SOLUTION:                                                                │
+│  1. Install Termux:Styling from F-Droid                                  │
+│  2. Set up productive theme:                                             │
+│     - Theme: Monokai or Atom One Dark (proven for coding)                │
+│     - Font: JetBrains Mono size 14 (excellent readability)               │
+│  3. Configure prompt with git integration:                               │
+│     ```bash                                                              │
+│     PS1="\[\033[1;34m\]\w\[\033[0;33m\]\$(__git_ps1)\[\033[0m\]\n\$ "    │
+│     ```                                                                  │
+│  4. Add useful aliases to .bashrc                                        │
+│  5. Configure termux.properties:                                         │
+│     - Extra keys row for coding symbols                                  │
+│     - Cursor style: bar (precise positioning)                            │
+│     - Bell: vibrate (discrete notification)                              │
+│                                                                           │
+│  RESULT: Professional, efficient workspace ready in minutes              │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                    SCENARIO 2: NIGHT OWL PRODUCTIVITY                     │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  SITUATION: Developer works late hours and needs comfortable            │
+│  terminal that doesn't strain eyes during extended sessions              │
+│                                                                           │
+│  SOLUTION:                                                                │
+│  1. Choose eye-friendly theme:                                           │
+│     - Solarized Dark (scientifically designed)                           │
+│     - Or Dracula (popular for dark environments)                         │
+│  2. Adjust for comfort:                                                  │
+│     - Font size: 16-18 (larger than normal)                              │
+│     - Line spacing: comfortable reading                                   │
+│     - Cursor: block with blink (easy to find)                            │
+│  3. Set up automatic brightness:                                         │
+│     ```bash                                                              │
+│     # In .bashrc                                                         │
+│     if [ $(date +%H) -ge 20 ] || [ $(date +%H) -lt 6 ]; then              │
+│         termux-brightness 80  # Lower brightness at night                │
+│     fi                                                                   │
+│     ```                                                                  │
+│  4. Disable notification sounds:                                         │
+│     bell-character=ignore  # in termux.properties                        │
+│                                                                           │
+│  RESULT: Comfortable extended coding sessions without eye fatigue        │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                  SCENARIO 3: SECURITY PROFESSIONAL SETUP                  │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  SITUATION: Penetration tester wants a professional, hacker-style       │
+│  terminal appearance for demonstrations and actual testing              │
+│                                                                           │
+│  SOLUTION:                                                                │
+│  1. Create custom "Hacker" theme:                                        │
+│     ```properties                                                        │
+│     background=#0d0d0d                                                   │
+│     foreground=#00ff00                                                   │
+│     cursor=#00ff00                                                       │
+│     color2=#00ff00   # Bright green for success                          │
+│     ```                                                                  │
+│  2. Set up informative prompt:                                           │
+│     ```bash                                                              │
+│     # Shows user, host, directory, and git status                        │
+│     PS1="\[\033[0;32m\]┌─[\[\033[1;32m\]\u\[\033[0;32m\]@\[\033[1;31m\]\h\│
+│     \[\033[0;32m\]]─[\[\033[1;34m\]\w\[\033[0;32m\]]\n\[\033[0;32m\]└──╼\ │
+│     \[\033[1;32m\]\$\[\033[0m\] "                                         │
+│     ```                                                                  │
+│  3. Use Powerline font for professional symbols                          │
+│  4. Configure extra keys with security tools shortcuts                   │
+│  5. Set up aliases for common security commands                          │
+│                                                                           │
+│  RESULT: Impressive, functional terminal for security work               │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                   SCENARIO 4: ACCESSIBILITY SETUP                         │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  SITUATION: User with visual impairment needs accessible terminal       │
+│  configuration for comfortable daily use                                 │
+│                                                                           │
+│  SOLUTION:                                                                │
+│  1. High contrast theme:                                                 │
+│     - Solarized Light or custom high-contrast theme                      │
+│     - White background with black text for maximum contrast              │
+│  2. Large font size:                                                     │
+│     - Font size: 20-24 (significantly larger)                            │
+│     - Font: DejaVu Sans Mono (excellent Unicode support)                 │
+│  3. Enhanced cursor:                                                      │
+│     ```properties                                                        │
+│     terminal-cursor-style=block                                          │
+│     terminal-cursor-blink=true                                           │
+│     ```                                                                  │
+│  4. Bold, distinguishable colors:                                        │
+│     - Use bright variants of colors                                       │
+│     - Ensure minimum 4.5:1 contrast ratio                                │
+│  5. Reduced motion:                                                       │
+│     - Disable animations if present                                       │
+│     - Steady, predictable interface                                       │
+│                                                                           │
+│  RESULT: Fully accessible terminal for users with visual needs           │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                  SCENARIO 5: TEAM STANDARDIZATION                         │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  SITUATION: Team lead wants to standardize terminal configuration       │
+│  across all team members for consistent collaboration                   │
+│                                                                           │
+│  SOLUTION:                                                                │
+│  1. Create shared configuration repository:                              │
+│     ```                                                                  │
+│     termux-config/                                                       │
+│     ├── .bashrc_team                                                     │
+│     ├── termux.properties                                                │
+│     ├── colors.properties                                                │
+│     ├── install.sh                                                       │
+│     └── README.md                                                        │
+│     ```                                                                  │
+│  2. Standardize on specific theme:                                       │
+│     - Nord theme (professional, low distraction)                         │
+│     - JetBrains Mono font, size 14                                       │
+│  3. Include team-specific prompt:                                        │
+│     - Shows project directory                                            │
+│     - Indicates environment (dev/staging/prod)                           │
+│     - Git status integration                                             │
+│  4. Create one-click install script                                      │
+│  5. Document in README with screenshots                                  │
+│                                                                           │
+│  RESULT: Entire team has identical, professional terminal setup          │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Termux Styling Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    TERMUX STYLING ARCHITECTURE                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌──────────────────────────────────────────────────────────────────┐  │
+│   │                    CONFIGURATION SOURCES                          │  │
+│   │                                                                   │  │
+│   │   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐           │  │
+│   │   │ Termux:      │  │ termux.      │  │ colors.      │           │  │
+│   │   │ Styling App  │  │ properties   │  │ properties   │           │  │
+│   │   │              │  │              │  │              │           │  │
+│   │   │ Built-in     │  │ ~/.termux/   │  │ ~/.termux/   │           │  │
+│   │   │ themes       │  │              │  │              │           │  │
+│   │   └──────┬───────┘  └──────┬───────┘  └──────┬───────┘           │  │
+│   │          │                 │                 │                    │  │
+│   └──────────┼─────────────────┼─────────────────┼────────────────────┘  │
+│              │                 │                 │                        │
+│              ▼                 ▼                 ▼                        │
+│   ┌──────────────────────────────────────────────────────────────────┐  │
+│   │                  termux-reload-settings                           │  │
+│   │                  (Applies all changes)                            │  │
+│   └──────────────────────────────────────────────────────────────────┘  │
+│              │                                                           │
+│              ▼                                                           │
+│   ┌──────────────────────────────────────────────────────────────────┐  │
+│   │                    TERMUX TERMINAL                                │  │
+│   │                                                                   │  │
+│   │   ┌──────────────────────────────────────────────────────────┐   │  │
+│   │   │                    Visual Changes                        │   │  │
+│   │   │                                                           │   │  │
+│   │   │   • Background Color                                      │   │  │
+│   │   │   • Foreground (Text) Color                               │   │  │
+│   │   │   • Cursor Style & Color                                  │   │  │
+│   │   │   • Font Family & Size                                    │   │  │
+│   │   │   • 16 ANSI Colors (0-15)                                 │   │  │
+│   │   │                                                           │   │  │
+│   │   └──────────────────────────────────────────────────────────┘   │  │
+│   │                                                                   │  │
+│   └──────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### PS1 Prompt Customization Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PS1 PROMPT CUSTOMIZATION                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   INPUT: Shell Configuration (~/.bashrc)                                │
+│                                                                          │
+│   ┌────────────────────────────────────────────────────────────────┐    │
+│   │  PS1="\[\033[0;32m\]\u@\h:\w\$\[\033[0m\] "                    │    │
+│   │                                                                 │    │
+│   │  Components:                                                    │    │
+│   │  ┌─────────┐                                                    │    │
+│   │  │ \[ \]   │ ← Non-printing characters (color codes)           │    │
+│   │  ├─────────┤                                                    │    │
+│   │  │ \033[   │ ← Escape sequence start                            │    │
+│   │  ├─────────┤                                                    │    │
+│   │  │ 0;32m   │ ← Style 0 (normal), Color 32 (green)              │    │
+│   │  ├─────────┤                                                    │    │
+│   │  │ \u      │ ← Username                                         │    │
+│   │  ├─────────┤                                                    │    │
+│   │  │ \h      │ ← Hostname                                         │    │
+│   │  ├─────────┤                                                    │    │
+│   │  │ \w      │ ← Working directory                                │    │
+│   │  ├─────────┤                                                    │    │
+│   │  │ \$      │ ← $ for user, # for root                           │    │
+│   │  └─────────┘                                                    │    │
+│   └────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│   OUTPUT: user@device:~$                                                 │
+│           ↑      ↑   ↑                                                   │
+│           │      │   └── Green prompt symbol                            │
+│           │      └── Current directory                                   │
+│           └── User and hostname in green                                 │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Color Scheme Application Process
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                   COLOR SCHEME APPLICATION                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   Step 1: Choose Theme                                                   │
+│   ┌────────────────────────────────────────────────────────────────┐    │
+│   │  Built-in (Styling App)  │  Custom (colors.properties)         │    │
+│   │  • Monokai               │  • Create ~/.termux/colors.prop     │    │
+│   │  • Dracula               │  • Define background                │    │
+│   │  • Solarized             │  • Define foreground                │    │
+│   │  • Nord                  │  • Define color0-15                 │    │
+│   └────────────────────────────────────────────────────────────────┘    │
+│              │                                                           │
+│              ▼                                                           │
+│   Step 2: Apply Theme                                                    │
+│   ┌────────────────────────────────────────────────────────────────┐    │
+│   │  Option A: Long Press → Style → Select Theme                   │    │
+│   │  Option B: Edit colors.properties → termux-reload-settings     │    │
+│   │  Option C: Theme script function                               │    │
+│   └────────────────────────────────────────────────────────────────┘    │
+│              │                                                           │
+│              ▼                                                           │
+│   Step 3: Verify Changes                                                 │
+│   ┌────────────────────────────────────────────────────────────────┐    │
+│   │  $ echo -e "\033[0;31mRed\033[0m"   # Test color output        │    │
+│   │  $ ls --color=auto                   # Test file colors         │    │
+│   │  $ vim script.sh                     # Test syntax highlight    │    │
+│   └────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Relationship | Chapter | Description |
+|--------------|---------|-------------|
+| **Prerequisites** | Ch 1: Termux Installation | Install Termux before styling |
+| **Prerequisites** | Ch 2: Initial Setup | Basic configuration first |
+| **Prerequisites** | Ch 8: Text Editors | Edit config files with Nano/Vim |
+| **Current** | Ch 9: Termux Styling | **You are here** |
+| **Next** | Ch 10: Termux:API Setup | Automation with API commands |
+| **Related** | Ch 11: Shell Customization | Advanced .bashrc configuration |
+| **Related** | Ch 15: Shell Scripting | Write scripts for theme switching |
+| **Related** | Ch 21: Zsh Shell | Alternative shell with Oh My Zsh |
+| **Advanced** | Ch 35: Dotfiles Management | Version control your configs |
+| **Advanced** | Ch 40: Automation Scripts | Automate theme changes |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Dynamic Git Status Prompt
+
+Create a prompt that shows git branch and status:
+
+```bash
+# Add to ~/.bashrc
+parse_git_branch() {
+    git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+parse_git_status() {
+    local status=""
+    if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
+        status="*"
+    fi
+    echo "$status"
+}
+
+# Prompt with git integration
+export PS1="\[\033[0;32m\]\u@\h\[\033[0m\]:\[\033[0;34m\]\w\[\033[0;33m\]\$(parse_git_branch)\[\033[0;31m\]\$(parse_git_status)\[\033[0m\]\n\$ "
+
+# Example output:
+# user@device:~/project (main) *
+# $
+```
+
+### Advanced Technique 2: Theme Randomizer
+
+Create a script that randomly selects a theme on each startup:
+
+```bash
+# Add to ~/.bashrc
+random_theme() {
+    local themes_dir="$HOME/.termux/themes"
+    local themes=($(ls "$themes_dir"/*.colors 2>/dev/null))
+    
+    if [ ${#themes[@]} -gt 0 ]; then
+        local random_index=$((RANDOM % ${#themes[@]}))
+        cp "${themes[$random_index]}" ~/.termux/colors.properties
+        termux-reload-settings
+        echo "Applied theme: $(basename "${themes[$random_index]}" .colors)"
+    fi
+}
+
+# Uncomment to enable random theme on startup
+# random_theme
+```
+
+### Advanced Technique 3: Powerline-Style Prompt
+
+Install and configure powerline-style prompt:
+
+```bash
+# Method 1: Using powerline-go (requires Go)
+pkg install golang
+go install github.com/justjanne/powerline-go@latest
+
+# Add to .bashrc
+POWERLINE_GO="$HOME/go/bin/powerline-go"
+if [ -f "$POWERLINE_GO" ]; then
+    function _update_ps1() {
+        PS1="$($POWERLINE_GO -error $? -shell bash -modules venv,ssh,cwd,git)"
+    }
+    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+fi
+
+# Method 2: Pure bash powerline
+powerline_prompt() {
+    local exit_code=$?
+    local green='\[\033[0;32m\]'
+    local blue='\[\033[0;34m\]'
+    local reset='\[\033[0m\]'
+    
+    echo "${green} $(parse_git_branch 2>/dev/null || echo '')${blue}${reset} \w ${blue}${reset} "
+}
+PS1='$(powerline_prompt)'
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+After completing this chapter, you should be able to:
+
+- [ ] Install Termux:Styling app from F-Droid
+- [ ] Change color schemes using the Style menu
+- [ ] Change fonts using Termux:Styling
+- [ ] Adjust font size using gestures or settings
+- [ ] Edit termux.properties for advanced customization
+- [ ] Create custom color schemes with colors.properties
+- [ ] Customize PS1 prompt with colors and information
+- [ ] Use termux-reload-settings to apply changes
+- [ ] Choose appropriate theme for different situations
+- [ ] Back up and restore your styling configuration
+- [ ] Use ANSI color codes in scripts
+- [ ] Create theme switching functions
+- [ ] Understand cursor style options
+- [ ] Configure extra keys row
+- [ ] Set up Termux:Float styling
+
+---
+
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1: Backup Your Theme Configuration**
@@ -2109,567 +2980,6 @@ export PS1='$(emoji_prompt) \u:\w\$ '
 3. **PS1 defines your prompt** - Make it informative
 4. **Always reload after changes** - termux-reload-settings
 5. **Backup your configurations** - Before major changes
-
----
-
-## 🎯 INTERVIEW QUESTIONS
-
-### Question 1
-**Q: What is Termux:Styling and how does it work?**
-
-**Answer:**
-Termux:Styling is an official add-on app that provides a GUI for customizing Termux appearance. It allows users to:
-- Change color schemes (20+ built-in themes)
-- Change fonts (multiple monospace options)
-- Apply changes instantly without commands
-
-After installation, access via: Long press screen → Style menu
-
----
-
-### Question 2
-**Q: What files control Termux appearance?**
-
-**Answer:**
-- `~/.termux/colors.properties` - Color scheme (background, foreground, 16 ANSI colors)
-- `~/.termux/font.ttf` - Custom font file
-- `~/.termux/termux.properties` - Settings (font size, cursor, bell)
-- `~/.bashrc` - PS1 prompt customization
-
-After modifying: Run `termux-reload-settings`
-
----
-
-### Question 3
-**Q: How do you create a custom color scheme?**
-
-**Answer:**
-Create/edit `~/.termux/colors.properties`:
-```properties
-background=#1e1e2e
-foreground=#cdd6f4
-cursor=#f5e0dc
-color0=#45475a    # Black
-color1=#f38ba8    # Red
-color2=#a6e3a1    # Green
-color3=#f9e2af    # Yellow
-color4=#89b4fa    # Blue
-color5=#f5c2e7    # Magenta
-color6=#94e2d5    # Cyan
-color7=#bac2de    # White
-# Repeat for colors 8-15 (bright versions)
-```
-
----
-
-### Question 4
-**Q: What is PS1 and how do you customize it?**
-
-**Answer:**
-PS1 is an environment variable that defines the shell prompt format.
-
-Special codes:
-- `\u` = username
-- `\h` = hostname
-- `\w` = working directory
-- `\d` = date
-- `\t` = time
-
-Example:
-```bash
-export PS1="\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
-```
-
----
-
-### Question 5
-**Q: How do you add colors to the PS1 prompt?**
-
-**Answer:**
-Use ANSI escape sequences:
-```bash
-# Define colors
-GREEN='\[\033[01;32m\]'
-BLUE='\[\033[01;34m\]'
-RESET='\[\033[00m\]'
-
-# Use in PS1
-export PS1="${GREEN}\u@\h${RESET}:${BLUE}\w${RESET}\$ "
-```
-
-Format: `\[\033[STYLE;COLORm\]`
-- Style: 0=normal, 1=bold, 4=underline
-- Color: 30-37 for foreground, 40-47 for background
-
----
-
-### Question 6
-**Q: What command applies styling changes?**
-
-**Answer:**
-`termux-reload-settings` - Reloads termux.properties, colors.properties, and font.ttf
-
-Can also restart Termux completely for a full reload.
-
----
-
-### Question 7
-**Q: How do you change font size?**
-
-**Answer:**
-Multiple methods:
-1. **Pinch gesture** on screen (touch-based)
-2. **termux.properties**: `termux.font.size=14`
-3. **Volume keys** + Ctrl (if configured)
-
-Recommended: 12-16 for phones, 16-20 for tablets
-
----
-
-### Question 8
-**Q: What are the 16 ANSI colors and their typical uses?**
-
-**Answer:**
-| Color | Typical Use |
-|-------|-------------|
-| 0 (Black) | Normal text |
-| 1 (Red) | Errors, warnings |
-| 2 (Green) | Success, additions |
-| 3 (Yellow) | Warnings |
-| 4 (Blue) | Directories, info |
-| 5 (Magenta) | Special files |
-| 6 (Cyan) | Symlinks |
-| 7 (White) | Normal text |
-| 8-15 | Bright variants |
-
----
-
-### Question 9
-**Q: How would you add a git branch to your prompt?**
-
-**Answer:**
-```bash
-# Add to ~/.bashrc
-parse_git_branch() {
-    git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-}
-
-export PS1="\w\$(parse_git_branch)\$ "
-# Shows: ~/projects (main) $
-```
-
----
-
-### Question 10
-**Q: What's the difference between .bashrc and termux.properties?**
-
-**Answer:**
-- **.bashrc**: Shell configuration (aliases, functions, PS1 prompt, PATH)
-- **termux.properties**: Termux app configuration (font size, colors, cursor, bell)
-
-Changes to .bashrc: `source ~/.bashrc`
-Changes to termux.properties: `termux-reload-settings`
-
----
-
-## 🚀 NEXT LEVEL TIPS
-
-### Performance Optimization
-
-```
-⚡ TIP: Faster Theme Switching
-
-Use symlinks for instant theme changes:
-
-mkdir -p ~/.termux/themes
-# Save themes
-cp colors.properties ~/.termux/themes/dark.colors
-cp colors.properties ~/.termux/themes/light.colors
-
-# Quick switch function
-theme() {
-    ln -sf ~/.termux/themes/$1.colors ~/.termux/colors.properties
-    termux-reload-settings
-}
-
-# Usage: theme dark or theme light
-```
-
-### Best Practices
-
-```
-📌 BEST PRACTICE: Theme Organization
-
-Directory structure:
-~/.termux/
-├── colors.properties     # Active colors (symlink)
-├── font.ttf             # Active font
-├── termux.properties    # Settings
-└── themes/
-    ├── dark.colors
-    ├── light.colors
-    ├── hacker.colors
-    └── custom/
-        ├── ocean.colors
-        └── forest.colors
-
-Backup regularly:
-tar -czvf ~/storage/downloads/themes_backup.tar.gz ~/.termux/
-```
-
-### Common Mistakes to Avoid
-
-```
-❌ MISTAKE 1: Forgetting to reload
-Solution: Always run termux-reload-settings after changes
-
-❌ MISTAKE 2: Invalid color format
-Wrong: background=red
-Right: background=#ff0000
-
-❌ MISTAKE 3: Missing \[ \] in PS1 colors
-Wrong: \033[01;32m
-Right: \[\033[01;32m\]
-
-❌ MISTAKE 4: Not backing up before changes
-Solution: cp ~/.termux/colors.properties{,.backup}
-
-❌ MISTAKE 5: Font file not .ttf
-Solution: Only TrueType fonts work (.ttf or .otf)
-```
-
-### Efficiency Tips
-
-```
-⏱️ TIME SAVERS:
-
-1. Create theme aliases:
-   alias dark='theme dark'
-   alias light='theme light'
-   alias matrix='theme hacker'
-
-2. Quick font size change:
-   alias big='echo "termux.font.size=18" > ~/.termux/termux.properties && termux-reload-settings'
-
-3. Export current theme:
-   alias export-theme='cp ~/.termux/colors.properties ~/storage/downloads/theme_$(date +%Y%m%d).colors'
-
-4. Preview all colors:
-   for i in {0..15}; do printf "\033[38;5;${i}mColor $i\033[0m\n"; done
-```
-
----
-
-## 📊 VISUAL DIAGRAMS
-
-### Diagram 1: Styling Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    TERMUX STYLING ARCHITECTURE                               │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│   ┌─────────────────────────────────────────────────────────────────────┐   │
-│   │                    Termux:Styling App                               │   │
-│   │                                                                     │   │
-│   │   ┌─────────────┐    ┌─────────────┐                               │   │
-│   │   │   Colors    │    │   Fonts     │                               │   │
-│   │   │   Panel     │    │   Panel     │                               │   │
-│   │   └──────┬──────┘    └──────┬──────┘                               │   │
-│   │          │                  │                                        │   │
-│   │          ▼                  ▼                                        │   │
-│   │   ┌────────────────────────────────────────────────────────────┐    │   │
-│   │   │         ~/.termux/                                         │    │   │
-│   │   │                                                            │    │   │
-│   │   │   colors.properties  ←── Color definitions                 │    │   │
-│   │   │   font.ttf          ←── Custom font                        │    │   │
-│   │   │   termux.properties ←── Settings                           │    │   │
-│   │   │                                                            │    │   │
-│   │   └────────────────────────────────────────────────────────────┘    │   │
-│   │                                  │                                  │   │
-│   │                                  ▼                                  │   │
-│   │   ┌────────────────────────────────────────────────────────────┐    │   │
-│   │   │         termux-reload-settings                             │    │   │
-│   │   │         (Applies all changes)                              │    │   │
-│   │   └────────────────────────────────────────────────────────────┘    │   │
-│   │                                                                     │   │
-│   └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                             │
-│   ┌─────────────────────────────────────────────────────────────────────┐   │
-│   │                    ~/.bashrc (Shell Prompt)                         │   │
-│   │                                                                     │   │
-│   │   PS1="..." ←── Prompt customization                               │   │
-│   │   source ~/.bashrc  ←── Apply changes                              │   │
-│   │                                                                     │   │
-│   └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-### Diagram 2: Color Scheme Structure
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    COLOR SCHEME STRUCTURE                                    │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│   colors.properties                                                         │
-│   ─────────────────────────────────────────────────────────────────────    │
-│                                                                             │
-│   # Basic Colors                                                            │
-│   background=#1e1e2e    ───────────────────────────────────────┐           │
-│   foreground=#cdd6f4    ───────────────────────────────────────┤           │
-│   cursor=#f5e0dc        ───────────────────────────────────────┤           │
-│                                                              │           │
-│   # 16 ANSI Colors                                           │           │
-│   ┌─────────────────┬─────────────────┐                       │           │
-│   │   Normal        │   Bright        │                       │           │
-│   ├─────────────────┼─────────────────┤                       │           │
-│   │ color0  Black   │ color8  Black   │                       │           │
-│   │ color1  Red     │ color9  Red     │                       │           │
-│   │ color2  Green   │ color10 Green   │                       │           │
-│   │ color3  Yellow  │ color11 Yellow  │                       │           │
-│   │ color4  Blue    │ color12 Blue    │                       │           │
-│   │ color5  Magenta │ color13 Magenta │                       │           │
-│   │ color6  Cyan    │ color14 Cyan    │                       │           │
-│   │ color7  White   │ color15 White   │                       │           │
-│   └─────────────────┴─────────────────┘                       │           │
-│                                                              │           │
-│   ┌───────────────────────────────────────────────────────────▼─────────┐ │
-│   │                    VISUAL RESULT                                     │ │
-│   │   ┌─────────────────────────────────────────────────────────────┐   │ │
-│   │   │  background color fills entire terminal                     │   │ │
-│   │   │  foreground color = default text color                      │   │ │
-│   │   │  cursor color = cursor block/line color                     │   │ │
-│   │   │  color0-15 = used by programs for colored output            │   │ │
-│   │   │    - ls colors, vim syntax, grep highlights                 │   │ │
-│   │   │    - error messages (red), success (green), etc.            │   │ │
-│   │   └─────────────────────────────────────────────────────────────┘   │ │
-│   └─────────────────────────────────────────────────────────────────────┘ │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-### Diagram 3: PS1 Building Blocks
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    PS1 PROMPT BUILDING BLOCKS                               │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│   PS1 = "\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "│
-│          │           │  │ │           │          │           │              │
-│          │           │  │ │           │          │           └─ End       │
-│          │           │  │ │           │          └─ Working directory     │
-│          │           │  │ │           └─ Blue color                        │
-│          │           │  │ └─ Hostname                                       │
-│          │           │  └─ @ symbol                                         │
-│          │           └─ Username                                            │
-│          │               ┌─────────────────────────────────────────┐       │
-│          └─ Green color │ Format: \[\033[STYLE;COLORM\]            │       │
-│                          │                                         │       │
-│                          │ STYLE: 1=bold, 4=underline, 0=normal   │       │
-│                          │ COLOR: 31=red, 32=green, 34=blue       │       │
-│                          │ \[ = start non-printing sequence        │       │
-│                          │ \] = end non-printing sequence          │       │
-│                          └─────────────────────────────────────────┘       │
-│                                                                             │
-│   RESULTING PROMPT:                                                         │
-│   ┌─────────────────────────────────────────────────────────────────────┐   │
-│   │  user@hostname:~/current/directory $                                │   │
-│   │      ↑           ↑            ↑                                     │   │
-│   │   Green       Normal       Blue                                      │   │
-│   └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 🔗 RELATED CHAPTERS
-
-| Chapter | Title | Relevance |
-|---------|-------|-----------|
-| **Chapter 7** | Environment Variables | PS1 customization |
-| **Chapter 8** | Text Editors | Editing config files |
-| **Chapter 10** | Termux API Setup | termux-reload-settings |
-| **Chapter 15** | Shell Scripting | Theme switcher scripts |
-| **Chapter 45** | Termux Backup | Backup styling configs |
-
----
-
-## 🎮 INTERACTIVE QUIZ
-
-### Quiz: Test Your Styling Knowledge!
-
-**Question 1:** What app provides GUI styling options?
-- A) Termux Style
-- B) Termux:Styling
-- C) Termux Style Pro
-- D) Termux Colors
-
-**Question 2:** Which file stores color scheme?
-- A) `~/.termux/colors`
-- B) `~/.termux/colors.properties`
-- C) `~/.termux/theme`
-- D) `~/.termux/style`
-
-**Question 3:** What command applies styling changes?
-- A) `termux-apply`
-- B) `termux-reload`
-- C) `termux-reload-settings`
-- D) `termux-update`
-
-**Question 4:** What does PS1 control?
-- A) Font size
-- B) Terminal colors
-- C) Shell prompt
-- D) Cursor style
-
-**Question 5:** Which PS1 code shows username?
-- A) `\U`
-- B) `\u`
-- C) `\user`
-- D) `\n`
-
-**Question 6:** What format are colors in colors.properties?
-- A) RGB
-- B) HSL
-- C) Hex
-- D) Color names
-
-**Question 7:** How many ANSI colors are there?
-- A) 8
-- B) 10
-- C) 16
-- D) 256
-
-**Question 8:** Which file sets font size?
-- A) `.bashrc`
-- B) `colors.properties`
-- C) `termux.properties`
-- D) `font.ttf`
-
-**Question 9:** What does `\w` show in PS1?
-- A) Username
-- B) Working directory
-- C) Hostname
-- D) Date
-
-**Question 10:** How to access Style menu?
-- A) Settings button
-- B) Long press screen
-- C) Volume keys
-- D) Command line
-
-**Question 11:** Which is NOT a valid color property?
-- A) `background`
-- B) `foreground`
-- C) `text`
-- D) `cursor`
-
-**Question 12:** What's the default Termux background?
-- A) White
-- B) Black
-- C) Blue
-- D) Gray
-
-**Question 13:** How to add git branch to prompt?
-- A) Use `\g` code
-- B) Write a function
-- C) Enable in settings
-- D) Install git-prompt
-
-**Question 14:** What's the `\[\]` purpose in PS1?
-- A) Comments
-- B) Mark non-printing sequences
-- C) Group commands
-- D) Escape characters
-
-**Question 15:** How to change font size via file?
-- A) `font.size=N`
-- B) `termux.font.size=N`
-- C) `fontsize=N`
-- D) `set.font.size=N`
-
-### Quiz Answers
-
-| Q | Answer | Explanation |
-|---|--------|-------------|
-| 1 | **B** | Termux:Styling is the official add-on |
-| 2 | **B** | `~/.termux/colors.properties` |
-| 3 | **C** | `termux-reload-settings` applies changes |
-| 4 | **C** | PS1 defines the shell prompt |
-| 5 | **B** | `\u` shows username |
-| 6 | **C** | Hex format like `#ffffff` |
-| 7 | **C** | 16 ANSI colors (0-15) |
-| 8 | **C** | `termux.properties` for settings |
-| 9 | **B** | `\w` shows working directory |
-| 10 | **B** | Long press screen → Style |
-| 11 | **C** | `text` is not valid; use `foreground` |
-| 12 | **B** | Default background is black |
-| 13 | **B** | Need to write a parse_git function |
-| 14 | **B** | Marks non-printing escape sequences |
-| 15 | **B** | `termux.font.size=N` in termux.properties |
-
----
-
-## 🔄 TRY IT YOURSELF CHALLENGES
-
-### Challenge 1: Create Custom Theme
-```bash
-# Task: Design your own color scheme
-# 1. Create a new theme file
-# 2. Choose colors for all 16 ANSI colors
-# 3. Set background and foreground
-# 4. Apply and test
-# 5. Share with others
-
-# Your colors.properties:
-```
-
-### Challenge 2: Fancy PS1 Prompt
-```bash
-# Task: Create an informative prompt
-# Include: username, hostname, directory, git branch, time
-# Use: Colors for each element
-# Add: Newline before prompt
-
-# Your PS1 value:
-```
-
-### Challenge 3: Theme Switcher Script
-```bash
-# Task: Create a complete theme manager
-# 1. List available themes
-# 2. Preview a theme
-# 3. Apply selected theme
-# 4. Backup current theme
-# 5. Restore from backup
-
-# Your script:
-```
-
-### Challenge 4: Time-Based Theme
-```bash
-# Task: Auto-switch themes
-# Morning (6-12): Light theme
-# Afternoon (12-18): Default theme  
-# Evening (18-22): Dark theme
-# Night (22-6): Hacker theme
-
-# Your function:
-```
-
-### Challenge 5: Style Export Package
-```bash
-# Task: Create shareable style package
-# Include: colors, font, properties, PS1
-# Create install script
-# Test on fresh Termux
-
-# Your package structure:
-```
 
 ---
 

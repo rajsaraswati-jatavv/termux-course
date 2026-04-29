@@ -3066,3 +3066,724 @@ Network Distance: 1 hop
 ---
 
 *Chapter 25 UPGRADED with 10 POWERFUL features! 🚀*
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>Click to reveal Quiz Questions (15 Questions)</b></summary>
+
+### Question 1: What does Nmap stand for?
+<details>
+<summary>Show Answer</summary>
+Nmap stands for "Network Mapper". It's a free, open-source network scanning tool created by Gordon Lyon (Fyodor) in 1997 for network discovery and security auditing.
+</details>
+
+### Question 2: What is the difference between -sS and -sT scans?
+<details>
+<summary>Show Answer</summary>
+-sS (SYN scan) is a "half-open" scan that doesn't complete the TCP handshake, making it faster and stealthier but requires root. -sT (TCP Connect scan) completes the full TCP connection, works without root, but is slower and easily detected.
+</details>
+
+### Question 3: Which Nmap flag is used for version detection?
+<details>
+<summary>Show Answer</summary>
+The -sV flag enables version detection. It probes open ports to determine service names and versions, which helps identify potential vulnerabilities.
+</details>
+
+### Question 4: What does the -p- flag do in Nmap?
+<details>
+<summary>Show Answer</summary>
+The -p- flag scans all 65535 TCP ports (from port 1 to 65535). Without this flag, Nmap only scans the 1000 most common ports by default.
+</details>
+
+### Question 5: What is OS detection in Nmap?
+<details>
+<summary>Show Answer</summary>
+OS detection (-O flag) uses TCP/IP fingerprinting to identify the target's operating system. It analyzes how the target's TCP/IP stack responds to specially crafted packets.
+</details>
+
+### Question 6: Which timing template is best for IDS evasion?
+<details>
+<summary>Show Answer</summary>
+-T0 (Paranoid) and -T1 (Sneaky) are best for IDS evasion. They send packets very slowly (T0 waits up to 5 minutes between probes) to avoid detection.
+</details>
+
+### Question 7: What port states can Nmap identify?
+<details>
+<summary>Show Answer</summary>
+Nmap identifies six port states: open, closed, filtered, unfiltered, open|filtered, and closed|filtered. Each state indicates different accessibility and service availability.
+</details>
+
+### Question 8: How do you save Nmap output in all formats?
+<details>
+<summary>Show Answer</summary>
+Use the -oA flag followed by the base filename: `nmap -oA results target.com`. This creates .nmap (normal), .xml, and .gnmap (grepable) files simultaneously.
+</details>
+
+### Question 9: What is the purpose of the -A flag in Nmap?
+<details>
+<summary>Show Answer</summary>
+The -A flag enables "aggressive" scanning, combining -O (OS detection), -sV (version detection), -sC (script scanning), and --traceroute in one command.
+</details>
+
+### Question 10: What is a SYN scan also known as?
+<details>
+<summary>Show Answer</summary>
+SYN scan (-sS) is also known as "half-open scan" or "stealth scan" because it doesn't complete the TCP three-way handshake, sending RST instead of ACK after receiving SYN-ACK.
+</details>
+
+### Question 11: Which Nmap command scans only the top 20 ports?
+<details>
+<summary>Show Answer</summary>
+Use `nmap --top-ports 20 target.com` to scan only the 20 most common ports. This provides quick results when full port scanning isn't necessary.
+</details>
+
+### Question 12: What is the default number of ports Nmap scans?
+<details>
+<summary>Show Answer</summary>
+By default, Nmap scans the 1000 most common TCP ports. This can be changed with -F (fast scan - 100 ports), -p- (all ports), or --top-ports N.
+</details>
+
+### Question 13: Why is UDP scanning slower than TCP scanning?
+<details>
+<summary>Show Answer</summary>
+UDP scanning is slower because UDP is connectionless - there's no acknowledgment. Nmap must wait for timeouts when no response comes, and open ports may respond differently or not at all.
+</details>
+
+### Question 14: What does the -Pn flag do?
+<details>
+<summary>Show Answer</summary>
+The -Pn flag skips host discovery (ping) and treats all hosts as online. It's useful when firewalls block ICMP, which would otherwise cause Nmap to skip scanning the host.
+</details>
+
+### Question 15: What is the legal consideration when using Nmap?
+<details>
+<summary>Show Answer</summary>
+Port scanning without permission is illegal in many countries. Only scan networks you own or have explicit written permission to test. Use authorized test targets like scanme.nmap.org for practice.
+</details>
+
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+<details>
+<summary><b>Click to reveal Interview Questions (10 Questions)</b></summary>
+
+### Q1: Explain how a TCP SYN scan works in detail.
+**Answer:**
+A TCP SYN scan (-sS) works by:
+1. Sending a SYN packet to the target port
+2. If port is open: Target responds with SYN-ACK
+3. Nmap sends RST to abort connection (doesn't complete handshake)
+4. If port is closed: Target responds with RST
+5. If filtered: No response or ICMP error
+
+This is called "half-open" because the connection is never fully established. It's faster and stealthier than full TCP connects but requires root privileges.
+
+---
+
+### Q2: How would you approach scanning a target with a firewall?
+**Answer:**
+When scanning firewalled targets:
+1. Use -Pn to skip ping discovery
+2. Use slower timing (-T2 or -T1) to avoid detection
+3. Try fragmented packets (-f) to bypass simple firewalls
+4. Use source port manipulation (--source-port 53 or -g 53)
+5. Use decoy scans (-D RND:10) to mask origin
+6. Combine multiple host discovery techniques (-PS, -PA, -PU)
+7. Test specific ports that might be allowed
+
+---
+
+### Q3: What information can Nmap provide about a target?
+**Answer:**
+Nmap can discover:
+- **Live hosts**: Which IP addresses are active
+- **Open ports**: Which services are accessible
+- **Service versions**: Specific software and versions running
+- **Operating system**: Through TCP/IP fingerprinting
+- **Network topology**: Via traceroute
+- **Vulnerabilities**: Through NSE scripts
+- **Firewall presence**: Through filtered port detection
+- **Network services**: HTTP, SSH, database servers, etc.
+
+---
+
+### Q4: Compare TCP Connect scan vs SYN scan performance and detection.
+**Answer:**
+
+| Aspect | SYN Scan (-sS) | TCP Connect (-sT) |
+|--------|---------------|-------------------|
+| Speed | Fast | Slower |
+| Privileges | Root required | No root needed |
+| Detection | Harder to detect | Easily logged |
+| Reliability | Good | Best |
+| Logging | Partially logged | Fully logged |
+| Compatibility | Requires raw sockets | Works everywhere |
+
+---
+
+### Q5: How would you use Nmap for network inventory?
+**Answer:**
+For network inventory:
+1. **Host discovery**: `nmap -sn 192.168.1.0/24` - Find all live hosts
+2. **Service inventory**: `nmap -sV 192.168.1.0/24` - Identify services
+3. **OS detection**: `nmap -O target` - Identify operating systems
+4. **Save results**: `nmap -oA inventory target` - Document findings
+5. **Script scanning**: `nmap --script default,safe target` - Get detailed info
+6. **Regular scanning**: Automate with cron jobs for monitoring changes
+
+---
+
+### Q6: Explain the significance of port states in Nmap output.
+**Answer:**
+- **Open**: Service actively accepting connections - security concern
+- **Closed**: Port accessible but no service - may become vulnerable later
+- **Filtered**: Firewall blocking access - requires further investigation
+- **Unfiltered**: Accessible but state unknown - rare state
+- **Open|Filtered**: Uncertain - typical for UDP scans
+- **Closed|Filtered**: Uncertain - seen in some IP ID idle scans
+
+Each state provides intelligence about network security posture.
+
+---
+
+### Q7: How do Nmap scripts (NSE) enhance scanning capabilities?
+**Answer:**
+Nmap Scripting Engine (NSE) extends Nmap with:
+- **Vulnerability detection**: Check for known CVEs
+- **Authentication testing**: Default credentials, weak auth
+- **Discovery**: Find additional services, subdomains
+- **Exploitation**: Safe exploit verification
+- **Brute force**: Credential testing
+- **Malware detection**: Backdoor identification
+
+Scripts are written in Lua and categorized for organized usage.
+
+---
+
+### Q8: What strategies optimize Nmap scan time?
+**Answer:**
+1. **Use appropriate timing**: -T4 for fast networks
+2. **Limit ports**: --top-ports 100 instead of -p-
+3. **Parallel scanning**: Scan multiple hosts simultaneously
+4. **Exclude known ports**: --exclude-ports for efficiency
+5. **Use -F for fast scan**: Only 100 common ports
+6. **Adjust retries**: --max-retries lower for faster results
+7. **Set timeouts**: --host-timeout to skip slow hosts
+
+---
+
+### Q9: How would you approach UDP scanning challenges?
+**Answer:**
+UDP scanning challenges and solutions:
+- **Challenge**: No connection acknowledgment
+- **Solution**: Wait for ICMP port unreachable for closed ports
+- **Challenge**: Slow due to timeouts
+- **Solution**: Use --top-ports to limit scope
+- **Challenge**: Open ports may not respond
+- **Solution**: Combine with version detection (-sV)
+- **Challenge**: False positives
+- **Solution**: Use --version-intensity for verification
+
+---
+
+### Q10: Describe the ethical considerations when using Nmap.
+**Answer:**
+Ethical Nmap usage:
+1. **Authorization**: Only scan networks you own or have permission for
+2. **Documentation**: Keep records of authorized testing scope
+3. **Notification**: Inform stakeholders before scanning
+4. **Impact awareness**: Understand that scans can trigger alerts
+5. **Legal compliance**: Know local laws about network scanning
+6. **Responsible disclosure**: Report vulnerabilities appropriately
+7. **Professional standards**: Follow industry guidelines (OSSTMM, PTES)
+
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔥 SCENARIO 1: Network Asset Discovery                                      ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Goal: Discover all devices on your network                                   ║
+║                                                                               ║
+║  Step 1: Find your network range                                             ║
+║    $ ip route | grep default                                                 ║
+║    → Note your network (e.g., 192.168.1.0/24)                                ║
+║                                                                               ║
+║  Step 2: Quick host discovery                                                ║
+║    $ nmap -sn 192.168.1.0/24                                                 ║
+║    → Lists all live hosts                                                    ║
+║                                                                               ║
+║  Step 3: Detailed service scan of discovered hosts                           ║
+║    $ nmap -sS -sV -O 192.168.1.1-20                                          ║
+║    → Identifies services and OS                                              ║
+║                                                                               ║
+║  Step 4: Save inventory report                                               ║
+║    $ nmap -sS -sV -O -oA network_inventory 192.168.1.0/24                    ║
+║                                                                               ║
+║  Output: Complete network documentation                                       ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔥 SCENARIO 2: Security Audit of a Web Server                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Target: Authorized web server security assessment                            ║
+║                                                                               ║
+║  Step 1: Full port scan                                                      ║
+║    $ nmap -p- target.com                                                     ║
+║    → Find all open ports                                                     ║
+║                                                                               ║
+║  Step 2: Service version detection                                           ║
+║    $ nmap -sV -p 80,443,8080 target.com                                      ║
+║    → Identify web server software                                            ║
+║                                                                               ║
+║  Step 3: Vulnerability scan                                                  ║
+║    $ nmap --script vuln target.com                                           ║
+║    → Check for known vulnerabilities                                         ║
+║                                                                               ║
+║  Step 4: SSL/TLS security check                                              ║
+║    $ nmap --script ssl-enum-ciphers -p 443 target.com                        ║
+║    → Analyze SSL configuration                                               ║
+║                                                                               ║
+║  Step 5: Generate report                                                     ║
+║    $ nmap -A -oA security_audit target.com                                   ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔥 SCENARIO 3: Firewall Rule Verification                                   ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Goal: Verify firewall is blocking unauthorized access                        ║
+║                                                                               ║
+║  Step 1: Scan from outside network                                           ║
+║    $ nmap -Pn -p 22,80,443,3306,3389 target.com                             ║
+║    → Only approved ports should be open                                      ║
+║                                                                               ║
+║  Step 2: Full port scan for unexpected openings                              ║
+║    $ nmap -Pn -p- target.com                                                 ║
+║    → Identify any unintended open ports                                      ║
+║                                                                               ║
+║  Step 3: Verify UDP rules                                                    ║
+║    $ nmap -sU --top-ports 50 target.com                                      ║
+║    → Check UDP port filtering                                                ║
+║                                                                               ║
+║  Step 4: Test with different source ports                                    ║
+║    $ nmap --source-port 53 target.com                                        ║
+║    → Verify firewall doesn't trust DNS port                                  ║
+║                                                                               ║
+║  Compare: Internal vs external scan results                                  ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔥 SCENARIO 4: Penetration Testing Preparation                              ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Phase: Reconnaissance and enumeration                                        ║
+║                                                                               ║
+║  Step 1: Host discovery (ping sweep)                                         ║
+║    $ nmap -sn 192.168.1.0/24 -oA hosts                                       ║
+║                                                                               ║
+║  Step 2: Port enumeration                                                   ║
+║    $ nmap -sS -p- -T4 --min-rate 1000 target -oA ports                       ║
+║                                                                               ║
+║  Step 3: Service enumeration                                                ║
+║    $ nmap -sV -sC -p <open_ports> target -oA services                        ║
+║                                                                               ║
+║  Step 4: OS fingerprinting                                                  ║
+║    $ nmap -O target -oA os_detect                                            ║
+║                                                                               ║
+║  Step 5: Vulnerability identification                                       ║
+║    $ nmap --script vuln,safe target -oA vulns                                ║
+║                                                                               ║
+║  Document: All findings for exploitation phase                               ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔥 SCENARIO 5: Troubleshooting Network Services                             ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Issue: Users reporting SSH connectivity problems                            ║
+║                                                                               ║
+║  Step 1: Check if SSH port is accessible                                     ║
+║    $ nmap -p 22 server.example.com                                           ║
+║    → Verify port state                                                       ║
+║                                                                               ║
+║  Step 2: Check SSH service version                                           ║
+║    $ nmap -sV -p 22 server.example.com                                       ║
+║    → Identify SSH version                                                    ║
+║                                                                               ║
+║  Step 3: Check SSH service details                                           ║
+║    $ nmap --script ssh-auth-methods -p 22 server.example.com                 ║
+║    → Verify authentication methods                                           ║
+║                                                                               ║
+║  Step 4: Check firewall rules (from different locations)                     ║
+║    $ nmap -Pn -p 22 server.example.com                                       ║
+║    → Test from inside and outside network                                    ║
+║                                                                               ║
+║  Step 5: Verify SSH is listening                                             ║
+║    $ nmap --script ssh-hostkey -p 22 server.example.com                      ║
+║    → Get SSH host key information                                            ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Nmap Scan Types Comparison
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         NMAP SCAN TYPES ARCHITECTURE                            │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  TCP CONNECT SCAN (-sT)                    SYN SCAN (-sS)                       │
+│  ┌─────────────────────┐                  ┌─────────────────────┐              │
+│  │ CLIENT              │                  │ CLIENT              │              │
+│  │ ────────SYN────────►│                  │ ────────SYN────────►│              │
+│  │                     │                  │                     │              │
+│  │ ◄──────SYN-ACK──────│                  │ ◄──────SYN-ACK──────│              │
+│  │                     │                  │                     │              │
+│  │ ────────ACK────────►│ ◄── COMPLETE     │ ────────RST────────►│ ◄── ABORTED  │
+│  │                     │                  │                     │              │
+│  │ Connection Made     │                  │ No Connection Made  │              │
+│  │ Logged by Server    │                  │ Not Logged          │              │
+│  │ No Root Required    │                  │ Root Required       │              │
+│  └─────────────────────┘                  └─────────────────────┘              │
+│                                                                                 │
+│  ─────────────────────────────────────────────────────────────────────────────  │
+│                                                                                 │
+│  UDP SCAN (-sU)                           FIN/NULL/XMAS SCANS                  │
+│  ┌─────────────────────┐                  ┌─────────────────────┐              │
+│  │ CLIENT              │                  │ CLIENT              │              │
+│  │ ────────UDP────────►│                  │ ────FIN/NULL/XMAS──►│              │
+│  │                     │                  │                     │              │
+│  │ ◄──ICMP Unreach──── │ (Closed)         │ ◄───────RST──────── │ (Closed)     │
+│  │   or No Response    │ (Open/Filtered)  │   or No Response    │ (Open)       │
+│  │                     │                  │                     │              │
+│  │ Slower due to       │                  │ Firewall Evasion    │              │
+│  │ timeouts            │                  │ Techniques          │              │
+│  └─────────────────────┘                  └─────────────────────┘              │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: Nmap Output Formats Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         NMAP OUTPUT FORMATS                                     │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│                        ┌─────────────────────┐                                 │
+│                        │   Nmap Scan         │                                 │
+│                        │   nmap target.com   │                                 │
+│                        └──────────┬──────────┘                                 │
+│                                   │                                             │
+│                                   ▼                                             │
+│                    ┌────────────────────────────────┐                           │
+│                    │      OUTPUT FLAGS              │                           │
+│                    ├────────────────────────────────┤                           │
+│                    │  -oN  │ Normal (human readable)│                          │
+│                    │  -oX  │ XML (machine readable) │                          │
+│                    │  -oG  │ Grepable (grep/awk)    │                          │
+│                    │  -oA  │ All formats at once    │                          │
+│                    └───────────────┬────────────────┘                           │
+│                                    │                                            │
+│              ┌─────────────────────┼─────────────────────┐                      │
+│              │                     │                     │                      │
+│              ▼                     ▼                     ▼                      │
+│   ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐              │
+│   │   scan.nmap      │ │   scan.xml       │ │   scan.gnmap     │              │
+│   ├──────────────────┤ ├──────────────────┤ ├──────────────────┤              │
+│   │ - Human readable │ │ - Parse by tools │ │ - Easy to grep   │              │
+│   │ - For reports    │ │ - Import to DB   │ │ - Quick analysis │              │
+│   │ - Documentation  │ │ - Zenmap import  │ │ - Bash scripts   │              │
+│   └──────────────────┘ └──────────────────┘ └──────────────────┘              │
+│                                                                                 │
+│   Example Usage:                                                                │
+│   nmap -oA myscan target.com                                                    │
+│   → Creates: myscan.nmap, myscan.xml, myscan.gnmap                              │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: Timing Templates Performance
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         NMAP TIMING TEMPLATES                                   │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  Speed ◄────────────────────────────────────────────────────────────► Stealth   │
+│                                                                                 │
+│  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐            │
+│  │  -T5   │ │  -T4   │ │  -T3   │ │  -T2   │ │  -T1   │ │  -T0   │            │
+│  │ Insane │ │Aggress │ │ Normal │ │ Polite │ │ Sneaky │ │Paranoid│            │
+│  └───┬────┘ └───┬────┘ └───┬────┘ └───┬────┘ └───┬────┘ └───┬────┘            │
+│      │          │          │          │          │          │                   │
+│      │          │          │          │          │          │                   │
+│      ▼          ▼          ▼          ▼          ▼          ▼                   │
+│  ┌────────────────────────────────────────────────────────────────────────┐    │
+│  │                                                                         │    │
+│  │  FAST ──────────────────────────────────────────────────────── SLOW     │    │
+│  │                                                                         │    │
+│  │  DETECTABLE ──────────────────────────────────────────── STEALTHY       │    │
+│  │                                                                         │    │
+│  │  Use Case:                                                              │    │
+│  │  -T5: Very fast networks, quick assessment                              │    │
+│  │  -T4: Fast networks, internal scans (RECOMMENDED)                        │    │
+│  │  -T3: Default, general use                                               │    │
+│  │  -T2: Shared networks, polite scanning                                   │    │
+│  │  -T1: IDS evasion, very stealthy                                        │    │
+│  │  -T0: Maximum stealth, 5 min between probes                             │    │
+│  │                                                                         │    │
+│  └────────────────────────────────────────────────────────────────────────┘    │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter Type | Chapter Number | Title | Relationship |
+|-------------|----------------|-------|--------------|
+| **Prerequisite** | Ch 24 | Networking Basics | Network fundamentals required |
+| **Current** | **Ch 25** | **Nmap Installation & Basics** | **You are here** |
+| **Next** | Ch 26 | Nmap Advanced | Advanced scanning techniques |
+| **Related** | Ch 27 | Netcat Mastery | Port scanning with netcat |
+| **Related** | Ch 28 | HTTP Tools | Web service scanning |
+| **Related** | Ch 29 | DNS & Domain Tools | DNS enumeration |
+| **Future** | Ch 30+ | Security Tools | Penetration testing applications |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Comprehensive Network Scanner Script
+
+```bash
+#!/bin/bash
+# nmap-comprehensive.sh - Multi-phase network scanning
+
+TARGET=$1
+OUTPUT_DIR="nmap_scan_$(date +%Y%m%d_%H%M%S)"
+
+if [ -z "$TARGET" ]; then
+    echo "Usage: $0 <target>"
+    exit 1
+fi
+
+mkdir -p "$OUTPUT_DIR"
+
+echo "[*] Starting comprehensive scan of $TARGET"
+
+# Phase 1: Host discovery
+echo "[*] Phase 1: Host Discovery..."
+nmap -sn "$TARGET" -oN "$OUTPUT_DIR/01_host_discovery.txt"
+
+# Phase 2: Quick port scan
+echo "[*] Phase 2: Quick Port Scan..."
+nmap -T4 -F "$TARGET" -oN "$OUTPUT_DIR/02_quick_scan.txt"
+
+# Phase 3: Full TCP port scan
+echo "[*] Phase 3: Full TCP Port Scan..."
+nmap -T4 -p- "$TARGET" -oN "$OUTPUT_DIR/03_full_tcp.txt"
+
+# Phase 4: Service version detection
+echo "[*] Phase 4: Service Version Detection..."
+nmap -T4 -sV "$TARGET" -oN "$OUTPUT_DIR/04_versions.txt"
+
+# Phase 5: Default scripts
+echo "[*] Phase 5: Default Script Scan..."
+nmap -T4 -sC "$TARGET" -oN "$OUTPUT_DIR/05_scripts.txt"
+
+# Phase 6: OS detection
+echo "[*] Phase 6: OS Detection..."
+nmap -T4 -O "$TARGET" -oN "$OUTPUT_DIR/06_os.txt"
+
+# Phase 7: Vulnerability scan
+echo "[*] Phase 7: Vulnerability Scan..."
+nmap --script vuln "$TARGET" -oN "$OUTPUT_DIR/07_vulns.txt"
+
+# Generate summary
+echo "[*] Generating Summary..."
+grep -h "open" "$OUTPUT_DIR"/*.txt | sort -u > "$OUTPUT_DIR/summary_open_ports.txt"
+
+echo "[+] Scan complete! Results in $OUTPUT_DIR"
+```
+
+### Advanced Technique 2: Nmap Parser for Quick Analysis
+
+```bash
+#!/bin/bash
+# nmap-parser.sh - Parse Nmap grepable output
+
+FILE=$1
+
+if [ -z "$FILE" ]; then
+    echo "Usage: $0 <nmap_grepable_file.gnmap>"
+    exit 1
+fi
+
+echo "=== NMAP SCAN ANALYSIS ==="
+
+# Count hosts
+echo -e "\n[+] Hosts Discovered:"
+grep "Host:" "$FILE" | wc -l
+
+# List open ports
+echo -e "\n[+] All Open Ports:"
+grep "Ports:" "$FILE" | \
+    sed 's/.*Ports: //' | \
+    tr ',' '\n' | \
+    grep "/open/" | \
+    cut -d'/' -f1 | \
+    sort -n | uniq -c | sort -rn
+
+# List hosts with specific port
+echo -e "\n[+] Hosts with Port 80 Open:"
+grep "80/open/tcp" "$FILE" | cut -d' ' -f2
+
+# Service summary
+echo -e "\n[+] Service Summary:"
+grep "Ports:" "$FILE" | \
+    sed 's/.*Ports: //' | \
+    tr ',' '\n' | \
+    grep "/open/" | \
+    cut -d'/' -f5 | \
+    sort | uniq -c | sort -rn | head -10
+
+echo -e "\n=== ANALYSIS COMPLETE ==="
+```
+
+### Advanced Technique 3: Target-Specific Scan Profiles
+
+```bash
+#!/bin/bash
+# nmap-profiles.sh - Predefined scan profiles
+
+TARGET=$1
+PROFILE=$2
+
+show_usage() {
+    echo "Usage: $0 <target> <profile>"
+    echo ""
+    echo "Profiles:"
+    echo "  quick    - Fast scan of common ports"
+    echo "  full     - All ports with version detection"
+    echo "  stealth  - Slow, evasive scanning"
+    echo "  vuln     - Vulnerability focused scan"
+    echo "  web      - Web server specific scan"
+    echo "  db       - Database server scan"
+    echo "  windows  - Windows-specific scan"
+}
+
+if [ -z "$TARGET" ] || [ -z "$PROFILE" ]; then
+    show_usage
+    exit 1
+fi
+
+case "$PROFILE" in
+    quick)
+        nmap -T4 -F -sV "$TARGET"
+        ;;
+    full)
+        nmap -T4 -p- -sV -sC -O "$TARGET"
+        ;;
+    stealth)
+        nmap -T1 -f -sS -p- --data-length 50 "$TARGET"
+        ;;
+    vuln)
+        nmap --script vuln,safe -sV "$TARGET"
+        ;;
+    web)
+        nmap -sV -p 80,443,8080,8443 --script http-* "$TARGET"
+        ;;
+    db)
+        nmap -sV -p 1433,1521,3306,5432,27017,6379 \
+             --script "*-auth,*-enum" "$TARGET"
+        ;;
+    windows)
+        nmap -sV -p 135,139,445,3389 \
+             --script smb-*,rdp-*,ms17-010 "$TARGET"
+        ;;
+    *)
+        echo "Unknown profile: $PROFILE"
+        show_usage
+        exit 1
+        ;;
+esac
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Concepts Mastered
+
+- [ ] **Nmap Purpose**: Network discovery and security auditing
+- [ ] **Port Categories**: Well-known (0-1023), registered, dynamic
+- [ ] **Port States**: open, closed, filtered, unfiltered
+- [ ] **Scan Types**: TCP Connect, SYN, UDP, Version detection
+- [ ] **OS Detection**: TCP/IP fingerprinting techniques
+- [ ] **Timing Templates**: T0-T5 for different scenarios
+
+### ✅ Commands Learned
+
+- [ ] `nmap <target>` - Basic scan
+- [ ] `nmap -sS <target>` - SYN scan (stealth)
+- [ ] `nmap -sT <target>` - TCP Connect scan
+- [ ] `nmap -sU <target>` - UDP scan
+- [ ] `nmap -sV <target>` - Version detection
+- [ ] `nmap -O <target>` - OS detection
+- [ ] `nmap -A <target>` - Aggressive scan
+- [ ] `nmap -p <ports>` - Port specification
+- [ ] `nmap -T<0-5>` - Timing templates
+- [ ] `nmap -oA <basename>` - Output all formats
+
+### ✅ Skills Acquired
+
+- [ ] Network host discovery
+- [ ] Port scanning methodology
+- [ ] Service identification
+- [ ] Operating system fingerprinting
+- [ ] Output analysis and documentation
+- [ ] Legal and ethical considerations
+
+### ✅ Best Practices Learned
+
+- [ ] Always get authorization before scanning
+- [ ] Use appropriate timing templates
+- [ ] Start with quick scans, then detailed
+- [ ] Save output in multiple formats
+- [ ] Document all scanning activities
+- [ ] Verify results with multiple methods
+
+### 📚 Recommended Practice
+
+1. Practice with scanme.nmap.org (authorized target)
+2. Scan your own local network
+3. Try different scan types and compare results
+4. Practice with various timing templates
+5. Create custom scan profiles for common tasks

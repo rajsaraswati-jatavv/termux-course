@@ -1,4 +1,16 @@
-# Chapter 59: Termux Performance Tips
+# ⚡ Chapter 59: Termux Performance Tips
+
+```
+╔═════════════════════════════════════════════════════════════════════════════╗
+║  ⚡ CHAPTER 59: TERMUX PERFORMANCE TIPS - SPEED UP YOUR TERMINAL ⚡        ║
+╠═════════════════════════════════════════════════════════════════════════════╣
+║  📚 Module: 10 - Troubleshooting                                           ║
+║  📖 Chapter: 59 of 61                                                      ║
+║  ⏱️  Duration: 15-20 Minutes                                                ║
+║  ⭐ Difficulty: Intermediate                                               ║
+║  🎯 Focus: Storage, Memory, CPU & Battery Optimization                    ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+```
 
 > **Module:** 10 - Troubleshooting  
 > **Chapter:** 59 of 61  
@@ -2152,6 +2164,893 @@ termux performance tips, termux optimization guide
 | Ch43 | Task Automation |
 | Ch58 | Common Errors and Fixes |
 | Ch60 | Termux Backup and Restore |
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>Q1: Which command shows disk usage in human-readable format?</b></summary>
+<br>
+<b>Answer:</b> `df -h`
+<br>
+The -h flag makes the output human-readable (shows sizes in KB, MB, GB instead of blocks).
+</details>
+
+<details>
+<summary><b>Q2: What does OOM stand for and why is it important for Termux?</b></summary>
+<br>
+<b>Answer:</b> OOM stands for "Out of Memory". It's important because Android's OOM Killer can terminate Termux when system memory is low. Setting battery to "Unrestricted" and managing memory usage helps prevent this.
+</details>
+
+<details>
+<summary><b>Q3: Which command creates a 1GB swap file?</b></summary>
+<br>
+<b>Answer:</b> `dd if=/dev/zero of=~/swapfile bs=1M count=1024`
+<br>
+This creates a 1GB file filled with zeros. After creating, you need to set permissions with `chmod 600 ~/swapfile` and enable it with `swapon ~/swapfile` (requires root).
+</details>
+
+<details>
+<summary><b>Q4: What is the difference between `pkg clean` and `pkg autoclean`?</b></summary>
+<br>
+<b>Answer:</b> `pkg clean` removes all cached package files from /var/cache/apt/archives/. `pkg autoclean` only removes package files that can no longer be downloaded (obsolete packages).
+</details>
+
+<details>
+<summary><b>Q5: How do you run a command with higher CPU priority?</b></summary>
+<br>
+<b>Answer:</b> `nice -n -10 <command>`
+<br>
+Lower nice values (-20 to -1) mean higher priority. Values 1-19 mean lower priority. Default is 0. Negative values typically require root.
+</details>
+
+<details>
+<summary><b>Q6: What command finds the top 10 largest files/folders in your home directory?</b></summary>
+<br>
+<b>Answer:</b> `du -sh ~/* 2>/dev/null | sort -rh | head -10`
+<br>
+This calculates disk usage for each item in home, sorts by size in reverse order, and shows top 10.
+</details>
+
+<details>
+<summary><b>Q7: What does `termux-wake-lock` do and when should you use it?</b></summary>
+<br>
+<b>Answer:</b> It keeps the CPU running even when the screen is off. Use it for long-running tasks like downloads or compilation. Always release with `termux-wake-unlock` when done to save battery.
+</details>
+
+<details>
+<summary><b>Q8: Which tool is better than `top` for monitoring processes and why?</b></summary>
+<br>
+<b>Answer:</b> `htop` is better because it provides an interactive, colorful interface with mouse support, tree view, and easier process management. Install with `pkg install htop`.
+</details>
+
+<details>
+<summary><b>Q9: How do you compile software using all CPU cores?</b></summary>
+<br>
+<b>Answer:</b> `make -j$(nproc)`
+<br>
+The -j flag specifies parallel jobs. `nproc` returns the number of CPU cores. This can speed up compilation by 4-8x on multi-core devices.
+</details>
+
+<details>
+<summary><b>Q10: What is ZRAM and how does it differ from swap?</b></summary>
+<br>
+<b>Answer:</b> ZRAM is compressed RAM that acts as swap memory. Unlike traditional swap (on disk), ZRAM is much faster but limited by physical RAM. Android typically manages ZRAM automatically.
+</details>
+
+<details>
+<summary><b>Q11: How do you run a process that persists after closing Termux?</b></summary>
+<br>
+<b>Answer:</b> `nohup <command> &` or use `screen`/`tmux`
+<br>
+`nohup` prevents the process from being terminated when the shell exits. For better management, use screen or tmux sessions.
+</details>
+
+<details>
+<summary><b>Q12: What Python cache folders can be safely deleted?</b></summary>
+<br>
+<b>Answer:</b> `__pycache__` folders and `.pyc` files
+<br>
+Command: `find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null`
+</details>
+
+<details>
+<summary><b>Q13: How do you check a process's OOM score?</b></summary>
+<br>
+<b>Answer:</b> `cat /proc/<PID>/oom_score`
+<br>
+Higher score = more likely to be killed by OOM killer. The adjustment value is in `/proc/<PID>/oom_score_adj`.
+</details>
+
+<details>
+<summary><b>Q14: What Android setting prevents Termux from being killed in background?</b></summary>
+<br>
+<b>Answer:</b> Settings → Apps → Termux → Battery → Unrestricted
+<br>
+This prevents Android's battery optimization from killing Termux during long operations.
+</details>
+
+<details>
+<summary><b>Q15: Which benchmark tool can test CPU performance in Termux?</b></summary>
+<br>
+<b>Answer:</b> `sysbench cpu --cpu-max-prime=20000 run`
+<br>
+Install with `pkg install sysbench`. Higher events per second indicates better performance.
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+**Q1: A user reports Termux is running very slowly. How would you diagnose and fix this?**
+
+**Answer:**
+1. Check memory: `free -h` - if memory is full, identify and kill memory-heavy processes
+2. Check storage: `df -h` - if storage is nearly full, clean caches with `pkg clean`
+3. Check processes: `htop` - look for runaway processes consuming CPU
+4. Check for zombie processes: `ps aux | grep Z`
+5. Verify battery settings are set to Unrestricted
+6. Check if multiple heavy tools are running simultaneously
+7. Consider if swap would help for memory-intensive tasks
+
+**Q2: Explain the difference between nice values and OOM scores. When would you use each?**
+
+**Answer:**
+- **Nice values** (-20 to 19): Control CPU scheduling priority. Lower values = higher priority. Use when you want to ensure important processes get more CPU time or background tasks don't interfere with foreground work.
+
+- **OOM scores** (0-1000 typically): Control which processes get killed when memory is exhausted. Lower values = less likely to be killed. Use to protect critical processes from OOM killer (requires root for negative values).
+
+Key difference: Nice affects performance during normal operation; OOM score only matters during memory exhaustion events.
+
+**Q3: How would you set up an automated performance monitoring system in Termux?**
+
+**Answer:**
+```bash
+#!/bin/bash
+# Create monitoring script
+LOG_FILE=~/performance.log
+
+echo "=== $(date) ===" >> $LOG_FILE
+echo "Memory: $(free -h | grep Mem)" >> $LOG_FILE
+echo "Storage: $(df -h /data | tail -1)" >> $LOG_FILE
+echo "Top CPU: $(ps aux --sort=-%cpu | head -3)" >> $LOG_FILE
+echo "Top Memory: $(ps aux --sort=-%mem | head -3)" >> $LOG_FILE
+echo "---" >> $LOG_FILE
+
+# Add to crontab for every 30 minutes
+# crontab -e
+# */30 * * * * ~/monitor.sh
+```
+
+**Q4: Describe a scenario where using screen or tmux is essential for performance testing.**
+
+**Answer:**
+When running long benchmarks or stress tests:
+1. Tests may take hours - closing Termux would interrupt them
+2. Screen/tmux allow detaching and reattaching without interrupting the process
+3. Can run multiple test sessions in parallel in different windows
+4. If Termux crashes, the session continues in background
+5. Can monitor progress from another device via SSH
+
+Example: Running `sysbench cpu --cpu-max-prime=100000 run` in a screen session ensures the test completes even if you switch apps or close Termux.
+
+**Q5: What are the trade-offs between using swap files vs. ZRAM on Android/Termux?**
+
+**Answer:**
+
+| Aspect | Swap File | ZRAM |
+|--------|-----------|------|
+| Speed | Slower (disk I/O) | Faster (RAM compression) |
+| Capacity | Limited by storage | Limited by RAM |
+| Setup | Manual (needs root) | Automatic (Android managed) |
+| Battery | Less impact | More CPU for compression |
+| Persistence | Survives reboot | Lost on reboot |
+
+**Recommendation:** ZRAM is better for most users (automatic, faster). Swap is useful for memory-intensive tasks when ZRAM isn't sufficient, but requires root and manual setup.
+
+**Q6: How would you optimize Termux for a low-end device with 2GB RAM?**
+
+**Answer:**
+1. Keep only essential packages installed
+2. Use lighter alternatives (nano vs vim for quick edits)
+3. Avoid running heavy tools (Metasploit) - use cloud alternatives
+4. Set up proper OOM protection (unrestricted battery)
+5. Use swap if root is available
+6. Clean caches regularly (`pkg clean`, clear Python cache)
+7. Close background apps before heavy Termux sessions
+8. Use `nice` to prioritize important tasks
+9. Consider using cloud IDEs for development
+10. Monitor memory with `htop` and kill unnecessary processes
+
+**Q7: Explain how you would troubleshoot a "Killed" error during package installation.**
+
+**Answer:**
+1. **Diagnosis:** The "Killed" message indicates OOM killer terminated the process
+2. **Immediate fix:** Close other apps, free memory
+3. **Check memory:** `free -h` to see available memory
+4. **Try alternative:** Install packages one at a time instead of bulk
+5. **Prevention:** 
+   - Set Termux battery to Unrestricted
+   - Close heavy background apps before installation
+   - Consider installing lighter alternatives
+   - Add swap if possible (requires root)
+6. **Verification:** Monitor with `dmesg | grep -i "out of memory"` for OOM events
+
+**Q8: What performance metrics would you track for a Termux-based development environment?**
+
+**Answer:**
+1. **Memory metrics:** Total, used, free, cached memory (`free -h`)
+2. **Storage metrics:** Used space, available space (`df -h`)
+3. **CPU metrics:** Load average, per-core usage (`top`, `htop`)
+4. **Process count:** Running vs sleeping processes
+5. **Cache sizes:** npm cache, pip cache, __pycache__ folders
+6. **Temperature:** CPU temperature if available (affects throttling)
+7. **Battery impact:** How quickly Termux drains battery
+8. **Compilation times:** For benchmarking code changes
+9. **I/O wait:** Disk read/write times (`iotop` if available)
+
+**Q9: How would you handle a situation where Termux storage is 95% full?**
+
+**Answer:**
+1. **Immediate cleanup:**
+   ```bash
+   pkg clean
+   rm -rf ~/.cache/*
+   find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null
+   npm cache clean --force 2>/dev/null
+   ```
+2. **Identify large items:** `du -sh ~/* | sort -rh | head -10`
+3. **Remove unused packages:** `pkg list-installed` → remove unnecessary ones
+4. **Clean project caches:** Remove node_modules from inactive projects
+5. **Move large files:** Transfer to external storage or cloud
+6. **Long-term solution:** Set up automated cleanup cron job
+
+**Q10: Design a script that performs weekly Termux maintenance automatically.**
+
+**Answer:**
+```bash
+#!/bin/bash
+# Weekly maintenance script
+# Save as: ~/weekly_maintenance.sh
+
+LOG=~/maintenance.log
+echo "=== Weekly Maintenance $(date) ===" >> $LOG
+
+# Update packages
+echo "Updating packages..." >> $LOG
+pkg update -y >> $LOG 2>&1
+
+# Clean caches
+echo "Cleaning caches..." >> $LOG
+pkg clean >> $LOG 2>&1
+pkg autoclean >> $LOG 2>&1
+
+# Remove Python cache
+find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null
+find ~ -type f -name "*.pyc" -delete 2>/dev/null
+
+# Clean npm cache
+npm cache clean --force 2>/dev/null
+
+# Remove old logs
+find ~ -name "*.log" -mtime +30 -delete 2>/dev/null
+
+# Report
+echo "Storage: $(df -h /data | tail -1)" >> $LOG
+echo "Memory: $(free -h | grep Mem)" >> $LOG
+echo "=== Maintenance Complete ===" >> $LOG
+
+# Add to crontab (runs every Sunday at 3 AM)
+# 0 3 * * 0 ~/weekly_maintenance.sh
+```
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  🔥 SCENARIO 1: Metasploit Causing System Freeze                            │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  PROBLEM: Running Metasploit causes phone to freeze and eventually         │
+│           Termux gets killed                                                │
+│                                                                              │
+│  DIAGNOSIS:                                                                 │
+│  1. Check memory: free -h → 95% used                                       │
+│  2. Check OOM score: cat /proc/self/oom_score → High                       │
+│  3. Android killing Termux due to memory pressure                          │
+│                                                                              │
+│  SOLUTION:                                                                  │
+│  1. Close ALL other apps before running Metasploit                         │
+│  2. Set Termux battery to Unrestricted                                      │
+│  3. Use termux-wake-lock during operation                                   │
+│  4. Run in screen session to survive kills                                  │
+│  5. Consider using cloud VPS for heavy exploitation                        │
+│                                                                              │
+│  PREVENTION:                                                                │
+│  • Monitor memory with: watch -n 1 free -h                                 │
+│  • Use msfconsole resource scripts to automate and reduce memory          │
+│  • Close msfconsole when not actively using it                            │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  🔥 SCENARIO 2: Package Installation Failing with "No Space" Error         │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  PROBLEM: pkg install fails with "No space left on device"                  │
+│           but df -h shows 500MB free                                        │
+│                                                                              │
+│  ROOT CAUSE:                                                                │
+│  • Package cache is consuming space during download                        │
+│  • Temporary files during extraction                                       │
+│  • /data partition has different limits than what df shows                 │
+│                                                                              │
+│  SOLUTION:                                                                  │
+│  $ pkg clean                                                                │
+│  $ rm -rf $PREFIX/var/cache/apt/archives/*.deb                            │
+│  $ rm -rf ~/.cache/*                                                        │
+│  $ find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null         │
+│  $ pkg autoclean                                                            │
+│  $ pkg install <package>                                                    │
+│                                                                              │
+│  VERIFICATION:                                                              │
+│  $ df -h /data                                                              │
+│  $ du -sh ~/* | sort -rh | head -5                                         │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  🔥 SCENARIO 3: Compilation Taking Too Long                                │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  PROBLEM: Compiling a C program takes 30 minutes, too slow                 │
+│                                                                              │
+│  DIAGNOSIS:                                                                 │
+│  $ nproc                                                                    │
+│  Output: 8  (8 CPU cores available)                                        │
+│  $ make -j1  # Only using 1 core                                           │
+│                                                                              │
+│  SOLUTION:                                                                  │
+│  $ make -j$(nproc)    # Use all 8 cores                                    │
+│  Compilation time reduced to 4 minutes!                                    │
+│                                                                              │
+│  ADDITIONAL OPTIMIZATIONS:                                                  │
+│  $ termux-wake-lock   # Prevent CPU throttling                             │
+│  $ nice -n -10 make -j$(nproc)  # Higher priority                          │
+│                                                                              │
+│  BENCHMARK RESULTS:                                                         │
+│  • Single core: 30 minutes                                                  │
+│  • Multi-core (-j8): 4 minutes                                              │
+│  • With nice -n -10: 3.5 minutes                                            │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  🔥 SCENARIO 4: Python Script Consuming All Memory                         │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  PROBLEM: Python data processing script causes Termux to crash             │
+│                                                                              │
+│  DIAGNOSIS:                                                                 │
+│  $ python large_data_script.py                                             │
+│  # ... after 5 minutes ...                                                 │
+│  Killed                                                                     │
+│  $ dmesg | grep -i "out of memory"                                         │
+│  Out of memory: Kill process 12345 (python)                                │
+│                                                                              │
+│  SOLUTION:                                                                  │
+│  1. Limit Python memory:                                                   │
+│     $ ulimit -v 1048576  # Limit to 1GB                                    │
+│                                                                              │
+│  2. Process data in chunks:                                                │
+│     # Instead of loading entire file                                       │
+│     with open('large_file.txt') as f:                                      │
+│         for chunk in iter(lambda: f.read(10000), ''):                      │
+│             process(chunk)                                                 │
+│                                                                              │
+│  3. Use generators instead of lists:                                       │
+│     # Bad: data = [line for line in file]                                  │
+│     # Good: data = (line for line in file)                                 │
+│                                                                              │
+│  4. Monitor while running:                                                 │
+│     $ termux-wake-lock && python script.py && termux-wake-unlock           │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  🔥 SCENARIO 5: Termux Slowing Down Entire Phone                           │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  PROBLEM: Running Termux makes phone laggy, other apps slow                │
+│                                                                              │
+│  DIAGNOSIS:                                                                 │
+│  $ htop                                                                     │
+│  Shows: Multiple Python processes using 90% CPU                            │
+│                                                                              │
+│  IDENTIFY CULPRIT:                                                          │
+│  $ ps aux --sort=-%cpu | head -10                                          │
+│  USER  PID  %CPU %MEM COMMAND                                               │
+│  u0_a1 1234 85.0  12.0 python script.py                                     │
+│  u0_a1 5678 15.0   5.0 node server.js                                       │
+│                                                                              │
+│  SOLUTION:                                                                  │
+│  1. Lower priority of heavy tasks:                                         │
+│     $ renice -n 10 -p 1234                                                 │
+│                                                                              │
+│  2. Or kill unnecessary processes:                                         │
+│     $ kill -9 5678                                                         │
+│                                                                              │
+│  3. Use CPU affinity to limit cores:                                       │
+│     $ taskset -c 0,1 python script.py  # Only use first 2 cores           │
+│                                                                              │
+│  4. Schedule heavy tasks for night:                                        │
+│     $ crontab -e                                                           │
+│     0 2 * * * /data/data/com.termux/files/home/heavy_task.sh              │
+│                                                                              │
+│  VERIFICATION: Phone responsiveness improved after applying fixes         │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 TROUBLESHOOTING FLOWCHARTS
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PERFORMANCE ISSUE DIAGNOSIS FLOWCHART                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+                            ┌─────────────────┐
+                            │ Performance     │
+                            │ Issue Detected  │
+                            └────────┬────────┘
+                                     │
+                    ┌────────────────┼────────────────┐
+                    │                │                │
+                    ▼                ▼                ▼
+            ┌───────────┐    ┌───────────┐    ┌───────────┐
+            │   Slow?   │    │   Laggy?  │    │  Crashes? │
+            └─────┬─────┘    └─────┬─────┘    └─────┬─────┘
+                  │                │                │
+                  ▼                ▼                ▼
+            ┌───────────┐    ┌───────────┐    ┌───────────┐
+            │ free -h   │    │   htop    │    │ dmesg │   │
+            │ df -h     │    │ ps aux    │    │ grep OOM │
+            └─────┬─────┘    └─────┬─────┘    └─────┬─────┘
+                  │                │                │
+         ┌────────┴────────┐      │         ┌──────┴──────┐
+         │                 │      │         │             │
+         ▼                 ▼      ▼         ▼             ▼
+    ┌─────────┐      ┌─────────┐ ┌────┐ ┌─────────┐ ┌─────────┐
+    │ Memory  │      │ Storage │ │CPU │ │ OOM     │ │ App     │
+    │ Full?   │      │ Full?   │ │High│ │ Kill?   │ │ Bug?    │
+    └────┬────┘      └────┬────┘ └─┬──┘ └────┬────┘ └────┬────┘
+         │                │        │         │           │
+         ▼                ▼        ▼         ▼           ▼
+    ┌─────────┐      ┌─────────┐ ┌────┐ ┌─────────┐ ┌─────────┐
+    │Kill     │      │pkg clean│ │Kill│ │Battery  │ │Report   │
+    │Processes│      │rm cache │ │Proc│ │Unrest-  │ │Bug/     │
+    │Add Swap │      │Remove   │ │renice│ │ricted │ │Update   │
+    └─────────┘      │packages │ └────┘ └─────────┘ └─────────┘
+                     └─────────┘
+```
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    OOM CRASH DIAGNOSIS FLOWCHART                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+                            ┌─────────────────┐
+                            │ Termux Killed / │
+                            │ "Killed" Message│
+                            └────────┬────────┘
+                                     │
+                                     ▼
+                        ┌───────────────────────┐
+                        │ Check: dmesg | grep   │
+                        │ -i "out of memory"    │
+                        └───────────┬───────────┘
+                                    │
+                    ┌───────────────┼───────────────┐
+                    │               │               │
+                    ▼               ▼               ▼
+              ┌──────────┐   ┌──────────┐   ┌──────────┐
+              │ OOM Found│   │ No OOM   │   │ Partial  │
+              │ in Log   │   │ Message  │   │ Match    │
+              └────┬─────┘   └────┬─────┘   └────┬─────┘
+                   │              │              │
+                   ▼              ▼              ▼
+          ┌───────────────┐ ┌───────────┐ ┌───────────────┐
+          │ Check Memory: │ │Check other│ │ Check for:    │
+          │ free -h       │ │causes:    │ │• Battery opt  │
+          │ cat /proc/    │ │• App crash│ │• Background   │
+          │ meminfo       │ │• Signal   │ │  limits       │
+          └───────┬───────┘ │• Segfault │ │• Storage full │
+                  │         └─────┬─────┘ └───────┬───────┘
+                  │               │               │
+                  ▼               ▼               ▼
+          ┌───────────────┐ ┌───────────┐ ┌───────────────┐
+          │ SOLUTION:     │ │ SOLUTION: │ │ SOLUTION:     │
+          │ 1. Close apps │ │ • Reinstall│ │ 1. Settings   │
+          │ 2. Battery    │ │ • Update   │ │    → Apps     │
+          │    Unrestricted│ │ • Check log│ │    → Termux   │
+          │ 3. Add swap   │ │ • Debug    │ │    → Battery  │
+          │ 4. Use screen │ │            │ │    → Unrestric│
+          └───────────────┘ └───────────┘ └───────────────┘
+```
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    STORAGE CLEANUP DECISION FLOWCHART                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+                            ┌─────────────────┐
+                            │ Storage Running │
+                            │ Low? (df -h)    │
+                            └────────┬────────┘
+                                     │
+                                     ▼
+                    ┌────────────────────────────────┐
+                    │ Check Usage: du -sh ~/* | sort │
+                    │ -rh | head -10                 │
+                    └────────────────┬───────────────┘
+                                     │
+            ┌────────────────────────┼────────────────────────┐
+            │                        │                        │
+            ▼                        ▼                        ▼
+      ┌───────────┐          ┌───────────┐          ┌───────────┐
+      │ .cache/   │          │ node_     │          │ Large     │
+      │ large?    │          │ modules?  │          │ Files?    │
+      └─────┬─────┘          └─────┬─────┘          └─────┬─────┘
+            │                      │                      │
+            ▼                      ▼                      ▼
+      ┌───────────┐          ┌───────────┐          ┌───────────┐
+      │ rm -rf    │          │ rm -rf    │          │ Move to   │
+      │ ~/.cache/*│          │ ~/project/│          │ external  │
+      │           │          │ node_mods │          │ storage   │
+      └─────┬─────┘          └─────┬─────┘          └─────┬─────┘
+            │                      │                      │
+            └──────────────────────┼──────────────────────┘
+                                   │
+                                   ▼
+                        ┌───────────────────────┐
+                        │ Check: pkg cache      │
+                        │ ls $PREFIX/var/cache/ │
+                        │ apt/archives/         │
+                        └───────────┬───────────┘
+                                    │
+                    ┌───────────────┼───────────────┐
+                    │               │               │
+                    ▼               ▼               ▼
+              ┌──────────┐   ┌──────────┐   ┌──────────┐
+              │ Large    │   │ Small    │   │ Empty    │
+              │ Cache    │   │ Cache    │   │          │
+              └────┬─────┘   └────┬─────┘   └────┬─────┘
+                   │              │              │
+                   ▼              ▼              ▼
+              ┌──────────┐   ┌──────────┐   ┌──────────┐
+              │ pkg clean│   │ pkg      │   │ Done!    │
+              │ pkg      │   │ autoclean│   │          │
+              │ autoclean│   │          │   │          │
+              └──────────┘   └──────────┘   └──────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Prerequisite Chapters | Topic | Why It's Relevant |
+|----------------------|-------|-------------------|
+| **Ch01** | Termux Introduction | Basic understanding of Termux environment |
+| **Ch05** | Package Management | Package installation and cleanup commands |
+| **Ch08** | Text Editors | Editing configuration files |
+| **Ch43** | Task Automation | Cron jobs for maintenance |
+| **Ch58** | Common Errors | Error diagnosis foundation |
+
+| Next Chapters | Topic | Connection |
+|---------------|-------|------------|
+| **Ch60** | Backup & Restore | Performance before backup ensures smooth process |
+| **Ch61** | Useful Resources | Community help for performance issues |
+
+| Parallel Learning | Topic | Synergy |
+|-------------------|-------|---------|
+| **Ch06** | File System | Understanding Termux directory structure |
+| **Ch15** | Process Management | Managing running processes |
+| **Ch44** | Cron Jobs | Automating maintenance tasks |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Custom Performance Dashboard
+
+Create a real-time performance monitoring dashboard:
+
+```bash
+#!/bin/bash
+# Save as: ~/perf_dashboard.sh
+
+clear
+while true; do
+    clear
+    echo "╔════════════════════════════════════════════════════════════════╗"
+    echo "║              TERMUX PERFORMANCE DASHBOARD                      ║"
+    echo "╚════════════════════════════════════════════════════════════════╝"
+    echo ""
+    
+    # Memory
+    MEM=$(free -h | grep Mem)
+    echo "📊 MEMORY:"
+    echo "   $MEM"
+    echo ""
+    
+    # Storage
+    DISK=$(df -h /data | tail -1)
+    echo "💾 STORAGE:"
+    echo "   $DISK"
+    echo ""
+    
+    # CPU Load
+    LOAD=$(cat /proc/loadavg)
+    CORES=$(nproc)
+    echo "⚡ CPU LOAD: $LOAD (Cores: $CORES)"
+    echo ""
+    
+    # Top Processes
+    echo "🔥 TOP CPU PROCESSES:"
+    ps aux --sort=-%cpu | head -5 | awk '{printf "   %-10s %5s %5s %s\n", $1, $3"%", $4"%", $11}'
+    echo ""
+    
+    # Top Memory
+    echo "🧠 TOP MEMORY PROCESSES:"
+    ps aux --sort=-%mem | head -5 | awk '{printf "   %-10s %5s %5s %s\n", $1, $3"%", $4"%", $11}'
+    echo ""
+    
+    # Network
+    echo "🌐 NETWORK CONNECTIONS: $(netstat -an 2>/dev/null | grep ESTABLISHED | wc -l)"
+    echo ""
+    
+    echo "Press Ctrl+C to exit | Refreshes every 2 seconds"
+    sleep 2
+done
+```
+
+### Advanced Technique 2: Automated Memory Protection Script
+
+Protect critical processes from OOM killer:
+
+```bash
+#!/bin/bash
+# Save as: ~/protect_process.sh
+
+if [ -z "$1" ]; then
+    echo "Usage: ./protect_process.sh <process_name>"
+    echo "Example: ./protect_process.sh python"
+    exit 1
+fi
+
+PROCESS_NAME=$1
+
+# Find PID
+PIDS=$(pgrep -d ',' $PROCESS_NAME)
+
+if [ -z "$PIDS" ]; then
+    echo "Process $PROCESS_NAME not found!"
+    exit 1
+fi
+
+echo "Found PIDs: $PIDS"
+
+for PID in $(echo $PIDS | tr ',' ' '); do
+    # Check if we can modify OOM score
+    if [ -w /proc/$PID/oom_score_adj ]; then
+        echo "-500" > /proc/$PID/oom_score_adj
+        echo "Protected PID $PID (OOM score: -500)"
+    else
+        echo "Cannot modify OOM score for PID $PID (need root)"
+    fi
+done
+
+# Monitor the process
+echo ""
+echo "Monitoring protected processes..."
+watch -n 5 "ps aux | grep $PROCESS_NAME | grep -v grep"
+```
+
+### Advanced Technique 3: Intelligent Cache Management
+
+Smart cache cleanup based on size and age:
+
+```bash
+#!/bin/bash
+# Save as: ~/smart_clean.sh
+
+echo "🧹 SMART CACHE CLEANUP"
+echo "========================"
+echo ""
+
+# Calculate current cache sizes
+echo "📊 Current Cache Sizes:"
+echo ""
+
+PKG_CACHE=$(du -sh $PREFIX/var/cache/apt/archives 2>/dev/null | cut -f1)
+PY_CACHE=$(find ~ -type d -name __pycache__ 2>/dev/null | xargs du -ch 2>/dev/null | tail -1 | cut -f1)
+NPM_CACHE=$(du -sh ~/.npm 2>/dev/null | cut -f1)
+PIP_CACHE=$(pip cache info 2>/dev/null | grep "Package cache" | awk '{print $3}')
+
+echo "   Package Cache:  $PKG_CACHE"
+echo "   Python Cache:   $PY_CACHE"
+echo "   NPM Cache:      ${NPM_CACHE:-0}"
+echo "   PIP Cache:      ${PIP_CACHE:-0}"
+echo ""
+
+# Ask for cleanup level
+echo "Select cleanup level:"
+echo "1) Light (package cache only)"
+echo "2) Medium (+ Python cache)"
+echo "3) Heavy (+ NPM, PIP caches)"
+echo "4) Custom (interactive)"
+echo ""
+read -p "Enter choice (1-4): " choice
+
+case $choice in
+    1)
+        pkg clean
+        echo "✅ Light cleanup complete"
+        ;;
+    2)
+        pkg clean
+        find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null
+        find ~ -type f -name "*.pyc" -delete 2>/dev/null
+        echo "✅ Medium cleanup complete"
+        ;;
+    3)
+        pkg clean
+        find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null
+        find ~ -type f -name "*.pyc" -delete 2>/dev/null
+        npm cache clean --force 2>/dev/null
+        pip cache purge 2>/dev/null
+        rm -rf ~/.cache/* 2>/dev/null
+        echo "✅ Heavy cleanup complete"
+        ;;
+    4)
+        read -p "Clean package cache? (y/n): " pkg_clean
+        read -p "Clean Python cache? (y/n): " py_clean
+        read -p "Clean NPM cache? (y/n): " npm_clean
+        read -p "Clean PIP cache? (y/n): " pip_clean
+        read -p "Clean ~/.cache? (y/n): " cache_clean
+        
+        [ "$pkg_clean" = "y" ] && pkg clean
+        [ "$py_clean" = "y" ] && find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null
+        [ "$npm_clean" = "y" ] && npm cache clean --force 2>/dev/null
+        [ "$pip_clean" = "y" ] && pip cache purge 2>/dev/null
+        [ "$cache_clean" = "y" ] && rm -rf ~/.cache/* 2>/dev/null
+        echo "✅ Custom cleanup complete"
+        ;;
+    *)
+        echo "❌ Invalid choice"
+        exit 1
+        ;;
+esac
+
+# Show space recovered
+echo ""
+echo "📊 Storage After Cleanup:"
+df -h /data | tail -1
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### Knowledge Checklist
+
+- [ ] I understand why performance optimization is important for Termux
+- [ ] I can check disk usage with `df -h` and `du` commands
+- [ ] I can check memory usage with `free -h` command
+- [ ] I know how to clean package cache with `pkg clean`
+- [ ] I can identify and remove Python cache (`__pycache__`)
+- [ ] I understand what OOM Killer is and how to prevent Termux from being killed
+- [ ] I can set Termux battery to "Unrestricted" in Android settings
+- [ ] I know how to use `htop` for process monitoring
+- [ ] I can run commands in background with `&` and `nohup`
+- [ ] I understand process priority with `nice` and `renice`
+- [ ] I know how to use `screen` and `tmux` for persistent sessions
+- [ ] I can compile with multiple cores using `make -j$(nproc)`
+- [ ] I understand the purpose of `termux-wake-lock` and when to use it
+- [ ] I can benchmark CPU and memory with `sysbench`
+
+### Skills Checklist
+
+- [ ] Created a cleanup alias in `.bashrc`
+- [ ] Used `htop` to identify memory-heavy processes
+- [ ] Successfully freed storage space by cleaning caches
+- [ ] Set up Termux with unrestricted battery settings
+- [ ] Ran a command with modified priority using `nice`
+- [ ] Used `screen` or `tmux` for a long-running process
+
+### Commands Mastered
+
+| Command | Purpose | Status |
+|---------|---------|--------|
+| `df -h` | Check disk space | ☐ |
+| `free -h` | Check memory | ☐ |
+| `pkg clean` | Clean package cache | ☐ |
+| `pkg autoclean` | Remove obsolete packages | ☐ |
+| `htop` | Process monitoring | ☐ |
+| `nproc` | CPU core count | ☐ |
+| `nice -n` | Set priority | ☐ |
+| `nohup` | Persist after logout | ☐ |
+| `screen` / `tmux` | Session management | ☐ |
+| `termux-wake-lock` | Keep CPU awake | ☐ |
+| `sysbench` | Benchmarking | ☐ |
+
+---
+
+## 🔧 QUICK FIX REFERENCE CARD
+
+### Common Performance Errors and Quick Fixes
+
+| Error/Issue | Quick Fix | Command |
+|-------------|-----------|---------|
+| "No space left on device" | Clean caches | `pkg clean && rm -rf ~/.cache/*` |
+| Termux running slow | Check memory | `free -h && htop` |
+| "Killed" during operation | OOM protection | Set battery to Unrestricted |
+| High battery drain | Check wake lock | `termux-wake-unlock` |
+| Slow package install | Clean cache first | `pkg clean && pkg autoclean` |
+| Too many processes | Kill unnecessary | `pkill <process_name>` |
+| Zombie processes | Find and kill | `ps aux \| grep Z` |
+| Low memory warning | Free memory | `pkill -f chrome` (kill browser) |
+| Compilation too slow | Use all cores | `make -j$(nproc)` |
+| Process keeps dying | Use screen | `screen -S mysession` |
+| Can't find large files | Check sizes | `du -sh ~/* \| sort -rh \| head` |
+| Python cache bloating | Clean __pycache__ | `find ~ -name __pycache__ -exec rm -rf {} +` |
+| npm cache too large | Clean npm cache | `npm cache clean --force` |
+| Phone heating up | Check CPU usage | `htop` then kill heavy process |
+| Background downloads fail | Wake lock | `termux-wake-lock` before download |
+
+### Performance Optimization Quick Commands
+
+```bash
+# Quick cleanup
+pkg clean && rm -rf ~/.cache/* && pkg autoclean
+
+# Memory check
+free -h && ps aux --sort=-%mem | head -5
+
+# Storage check
+df -h && du -sh ~/* | sort -rh | head -5
+
+# Kill top memory user
+kill -9 $(ps aux --sort=-%mem | head -2 | tail -1 | awk '{print $2}')
+
+# Run with higher priority
+nice -n -10 <command>
+
+# Run in background persistently
+nohup <command> > output.log 2>&1 &
+
+# Quick benchmark
+sysbench cpu --cpu-max-prime=10000 run
+
+# Find large files (>50MB)
+find ~ -type f -size +50M 2>/dev/null
+
+# Monitor in real-time
+watch -n 1 'free -h && echo && df -h /data'
+```
 
 ---
 

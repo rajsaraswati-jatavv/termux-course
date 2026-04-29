@@ -2840,3 +2840,982 @@ curl http://localhost:8080/db.php
 
 **🎉 Chapter 47 Upgraded Successfully!**
 
+
+---
+
+## 🎮 INTERACTIVE QUIZ (15 Questions)
+
+### Test Your Web Server Knowledge
+
+**Q1: Which command starts a simple Python HTTP server on port 8080?**
+- A) `python -m http.server 8080`
+- B) `python -http 8080`
+- C) `python server 8080`
+- D) `http.server 8080`
+
+**Q2: What is Apache's default document root in Termux?**
+- A) `/var/www/html/`
+- B) `$PREFIX/var/www/html/`
+- C) `/home/www/`
+- D) `~/www/`
+
+**Q3: Which command starts Nginx?**
+- A) `nginx start`
+- B) `service nginx start`
+- C) `nginx`
+- D) `systemctl start nginx`
+
+**Q4: How do you start MariaDB server in Termux?**
+- A) `mysql start`
+- B) `mysqld_safe &`
+- C) `service mysql start`
+- D) `mariadb start`
+
+**Q5: Which tool creates a public URL for localhost?**
+- A) `curl`
+- B) `ngrok`
+- C) `wget`
+- D) `httpie`
+
+**Q6: What port does Apache use by default in Termux?**
+- A) 80
+- B) 8080
+- C) 3000
+- D) 443
+
+**Q7: Which PHP command starts a built-in server?**
+- A) `php -S 0.0.0.0:8080`
+- B) `php server 8080`
+- C) `php -start 8080`
+- D) `php http 8080`
+
+**Q8: What is the command to stop Nginx?**
+- A) `nginx stop`
+- B) `nginx -s stop`
+- C) `kill nginx`
+- D) `service nginx stop`
+
+**Q9: Which database is SQLite stored in?**
+- A) Memory only
+- B) Single file
+- C) Multiple files
+- D) Network server
+
+**Q10: How do you check Apache configuration?**
+- A) `apachectl configtest`
+- B) `apache --check`
+- C) `httpd -t`
+- D) Both A and C
+
+**Q11: What is Node.js package manager called?**
+- A) `node-pm`
+- B) `npm`
+- C) `nodepack`
+- D) `pkg-node`
+
+**Q12: Which is NOT a valid web server for Termux?**
+- A) Apache
+- B) Nginx
+- C) IIS
+- D) Python http.server
+
+**Q13: What does `apachectl restart` do?**
+- A) Starts Apache
+- B) Stops Apache
+- C) Stops and starts Apache
+- D) Reloads config
+
+**Q14: Which port is typically used for HTTPS?**
+- A) 80
+- B) 8080
+- C) 443
+- D) 3000
+
+**Q15: How do you generate a self-signed SSL certificate?**
+- A) `ssl-gen`
+- B) `openssl req`
+- C) `cert-create`
+- D) `https-gen`
+
+### Answers
+<details>
+<summary>Show Answers</summary>
+
+| Q | A | Q | A | Q | A | Q | A | Q | A |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | A | 4 | B | 7 | A | 10 | D | 13 | C |
+| 2 | B | 5 | B | 8 | B | 11 | B | 14 | C |
+| 3 | C | 6 | B | 9 | B | 12 | C | 15 | B |
+
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS (With Detailed Answers)
+
+### Web Server Interview Questions
+
+**Q1: Compare Apache and Nginx web servers.**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:**
+
+| Feature | Apache | Nginx |
+|---------|--------|-------|
+| Architecture | Process/Thread | Event-driven |
+| Static Files | Good | Excellent |
+| Dynamic Content | Native (mod_php) | Reverse proxy |
+| Memory Usage | Higher | Lower |
+| Configuration | .htaccess | Central config |
+| Best For | PHP apps | Reverse proxy, static |
+
+**When to choose:**
+- **Apache:** PHP applications, .htaccess needed
+- **Nginx:** High traffic, static files, reverse proxy
+
+</details>
+
+**Q2: Explain the difference between HTTP and HTTPS.**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:**
+
+| Feature | HTTP | HTTPS |
+|---------|------|-------|
+| Encryption | None | TLS/SSL |
+| Port | 80 | 443 |
+| Security | Vulnerable | Secure |
+| Certificate | Not required | Required |
+| SEO | Lower priority | Higher priority |
+
+**HTTPS provides:**
+1. **Encryption** - Data is encrypted
+2. **Authentication** - Server identity verified
+3. **Integrity** - Data cannot be modified
+
+</details>
+
+**Q3: What is a reverse proxy and why use Nginx for it?**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:** A reverse proxy sits between clients and servers, forwarding requests.
+
+```
+Client → Nginx (Reverse Proxy) → Backend Server (Node.js/Python/PHP)
+```
+
+**Benefits:**
+- Load balancing
+- SSL termination
+- Caching
+- Compression
+- Security (hide backend)
+
+**Nginx config:**
+```nginx
+server {
+    listen 80;
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+    }
+}
+```
+
+</details>
+
+**Q4: How does a web server handle multiple requests?**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:**
+
+**Apache (Process-based):**
+- Prefork: New process per request
+- Worker: Thread per request
+- Event: Async for keep-alive
+
+**Nginx (Event-driven):**
+- Single process handles many connections
+- Non-blocking I/O
+- Efficient for high concurrency
+
+**Node.js:**
+- Single-threaded event loop
+- Non-blocking I/O
+- Excellent for I/O-heavy tasks
+
+</details>
+
+**Q5: Explain virtual hosts in Apache.**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:** Virtual hosts allow multiple websites on one server:
+
+```apache
+# site1.conf
+<VirtualHost *:8080>
+    ServerName site1.local
+    DocumentRoot /var/www/site1
+</VirtualHost>
+
+# site2.conf
+<VirtualHost *:8080>
+    ServerName site2.local
+    DocumentRoot /var/www/site2
+</VirtualHost>
+```
+
+**Types:**
+- **Name-based:** Different domains, same IP
+- **IP-based:** Different IPs
+
+</details>
+
+**Q6: What is the difference between 301 and 302 redirects?**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:**
+
+| Status | Type | Meaning | Use Case |
+|--------|------|---------|----------|
+| 301 | Permanent | URL permanently moved | Domain change |
+| 302 | Temporary | URL temporarily moved | Maintenance |
+
+**SEO Impact:**
+- 301: Link equity transferred
+- 302: Link equity not transferred
+
+**Nginx example:**
+```nginx
+return 301 https://example.com$request_uri;
+```
+
+</details>
+
+**Q7: How do you secure a web server?**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:** Security checklist:
+
+1. **HTTPS:** Install SSL certificate
+2. **Headers:**
+```nginx
+add_header X-Frame-Options "SAMEORIGIN";
+add_header X-Content-Type-Options "nosniff";
+add_header X-XSS-Protection "1; mode=block";
+```
+3. **Hide version:** `server_tokens off;`
+4. **Limit methods:** Allow only GET, POST
+5. **Rate limiting:** Prevent DDoS
+6. **Firewall:** Block unnecessary ports
+7. **Updates:** Regular security patches
+8. **File permissions:** Proper ownership
+
+</details>
+
+**Q8: What is CGI and FastCGI?**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:**
+
+**CGI (Common Gateway Interface):**
+- Creates new process for each request
+- Slow due to process creation overhead
+- Simple but inefficient
+
+**FastCGI:**
+- Persistent processes
+- Handles multiple requests
+- Much faster than CGI
+
+**PHP-FPM (FastCGI Process Manager):**
+- Popular FastCGI implementation for PHP
+- Process pooling
+- Better performance
+
+```nginx
+location ~ \.php$ {
+    fastcgi_pass unix:/run/php/php-fpm.sock;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    include fastcgi_params;
+}
+```
+
+</details>
+
+**Q9: Explain caching strategies for web servers.**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:**
+
+**Browser Caching:**
+```nginx
+location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
+    expires 30d;
+    add_header Cache-Control "public, no-transform";
+}
+```
+
+**Server-side Caching:**
+- **Nginx FastCGI cache:**
+```nginx
+fastcgi_cache_path /tmp/cache levels=1:2 keys_zone=MYCACHE:10m;
+fastcgi_cache MYCACHE;
+fastcgi_cache_valid 200 1h;
+```
+
+**Types:**
+1. **Browser cache** - Client-side
+2. **CDN cache** - Edge servers
+3. **Reverse proxy cache** - Nginx
+4. **Application cache** - Redis/Memcached
+
+</details>
+
+**Q10: How do you troubleshoot a slow web server?**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:** Troubleshooting steps:
+
+```bash
+# 1. Check server resources
+top
+free -m
+df -h
+
+# 2. Check connections
+netstat -an | grep :80 | wc -l
+
+# 3. Check Apache/Nginx status
+apachectl status
+nginx -t
+
+# 4. Check logs
+tail -f /var/log/nginx/error.log
+tail -f /var/log/apache2/error.log
+
+# 5. Test response time
+curl -w "@curl-format.txt" -o /dev/null -s http://localhost
+
+# 6. Check PHP (if applicable)
+php -i | grep memory_limit
+
+# 7. Database queries
+mysqladmin processlist
+```
+
+**Common causes:**
+- Insufficient memory
+- Too many concurrent connections
+- Slow database queries
+- Missing indexes
+- Large files without compression
+
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Local Development Server
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              SCENARIO: DEVELOP WEBSITE LOCALLY ON ANDROID                   ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                             ║
+║  SITUATION: Developer wants to build/test website on phone                 ║
+║  NEED: Local web server with PHP and database                              ║
+║                                                                             ║
+║  ARCHITECTURE:                                                              ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │                          TERMUX PHONE                                │   ║
+║  │  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐        │   ║
+║  │  │  Browser  │  │  Apache   │  │    PHP    │  │  MariaDB  │        │   ║
+║  │  │           │  │  :8080    │  │  7.x/8.x  │  │   :3306   │        │   ║
+║  │  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘        │   ║
+║  │        │              │              │              │               │   ║
+║  │        └──────────────┴──────────────┴──────────────┘               │   ║
+║  │                           localhost                                  │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+║  SETUP COMMANDS:                                                            ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ # Install stack                                                      │   ║
+║  │ pkg install apache2 php php-apache mariadb -y                        │   ║
+║  │                                                                      │   ║
+║  │ # Start services                                                     │   ║
+║  │ mysqld_safe &                                                        │   ║
+║  │ apachectl start                                                      │   ║
+║  │                                                                      │   ║
+║  │ # Create project                                                     │   ║
+║  │ mkdir -p $PREFIX/var/www/html/myproject                              │   ║
+║  │ cd $PREFIX/var/www/html/myproject                                    │   ║
+║  │                                                                      │   ║
+║  │ # Test                                                               │   ║
+║  │ echo "<?php phpinfo(); ?>" > index.php                               │   ║
+║  │ # Open: http://localhost:8080/myproject/                             │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: API Server with Node.js
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              SCENARIO: BUILD REST API ON TERMUX                             ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                             ║
+║  SITUATION: Build and test REST API locally                                 ║
+║  STACK: Node.js + Express + SQLite                                          ║
+║                                                                             ║
+║  ARCHITECTURE:                                                              ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │                         API SERVER                                   │   ║
+║  │                                                                      │   ║
+║  │   Client (Postman/Browser)                                          │   ║
+║  │           │                                                          │   ║
+║  │           ▼                                                          │   ║
+║  │   ┌───────────────────────────────────────┐                         │   ║
+║  │   │         Express.js Server             │                         │   ║
+║  │   │            :3000                      │                         │   ║
+║  │   │                                       │                         │   ║
+║  │   │   Routes → Controllers → Models      │                         │   ║
+║  │   │                                       │                         │   ║
+║  │   └───────────────┬───────────────────────┘                         │   ║
+║  │                   │                                                  │   ║
+║  │                   ▼                                                  │   ║
+║  │   ┌───────────────────────────────────────┐                         │   ║
+║  │   │        SQLite Database                │                         │   ║
+║  │   │          (api.db)                     │                         │   ║
+║  │   └───────────────────────────────────────┘                         │   ║
+║  │                                                                      │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+║  CODE EXAMPLE:                                                              ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ // server.js                                                         │   ║
+║  │ const express = require('express');                                  │   ║
+║  │ const sqlite3 = require('sqlite3');                                  │   ║
+║  │ const app = express();                                               │   ║
+║  │                                                                      │   ║
+║  │ app.use(express.json());                                             │   ║
+║  │                                                                      │   ║
+║  │ // Routes                                                            │   ║
+║  │ app.get('/api/users', (req, res) => {                                │   ║
+║  │     db.all('SELECT * FROM users', (err, rows) => {                   │   ║
+║  │         res.json(rows);                                              │   ║
+║  │     });                                                              │   ║
+║  │ });                                                                  │   ║
+║  │                                                                      │   ║
+║  │ app.listen(3000, () => console.log('API running on :3000'));         │   ║
+║  │                                                                      │   ║
+║  │ // Run: node server.js                                               │   ║
+║  │ // Test: curl http://localhost:3000/api/users                        │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 3: Static Site Hosting with Public Access
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              SCENARIO: HOST PORTFOLIO WEBSITE PUBLICLY                      ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                             ║
+║  SITUATION: Host personal portfolio from phone, accessible worldwide       ║
+║  SOLUTION: Python server + ngrok tunnel                                     ║
+║                                                                             ║
+║  ARCHITECTURE:                                                              ║
+║  ┌─────────────┐                           ┌─────────────┐                 ║
+║  │   Internet  │                           │    Phone    │                 ║
+║  │   Users     │                           │   Termux    │                 ║
+║  │             │                           │             │                 ║
+║  │             │      ngrok tunnel         │  ┌───────┐  │                 ║
+║  │   Browser   │◄─────────────────────────►│  │Python │  │                 ║
+║  │             │   https://xxx.ngrok.io    │  │:8080  │  │                 ║
+║  │             │                           │  └───┬───┘  │                 ║
+║  │             │                           │      │      │                 ║
+║  │             │                           │  ┌───▼───┐  │                 ║
+║  │             │                           │  │ HTML/ │  │                 ║
+║  │             │                           │  │ CSS/  │  │                 ║
+║  │             │                           │  │ JS    │  │                 ║
+║  │             │                           │  └───────┘  │                 ║
+║  └─────────────┘                           └─────────────┘                 ║
+║                                                                             ║
+║  SETUP:                                                                     ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ # 1. Create website                                                  │   ║
+║  │ mkdir ~/portfolio && cd ~/portfolio                                  │   ║
+║  │ # Create index.html, style.css, script.js                           │   ║
+║  │                                                                      │   ║
+║  │ # 2. Start local server                                              │   ║
+║  │ python -m http.server 8080 &                                         │   ║
+║  │                                                                      │   ║
+║  │ # 3. Create public tunnel                                            │   ║
+║  │ ngrok http 8080                                                      │   ║
+║  │                                                                      │   ║
+║  │ # Output:                                                            │   ║
+║  │ # Forwarding: https://abc123.ngrok-free.app -> http://localhost:8080│   ║
+║  │                                                                      │   ║
+║  │ # 4. Share the ngrok URL with anyone!                               │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 4: Database-Driven Web Application
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              SCENARIO: BUILD TODO APP WITH DATABASE                         ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                             ║
+║  SITUATION: Build full-stack app with PHP and MySQL                        ║
+║  FEATURES: CRUD operations, user authentication                            ║
+║                                                                             ║
+║  ARCHITECTURE:                                                              ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │                         LAMP STACK                                   │   ║
+║  │                                                                      │   ║
+║  │    ┌──────────┐                                                      │   ║
+║  │    │  Client  │                                                      │   ║
+║  │    │ (Browser)│                                                      │   ║
+║  │    └────┬─────┘                                                      │   ║
+║  │         │ HTTP                                                       │   ║
+║  │         ▼                                                            │   ║
+║  │    ┌──────────┐      ┌──────────┐      ┌──────────┐                  │   ║
+║  │    │  Linux   │      │  Apache  │      │   PHP    │                  │   ║
+║  │    │ (Termux) │─────►│  :8080   │─────►│   8.x    │                  │   ║
+║  │    └──────────┘      └──────────┘      └────┬─────┘                  │   ║
+║  │                                            │                         │   ║
+║  │                                            ▼                         │   ║
+║  │                                      ┌──────────┐                    │   ║
+║  │                                      │  MySQL   │                    │   ║
+║  │                                      │  :3306   │                    │   ║
+║  │                                      └──────────┘                    │   ║
+║  │                                                                      │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+║  IMPLEMENTATION:                                                            ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ // database.sql                                                      │   ║
+║  │ CREATE DATABASE todo_app;                                            │   ║
+║  │ USE todo_app;                                                        │   ║
+║  │ CREATE TABLE tasks (                                                 │   ║
+║  │     id INT AUTO_INCREMENT PRIMARY KEY,                               │   ║
+║  │     task VARCHAR(255) NOT NULL,                                      │   ║
+║  │     completed BOOLEAN DEFAULT FALSE,                                  │   ║
+║  │     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP                   │   ║
+║  │ );                                                                   │   ║
+║  │                                                                      │   ║
+║  │ // config.php                                                        │   ║
+║  │ <?php                                                                │   ║
+║  │ $conn = new mysqli('localhost', 'root', '', 'todo_app');            │   ║
+║  │ if ($conn->connect_error) die("Connection failed");                 │   ║
+║  │ ?>                                                                   │   ║
+║  │                                                                      │   ║
+║  │ // api.php - REST endpoints                                          │   ║
+║  │ <?php                                                                │   ║
+║  │ require 'config.php';                                                │   ║
+║  │ $method = $_SERVER['REQUEST_METHOD'];                                │   ║
+║  │ switch($method) {                                                    │   ║
+║  │     case 'GET':  // List tasks                                       │   ║
+║  │     case 'POST': // Add task                                         │   ║
+║  │     case 'PUT':  // Update task                                      │   ║
+║  │     case 'DELETE': // Delete task                                    │   ║
+║  │ }                                                                    │   ║
+║  │ ?>                                                                   │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 5: Nginx as Reverse Proxy
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              SCENARIO: MULTIPLE SERVICES, ONE ENTRY POINT                   ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                             ║
+║  SITUATION: Run multiple services, route traffic based on path             ║
+║  SERVICES: Website, API, Database admin                                    ║
+║                                                                             ║
+║  ARCHITECTURE:                                                              ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │                                                                      │   ║
+║  │                      NGINX (:8080)                                  │   ║
+║  │                         │                                           │   ║
+║  │         ┌───────────────┼───────────────┐                           │   ║
+║  │         │               │               │                           │   ║
+║  │         ▼               ▼               ▼                           │   ║
+║  │   ┌──────────┐   ┌──────────┐   ┌──────────┐                        │   ║
+║  │   │  Static  │   │   API    │   │  Admin   │                        │   ║
+║  │   │  Files   │   │ Node.js  │   │  Adminer │                        │   ║
+║  │   │          │   │  :3000   │   │  :8081   │                        │   ║
+║  │   │ /        │   │ /api/*   │   │ /db/*    │                        │   ║
+║  │   └──────────┘   └──────────┘   └──────────┘                        │   ║
+║  │                                                                      │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+║  NGINX CONFIG:                                                              ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ server {                                                             │   ║
+║  │     listen 8080;                                                     │   ║
+║  │     server_name localhost;                                           │   ║
+║  │                                                                      │   ║
+║  │     # Static files (website)                                         │   ║
+║  │     location / {                                                     │   ║
+║  │         root $PREFIX/var/www/html;                                  │   ║
+║  │         index index.html;                                            │   ║
+║  │     }                                                                │   ║
+║  │                                                                      │   ║
+║  │     # API proxy                                                      │   ║
+║  │     location /api/ {                                                 │   ║
+║  │         proxy_pass http://localhost:3000/;                          │   ║
+║  │         proxy_http_version 1.1;                                      │   ║
+║  │         proxy_set_header Host $host;                                 │   ║
+║  │     }                                                                │   ║
+║  │                                                                      │   ║
+║  │     # Database admin                                                 │   ║
+║  │     location /db/ {                                                  │   ║
+║  │         proxy_pass http://localhost:8081/;                          │   ║
+║  │     }                                                                │   ║
+║  │ }                                                                    │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Web Server Stack Comparison
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    WEB SERVER STACK OPTIONS                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  STACK 1: SIMPLE PYTHON                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │  Browser  ────────►  Python http.server  ────────►  Static Files    │    │
+│  │                      (Port 8000)                    (Directory)      │    │
+│  │                                                                      │    │
+│  │  Best for: Quick testing, file sharing, static sites                │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  STACK 2: LAMP (Linux, Apache, MySQL, PHP)                                  │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                                                                      │    │
+│  │  Browser                                                             │    │
+│  │     │                                                                │    │
+│  │     ▼                                                                │    │
+│  │  Apache (:8080) ◄─── PHP ◄───► MySQL (:3306)                        │    │
+│  │                                                                      │    │
+│  │  Best for: WordPress, traditional PHP apps                           │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  STACK 3: MODERN JS                                                          │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                                                                      │    │
+│  │  Browser                                                             │    │
+│  │     │                                                                │    │
+│  │     ▼                                                                │    │
+│  │  Node.js (:3000) ◄───► Express ◄───► SQLite/MongoDB                 │    │
+│  │                                                                      │    │
+│  │  Best for: APIs, SPAs, real-time apps                               │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  STACK 4: REVERSE PROXY                                                       │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                                                                      │    │
+│  │  Browser                                                             │    │
+│  │     │                                                                │    │
+│  │     ▼                                                                │    │
+│  │  Nginx (:8080) ───┬───► Node.js (:3000)                             │    │
+│  │                   ├───► Python app (:5000)                           │    │
+│  │                   └───► Static files                                 │    │
+│  │                                                                      │    │
+│  │  Best for: Multiple services, load balancing                         │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### HTTP Request Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    HTTP REQUEST/RESPONSE FLOW                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  CLIENT                                      SERVER                         │
+│  ┌────────────────┐                        ┌────────────────┐              │
+│  │                │   1. HTTP REQUEST      │                │              │
+│  │                │   ────────────────────►│                │              │
+│  │                │                        │                │              │
+│  │                │   GET /index.html      │  Parse URL     │              │
+│  │                │   Host: localhost      │  Check Auth    │              │
+│  │                │   User-Agent: ...      │  Route Request │              │
+│  │                │                        │                │              │
+│  │                │                        │        │       │              │
+│  │                │                        │        ▼       │              │
+│  │                │                        │  ┌─────────┐   │              │
+│  │                │                        │  │ Process │   │              │
+│  │                │                        │  │ Request │   │              │
+│  │                │                        │  └────┬────┘   │              │
+│  │                │                        │       │        │              │
+│  │                │   2. HTTP RESPONSE     │       ▼        │              │
+│  │                │   ◄────────────────────│  ┌─────────┐   │              │
+│  │                │                        │  │Generate │   │              │
+│  │                │   200 OK               │  │Response │   │              │
+│  │                │   Content-Type: html   │  └─────────┘   │              │
+│  │                │   <html>...</html>     │                │              │
+│  │                │                        │                │              │
+│  └────────────────┘                        └────────────────┘              │
+│                                                                              │
+│  STATUS CODES:                                                               │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │  2xx Success:  200 OK, 201 Created, 204 No Content                  │    │
+│  │  3xx Redirect: 301 Permanent, 302 Temporary, 304 Not Modified       │    │
+│  │  4xx Client:   400 Bad Request, 404 Not Found, 403 Forbidden        │    │
+│  │  5xx Server:   500 Internal Error, 503 Service Unavailable          │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Title | Relevance |
+|---------|-------|-----------|
+| **Chapter 45** | SSH Server | Secure remote access to web server |
+| **Chapter 46** | SSH Client | Tunnel to access local web server |
+| **Chapter 48** | Database | MySQL/SQLite for dynamic sites |
+| **Chapter 24** | Package Management | Installing web server packages |
+| **Chapter 26** | File Transfer | Upload files to web server |
+| **Chapter 38** | Network Tools | Test connectivity, debugging |
+| **Chapter 49** | Proot Distros | Full Linux web server environment |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Bonus 1: WebSocket Server in Node.js
+
+Real-time bidirectional communication:
+
+```javascript
+// websocket-server.js
+const WebSocket = require('ws');
+const http = require('http');
+
+const server = http.createServer();
+const wss = new WebSocket.Server({ server });
+
+const clients = new Set();
+
+wss.on('connection', (ws) => {
+    clients.add(ws);
+    console.log('Client connected. Total:', clients.size);
+    
+    ws.on('message', (message) => {
+        // Broadcast to all clients
+        for (const client of clients) {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
+                client.send(message);
+            }
+        }
+    });
+    
+    ws.on('close', () => {
+        clients.delete(ws);
+        console.log('Client disconnected');
+    });
+});
+
+server.listen(8080, () => console.log('WebSocket on :8080'));
+
+// Client (browser):
+// const ws = new WebSocket('ws://localhost:8080');
+// ws.onmessage = (e) => console.log(e.data);
+// ws.send('Hello!');
+```
+
+### Bonus 2: Custom Error Pages
+
+Professional 404/500 pages:
+
+```nginx
+# nginx.conf
+server {
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /50x.html;
+    
+    location = /404.html {
+        root $PREFIX/var/www/html;
+        internal;
+    }
+    
+    location = /50x.html {
+        root $PREFIX/var/www/html;
+        internal;
+    }
+}
+```
+
+```html
+<!-- 404.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>404 - Page Not Found</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            text-align: center; 
+            padding: 50px; 
+            background: #1a1a2e;
+            color: #eee;
+        }
+        h1 { font-size: 100px; color: #e94560; margin: 0; }
+        a { color: #0f3460; }
+    </style>
+</head>
+<body>
+    <h1>404</h1>
+    <p>Page not found!</p>
+    <a href="/">Go Home</a>
+</body>
+</html>
+```
+
+### Bonus 3: Automated Deployment Script
+
+Deploy with one command:
+
+```bash
+#!/bin/bash
+# deploy.sh
+
+PROJECT_DIR="$HOME/mywebsite"
+BACKUP_DIR="$HOME/backups"
+DATE=$(date +%Y%m%d_%H%M%S)
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+echo -e "${GREEN}🚀 Starting deployment...${NC}"
+
+# Backup current
+if [ -d "$PROJECT_DIR" ]; then
+    mkdir -p "$BACKUP_DIR"
+    cp -r "$PROJECT_DIR" "$BACKUP_DIR/backup_$DATE"
+    echo "✅ Backup created"
+fi
+
+# Pull latest (if git repo)
+if [ -d "$PROJECT_DIR/.git" ]; then
+    cd "$PROJECT_DIR"
+    git pull origin main
+    echo "✅ Code updated"
+fi
+
+# Install dependencies
+if [ -f "$PROJECT_DIR/package.json" ]; then
+    cd "$PROJECT_DIR"
+    npm install --production
+    echo "✅ Dependencies installed"
+fi
+
+# Restart services
+pkill -f "node.*server.js" 2>/dev/null
+nohup node "$PROJECT_DIR/server.js" > /dev/null 2>&1 &
+echo "✅ Server restarted"
+
+# Health check
+sleep 2
+if curl -s "http://localhost:3000/health" > /dev/null; then
+    echo -e "${GREEN}✅ Deployment successful!${NC}"
+else
+    echo -e "${RED}❌ Health check failed${NC}"
+fi
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Web Server Mastery Checklist
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CHAPTER 47 COMPLETION CHECKLIST                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  PYTHON HTTP SERVER:                                                        │
+│  ☐ Start basic server on custom port                                       │
+│  ☐ Serve specific directory                                                │
+│  ☐ Share files over local network                                          │
+│  ☐ Stop server properly                                                    │
+│                                                                              │
+│  NODE.JS:                                                                   │
+│  ☐ Install Node.js and npm                                                 │
+│  ☐ Create basic HTTP server                                                │
+│  ☐ Use Express.js framework                                                │
+│  ☐ Create REST API endpoints                                               │
+│                                                                              │
+│  APACHE:                                                                    │
+│  ☐ Install and start Apache                                                │
+│  ☐ Configure document root                                                 │
+│  ☐ Enable PHP module                                                       │
+│  ☐ Set up virtual hosts                                                    │
+│  ☐ Configure SSL/HTTPS                                                     │
+│                                                                              │
+│  NGINX:                                                                     │
+│  ☐ Install and start Nginx                                                 │
+│  ☐ Configure reverse proxy                                                 │
+│  ☐ Set up multiple locations                                               │
+│  ☐ Configure caching                                                       │
+│                                                                              │
+│  DATABASES:                                                                 │
+│  ☐ Install and start MariaDB                                               │
+│  ☐ Create database and users                                               │
+│  ☐ Connect PHP to MySQL                                                    │
+│  ☐ Use SQLite for lightweight apps                                         │
+│                                                                              │
+│  PUBLIC ACCESS:                                                             │
+│  ☐ Set up ngrok tunnel                                                     │
+│  ☐ Configure ngrok auth token                                              │
+│  ☐ Create public URL for local server                                      │
+│                                                                              │
+│  SECURITY:                                                                  │
+│  ☐ Generate SSL certificate                                                │
+│  ☐ Configure HTTPS                                                         │
+│  ☐ Set proper file permissions                                             │
+│  ☐ Hide server version                                                     │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+**🌐 Chapter 47: Web Server - UPGRADED SUCCESSFULLY! 🌐**

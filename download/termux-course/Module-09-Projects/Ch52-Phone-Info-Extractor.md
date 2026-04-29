@@ -1,4 +1,20 @@
-# Chapter 52: Project 2 - Phone Info Extractor
+# 📱 Chapter 52: Project 2 - Phone Info Extractor
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║   ██████╗  ██████╗ ███████╗ █████╗  ██████╗ ██╗    ██╗                      ║
+║   ██╔══██╗██╔═══██╗██╔════╝██╔══██╗██╔════╝ ██║    ██║                      ║
+║   ██████╔╝██║   ██║███████╗███████║██║  ███╗██║ █╗ ██║                      ║
+║   ██╔══██╗██║   ██║╚════██║██╔══██║██║   ██║██║███╗██║                      ║
+║   ██║  ██║╚██████╔╝███████║██║  ██║╚██████╔╝╚███╔███╔╝                      ║
+║   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝                       ║
+║                                                                              ║
+║              📱 PHONE INFO EXTRACTOR 📱                                      ║
+║                    by T3rmuxk1ng                                             ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
 
 > **Module:** 9 - Projects  
 > **Chapter:** 52 of 61  
@@ -1044,6 +1060,1147 @@ Main har comment ka reply karta hoon.
 Thank you for watching! See you in Chapter 53!
 
 ═══════════════════════════════════════════════════════════════════════════════
+```
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+### Test Your Phone Info Extractor Knowledge!
+
+<details>
+<summary>❓ Question 1: Which Termux API command returns battery status in JSON format?</summary>
+
+**Answer:** `termux-battery-status`
+
+**Explanation:** The `termux-battery-status` command returns a JSON object containing battery information including percentage, health, charging status, and temperature. This requires the Termux:API app to be installed alongside Termux.
+
+```bash
+termux-battery-status
+# Output: {"health": "GOOD", "percentage": 85, "plugged": "UNPLUGGED", ...}
+```
+</details>
+
+<details>
+<summary>❓ Question 2: What Android command retrieves device properties like model and manufacturer?</summary>
+
+**Answer:** `getprop`
+
+**Explanation:** The `getprop` command reads system properties from Android's property service. You can retrieve specific properties like `getprop ro.product.model` for device model, or `getprop ro.build.version.release` for Android version.
+
+```bash
+getprop ro.product.model      # Device model
+getprop ro.build.version.release  # Android version
+getprop ro.serialno           # Serial number
+```
+</details>
+
+<details>
+<summary>❓ Question 3: Which file contains CPU information in Linux/Android?</summary>
+
+**Answer:** `/proc/cpuinfo`
+
+**Explanation:** The `/proc/cpuinfo` file contains detailed CPU information including processor type, core count, features, and clock speed. It's a virtual file provided by the kernel.
+
+```bash
+cat /proc/cpuinfo
+# Shows: processor, model name, cache size, flags, etc.
+```
+</details>
+
+<details>
+<summary>❓ Question 4: How do you parse JSON output in Python?</summary>
+
+**Answer:** Using the `json` module's `loads()` or `load()` functions
+
+**Explanation:** Python's built-in `json` module provides functions to parse JSON strings. Use `json.loads()` for strings and `json.load()` for file objects.
+
+```python
+import json
+data = '{"name": "test", "value": 123}'
+parsed = json.loads(data)
+print(parsed['name'])  # Output: test
+```
+</details>
+
+<details>
+<summary>❓ Question 5: What is the purpose of `subprocess.run()` in this project?</summary>
+
+**Answer:** To execute shell commands and capture their output
+
+**Explanation:** `subprocess.run()` is used to execute Termux API commands and system commands, capturing their output for processing. The `capture_output=True` parameter captures stdout and stderr.
+
+```python
+result = subprocess.run(
+    ['termux-battery-status'],
+    capture_output=True,
+    text=True
+)
+output = result.stdout
+```
+</details>
+
+<details>
+<summary>❓ Question 6: Which Termux API provides WiFi connection details?</summary>
+
+**Answer:** `termux-wifi-connectioninfo`
+
+**Explanation:** This command returns JSON containing WiFi details like SSID, BSSID, IP address, link speed, signal strength (RSSI), and MAC address.
+
+```bash
+termux-wifi-connectioninfo
+# Output: {"ssid": "MyWiFi", "ip": "192.168.1.100", "rssi": -45, ...}
+```
+</details>
+
+<details>
+<summary>❓ Question 7: What does `/proc/meminfo` contain?</summary>
+
+**Answer:** System memory information including total, free, and available RAM
+
+**Explanation:** The `/proc/meminfo` file provides detailed memory statistics including MemTotal, MemFree, MemAvailable, Buffers, Cached, SwapTotal, and more.
+
+```bash
+cat /proc/meminfo
+# MemTotal:        4096000 kB
+# MemFree:          512000 kB
+# MemAvailable:    2048000 kB
+```
+</details>
+
+<details>
+<summary>❓ Question 8: How do you get the public IP address in Termux?</summary>
+
+**Answer:** Using `curl ifconfig.me` or similar services
+
+**Explanation:** External services like ifconfig.me, icanhazip.com, or ipify.org return your public IP address when queried via curl or wget.
+
+```bash
+curl -s ifconfig.me
+# Output: 123.45.67.89 (your public IP)
+```
+</details>
+
+<details>
+<summary>❓ Question 9: Which Termux API provides SIM and network operator information?</summary>
+
+**Answer:** `termux-telephony-deviceinfo`
+
+**Explanation:** This command returns telephony information including IMEI, network operator, SIM operator, phone type, and SIM state.
+
+```bash
+termux-telephony-deviceinfo
+# Returns: IMEI, network operator name, SIM details, etc.
+```
+</details>
+
+<details>
+<summary>❓ Question 10: What is the purpose of `os.path.expanduser()` in file paths?</summary>
+
+**Answer:** To expand the `~` symbol to the user's home directory
+
+**Explanation:** `os.path.expanduser()` converts paths containing `~` to the actual home directory path, making paths portable across different users and systems.
+
+```python
+import os
+path = "~/storage/downloads"
+expanded = os.path.expanduser(path)
+# Result: /data/data/com.termux/files/home/storage/downloads
+```
+</details>
+
+<details>
+<summary>❓ Question 11: How do you get installed package list in Termux?</summary>
+
+**Answer:** Using `pkg list-installed` or `pm list packages`
+
+**Explanation:** `pkg list-installed` shows Termux packages, while `pm list packages` shows all Android packages. Use `-3` flag with pm for third-party apps only.
+
+```bash
+pkg list-installed      # Termux packages
+pm list packages -3     # Third-party Android apps
+```
+</details>
+
+<details>
+<summary>❓ Question 12: What does the `df -h` command show?</summary>
+
+**Answer:** Disk space usage in human-readable format
+
+**Explanation:** `df` (disk free) shows filesystem disk space usage. The `-h` flag makes output human-readable (MB, GB instead of blocks).
+
+```bash
+df -h
+# Filesystem    Size  Used Avail Use% Mounted on
+# /dev/block    32G   15G   17G  47% /
+```
+</details>
+
+<details>
+<summary>❓ Question 13: How do you format Python datetime for filenames?</summary>
+
+**Answer:** Using `strftime()` format codes
+
+**Explanation:** `strftime()` formats datetime objects into strings using format codes like `%Y` for year, `%m` for month, `%d` for day, `%H%M%S` for time.
+
+```python
+from datetime import datetime
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+# Result: "20241215_143000"
+```
+</details>
+
+<details>
+<summary>❓ Question 14: What is the purpose of error handling in the phone info extractor?</summary>
+
+**Answer:** To gracefully handle missing APIs, permissions, or unavailable data
+
+**Explanation:** Not all devices have all features (e.g., some lack telephony), and APIs might fail. Try-except blocks ensure the script continues even if some information can't be retrieved.
+
+```python
+try:
+    battery = run_json_command("termux-battery-status")
+except Exception as e:
+    battery = {"error": str(e)}
+```
+</details>
+
+<details>
+<summary>❓ Question 15: Which HTML tags are used to create styled reports?</summary>
+
+**Answer:** `<div>`, `<span>`, `<style>`, and CSS classes
+
+**Explanation:** HTML reports use div containers for sections, spans for individual items, and embedded CSS for styling. The style tag contains all formatting rules.
+
+```html
+<div class='section'>
+  <h2>Device Information</h2>
+  <span class='info-label'>Model:</span>
+  <span class='info-value'>Pixel 7</span>
+</div>
+```
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Device Information & System Programming Interview Questions
+
+<details>
+<summary>🎤 Q1: How would you design a device inventory system for enterprise management?</summary>
+
+**Answer:**
+An enterprise device inventory system would include:
+1. **Agent-based collection**: Lightweight agents running on each device
+2. **Centralized database**: Store device info with unique identifiers
+3. **Scheduled reporting**: Daily/weekly automatic updates
+4. **Change detection**: Alert on hardware/software changes
+5. **API endpoints**: For integration with ITSM tools
+6. **Compliance checking**: Verify against security policies
+
+**Follow-up:** How would you handle devices that are offline or behind firewalls?
+</details>
+
+<details>
+<summary>🎤 Q2: Explain how you would secure the collection and transmission of device information.</summary>
+
+**Answer:**
+Security measures would include:
+1. **Encryption in transit**: TLS/SSL for all communications
+2. **Authentication**: API keys or certificates for device identity
+3. **Data minimization**: Only collect necessary information
+4. **Anonymization**: Hash sensitive identifiers when possible
+5. **Access control**: Role-based access to inventory data
+6. **Audit logging**: Track who accessed what data
+
+**Follow-up:** How would you handle GDPR/privacy concerns with device tracking?
+</details>
+
+<details>
+<summary>🎤 Q3: How would you implement cross-platform device information collection?</summary>
+
+**Answer:**
+Cross-platform implementation requires:
+1. **Abstraction layer**: Common interface for all platforms
+2. **Platform-specific modules**: OS-specific implementations
+3. **Feature detection**: Check what's available on each platform
+4. **Graceful degradation**: Handle missing features gracefully
+5. **Standardized output**: Common JSON schema regardless of platform
+
+```python
+class DeviceInfoCollector:
+    def __init__(self):
+        self.platform = platform.system()
+        
+    def get_info(self):
+        if self.platform == "Linux":
+            return LinuxInfoCollector().collect()
+        elif self.platform == "Android":
+            return AndroidInfoCollector().collect()
+```
+
+**Follow-up:** What are the key differences between Android and desktop Linux for device info?
+</details>
+
+<details>
+<summary>🎤 Q4: How would you optimize device info collection for performance?</summary>
+
+**Answer:**
+Performance optimization strategies:
+1. **Caching**: Cache slow-changing information
+2. **Parallel collection**: Use threading for independent calls
+3. **Lazy loading**: Only collect info when requested
+4. **Selective collection**: Option to skip expensive operations
+5. **Timeout handling**: Don't hang on unresponsive APIs
+
+```python
+from concurrent.futures import ThreadPoolExecutor
+
+def collect_all_info():
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        futures = {
+            executor.submit(get_battery_info): 'battery',
+            executor.submit(get_cpu_info): 'cpu',
+            executor.submit(get_memory_info): 'memory',
+        }
+        results = {}
+        for future, key in futures.items():
+            try:
+                results[key] = future.result(timeout=5)
+            except TimeoutError:
+                results[key] = {'error': 'timeout'}
+        return results
+```
+
+**Follow-up:** How would you benchmark and identify bottlenecks in the collection process?
+</details>
+
+<details>
+<summary>🎤 Q5: Explain how you would implement a device fingerprinting system.</summary>
+
+**Answer:**
+Device fingerprinting combines multiple identifiers:
+1. **Hardware identifiers**: IMEI, serial number, MAC addresses
+2. **Software identifiers**: Android ID, app signatures
+3. **Configuration fingerprints**: Installed apps, settings hash
+4. **Behavioral patterns**: Usage patterns, timing analysis
+5. **Consistent hashing**: Generate stable fingerprint across reboots
+
+```python
+def generate_fingerprint():
+    components = [
+        getprop('ro.serialno'),
+        getprop('ro.build.fingerprint'),
+        get_mac_address(),
+        get_android_id(),
+        hash_installed_apps()
+    ]
+    combined = '|'.join(components)
+    return hashlib.sha256(combined.encode()).hexdigest()
+```
+
+**Follow-up:** What are the privacy implications and how would you address them?
+</details>
+
+<details>
+<summary>🎤 Q6: How would you implement change detection for device monitoring?</summary>
+
+**Answer:**
+Change detection implementation:
+1. **Baseline storage**: Store initial state snapshot
+2. **Periodic comparison**: Compare current state with baseline
+3. **Delta calculation**: Identify specific changes
+4. **Change logging**: Maintain audit trail of changes
+5. **Alerting**: Notify on significant changes
+
+```python
+class DeviceMonitor:
+    def __init__(self, baseline_file):
+        self.baseline = self.load_baseline(baseline_file)
+        
+    def check_changes(self):
+        current = collect_all_info()
+        changes = {}
+        for key in current:
+            if current[key] != self.baseline.get(key):
+                changes[key] = {
+                    'old': self.baseline.get(key),
+                    'new': current[key]
+                }
+        return changes
+```
+
+**Follow-up:** How would you handle false positives from normal system updates?
+</details>
+
+<details>
+<summary>🎤 Q7: How would you design a reporting system for device metrics?</summary>
+
+**Answer:**
+A reporting system would include:
+1. **Template engine**: Customizable report formats
+2. **Multiple output formats**: PDF, HTML, JSON, CSV
+3. **Scheduling**: Automated report generation
+4. **Distribution**: Email, webhook, dashboard delivery
+5. **Historical comparisons**: Trend analysis
+6. **Conditional formatting**: Highlight issues automatically
+
+**Follow-up:** How would you implement real-time dashboards vs. scheduled reports?
+</details>
+
+<details>
+<summary>🎤 Q8: Explain how you would handle API rate limiting and retries.</summary>
+
+**Answer:**
+Rate limiting and retry strategies:
+1. **Exponential backoff**: Increasing delay between retries
+2. **Circuit breaker**: Stop retrying after threshold
+3. **Request queuing**: Buffer requests when rate limited
+4. **Token bucket**: Control request rate
+5. **Fallback mechanisms**: Use cached data when unavailable
+
+```python
+import time
+from functools import wraps
+
+def retry_with_backoff(max_retries=3, base_delay=1):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            for attempt in range(max_retries):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    if attempt == max_retries - 1:
+                        raise
+                    delay = base_delay * (2 ** attempt)
+                    time.sleep(delay)
+        return wrapper
+    return decorator
+```
+
+**Follow-up:** How would you differentiate between rate limiting and actual errors?
+</details>
+
+<details>
+<summary>🎤 Q9: How would you implement device info collection without Termux:API?</summary>
+
+**Answer:**
+Alternative methods without Termux:API:
+1. **Direct file reading**: `/proc/` and `/sys/` filesystems
+2. **System commands**: `getprop`, `dumpsys`, `settings`
+3. **Native APIs**: Using JNI to call Android APIs
+4. **ADB commands**: If ADB access is available
+5. **Package manager**: `pm` and `cmd package` commands
+
+```python
+def get_battery_without_api():
+    # Read from /sys/class/power_supply/
+    with open('/sys/class/power_supply/battery/capacity') as f:
+        percentage = f.read().strip()
+    with open('/sys/class/power_supply/battery/status') as f:
+        status = f.read().strip()
+    return {'percentage': int(percentage), 'status': status}
+```
+
+**Follow-up:** What limitations exist compared to using Termux:API?
+</details>
+
+<details>
+<summary>🎤 Q10: How would you implement a distributed device info collection system?</summary>
+
+**Answer:**
+Distributed system architecture:
+1. **Master-worker model**: Central coordinator, distributed collectors
+2. **Message queue**: RabbitMQ/Redis for task distribution
+3. **API gateway**: REST/gRPC endpoints for collection
+4. **Database sharding**: Distribute storage by region/device type
+5. **Consistent hashing**: For load balancing and caching
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Client 1  │     │   Client 2  │     │   Client N  │
+└──────┬──────┘     └──────┬──────┘     └──────┬──────┘
+       │                   │                   │
+       └───────────────────┼───────────────────┘
+                          │
+                    ┌─────▼─────┐
+                    │    API    │
+                    │  Gateway  │
+                    └─────┬─────┘
+                          │
+                    ┌─────▼─────┐
+                    │   Queue   │
+                    └─────┬─────┘
+                          │
+       ┌──────────────────┼──────────────────┐
+       │                  │                  │
+ ┌─────▼─────┐     ┌─────▼─────┐     ┌─────▼─────┐
+ │  Worker 1 │     │  Worker 2 │     │  Worker N │
+ └───────────┘     └───────────┘     └───────────┘
+```
+
+**Follow-up:** How would you handle network partitions and eventual consistency?
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Device Onboarding for IT Department
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                    🖥️ DEVICE ONBOARDING SCENARIO                          │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Situation: IT department needs to document a new employee's device     │
+│  for asset management and security compliance.                           │
+│                                                                          │
+│  Commands to use:                                                        │
+│  ──────────────────                                                      │
+│                                                                          │
+│  # Run the phone info extractor                                          │
+│  python phone_info_extractor.py --full-report                            │
+│                                                                          │
+│  # The tool will generate:                                               │
+│  # - JSON report with all device details                                 │
+│  # - HTML report for HR documentation                                    │
+│  # - Text summary for quick reference                                    │
+│                                                                          │
+│  Sample output:                                                          │
+│  ──────────────                                                          │
+│  Device: Samsung Galaxy S23 (SM-S911B)                                   │
+│  Serial: R5CT50XXXXX                                                     │
+│  Android: 14 (API 34)                                                    │
+│  IMEI: 352XXXXXXXXXXXX                                                   │
+│  Storage: 128GB (45GB used)                                              │
+│  Security Patch: 2024-01-01                                              │
+│                                                                          │
+│  ✅ Reports saved to ~/storage/downloads/phone_info/                     │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 2: Troubleshooting Slow Performance
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                    🔧 PERFORMANCE TROUBLESHOOTING                         │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Situation: User reports phone is running slow. Need to diagnose.       │
+│                                                                          │
+│  Commands to use:                                                        │
+│  ──────────────────                                                      │
+│                                                                          │
+│  # Check memory usage                                                    │
+│  cat /proc/meminfo | grep -E "MemTotal|MemFree|MemAvailable"             │
+│                                                                          │
+│  # Check storage space                                                   │
+│  df -h                                                                   │
+│                                                                          │
+│  # Check CPU temperature and battery                                     │
+│  termux-battery-status                                                   │
+│                                                                          │
+│  # Check running processes                                               │
+│  ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -10                  │
+│                                                                          │
+│  Diagnosis output:                                                       │
+│  ─────────────────                                                       │
+│  Memory: 6GB total, 4.2GB used (70% - Moderate usage)                    │
+│  Storage: 64GB total, 58GB used (90% - Near capacity!)                   │
+│  Battery: 45°C (Running hot!)                                            │
+│  Top process: com.app.chrome - 800MB RAM                                 │
+│                                                                          │
+│  💡 Recommendation: Clear cache, delete unused files, check for         │
+│     background apps. Storage is nearly full!                             │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 3: Security Audit Data Collection
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                    🔒 SECURITY AUDIT DATA COLLECTION                      │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Situation: Security auditor needs device information for compliance.   │
+│                                                                          │
+│  Commands to use:                                                        │
+│  ──────────────────                                                      │
+│                                                                          │
+│  # Generate comprehensive security report                                │
+│  python phone_info_extractor.py --security-audit                        │
+│                                                                          │
+│  Key data collected:                                                     │
+│  ──────────────────                                                      │
+│  • Android version & security patch level                                │
+│  • Device encryption status                                              │
+│  • Installed applications list                                           │
+│  • Network configuration                                                 │
+│  • Developer options status                                              │
+│  • USB debugging status                                                  │
+│  • Screen lock type                                                      │
+│                                                                          │
+│  Security Checklist:                                                     │
+│  ──────────────────                                                      │
+│  ✅ Android 14 (Up to date)                                              │
+│  ✅ Security Patch: January 2024                                         │
+│  ✅ Device Encrypted                                                     │
+│  ⚠️ USB Debugging: ENABLED (Risk)                                        │
+│  ⚠️ Root Access: DETECTED (Risk)                                         │
+│  ❌ Screen Lock: None (Critical Risk)                                    │
+│                                                                          │
+│  📋 Report generated: security_audit_20241215.json                       │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 4: App Compatibility Check
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                    📲 APP COMPATIBILITY CHECK                             │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Situation: Developer needs to verify device meets app requirements.    │
+│                                                                          │
+│  Commands to use:                                                        │
+│  ──────────────────                                                      │
+│                                                                          │
+│  # Quick device spec check                                               │
+│  echo "Model: $(getprop ro.product.model)"                               │
+│  echo "Android: $(getprop ro.build.version.release)"                     │
+│  echo "SDK: $(getprop ro.build.version.sdk)"                             │
+│  echo "RAM: $(cat /proc/meminfo | head -1)"                              │
+│  echo "CPU Cores: $(cat /proc/cpuinfo | grep processor | wc -l)"         │
+│                                                                          │
+│  Output:                                                                 │
+│  ────────                                                                │
+│  Model: Pixel 7 Pro                                                      │
+│  Android: 14                                                             │
+│  SDK: 34                                                                 │
+│  RAM: MemTotal: 11853884 kB (12GB)                                       │
+│  CPU Cores: 8                                                            │
+│                                                                          │
+│  App Requirements Check:                                                 │
+│  ────────────────────                                                    │
+│  App: NewGame Pro                                                        │
+│  Minimum: Android 11 (SDK 30), 4GB RAM                                   │
+│  ✅ Device EXCEEDS requirements!                                         │
+│  Performance expectation: Excellent                                      │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 5: Network Troubleshooting
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                    📶 NETWORK TROUBLESHOOTING                             │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Situation: User reports WiFi connectivity issues.                       │
+│                                                                          │
+│  Commands to use:                                                        │
+│  ──────────────────                                                      │
+│                                                                          │
+│  # Check WiFi connection                                                 │
+│  termux-wifi-connectioninfo                                              │
+│                                                                          │
+│  # Check IP addresses                                                    │
+│  ip addr show wlan0                                                      │
+│                                                                          │
+│  # Test connectivity                                                     │
+│  ping -c 4 google.com                                                    │
+│  ping -c 4 8.8.8.8                                                       │
+│                                                                          │
+│  # Check DNS                                                             │
+│  nslookup google.com                                                     │
+│                                                                          │
+│  Diagnostic output:                                                      │
+│  ─────────────────                                                       │
+│  WiFi: Connected to "MyWiFi"                                             │
+│  Signal: -72 dBm (Weak)                                                  │
+│  Local IP: 192.168.1.105                                                 │
+│  Public IP: Timeout (No internet!)                                       │
+│  DNS: 192.168.1.1 (Router)                                               │
+│                                                                          │
+│  🔍 Issue: Weak signal (-72 dBm) + DNS resolution failing                │
+│  💡 Recommendation: Move closer to router or check DNS settings          │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 PROJECT ARCHITECTURE DIAGRAMS
+
+### Phone Info Extractor Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PHONE INFO EXTRACTOR ARCHITECTURE                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                         DATA SOURCES                                  │    │
+│  │                                                                        │    │
+│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐    │    │
+│  │  │Termux APIs  │ │System Files │ │  Commands   │ │ Environment │    │    │
+│  │  │             │ │ /proc/*     │ │ getprop     │ │ Variables   │    │    │
+│  │  │• Battery    │ │ /sys/*      │ │ pm          │ │ HOME, PATH  │    │    │
+│  │  │• WiFi       │ │ cpuinfo     │ │ df          │ │ etc.        │    │    │
+│  │  │• Telephony  │ │ meminfo     │ │ ip          │ │             │    │    │
+│  │  └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘    │    │
+│  │         │               │               │               │             │    │
+│  └─────────┼───────────────┼───────────────┼───────────────┼────────────┘    │
+│            │               │               │               │                  │
+│            ▼               ▼               ▼               ▼                  │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                        COLLECTION LAYER                               │    │
+│  │                                                                        │    │
+│  │  ┌──────────────────────────────────────────────────────────────┐    │    │
+│  │  │                     run_command()                             │    │    │
+│  │  │  • Execute shell commands                                     │    │    │
+│  │  │  • Capture output                                              │    │    │
+│  │  │  • Handle errors                                               │    │    │
+│  │  └──────────────────────────────────────────────────────────────┘    │    │
+│  │                                                                        │    │
+│  │  ┌──────────────────────────────────────────────────────────────┐    │    │
+│  │  │                   run_json_command()                          │    │    │
+│  │  │  • Execute command                                             │    │    │
+│  │  │  • Parse JSON response                                         │    │    │
+│  │  │  • Return Python dict                                          │    │    │
+│  │  └──────────────────────────────────────────────────────────────┘    │    │
+│  │                                                                        │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                │                                            │
+│                                ▼                                            │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                      PROCESSING LAYER                                 │    │
+│  │                                                                        │    │
+│  │  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐            │    │
+│  │  │ get_device│ │get_battery│ │ get_cpu   │ │get_network│            │    │
+│  │  │ _info()   │ │ _info()   │ │ _info()   │ │ _info()   │            │    │
+│  │  └───────────┘ └───────────┘ └───────────┘ └───────────┘            │    │
+│  │                                                                        │    │
+│  │  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐            │    │
+│  │  │get_memory │ │get_storage│ │get_telepho│ │get_termux │            │    │
+│  │  │ _info()   │ │ _info()   │ │ ny_info() │ │ _info()   │            │    │
+│  │  └───────────┘ └───────────┘ └───────────┘ └───────────┘            │    │
+│  │                                                                        │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                │                                            │
+│                                ▼                                            │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                        OUTPUT LAYER                                   │    │
+│  │                                                                        │    │
+│  │  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐            │    │
+│  │  │ format_text   │  │ format_json   │  │ format_html   │            │    │
+│  │  │ _output()     │  │ _output()     │  │ _output()     │            │    │
+│  │  └───────┬───────┘  └───────┬───────┘  └───────┬───────┘            │    │
+│  │          │                  │                  │                      │    │
+│  │          ▼                  ▼                  ▼                      │    │
+│  │    [Console]           [.json]             [.html]                   │    │
+│  │                                                                        │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Data Collection Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    DATA COLLECTION FLOW                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   START                                                                      │
+│     │                                                                        │
+│     ▼                                                                        │
+│   ┌─────────────────────────────────────────┐                              │
+│   │         collect_all_info()               │                              │
+│   │                                         │                              │
+│   │  Coordinates all information gathering   │                              │
+│   └───────────────────┬─────────────────────┘                              │
+│                       │                                                      │
+│     ┌─────────────────┼─────────────────┬─────────────────┐                │
+│     │                 │                 │                 │                │
+│     ▼                 ▼                 ▼                 ▼                │
+│   ┌───────┐       ┌───────┐       ┌───────┐       ┌───────┐              │
+│   │Device │       │Battery│       │  CPU  │       │Memory │              │
+│   │ Info  │       │ Info  │       │ Info  │       │ Info  │              │
+│   └───┬───┘       └───┬───┘       └───┬───┘       └───┬───┘              │
+│       │               │               │               │                    │
+│       │ getprop       │ termux-api    │ /proc/        │ /proc/            │
+│       │ commands      │ commands      │ cpuinfo       │ meminfo           │
+│       │               │               │               │                    │
+│   ┌───┴───┐       ┌───┴───┐       ┌───┴───┐       ┌───┴───┐              │
+│   │Storage│       │Network│       │Telephony│     │Termux │              │
+│   │ Info  │       │ Info  │       │  Info   │      │ Info  │              │
+│   └───┬───┘       └───┬───┘       └───┬────┘       └───┬───┘              │
+│       │               │               │               │                    │
+│       │ df -h         │ termux-wifi   │ termux-       │ env vars          │
+│       │               │ connectioninfo│ telephony     │ pkg list          │
+│       │               │               │               │                    │
+│       └───────────────┴───────────────┴───────────────┘                    │
+│                               │                                            │
+│                               ▼                                            │
+│   ┌─────────────────────────────────────────┐                              │
+│   │              Data Dictionary              │                              │
+│   │                                         │                              │
+│   │  {                                      │                              │
+│   │    "timestamp": "2024-12-15 14:30:00",  │                              │
+│   │    "device": {...},                     │                              │
+│   │    "battery": {...},                    │                              │
+│   │    "cpu": {...},                        │                              │
+│   │    "memory": {...},                     │                              │
+│   │    "network": {...},                    │                              │
+│   │    "telephony": {...}                   │                              │
+│   │  }                                      │                              │
+│   └───────────────────┬─────────────────────┘                              │
+│                       │                                                      │
+│     ┌─────────────────┼─────────────────┐                                  │
+│     │                 │                 │                                    │
+│     ▼                 ▼                 ▼                                    │
+│  [TEXT]            [JSON]           [HTML]                                  │
+│   Output            Report          Report                                  │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+### Chapter Dependencies and Navigation
+
+| Category | Chapter | Topic | Connection |
+|----------|---------|-------|------------|
+| **Prerequisites** | Ch47 | Python Basics | File I/O, JSON parsing |
+| | Ch48 | Advanced Python | subprocess module |
+| | Ch50 | Termux API | API commands |
+| **Related Projects** | Ch51 | Password Generator | Security tools |
+| | Ch53 | WiFi Analyzer | Network diagnostics |
+| | Ch55 | Port Scanner | Network security |
+| **Next Steps** | Ch57 | Backup Automation | Device backup |
+| | Ch61 | Security Best Practices | Device hardening |
+
+### Learning Path
+
+```
+Module 9 Projects Flow:
+═══════════════════════
+
+Ch51 Password Generator ──▶ Ch52 Phone Info ──▶ Ch53 WiFi Analyzer
+         │                        │                     │
+         ▼                        ▼                     ▼
+    [Security]              [Diagnostics]        [Network Security]
+         │                        │                     │
+         └────────────────────────┼─────────────────────┘
+                                  │
+                                  ▼
+                         Ch54-57 More Projects
+```
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Remote Device Monitoring
+
+```python
+import requests
+import json
+from datetime import datetime
+
+class RemoteDeviceMonitor:
+    """
+    Send device info to remote server for monitoring
+    """
+    def __init__(self, server_url, api_key):
+        self.server_url = server_url
+        self.api_key = api_key
+    
+    def send_report(self, device_info):
+        """Send device info to monitoring server"""
+        payload = {
+            'device_id': self._generate_device_id(),
+            'timestamp': datetime.now().isoformat(),
+            'data': device_info
+        }
+        
+        headers = {
+            'Authorization': f'Bearer {self.api_key}',
+            'Content-Type': 'application/json'
+        }
+        
+        try:
+            response = requests.post(
+                f'{self.server_url}/api/device/report',
+                json=payload,
+                headers=headers,
+                timeout=10
+            )
+            return response.status_code == 200
+        except requests.RequestException as e:
+            print(f"Failed to send report: {e}")
+            return False
+    
+    def _generate_device_id(self):
+        """Generate unique device identifier"""
+        import hashlib
+        serial = run_command("getprop ro.serialno")
+        model = run_command("getprop ro.product.model")
+        unique = f"{serial}:{model}"
+        return hashlib.md5(unique.encode()).hexdigest()[:12]
+```
+
+### Advanced Technique 2: Automated Report Scheduling
+
+```python
+import schedule
+import time
+from threading import Thread
+
+class ScheduledReporter:
+    """
+    Schedule automatic device info collection
+    """
+    def __init__(self, output_dir):
+        self.output_dir = output_dir
+        self.running = False
+    
+    def start(self, interval_hours=24):
+        """Start scheduled reporting"""
+        schedule.every(interval_hours).hours.do(self._collect_and_save)
+        
+        # Also run at startup
+        self._collect_and_save()
+        
+        self.running = True
+        thread = Thread(target=self._run_scheduler, daemon=True)
+        thread.start()
+    
+    def stop(self):
+        """Stop scheduled reporting"""
+        self.running = False
+        schedule.clear()
+    
+    def _run_scheduler(self):
+        while self.running:
+            schedule.run_pending()
+            time.sleep(60)
+    
+    def _collect_and_save(self):
+        """Collect info and save to file"""
+        from datetime import datetime
+        
+        data = collect_all_info()
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"device_info_{timestamp}.json"
+        filepath = os.path.join(self.output_dir, filename)
+        
+        with open(filepath, 'w') as f:
+            json.dump(data, f, indent=2, default=str)
+        
+        print(f"Report saved: {filepath}")
+        
+        # Send notification
+        os.system(f'termux-notification --title "Device Report" '
+                  f'--content "Saved: {filename}"')
+
+# Usage
+reporter = ScheduledReporter("~/reports")
+reporter.start(interval_hours=24)  # Daily reports
+```
+
+### Advanced Technique 3: Device Comparison Tool
+
+```python
+import json
+from difflib import unified_diff
+
+class DeviceComparator:
+    """
+    Compare device info between two snapshots or devices
+    """
+    def compare_snapshots(self, file1, file2):
+        """Compare two device info snapshots"""
+        with open(file1) as f:
+            data1 = json.load(f)
+        with open(file2) as f:
+            data2 = json.load(f)
+        
+        differences = {}
+        
+        for category in data1:
+            if category == 'timestamp':
+                continue
+            
+            if category in data2:
+                diff = self._compare_dicts(data1[category], data2[category])
+                if diff:
+                    differences[category] = diff
+        
+        return differences
+    
+    def _compare_dicts(self, dict1, dict2, path=""):
+        """Recursively compare dictionaries"""
+        differences = []
+        
+        all_keys = set(dict1.keys()) | set(dict2.keys())
+        
+        for key in all_keys:
+            current_path = f"{path}.{key}" if path else key
+            
+            if key not in dict1:
+                differences.append({
+                    'path': current_path,
+                    'change': 'ADDED',
+                    'value': dict2[key]
+                })
+            elif key not in dict2:
+                differences.append({
+                    'path': current_path,
+                    'change': 'REMOVED',
+                    'value': dict1[key]
+                })
+            elif dict1[key] != dict2[key]:
+                if isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
+                    nested = self._compare_dicts(dict1[key], dict2[key], current_path)
+                    differences.extend(nested)
+                else:
+                    differences.append({
+                        'path': current_path,
+                        'change': 'MODIFIED',
+                        'old': dict1[key],
+                        'new': dict2[key]
+                    })
+        
+        return differences
+    
+    def generate_diff_report(self, differences):
+        """Generate human-readable diff report"""
+        report = []
+        report.append("=" * 60)
+        report.append("DEVICE INFO CHANGE REPORT")
+        report.append("=" * 60)
+        
+        for category, changes in differences.items():
+            report.append(f"\n[{category.upper()}]")
+            report.append("-" * 40)
+            for change in changes:
+                if change['change'] == 'ADDED':
+                    report.append(f"  + {change['path']}: {change['value']}")
+                elif change['change'] == 'REMOVED':
+                    report.append(f"  - {change['path']}: {change['value']}")
+                else:
+                    report.append(f"  ~ {change['path']}:")
+                    report.append(f"      Old: {change['old']}")
+                    report.append(f"      New: {change['new']}")
+        
+        return "\n".join(report)
+
+# Usage
+comparator = DeviceComparator()
+diff = comparator.compare_snapshots(
+    "device_info_20241201.json",
+    "device_info_20241215.json"
+)
+print(comparator.generate_diff_report(diff))
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### What You Should Have Learned
+
+- [ ] Understanding of Termux API commands for device info
+- [ ] Using `getprop` to retrieve Android system properties
+- [ ] Reading system files from `/proc/` filesystem
+- [ ] JSON parsing in Python with the `json` module
+- [ ] Using `subprocess` to execute shell commands
+- [ ] HTML report generation with embedded CSS
+- [ ] File handling and path manipulation with `os` and `pathlib`
+- [ ] Error handling for missing APIs and permissions
+- [ ] Creating formatted text, JSON, and HTML outputs
+- [ ] Battery, WiFi, telephony API usage
+
+### Skills Acquired
+
+| Skill | Level | Description |
+|-------|-------|-------------|
+| API Integration | ⭐⭐⭐ | Using Termux APIs for data collection |
+| System Programming | ⭐⭐⭐ | Reading /proc and executing commands |
+| JSON Processing | ⭐⭐⭐ | Parsing and generating JSON data |
+| Report Generation | ⭐⭐ | Creating multi-format reports |
+| Error Handling | ⭐⭐ | Graceful handling of failures |
+
+---
+
+## 🚀 PROJECT CHALLENGES
+
+### Challenge 1: Real-time Device Dashboard
+
+**Task:** Create a web-based dashboard that displays device information in real-time with auto-refresh.
+
+**Requirements:**
+- Use Flask or FastAPI for the web server
+- Auto-refresh every 30 seconds
+- Visual indicators for battery, storage, memory
+- Historical charts for resource usage
+
+**Hint:** Store data in SQLite and use Chart.js for visualization.
+
+```bash
+# Expected usage:
+python dashboard.py --port 8080
+# Open browser to http://localhost:8080
+```
+
+### Challenge 2: Device Fingerprinting System
+
+**Task:** Implement a device fingerprinting system that can uniquely identify devices across sessions.
+
+**Requirements:**
+- Combine multiple identifiers (IMEI, serial, MAC)
+- Generate consistent hash across runs
+- Detect device changes (new apps, settings)
+- Alert on significant changes
+
+**Hint:** Use hashlib for consistent fingerprinting.
+
+```bash
+# Expected usage:
+python fingerprint.py --generate
+python fingerprint.py --verify
+```
+
+### Challenge 3: Multi-Device Inventory System
+
+**Task:** Build a system to collect and manage info from multiple devices.
+
+**Requirements:**
+- Central server to receive device reports
+- Device registration and authentication
+- Web UI to view all devices
+- Alert system for policy violations
+
+**Hint:** Use a simple REST API with token authentication.
+
+```bash
+# Expected usage:
+# On each device:
+python reporter.py --server http://inventory.local --token DEVICE_TOKEN
+
+# On server:
+python inventory_server.py --port 5000
 ```
 
 ---

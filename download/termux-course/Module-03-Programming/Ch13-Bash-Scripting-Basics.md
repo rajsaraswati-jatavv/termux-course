@@ -1,4 +1,20 @@
-# Chapter 13: Bash Scripting Basics
+```
+ ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗ ███╗   ███╗███████╗███████╗████████╗███████╗██████╗ 
+██╔════╝██╔══██╗██║     ██║     ██╔══██╗██╔══██╗████╗ ████║██╔════╝██╔════╝╚══██╔══╝██╔════╝██╔══██╗
+██║     ███████║██║     ██║     ██████╔╝███████║██╔████╔██║█████╗  ███████╗   ██║   █████╗  ██████╔╝
+██║     ██╔══██║██║     ██║     ██╔══██╗██╔══██║██║╚██╔╝██║██╔══╝  ╚════██║   ██║   ██╔══╝  ██╔══██╗
+╚██████╗██║  ██║███████╗███████╗██║  ██║██║  ██║██║ ╚═╝ ██║███████╗███████║   ██║   ███████╗██║  ██║
+ ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+                                                                                                    
+ ██████╗ ██████╗  █████╗ ███╗   ███╗███████╗███████╗████████╗███████╗██████╗ 
+██╔════╝██╔═══██╗██╔══██╗████╗ ████║██╔════╝██╔════╝╚══██╔══╝██╔════╝██╔══██╗
+██║     ██║   ██║███████║██╔████╔██║█████╗  ███████╗   ██║   █████╗  ██████╔╝
+██║     ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ╚════██║   ██║   ██╔══╝  ██╔══██╗
+╚██████╗╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗███████║   ██║   ███████╗██║  ██║
+ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+```
+
+# 🐚 Chapter 13: Bash Scripting Basics
 
 > **Module:** 3 - Programming  
 > **Chapter:** 13 of 61  
@@ -3613,6 +3629,1422 @@ Before moving to Chapter 14, verify:
 
 ---
 
+## 🎮 INTERACTIVE QUIZ
+
+Test your Bash Scripting Basics knowledge! Click to reveal answers.
+
+<details>
+<summary><b>Q1: What does the shebang #!/bin/bash do?</b></summary>
+
+The shebang `#!/bin/bash` tells the operating system which interpreter to use to execute the script. It must be the very first line of the script. When you run `./script.sh`, the OS reads this line and knows to use bash to interpret the commands.
+
+```bash
+#!/bin/bash    # Correct - first line
+#!/usr/bin/env bash  # Better - more portable
+```
+</details>
+
+<details>
+<summary><b>Q2: What's wrong with this code: name = "John"?</b></summary>
+
+**Bash does NOT allow spaces around the `=` sign in variable assignment!**
+
+```bash
+# WRONG - will cause error
+name = "John"
+
+# CORRECT - no spaces
+name="John"
+```
+
+The wrong version will try to run a command called `name` with `=` and `"John"` as arguments.
+</details>
+
+<details>
+<summary><b>Q3: How do you get the length of a string in Bash?</b></summary>
+
+Use `${#variable}` syntax:
+
+```bash
+str="Hello Termux"
+echo ${#str}    # Output: 12
+
+# For arrays
+arr=("a" "b" "c")
+echo ${#arr[@]}    # Output: 3 (number of elements)
+```
+</details>
+
+<details>
+<summary><b>Q4: What's the difference between $@ and $*?</b></summary>
+
+Both represent all command-line arguments, but they behave differently when quoted:
+
+```bash
+# $* - All arguments as single string
+for arg in "$*"; do
+    echo "$arg"    # Prints all args as ONE item
+done
+
+# $@ - Each argument as separate element
+for arg in "$@"; do
+    echo "$arg"    # Prints each arg separately
+done
+
+# Use "$@" when you want to preserve argument boundaries!
+```
+</details>
+
+<details>
+<summary><b>Q5: How do you check if a file exists and is readable?</b></summary>
+
+Use file test operators with `-e` and `-r`:
+
+```bash
+if [[ -e "$file" && -r "$file" ]]; then
+    echo "File exists AND is readable"
+fi
+
+# Other useful tests:
+# -f = regular file
+# -d = directory
+# -w = writable
+# -x = executable
+# -s = non-empty
+```
+</details>
+
+<details>
+<summary><b>Q6: What's the difference between [ ] and [[ ]]?</b></summary>
+
+`[[ ]]` is the Bash enhanced test command with more features:
+
+```bash
+# [ ] - POSIX test (portable but limited)
+[ "$var" = "value" ]        # Requires quoting
+[ "$a" \< "$b" ]           # Must escape <
+
+# [[ ]] - Bash extended test (recommended)
+[[ $var == "value" ]]       # No quoting needed
+[[ $var =~ regex ]]         # Regex support!
+[[ $a < $b ]]              # No escaping needed
+```
+
+Use `[[ ]]` for Bash scripts, `[ ]` for POSIX compatibility.
+</details>
+
+<details>
+<summary><b>Q7: How do you read user input silently (for passwords)?</b></summary>
+
+Use the `-s` flag with `read`:
+
+```bash
+read -s -p "Enter password: " password
+echo    # Add newline after hidden input
+echo "Password received (length: ${#password})"
+```
+
+The `-s` flag prevents the input from being displayed on screen.
+</details>
+
+<details>
+<summary><b>Q8: What's the difference between for, while, and until loops?</b></summary>
+
+```bash
+# FOR - iterate over a list
+for i in 1 2 3; do
+    echo $i
+done
+
+# WHILE - run WHILE condition is TRUE
+count=0
+while [[ $count -lt 3 ]]; do
+    echo $count
+    ((count++))
+done
+
+# UNTIL - run UNTIL condition becomes TRUE
+count=0
+until [[ $count -ge 3 ]]; do
+    echo $count
+    ((count++))
+done
+```
+
+Use `for` for known iterations, `while` for condition-based, `until` when waiting for something to happen.
+</details>
+
+<details>
+<summary><b>Q9: How do you define and call a function with arguments?</b></summary>
+
+```bash
+# Define function
+greet() {
+    local name="$1"     # First argument
+    local age="$2"      # Second argument
+    echo "Hello, $name! You are $age years old."
+}
+
+# Call function with arguments
+greet "T3rmuxk1ng" 25
+
+# Access all arguments in function
+show_all() {
+    echo "All args: $@"
+    echo "Count: $#"
+}
+show_all a b c d
+```
+</details>
+
+<details>
+<summary><b>Q10: What does $(( )) do?</b></summary>
+
+`$(( ))` performs arithmetic expansion in Bash:
+
+```bash
+a=10
+b=3
+
+echo $((a + b))    # Addition: 13
+echo $((a - b))    # Subtraction: 7
+echo $((a * b))    # Multiplication: 30
+echo $((a / b))    # Division: 3 (integer only!)
+echo $((a % b))    # Modulo: 1
+echo $((a ** 2))   # Exponent: 100
+
+# Can also use for increment
+((count++))        # Same as count=$((count+1))
+```
+</details>
+
+<details>
+<summary><b>Q11: How do you extract a substring in Bash?</b></summary>
+
+Use `${variable:start:length}` syntax:
+
+```bash
+str="Hello Termux"
+
+# Extract from position 0, length 5
+echo ${str:0:5}      # Output: Hello
+
+# Extract from position 6 to end
+echo ${str:6}        # Output: Termux
+
+# Extract last 3 characters
+echo ${str: -3}      # Output: mux
+```
+</details>
+
+<details>
+<summary><b>Q12: What's the exit status $? and how is it used?</b></summary>
+
+`$?` contains the exit status of the last executed command:
+- `0` = success
+- Non-zero = failure
+
+```bash
+ls /nonexistent 2>/dev/null
+echo $?    # Output: non-zero (failed)
+
+ls /tmp
+echo $?    # Output: 0 (success)
+
+# Use in conditions
+if command; then
+    echo "Command succeeded"
+fi
+
+# Or explicitly check
+command
+if [[ $? -eq 0 ]]; then
+    echo "Success"
+fi
+```
+</details>
+
+<details>
+<summary><b>Q13: How do you create and use an associative array?</b></summary>
+
+Use `declare -A` to create key-value arrays:
+
+```bash
+# Declare associative array
+declare -A user
+
+# Assign values
+user[name]="T3rmuxk1ng"
+user[age]=25
+user[city]="Mumbai"
+
+# Access values
+echo ${user[name]}     # T3rmuxk1ng
+echo ${user[age]}      # 25
+
+# Loop through keys
+for key in "${!user[@]}"; do
+    echo "$key: ${user[$key]}"
+done
+```
+</details>
+
+<details>
+<summary><b>Q14: How do you debug a Bash script?</b></summary>
+
+Multiple debugging methods:
+
+```bash
+# Method 1: Run with -x flag
+bash -x script.sh
+
+# Method 2: Add set -x in script
+#!/bin/bash
+set -x    # Enable debug
+# ... your code
+set +x    # Disable debug
+
+# Method 3: Syntax check without running
+bash -n script.sh
+
+# Method 4: Use shellcheck tool
+shellcheck script.sh
+
+# Method 5: Strict mode for catching errors
+set -euo pipefail
+```
+</details>
+
+<details>
+<summary><b>Q15: How do you handle command-line arguments in a script?</b></summary>
+
+```bash
+#!/bin/bash
+
+# Special variables for arguments
+echo "Script name: $0"
+echo "First arg: $1"
+echo "Second arg: $2"
+echo "All args: $@"
+echo "Number of args: $#"
+
+# Check if argument provided
+if [[ -z "$1" ]]; then
+    echo "Usage: $0 <name>"
+    exit 1
+fi
+
+# Loop through all arguments
+for arg in "$@"; do
+    echo "Processing: $arg"
+done
+
+# Shift to process arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -n|--name) name="$2"; shift 2 ;;
+        -h|--help) show_help; exit 0 ;;
+        *) echo "Unknown: $1"; exit 1 ;;
+    esac
+done
+```
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Top 10 Bash Scripting Interview Questions with Detailed Answers
+
+**Q1: Explain the difference between single quotes and double quotes in Bash.**
+
+```bash
+# SINGLE QUOTES - Literal interpretation
+name='John'
+echo 'Hello $name'      # Output: Hello $name
+# No variable expansion, no escape sequences
+
+# DOUBLE QUOTES - Variable expansion
+echo "Hello $name"      # Output: Hello John
+# Variables are expanded, escape sequences work
+
+# When to use which:
+# Single quotes: When you want literal strings (regex, patterns)
+# Double quotes: When you need variable expansion
+
+# Example:
+pattern='^user[0-9]+$'    # Regex pattern - use single quotes
+message="Welcome $USER"   # Message with variable - use double quotes
+```
+
+**Q2: What is command substitution and what are the different methods?**
+
+```bash
+# Method 1: $() syntax (recommended)
+current_date=$(date)
+files=$(ls -la)
+
+# Method 2: Backticks (old style, avoid)
+current_date=`date`
+
+# Why $() is better:
+# 1. More readable
+# 2. Nestable: inner=$(echo "outer: $(date)")
+# 3. No confusion with single quotes
+
+# Practical example:
+backup_name="backup_$(date +%Y%m%d).tar.gz"
+echo "Creating: $backup_name"
+```
+
+**Q3: How do you handle errors in Bash scripts?**
+
+```bash
+#!/bin/bash
+
+# Method 1: set -e (exit on error)
+set -e    # Script exits if any command fails
+
+# Method 2: set -u (error on undefined variable)
+set -u    # Error if using undefined variable
+
+# Method 3: set -o pipefail (pipeline errors)
+set -o pipefail    # Pipeline fails if any command in it fails
+
+# Combined strict mode:
+set -euo pipefail
+
+# Method 4: Explicit error checking
+if ! command; then
+    echo "Error: command failed" >&2
+    exit 1
+fi
+
+# Method 5: trap for cleanup
+cleanup() {
+    rm -f "$temp_file"
+}
+trap cleanup EXIT
+
+# Method 6: Custom error function
+die() {
+    echo "ERROR: $*" >&2
+    exit 1
+}
+
+[[ -f "$file" ]] || die "File not found: $file"
+```
+
+**Q4: Explain IFS (Internal Field Separator) with examples.**
+
+```bash
+# IFS determines how Bash splits strings
+
+# Default IFS: space, tab, newline
+IFS=' ' read -ra words <<< "one two three"
+# words=("one" "two" "three")
+
+# Change IFS for different delimiter
+IFS=',' read -ra csv <<< "apple,banana,orange"
+# csv=("apple" "banana" "orange")
+
+# Read /etc/passwd fields
+IFS=':' read -ra fields <<< "root:x:0:0:root:/root:/bin/bash"
+# fields[0]="root", fields[6]="/bin/bash"
+
+# Preserve all whitespace (empty IFS)
+IFS= read -r line < file.txt
+
+# Important: Save and restore IFS
+OLD_IFS="$IFS"
+IFS=','
+# ... do something
+IFS="$OLD_IFS"
+
+# Or use subshell
+( IFS=','; echo "${array[*]}" )
+```
+
+**Q5: What are the different ways to iterate through an array?**
+
+```bash
+arr=("apple" "banana" "cherry")
+
+# Method 1: Simple iteration
+for item in "${arr[@]}"; do
+    echo "$item"
+done
+
+# Method 2: With index
+for i in "${!arr[@]}"; do
+    echo "Index $i: ${arr[$i]}"
+done
+
+# Method 3: C-style loop
+for ((i=0; i<${#arr[@]}; i++)); do
+    echo "${arr[$i]}"
+done
+
+# Method 4: While with counter
+i=0
+while [[ $i -lt ${#arr[@]} ]]; do
+    echo "${arr[$i]}"
+    ((i++))
+done
+
+# Method 5: Process array elements
+printf '%s\n' "${arr[@]}"
+
+# For associative arrays:
+declare -A hash
+hash[key]="value"
+for key in "${!hash[@]}"; do
+    echo "$key: ${hash[$key]}"
+done
+```
+
+**Q6: How do you redirect stdout and stderr separately?**
+
+```bash
+# Redirect stdout to file
+command > output.txt
+
+# Redirect stderr to file
+command 2> error.txt
+
+# Redirect both to same file
+command > all.txt 2>&1
+# OR (Bash 4+)
+command &> all.txt
+
+# Redirect stdout and stderr to different files
+command > output.txt 2> error.txt
+
+# Redirect stdout to file, stderr to /dev/null
+command > output.txt 2>/dev/null
+
+# Redirect stderr to stdout (for piping)
+command 2>&1 | grep "error"
+
+# Redirect both to different destinations
+command > >(tee stdout.log) 2> >(tee stderr.log >&2)
+
+# Discard all output
+command > /dev/null 2>&1
+```
+
+**Q7: Explain the `exec` command and its uses.**
+
+```bash
+# 1. Redirect all output for entire script
+exec > output.log 2>&1
+echo "This goes to log file"
+
+# 2. Read from file as stdin
+exec 3< input.txt
+while read -u 3 line; do
+    echo "$line"
+done
+exec 3<&-  # Close file descriptor
+
+# 3. Replace current shell with command
+exec bash    # Replace with new bash
+exec ./script.sh    # Replace with script (script PID = original PID)
+
+# 4. Open file descriptors
+exec 3> output.txt    # Open FD 3 for writing
+echo "Hello" >&3
+exec 3>&-             # Close FD 3
+
+# 5. Duplicate file descriptors
+exec 3>&1    # Save stdout to FD 3
+exec > log.txt
+# ... commands go to log
+exec 1>&3    # Restore stdout
+exec 3>&-    # Close FD 3
+```
+
+**Q8: What is process substitution and when would you use it?**
+
+```bash
+# Process substitution treats command output as a file
+
+# Compare outputs of two commands
+diff <(ls dir1) <(ls dir2)
+
+# Use with while loop
+while read line; do
+    echo "Processing: $line"
+done < <(grep "error" logfile.txt)
+
+# Multiple inputs to a command
+cat <(echo "Header") <(cat data.txt) <(echo "Footer")
+
+# Send output to multiple processes
+tee >(process1 > out1.txt) >(process2 > out2.txt) > /dev/null
+
+# Practical example: sort and compare
+diff <(sort file1.txt) <(sort file2.txt)
+
+# Named pipes (FIFO) alternative
+mkfifo mypipe
+command1 > mypipe &
+command2 < mypipe
+```
+
+**Q9: How do you write a Bash script that accepts command-line options?**
+
+```bash
+#!/bin/bash
+
+# Method 1: Manual parsing
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            echo "Usage: $0 [-h] [-f file] [-v]"
+            exit 0
+            ;;
+        -f|--file)
+            file="$2"
+            shift 2
+            ;;
+        -v|--verbose)
+            verbose=true
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+# Method 2: Using getopts (for short options)
+while getopts "hf:v" opt; do
+    case "$opt" in
+        h) echo "Help"; exit 0 ;;
+        f) file="$OPTARG" ;;
+        v) verbose=true ;;
+        \?) echo "Invalid option"; exit 1 ;;
+        :) echo "Option requires argument"; exit 1 ;;
+    esac
+done
+shift $((OPTIND-1))
+```
+
+**Q10: Explain how to handle signals in Bash scripts.**
+
+```bash
+#!/bin/bash
+
+# Common signals:
+# SIGINT (2)  - Ctrl+C
+# SIGTERM (15) - Termination request
+# SIGHUP (1)  - Hangup
+# EXIT        - Script exit (pseudo-signal)
+
+# Setup trap
+cleanup() {
+    echo "Cleaning up..."
+    rm -f "$temp_file"
+    echo "Cleanup complete"
+    exit
+}
+
+# Trap multiple signals
+trap cleanup EXIT INT TERM
+
+# Trap specific signals
+trap 'echo "Ctrl+C pressed"; exit 130' INT
+trap 'echo "Terminating..."; exit 143' TERM
+trap 'echo "Hangup received"; exit 129' HUP
+
+# Reload config on SIGHUP
+trap 'source config.sh; echo "Config reloaded"' HUP
+
+# Ignore a signal
+trap '' INT    # Ignore Ctrl+C
+
+# Main script
+temp_file=$(mktemp)
+echo "Working... (PID: $$)"
+while true; do
+    echo "Running..."
+    sleep 1
+done
+```
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Automated Backup System
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      SCENARIO: Daily Backup Script                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  You need to create a backup script that:                               │
+│  • Compresses important directories                                      │
+│  • Names backups with timestamps                                         │
+│  • Keeps only last 7 days of backups                                     │
+│  • Logs all operations                                                   │
+│  • Sends notification on failure                                         │
+│                                                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  #!/bin/bash                                                            │
+│  # Automated backup script for Termux                                   │
+│  set -euo pipefail                                                      │
+│                                                                          │
+│  # Configuration                                                         │
+│  BACKUP_DIR="$HOME/backups"                                             │
+│  LOG_FILE="$HOME/backup.log"                                            │
+│  DAYS_TO_KEEP=7                                                         │
+│  DIRECTORIES=("$HOME/projects" "$HOME/scripts" "$HOME/.bashrc")         │
+│                                                                          │
+│  # Logging function                                                      │
+│  log() {                                                                │
+│      echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >> "$LOG_FILE"            │
+│  }                                                                       │
+│                                                                          │
+│  # Create backup directory                                               │
+│  mkdir -p "$BACKUP_DIR"                                                 │
+│  log "Starting backup..."                                               │
+│                                                                          │
+│  # Create backup                                                         │
+│  TIMESTAMP=$(date +%Y%m%d_%H%M%S)                                       │
+│  BACKUP_FILE="$BACKUP_DIR/backup_$TIMESTAMP.tar.gz"                     │
+│                                                                          │
+│  tar -czf "$BACKUP_FILE" "${DIRECTORIES[@]}" 2>/dev/null || {           │
+│      log "ERROR: Backup failed!"                                        │
+│      termux-notification --title "Backup Failed" \                      │
+│          --content "Check log: $LOG_FILE"                               │
+│      exit 1                                                             │
+│  }                                                                       │
+│                                                                          │
+│  log "Backup created: $BACKUP_FILE"                                     │
+│                                                                          │
+│  # Cleanup old backups                                                   │
+│  find "$BACKUP_DIR" -name "backup_*.tar.gz" -mtime +$DAYS_TO_KEEP -delete│
+│  log "Old backups cleaned"                                              │
+│                                                                          │
+│  log "Backup completed successfully!"                                   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 2: Log File Analyzer
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      SCENARIO: Security Log Analyzer                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Task: Analyze web server logs to detect:                               │
+│  • Failed login attempts                                                 │
+│  • Suspicious IP addresses                                               │
+│  • Attack patterns                                                       │
+│  • Generate security report                                              │
+│                                                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  #!/bin/bash                                                            │
+│  # Security log analyzer                                                │
+│                                                                          │
+│  LOG_FILE="${1:-/var/log/auth.log}"                                     │
+│  REPORT="$HOME/security_report_$(date +%Y%m%d).txt"                     │
+│                                                                          │
+│  echo "=== Security Analysis Report ===" > "$REPORT"                    │
+│  echo "Date: $(date)" >> "$REPORT"                                      │
+│  echo "" >> "$REPORT"                                                   │
+│                                                                          │
+│  # Count failed logins                                                   │
+│  echo "=== Failed Login Attempts ===" >> "$REPORT"                      │
+│  grep "Failed password" "$LOG_FILE" | \                                 │
+│      awk '{print $(NF-3)}' | sort | uniq -c | sort -rn | \              │
+│      head -10 >> "$REPORT"                                              │
+│                                                                          │
+│  # Most active IPs                                                       │
+│  echo "" >> "$REPORT"                                                   │
+│  echo "=== Top 10 Active IPs ===" >> "$REPORT"                          │
+│  grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' "$LOG_FILE" | \              │
+│      sort | uniq -c | sort -rn | head -10 >> "$REPORT"                  │
+│                                                                          │
+│  # SSH brute force attempts                                              │
+│  echo "" >> "$REPORT"                                                   │
+│  echo "=== Potential Brute Force IPs ===" >> "$REPORT"                  │
+│  grep "Failed password" "$LOG_FILE" | \                                 │
+│      awk '{print $(NF-3)}' | sort | uniq -c | \                         │
+│      awk '$1 > 5 {print $1, $2}' >> "$REPORT"                           │
+│                                                                          │
+│  # Generate summary                                                      │
+│  echo "" >> "$REPORT"                                                   │
+│  echo "=== Summary ===" >> "$REPORT"                                    │
+│  echo "Total lines analyzed: $(wc -l < "$LOG_FILE")" >> "$REPORT"       │
+│  echo "Failed attempts: $(grep -c 'Failed password' "$LOG_FILE")" >> "$REPORT"│
+│  echo "Unique IPs: $(grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' "$LOG_FILE" |\│
+│      sort -u | wc -l)" >> "$REPORT"                                     │
+│                                                                          │
+│  echo "Report saved to: $REPORT"                                        │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 3: Network Monitor
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      SCENARIO: Network Health Monitor                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Task: Create a network monitoring script that:                         │
+│  • Checks connectivity to multiple hosts                                 │
+│  • Measures response time                                                │
+│  • Alerts on failures                                                    │
+│  • Logs historical data                                                  │
+│                                                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  #!/bin/bash                                                            │
+│  # Network health monitor                                               │
+│                                                                          │
+│  HOSTS=("8.8.8.8" "1.1.1.1" "github.com")                               │
+│  LOG="$HOME/network_monitor.log"                                        │
+│  ALERT_THRESHOLD=3  # Alert after 3 consecutive failures                │
+│                                                                          │
+│  declare -A failure_count                                               │
+│                                                                          │
+│  log() {                                                                │
+│      echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG"          │
+│  }                                                                       │
+│                                                                          │
+│  check_host() {                                                          │
+│      local host="$1"                                                    │
+│      local response                                                     │
+│                                                                          │
+│      response=$(ping -c 1 -W 2 "$host" 2>&1)                            │
+│                                                                          │
+│      if [[ $? -eq 0 ]]; then                                            │
+│          local time=$(echo "$response" | grep 'time=' | \               │
+│              sed 's/.*time=\([0-9.]*\).*/\1/')                           │
+│          log "✓ $host - Response time: ${time}ms"                       │
+│          failure_count[$host]=0                                         │
+│          return 0                                                       │
+│      else                                                                │
+│          ((failure_count[$host]++))                                     │
+│          log "✗ $host - Failed (${failure_count[$host]}/$ALERT_THRESHOLD)"│
+│                                                                          │
+│          if [[ ${failure_count[$host]} -ge $ALERT_THRESHOLD ]]; then    │
+│              termux-notification --title "Network Alert" \              │
+│                  --content "$host is unreachable!"                      │
+│          fi                                                              │
+│          return 1                                                       │
+│      fi                                                                  │
+│  }                                                                       │
+│                                                                          │
+│  log "=== Network Monitor Started ==="                                  │
+│  while true; do                                                         │
+│      for host in "${HOSTS[@]}"; do                                      │
+│          check_host "$host"                                             │
+│      done                                                                │
+│      echo "---" >> "$LOG"                                               │
+│      sleep 60                                                           │
+│  done                                                                    │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 4: File Organizer
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      SCENARIO: Automatic File Organizer                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Task: Create a script that automatically organizes downloads           │
+│  folder by file type:                                                    │
+│  • Move images to Pictures/                                              │
+│  • Move documents to Documents/                                          │
+│  • Move code to Code/                                                    │
+│  • Move archives to Archives/                                            │
+│                                                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  #!/bin/bash                                                            │
+│  # Automatic file organizer                                             │
+│                                                                          │
+│  SOURCE_DIR="${1:-$HOME/storage/downloads}"                             │
+│  DRY_RUN=false                                                          │
+│                                                                          │
+│  # File type mappings                                                    │
+│  declare -A file_types                                                  │
+│  file_types["Pictures"]="jpg jpeg png gif bmp svg webp"                 │
+│  file_types["Documents"]="pdf doc docx txt xlsx ppt csv md"             │
+│  file_types["Code"]="py js sh java cpp c html css json"                 │
+│  file_types["Archives"]="zip tar gz bz2 7z rar"                         │
+│  file_types["Media"]="mp3 mp4 avi mkv wav flac"                         │
+│                                                                          │
+│  organize_file() {                                                       │
+│      local file="$1"                                                    │
+│      local ext="${file##*.}"                                            │
+│      ext="${ext,,}"  # lowercase                                        │
+│                                                                          │
+│      for category in "${!file_types[@]}"; do                            │
+│          if [[ " ${file_types[$category]} " =~ " $ext " ]]; then        │
+│              local target_dir="$SOURCE_DIR/$category"                   │
+│                                                                          │
+│              if [[ "$DRY_RUN" == "true" ]]; then                        │
+│                  echo "[DRY] Would move: $file -> $target_dir/"         │
+│              else                                                        │
+│                  mkdir -p "$target_dir"                                 │
+│                  mv "$file" "$target_dir/"                              │
+│                  echo "Moved: $(basename "$file") -> $category/"        │
+│              fi                                                          │
+│              return                                                     │
+│          fi                                                              │
+│      done                                                                │
+│                                                                          │
+│      # Unknown file type                                                 │
+│      [[ "$DRY_RUN" != "true" ]] && {                                    │
+│          mkdir -p "$SOURCE_DIR/Other"                                   │
+│          mv "$file" "$SOURCE_DIR/Other/"                                │
+│      }                                                                   │
+│  }                                                                       │
+│                                                                          │
+│  echo "Organizing files in: $SOURCE_DIR"                                │
+│  find "$SOURCE_DIR" -maxdepth 1 -type f | while read -r file; do       │
+│      organize_file "$file"                                              │
+│  done                                                                    │
+│  echo "Organization complete!"                                          │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 5: Development Environment Setup
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                  SCENARIO: Termux Development Environment Setup          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Task: Create a script that sets up a complete development              │
+│  environment in Termux:                                                  │
+│  • Install essential packages                                            │
+│  • Configure shell                                                       │
+│  • Setup Git                                                             │
+│  • Create project structure                                              │
+│                                                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  #!/bin/bash                                                            │
+│  # Termux development environment setup                                 │
+│                                                                          │
+│  set -e                                                                  │
+│                                                                          │
+│  GREEN='\033[0;32m'                                                     │
+│  RED='\033[0;31m'                                                       │
+│  NC='\033[0m'                                                           │
+│                                                                          │
+│  success() { echo -e "${GREEN}✓ $*${NC}"; }                             │
+│  error() { echo -e "${RED}✗ $*${NC}"; exit 1; }                         │
+│                                                                          │
+│  # Update system                                                         │
+│  echo "Updating system..."                                               │
+│  pkg update -y && pkg upgrade -y || error "Update failed"               │
+│  success "System updated"                                               │
+│                                                                          │
+│  # Install essential packages                                            │
+│  PACKAGES=(git python nodejs vim nano wget curl grep sed gawk)          │
+│  echo "Installing packages: ${PACKAGES[*]}"                             │
+│  pkg install -y "${PACKAGES[@]}" || error "Package install failed"     │
+│  success "Packages installed"                                           │
+│                                                                          │
+│  # Configure Git                                                         │
+│  echo "Configuring Git..."                                               │
+│  read -p "Git username: " git_user                                      │
+│  read -p "Git email: " git_email                                        │
+│  git config --global user.name "$git_user"                              │
+│  git config --global user.email "$git_email"                            │
+│  success "Git configured"                                               │
+│                                                                          │
+│  # Create project structure                                              │
+│  echo "Creating project directories..."                                  │
+│  mkdir -p "$HOME"/{projects,scripts,tools,backups}                      │
+│  success "Directories created"                                          │
+│                                                                          │
+│  # Setup .bashrc                                                         │
+│  cat >> ~/.bashrc << 'EOF'                                              │
+│  # Custom aliases                                                        │
+│  alias ll='ls -la'                                                      │
+│  alias ..='cd ..'                                                       │
+│  alias grep='grep --color=auto'                                         │
+│  alias cls='clear'                                                      │
+│                                                                          │
+│  # Custom prompt                                                         │
+│  PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ ' │
+│  EOF                                                                     │
+│  success ".bashrc configured"                                           │
+│                                                                          │
+│  echo ""                                                                 │
+│  echo "=== Setup Complete ==="                                          │
+│  echo "Restart Termux or run: source ~/.bashrc"                        │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Bash Script Execution Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    BASH SCRIPT EXECUTION FLOW                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌─────────────┐                                                       │
+│   │  Script     │                                                       │
+│   │  File.sh    │                                                       │
+│   └──────┬──────┘                                                       │
+│          │                                                               │
+│          ▼                                                               │
+│   ┌─────────────────────────────────────┐                              │
+│   │         SHEBANG CHECK               │                              │
+│   │   #!/bin/bash or #!/usr/bin/env bash│                              │
+│   └──────────────┬──────────────────────┘                              │
+│                  │                                                       │
+│                  ▼                                                       │
+│   ┌─────────────────────────────────────┐                              │
+│   │         PARSING PHASE               │                              │
+│   │   • Read script line by line        │                              │
+│   │   • Check syntax                    │                              │
+│   │   • Expand aliases                  │                              │
+│   └──────────────┬──────────────────────┘                              │
+│                  │                                                       │
+│          ┌───────┴───────┐                                              │
+│          │               │                                               │
+│    ┌─────▼─────┐   ┌─────▼─────┐                                       │
+│    │  COMMENT  │   │  COMMAND  │                                       │
+│    │  # line   │   │  LINE     │                                       │
+│    │  Skip it  │   │  Process  │                                       │
+│    └───────────┘   └─────┬─────┘                                       │
+│                          │                                               │
+│                          ▼                                               │
+│   ┌─────────────────────────────────────┐                              │
+│   │         EXPANSION PHASE             │                              │
+│   │   • Variable: $var → value          │                              │
+│   │   • Command: $(cmd) → output        │                              │
+│   │   • Arithmetic: $((1+1)) → 2        │                              │
+│   │   • Brace: {a,b} → a b              │                              │
+│   │   • Tilde: ~ → $HOME                │                              │
+│   └──────────────┬──────────────────────┘                              │
+│                  │                                                       │
+│                  ▼                                                       │
+│   ┌─────────────────────────────────────┐                              │
+│   │         EXECUTION PHASE             │                              │
+│   │   • Fork child process              │                              │
+│   │   • Execute command                 │                              │
+│   │   • Wait for completion             │                              │
+│   │   • Capture exit status             │                              │
+│   └──────────────┬──────────────────────┘                              │
+│                  │                                                       │
+│                  ▼                                                       │
+│   ┌─────────────────────────────────────┐                              │
+│   │         NEXT LINE                   │                              │
+│   │   Continue until EOF or exit        │                              │
+│   └─────────────────────────────────────┘                              │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: Variable Scope in Bash
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    VARIABLE SCOPE IN BASH                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    GLOBAL SCOPE                                  │   │
+│   │   (Available everywhere in script)                              │   │
+│   │                                                                  │   │
+│   │   name="T3rmuxk1ng"                                             │   │
+│   │   count=10                                                      │   │
+│   │                                                                  │   │
+│   │   ┌─────────────────────────────────────────────────────────┐   │   │
+│   │   │                 FUNCTION SCOPE                           │   │   │
+│   │   │                                                          │   │   │
+│   │   │  myfunction() {                                          │   │   │
+│   │   │      local x=10     # LOCAL - only in function          │   │   │
+│   │   │      y=20           # GLOBAL - creates global           │   │   │
+│   │   │      z=$count       # Can read global                   │   │   │
+│   │   │      echo "$name"    # Can read global                  │   │   │
+│   │   │  }                                                      │   │   │
+│   │   │                                                          │   │   │
+│   │   │  # After function call:                                  │   │   │
+│   │   │  # $x is undefined (was local)                          │   │   │
+│   │   │  # $y = 20 (global created)                             │   │   │
+│   │   └─────────────────────────────────────────────────────────┘   │   │
+│   │                                                                  │   │
+│   │   ┌─────────────────────────────────────────────────────────┐   │   │
+│   │   │                 SUBSHELL SCOPE                           │   │   │
+│   │   │                                                          │   │   │
+│   │   │  ( var=5 )          # Subshell - changes don't persist  │   │   │
+│   │   │  echo $var          # Undefined! Was in subshell        │   │   │
+│   │   │                                                          │   │   │
+│   │   │  piped_cmd | while read line; do                        │   │   │
+│   │   │      count=100     # In subshell - won't persist!       │   │   │
+│   │   │  done                                                    │   │   │
+│   │   │  echo $count        # Still 10, not 100                 │   │   │
+│   │   │                                                          │   │   │
+│   │   │  # Use process substitution to avoid subshell:           │   │   │
+│   │   │  while read line; do                                    │   │   │
+│   │   │      count=100     # Now it persists!                   │   │   │
+│   │   │  done < <(piped_cmd)                                    │   │   │
+│   │   └─────────────────────────────────────────────────────────┘   │   │
+│   │                                                                  │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+│   KEY POINTS:                                                           │
+│   • Use 'local' keyword inside functions to avoid polluting globals    │
+│   • Pipes create subshells - variables won't persist                    │
+│   • Use process substitution <() to avoid subshell issues              │
+│   • Environment variables are inherited by child processes              │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: Bash Conditional Logic Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CONDITIONAL LOGIC FLOW                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│                         ┌──────────────┐                                │
+│                         │   START      │                                │
+│                         └──────┬───────┘                                │
+│                                │                                         │
+│                                ▼                                         │
+│                    ┌───────────────────┐                                │
+│                    │   if CONDITION1   │                                │
+│                    └─────────┬─────────┘                                │
+│                              │                                           │
+│              ┌───────────────┼───────────────┐                          │
+│              │               │               │                           │
+│        ┌─────▼─────┐   ┌─────▼─────┐   ┌─────▼─────┐                   │
+│        │   TRUE    │   │   FALSE   │   │  (other)  │                   │
+│        │           │   │           │   │           │                   │
+│        │  then     │   │  elif     │   │  else     │                   │
+│        │  block    │   │  CONDITION2│   │  block    │                   │
+│        │           │   │           │   │           │                   │
+│        └─────┬─────┘   └─────┬─────┘   └─────┬─────┘                   │
+│              │               │               │                           │
+│              │         ┌─────▼─────┐         │                           │
+│              │         │  Test     │         │                           │
+│              │         │  Again    │         │                           │
+│              │         └─────┬─────┘         │                           │
+│              │               │               │                           │
+│              └───────────────┼───────────────┘                          │
+│                              │                                           │
+│                              ▼                                           │
+│                      ┌───────────┐                                      │
+│                      │    fi     │                                      │
+│                      └─────┬─────┘                                      │
+│                            │                                             │
+│                            ▼                                             │
+│                      ┌───────────┐                                      │
+│                      │   END     │                                      │
+│                      └───────────┘                                      │
+│                                                                          │
+│   EXAMPLE:                                                              │
+│   ┌────────────────────────────────────────────────────────────────┐   │
+│   │ if [[ $age -ge 18 ]]; then                                      │   │
+│   │     echo "Adult"                                                │   │
+│   │ elif [[ $age -ge 13 ]]; then                                    │   │
+│   │     echo "Teenager"                                             │   │
+│   │ else                                                             │   │
+│   │     echo "Child"                                                │   │
+│   │ fi                                                               │   │
+│   └────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Title | Relevance |
+|---------|-------|-----------|
+| Ch01 | Termux Installation | Foundation for running Bash |
+| Ch02 | Basic Commands | Pre-requisite commands |
+| Ch03 | File System | File operations in scripts |
+| Ch06 | Package Management | Installing scripting tools |
+| Ch07 | Text Editors | Creating script files |
+| Ch14 | Advanced Bash Scripting | Next level techniques |
+| Ch17 | Python Installation | Alternative scripting language |
+| Ch21 | Cron Jobs | Scheduling bash scripts |
+| Ch25 | Termux API | Bash + Android integration |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Technique 1: Self-Documenting Scripts
+
+```bash
+#!/bin/bash
+# Script that generates its own documentation
+
+: << 'DOC'
+NAME:    deploy.sh
+AUTHOR:  T3rmuxk1ng
+VERSION: 1.0.0
+USAGE:   ./deploy.sh [options] <environment>
+
+OPTIONS:
+  -h, --help     Show this help
+  -v, --verbose  Enable verbose output
+  -d, --dry-run  Show what would be done
+
+EXAMPLES:
+  ./deploy.sh production
+  ./deploy.sh -v staging
+DOC
+
+show_help() {
+    # Extract documentation from script itself
+    sed -n '/^: << '\''DOC'\''/,/^DOC$/p' "$0" | sed '1d;$d'
+    exit 0
+}
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help) show_help ;;
+        -v|--verbose) VERBOSE=true ;;
+        -d|--dry-run) DRY_RUN=true ;;
+        *) ENV="$1" ;;
+    esac
+    shift
+done
+
+echo "Deploying to: ${ENV:-development}"
+```
+
+### Technique 2: Configuration File Management
+
+```bash
+#!/bin/bash
+# Advanced configuration management
+
+# Default configuration
+declare -A CONFIG
+CONFIG[server]="localhost"
+CONFIG[port]="8080"
+CONFIG[debug]="false"
+CONFIG[log_level]="INFO"
+
+# Load configuration file
+load_config() {
+    local config_file="${1:-config.ini}"
+    
+    if [[ -f "$config_file" ]]; then
+        while IFS='=' read -r key value; do
+            # Skip comments and empty lines
+            [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue
+            
+            # Trim whitespace
+            key=$(echo "$key" | xargs)
+            value=$(echo "$value" | xargs)
+            
+            CONFIG[$key]="$value"
+        done < "$config_file"
+        echo "Configuration loaded from $config_file"
+    fi
+}
+
+# Override with environment variables
+load_env_config() {
+    for key in "${!CONFIG[@]}"; do
+        local env_var="APP_${key^^}"
+        [[ -n "${!env_var}" ]] && CONFIG[$key]="${!env_var}"
+    done
+}
+
+# Override with command-line arguments
+load_cli_config() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --server=*) CONFIG[server]="${1#*=}" ;;
+            --port=*) CONFIG[port]="${1#*=}" ;;
+            --debug) CONFIG[debug]="true" ;;
+        esac
+        shift
+    done
+}
+
+# Display current configuration
+show_config() {
+    echo "=== Current Configuration ==="
+    for key in "${!CONFIG[@]}"; do
+        printf "%-15s: %s\n" "$key" "${CONFIG[$key]}"
+    done
+}
+
+# Usage
+load_config "myapp.conf"
+load_env_config
+load_cli_config "$@"
+show_config
+```
+
+### Technique 3: Parallel Processing in Bash
+
+```bash
+#!/bin/bash
+# Parallel processing with job control
+
+process_item() {
+    local item="$1"
+    echo "Processing: $item (PID: $$)"
+    sleep 2  # Simulate work
+    echo "Done: $item"
+}
+
+# Method 1: Background jobs with wait
+parallel_wait() {
+    local items=("$@")
+    local pids=()
+    
+    for item in "${items[@]}"; do
+        process_item "$item" &
+        pids+=($!)
+    done
+    
+    # Wait for all background jobs
+    for pid in "${pids[@]}"; do
+        wait "$pid"
+    done
+}
+
+# Method 2: Limited parallelism with semaphore
+parallel_limited() {
+    local max_jobs="${1:-4}"
+    shift
+    local items=("$@")
+    
+    for item in "${items[@]}"; do
+        # Wait if too many jobs running
+        while [[ $(jobs -r | wc -l) -ge $max_jobs ]]; do
+            sleep 0.1
+        done
+        
+        process_item "$item" &
+    done
+    
+    wait  # Wait for all remaining jobs
+}
+
+# Method 3: Using xargs for parallel processing
+parallel_xargs() {
+    local threads="${1:-4}"
+    local items=("${@:2}")
+    
+    printf '%s\n' "${items[@]}" | xargs -P "$threads" -I {} \
+        bash -c 'process_item "$@"' _ {}
+}
+
+# Method 4: Using GNU parallel (if installed)
+parallel_gnu() {
+    local threads="${1:-4}"
+    local items=("${@:2}")
+    
+    if command -v parallel &>/dev/null; then
+        printf '%s\n' "${items[@]}" | parallel -j "$threads" process_item
+    else
+        echo "GNU parallel not installed, using fallback"
+        parallel_limited "$threads" "${items[@]}"
+    fi
+}
+
+# Example usage
+items=("task1" "task2" "task3" "task4" "task5" "task6")
+echo "=== Parallel Processing Demo ==="
+time parallel_limited 3 "${items[@]}"
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+- [ ] **Understand Bash Scripting Basics**
+  - [ ] Know what Bash is and why it's useful
+  - [ ] Understand shebang and script execution
+  - [ ] Can create and run basic scripts
+
+- [ ] **Master Variables**
+  - [ ] Variable assignment without spaces
+  - [ ] Using $variable and ${variable}
+  - [ ] Special variables ($0, $1, $#, $@, $?, $$)
+  - [ ] Environment variables
+
+- [ ] **Handle User Input**
+  - [ ] Using `read` command
+  - [ ] Prompts with `-p` flag
+  - [ ] Silent input with `-s` flag
+  - [ ] Timeout with `-t` flag
+
+- [ ] **Perform Arithmetic Operations**
+  - [ ] Using $(( )) syntax
+  - [ ] expr command
+  - [ ] let command
+  - [ ] bc for floating-point
+
+- [ ] **Manipulate Strings**
+  - [ ] String length with ${#var}
+  - [ ] Substring with ${var:start:len}
+  - [ ] Replacement with ${var/old/new}
+  - [ ] Case conversion with ${var^^} and ${var,,}
+
+- [ ] **Write Conditional Logic**
+  - [ ] if/elif/else statements
+  - [ ] File test operators (-e, -f, -d, -r, -w, -x)
+  - [ ] String test operators (-z, -n, =, !=)
+  - [ ] Numeric comparisons (-eq, -ne, -gt, -lt)
+
+- [ ] **Use Loops Effectively**
+  - [ ] for loops (list, range, C-style)
+  - [ ] while loops
+  - [ ] until loops
+  - [ ] break and continue
+
+- [ ] **Work with Arrays**
+  - [ ] Indexed arrays
+  - [ ] Associative arrays
+  - [ ] Array operations
+
+- [ ] **Create Functions**
+  - [ ] Function definition
+  - [ ] Arguments and return values
+  - [ ] Local variables
+  - [ ] Recursive functions
+
+- [ ] **Debug Scripts**
+  - [ ] Using bash -x
+  - [ ] set -e, set -u, set -x
+  - [ ] shellcheck tool
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Always use `#!/usr/bin/env bash` instead of `#!/bin/bash` for better portability across different systems.
@@ -4933,6 +6365,45 @@ done
 
 ---
 
+**Q13: What does `${#var}` return?**
+- A) Variable type
+- B) Length of variable value
+- C) Variable name
+- D) Variable address
+
+<details>
+<summary>Answer</summary>
+**B) Length of variable value** - Returns the number of characters in the variable's value.
+</details>
+
+---
+
+**Q14: How do you create an associative array?**
+- A) `array[key]=value`
+- B) `declare -A array`
+- C) `assoc array`
+- D) `map array`
+
+<details>
+<summary>Answer</summary>
+**B) `declare -A array`** - The `-A` flag declares an associative (key-value) array in Bash.
+</details>
+
+---
+
+**Q15: What is the purpose of `shift` command?**
+- A) Shifts text left
+- B) Shifts positional parameters left
+- C) Shifts file contents
+- D) Shifts cursor position
+
+<details>
+<summary>Answer</summary>
+**B) Shifts positional parameters left** - `shift` moves all positional parameters down by one, so $2 becomes $1, $3 becomes $2, etc.
+</details>
+
+---
+
 ## 💡 PRO TIPS
 
 ### 10 Expert Bash Scripting Tips
@@ -5753,24 +7224,1418 @@ done
 
 ---
 
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>Q1: Bash script ki pehli line (shebang) kya hoti hai?</b></summary>
+
+**Options:**
+- A) `#!/bin/bash`
+- B) `# /bin/bash`
+- C) `<!/bin/bash>`
+- D) `/* bin/bash */`
+
+**Answer: A) `#!/bin/bash`**
+
+**Explanation:** Shebang (`#!`) system ko batata hai ki script ko kis interpreter se run karna hai. `#!/bin/bash` means script Bash shell mein run hogi. Ye har bash script ki pehli line honi chahiye.
+</details>
+
+<details>
+<summary><b>Q2: Bash mein variable declare karne ka sahi syntax kya hai?</b></summary>
+
+**Options:**
+- A) `name = "John"`
+- B) `name="John"`
+- C) `var name="John"`
+- D) `let name="John"`
+
+**Answer: B) `name="John"`**
+
+**Explanation:** Bash mein variable declaration mein equal sign ke dono sides space NAHI hona chahiye. `name="John"` correct hai, `name = "John"` error dega.
+</details>
+
+<details>
+<summary><b>Q3: Variable ka value access karne ke liye kya use karte hain?</b></summary>
+
+**Options:**
+- A) `name`
+- B) `$name`
+- C) `${name}`
+- D) B and C dono
+
+**Answer: D) B and C dono**
+
+**Explanation:** `$name` aur `${name}` dono kaam karte hain. `${name}` zyada safe hai jab variable ke baad text aaye (e.g., `${name}_file`).
+</details>
+
+<details>
+<summary><b>Q4: User se input lene ke liye kaunsi command use hoti hai?</b></summary>
+
+**Options:**
+- A) `input`
+- B) `read`
+- C) `get`
+- D) `scan`
+
+**Answer: B) `read`**
+
+**Explanation:** `read` command user se input leti hai. Example: `read name` user ka input variable `name` mein store karega. `read -p "Enter name: " name` prompt ke saath input leta hai.
+</details>
+
+<details>
+<summary><b>Q5: Bash mein arithmetic operation karne ka best tareeka kya hai?</b></summary>
+
+**Options:**
+- A) `result = a + b`
+- B) `result=$((a + b))`
+- C) `result = sum(a, b)`
+- D) `result = $a + $b`
+
+**Answer: B) `result=$((a + b))`**
+
+**Explanation:** Double parentheses `(( ))` Bash mein arithmetic ke liye use hoti hain. `$((expression))` calculated value return karta hai. Isse `expr` ya `let` se better hai.
+</details>
+
+<details>
+<summary><b>Q6: Bash mein if statement ka sahi syntax kya hai?</b></summary>
+
+**Options:**
+- A) `if [ condition ] then ... fi`
+- B) `if [ condition ]; then ... fi`
+- C) `if (condition) { ... }`
+- D) `if condition then ... end`
+
+**Answer: B) `if [ condition ]; then ... fi`**
+
+**Explanation:** Bash mein if statement semicolon ya newline ke saath `then` aata hai, aur `fi` se end hota hai. `[ ]` test command hai. Correct: `if [ "$var" = "value" ]; then ... fi`
+</details>
+
+<details>
+<summary><b>Q7: `-f` test operator kya check karta hai?</b></summary>
+
+**Options:**
+- A) File exists
+- B) File exists and is regular file
+- C) File is executable
+- D) File is directory
+
+**Answer: B) File exists and is regular file**
+
+**Explanation:** `-f` check karta hai ki file exists karti hai aur wo regular file hai (directory ya device file nahi). `-e` sirf existence check karta hai, `-d` directory ke liye, `-x` executable ke liye.
+</details>
+
+<details>
+<summary><b>Q8: For loop ka sahi syntax kya hai Bash mein?</b></summary>
+
+**Options:**
+- A) `for i in 1 2 3; do ... done`
+- B) `for (i=0; i<5; i++) { ... }`
+- C) `for i in range(5); do ... done`
+- D) A and B dono
+
+**Answer: D) A and B dono**
+
+**Explanation:** Bash mein do tareeke hain for loop ke: `for i in 1 2 3; do ... done` (standard) aur C-style `for ((i=0; i<5; i++)); do ... done`. Dono valid hain.
+</details>
+
+<details>
+<summary><b>Q9: `break` aur `continue` mein kya farak hai?</b></summary>
+
+**Options:**
+- A) break pause karta hai, continue resume karta hai
+- B) break loop exit karta hai, continue next iteration pe jata hai
+- C) Dono same hain
+- D) break infinite loop ke liye, continue finite ke liye
+
+**Answer: B) break loop exit karta hai, continue next iteration pe jata hai**
+
+**Explanation:** `break` loop se completely bahar nikal jata hai. `continue` current iteration skip karke next iteration pe jata hai, loop continue rehta hai.
+</details>
+
+<details>
+<summary><b>Q10: Bash array ka sahi declaration kya hai?</b></summary>
+
+**Options:**
+- A) `arr = (1 2 3)`
+- B) `arr=(1 2 3)`
+- C) `array[1,2,3]`
+- D) `arr = [1, 2, 3]`
+
+**Answer: B) `arr=(1 2 3)`**
+
+**Explanation:** Bash array parentheses ke saath declare hoti hai, spaces se separated values, aur equal sign ke around NO spaces. `arr=(1 2 3)` correct hai.
+</details>
+
+<details>
+<summary><b>Q11: Script ko executable banane ke liye kya command use karte hain?</b></summary>
+
+**Options:**
+- A) `exec script.sh`
+- B) `chmod +x script.sh`
+- C) `run script.sh`
+- D) `permit script.sh`
+
+**Answer: B) `chmod +x script.sh`**
+
+**Explanation:** `chmod +x` file ko executable permission deta hai. Uske baad `./script.sh` se directly run kar sakte ho without `bash` command.
+</details>
+
+<details>
+<summary><b>Q12: `$?` special variable kya store karta hai?</b></summary>
+
+**Options:**
+- A) Process ID
+- B) Script name
+- C) Exit status of last command
+- D) Number of arguments
+
+**Answer: C) Exit status of last command**
+
+**Explanation:** `$?` last command ka exit status store karta hai. 0 means success, non-zero means failure. Useful for error checking: `if [ $? -eq 0 ]; then ...`
+</details>
+
+<details>
+<summary><b>Q13: `$1` script mein kya represent karta hai?</b></summary>
+
+**Options:**
+- A) First command
+- B) First argument passed to script
+- C) Script name
+- D) First line number
+
+**Answer: B) First argument passed to script**
+
+**Explanation:** `$1`, `$2`, etc. command line arguments hain. `./script.sh arg1 arg2` mein `$1 = arg1`, `$2 = arg2`. `$0` script name hai.
+</details>
+
+<details>
+<summary><b>Q14: Function define karne ka sahi syntax kya hai?</b></summary>
+
+**Options:**
+- A) `function myfunc() { ... }`
+- B) `myfunc() { ... }`
+- C) `def myfunc { ... }`
+- D) A and B dono
+
+**Answer: D) A and B dono**
+
+**Explanation:** Bash mein dono syntax valid hain: `function name() { }` aur `name() { }`. Dono kaam karte hain, second one zyada common hai.
+</details>
+
+<details>
+<summary><b>Q15: Script debug mode mein kaise run karte hain?</b></summary>
+
+**Options:**
+- A) `bash -d script.sh`
+- B) `bash -x script.sh`
+- C) `debug script.sh`
+- D) `bash --debug script.sh`
+
+**Answer: B) `bash -x script.sh`**
+
+**Explanation:** `bash -x` debug mode enable karta hai jo har command ko print karta hai before execution (`+` prefix ke saath). Useful for troubleshooting.
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Q1: Bash scripting kya hai aur kyun use hoti hai?
+
+**Answer:**
+
+**Bash Scripting Definition:**
+Bash scripting ek powerful automation tool hai jo multiple commands ko ek executable file mein combine karta hai. Ye Linux/Unix systems ka fundamental part hai.
+
+**Use Cases:**
+1. **System Administration** - Automated backups, user management
+2. **DevOps** - CI/CD pipelines, deployment scripts
+3. **Development** - Build automation, testing
+4. **Data Processing** - Log analysis, file manipulation
+5. **Security** - Network scanning, monitoring
+
+**Advantages:**
+- Native to Linux/Unix systems
+- No compilation needed
+- Quick to write and modify
+- Excellent for file/text operations
+- Integrates with all system commands
+
+**Follow-up:** When would you NOT use Bash?
+- Complex logic requiring data structures
+- Cross-platform compatibility needed
+- Performance-critical applications
+- When maintainability by team is important (Python may be better)
+
+### Q2: Bash mein `sh` aur `bash` mein kya difference hai?
+
+**Answer:**
+
+| Aspect | sh (Bourne Shell) | bash (Bourne Again Shell) |
+|--------|------------------|---------------------------|
+| Year | 1979 | 1989 |
+| Features | Basic | Extended |
+| Arrays | No | Yes |
+| `[[ ]]` test | No | Yes |
+| Command completion | No | Yes |
+| History | No | Yes |
+| Portability | Higher | Lower |
+
+```bash
+# sh-compatible script
+#!/bin/sh
+if [ "$var" = "value" ]; then
+    echo "POSIX compliant"
+fi
+
+# bash-specific features
+#!/bin/bash
+arr=(1 2 3)
+if [[ "$var" == value* ]]; then
+    echo "Pattern matching"
+fi
+```
+
+**Best Practice:**
+- Use `#!/usr/bin/env bash` for portability
+- Use `#!/bin/sh` only if POSIX compliance needed
+
+**Follow-up:** What is POSIX shell?
+- Standard defined by IEEE
+- Subset of features across all shells
+- Maximum portability
+
+### Q3: Bash mein error handling kaise karte hain?
+
+**Answer:**
+
+```bash
+#!/bin/bash
+
+# Method 1: set -e (Exit on error)
+set -e
+command_that_might_fail  # Script exits if fails
+
+# Method 2: Explicit check
+if ! command; then
+    echo "Command failed" >&2
+    exit 1
+fi
+
+# Method 3: OR operator
+command || { echo "Failed"; exit 1; }
+
+# Method 4: trap for cleanup
+cleanup() {
+    rm -f "$TEMP_FILE"
+}
+trap cleanup EXIT
+
+# Method 5: Full error handling
+set -euo pipefail
+# -e: Exit on error
+# -u: Error on undefined variable
+# -o pipefail: Pipe fails if any command fails
+
+# Check last command status
+command
+if [ $? -ne 0 ]; then
+    echo "Error occurred"
+fi
+
+# Combined with logging
+log_error() {
+    echo "[ERROR] $1" >&2
+}
+```
+
+**Follow-up:** What is `trap` and when to use it?
+- Catches signals and executes code
+- Common: `trap cleanup EXIT INT TERM`
+- Ensures cleanup even on script interruption
+
+### Q4: String manipulation Bash mein kaise karte hain?
+
+**Answer:**
+
+```bash
+str="Hello World"
+
+# Length
+echo ${#str}                    # 11
+
+# Substring
+echo ${str:0:5}                 # Hello
+echo ${str:6}                   # World
+
+# Case conversion (Bash 4+)
+echo ${str,,}                   # hello world (lower)
+echo ${str^^}                   # HELLO WORLD (upper)
+
+# Remove pattern from start
+path="/home/user/file.txt"
+echo ${path#*/}                 # home/user/file.txt
+echo ${path##*/}                # file.txt (longest match)
+
+# Remove pattern from end
+file="backup.tar.gz"
+echo ${file%.*}                 # backup.tar
+echo ${file%%.*}                # backup (shortest)
+
+# Replace
+echo ${str/World/Termux}        # Hello Termux
+echo ${str//o/O}                # HellO WOrld (all)
+
+# Default values
+echo ${undefined:-"default"}    # default
+echo ${undefined:="default"}    # default (and sets variable)
+```
+
+**Common Patterns:**
+```bash
+# Get file extension
+file="script.sh"
+ext="${file##*.}"               # sh
+
+# Get filename without extension
+name="${file%.*}"               # script
+
+# Check if string contains substring
+if [[ $str == *"World"* ]]; then
+    echo "Found!"
+fi
+```
+
+**Follow-up:** How to split string into array?
+```bash
+IFS=' ' read -ra arr <<< "one two three"
+# arr[0]=one, arr[1]=two, arr[2]=three
+```
+
+### Q5: Bash arrays explain karein with examples.
+
+**Answer:**
+
+```bash
+# Indexed Arrays
+arr=(one two three four)
+
+# Access elements
+echo ${arr[0]}                  # one
+echo ${arr[-1]}                 # four (last)
+echo ${arr[@]}                  # all elements
+
+# Length
+echo ${#arr[@]}                 # 4 (number of elements)
+echo ${#arr[0]}                 # 3 (length of first element)
+
+# Modify
+arr[0]="ONE"                    # Modify
+arr+=(five six)                 # Append
+
+# Iterate
+for item in "${arr[@]}"; do
+    echo "$item"
+done
+
+# With index
+for i in "${!arr[@]}"; do
+    echo "$i: ${arr[$i]}"
+done
+
+# Slice
+echo ${arr[@]:1:2}              # two three
+
+# Associative Arrays (key-value)
+declare -A user
+user[name]="John"
+user[age]=25
+user[city]="Mumbai"
+
+echo ${user[name]}              # John
+for key in "${!user[@]}"; do
+    echo "$key: ${user[$key]}"
+done
+```
+
+**Follow-up:** Difference between `${arr[@]}` and `${arr[*]}`?
+- `@` - Each element as separate word (use in loops)
+- `*` - All elements as single word (joined by first char of IFS)
+
+### Q6: Bash functions kaise kaam karte hain?
+
+**Answer:**
+
+```bash
+# Basic function
+greet() {
+    echo "Hello, $1!"
+}
+greet "World"                   # Hello, World!
+
+# Return values (via echo)
+add() {
+    echo $(($1 + $2))
+}
+result=$(add 5 3)
+echo $result                    # 8
+
+# Return status
+check_file() {
+    [[ -f "$1" ]]
+}
+if check_file "test.txt"; then
+    echo "Exists"
+fi
+
+# Local variables
+process() {
+    local temp="local value"
+    echo "$temp"
+}
+
+# Arguments in functions
+args_demo() {
+    echo "Function received $# arguments"
+    echo "First: $1, All: $@"
+}
+
+# Recursive function
+factorial() {
+    if [[ $1 -le 1 ]]; then
+        echo 1
+    else
+        local prev=$(factorial $(($1 - 1)))
+        echo $(($1 * prev))
+    fi
+}
+
+# Function with default value
+greet() {
+    local name="${1:-Guest}"
+    echo "Hello, $name"
+}
+greet          # Hello, Guest
+greet "Admin"  # Hello, Admin
+```
+
+**Follow-up:** How to export functions?
+- `export -f function_name`
+- Makes function available to subshells
+
+### Q7: Bash mein command substitution kya hai?
+
+**Answer:**
+
+```bash
+# Old syntax (backticks)
+date=`date +%Y-%m-%d`
+
+# Modern syntax $()
+date=$(date +%Y-%m-%d)          # Preferred
+
+# Nested commands
+result=$(echo "Result: $(date)")
+
+# With pipes
+files=$(ls -la | grep ".txt")
+
+# Multiple lines
+output=$(cat << EOF
+Line 1
+Line 2
+EOF
+)
+
+# Real examples
+current_dir=$(pwd)
+user_count=$(who | wc -l)
+largest_file=$(ls -S | head -1)
+
+# Arithmetic substitution
+num=$((5 + 3))
+
+# Command substitution in loops
+while IFS= read -r line; do
+    echo "Processing: $line"
+done < <(cat file.txt)          # Process substitution
+```
+
+**Best Practices:**
+1. Always use `$()` instead of backticks
+2. Quote the result: `"$(command)"`
+3. Check for empty results
+
+**Follow-up:** What is process substitution?
+- `<(command)` - Output as file
+- `>(command)` - Input as file
+- Example: `diff <(sort file1) <(sort file2)`
+
+### Q8: Bash script mein logging kaise implement karte hain?
+
+**Answer:**
+
+```bash
+#!/bin/bash
+
+# Simple logging function
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+}
+
+log_info() {
+    echo "[INFO] $(date '+%H:%M:%S') - $1"
+}
+
+log_error() {
+    echo "[ERROR] $(date '+%H:%M:%S') - $1" >&2
+}
+
+# Usage
+log_info "Script started"
+log_error "File not found"
+
+# With log levels
+LOG_LEVEL="DEBUG"
+
+log_debug() { [[ "$LOG_LEVEL" == "DEBUG" ]] && echo "[DEBUG] $1"; }
+log_info() { echo "[INFO] $1"; }
+log_warn() { echo "[WARN] $1" >&2; }
+log_error() { echo "[ERROR] $1" >&2; }
+
+# Log to file
+LOG_FILE="/var/log/myscript.log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+# Syslog style
+logger -t myscript "Message to syslog"
+
+# Complete logging setup
+setup_logging() {
+    local log_file="$1"
+    exec 1> >(tee -a "$log_file")
+    exec 2>&1
+}
+```
+
+**Follow-up:** How to implement log rotation?
+- Use `logrotate` daemon
+- Or implement in script with date-based filenames
+
+### Q9: Bash script ko secure kaise banate hain?
+
+**Answer:**
+
+```bash
+#!/bin/bash
+
+# 1. Use strict mode
+set -euo pipefail
+
+# 2. Quote all variables
+if [[ "$var" == "value" ]]; then
+    # ...
+fi
+
+# 3. Validate input
+validate_input() {
+    local input="$1"
+    # Check length
+    [[ ${#input} -gt 100 ]] && return 1
+    # Check for dangerous characters
+    [[ "$input" =~ [;\|\&\`\$\(\)] ]] && return 1
+    return 0
+}
+
+# 4. Use absolute paths
+/bin/rm "$file"
+/usr/bin/find /path -name "*.txt"
+
+# 5. Secure temporary files
+TEMP_FILE=$(mktemp) || exit 1
+trap 'rm -f "$TEMP_FILE"' EXIT
+
+# 6. Check permissions
+if [[ ! -r "$config_file" ]]; then
+    echo "Cannot read config" >&2
+    exit 1
+fi
+
+# 7. Avoid eval
+# BAD: eval "echo $user_input"
+# GOOD: echo "$user_input"
+
+# 8. Use safe constructs
+# Safe file deletion
+for f in *.tmp; do
+    [[ -f "$f" ]] && rm "$f"
+done
+
+# 9. Set secure umask
+umask 077
+
+# 10. Validate paths (no directory traversal)
+canonical_path=$(realpath "$user_path")
+if [[ "$canonical_path" != /expected/path/* ]]; then
+    echo "Invalid path" >&2
+    exit 1
+fi
+```
+
+**Follow-up:** What is ShellCheck?
+- Static analysis tool for shell scripts
+- Finds common security issues
+- Use: `shellcheck script.sh`
+
+### Q10: Bash script optimization tips kya hain?
+
+**Answer:**
+
+```bash
+# 1. Avoid unnecessary subshells
+# Slow
+for f in $(ls); do
+    process "$f"
+done
+
+# Fast
+for f in *; do
+    process "$f"
+done
+
+# 2. Use builtins over external commands
+# Slow
+result=$(echo "$var" | sed 's/old/new/')
+
+# Fast
+result="${var/old/new}"
+
+# 3. Minimize I/O operations
+# Slow (multiple writes)
+echo "line1" >> file
+echo "line2" >> file
+echo "line3" >> file
+
+# Fast (single write)
+cat >> file << EOF
+line1
+line2
+line3
+EOF
+
+# 4. Use arrays for multiple values
+files=(*.txt)
+total=${#files[@]}
+
+# 5. Avoid pipes when possible
+# Slow
+output=$(cat file | grep pattern)
+
+# Fast
+output=$(grep pattern file)
+
+# 6. Pre-allocate arrays
+declare -a arr
+arr=(element1 element2)
+
+# 7. Use [[ ]] over [ ]
+# [[ ]] is faster and more capable
+
+# 8. Parallel processing
+process_file() {
+    # Process $1
+}
+export -f process_file
+find . -name "*.txt" | xargs -P 4 -I {} bash -c 'process_file "$@"' _ {}
+```
+
+**Performance comparison:**
+```bash
+# Time your scripts
+time bash script.sh
+
+# Profile with set -x
+bash -x script.sh 2>&1 | ts '[%.T]'
+```
+
+**Follow-up:** When to switch to Python?
+- Complex data processing
+- Heavy computations
+- Need for data structures
+- Cross-platform requirements
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: 🗂️ Automated Backup System
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      AUTOMATED BACKUP SYSTEM                                ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION: Create automated backup script for important files              ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Script: backup.sh                                                           ║
+║  ─────────────────                                                          ║
+║  #!/bin/bash                                                                ║
+║  # Automated Backup Script for Termux                                        ║
+║                                                                              ║
+║  set -e                                                                     ║
+║                                                                              ║
+║  # Configuration                                                             ║
+║  SOURCE_DIR="$HOME/important"                                                ║
+║  BACKUP_DIR="$HOME/backups"                                                 ║
+║  DATE=$(date +%Y%m%d_%H%M%S)                                                ║
+║  BACKUP_FILE="backup_${DATE}.tar.gz"                                        ║
+║  MAX_BACKUPS=7                                                              ║
+║                                                                              ║
+║  # Create backup directory                                                   ║
+║  mkdir -p "$BACKUP_DIR"                                                     ║
+║                                                                              ║
+║  # Create backup                                                             ║
+║  echo "Creating backup of $SOURCE_DIR..."                                    ║
+║  tar -czf "$BACKUP_DIR/$BACKUP_FILE" -C "$SOURCE_DIR" .                     ║
+║                                                                              ║
+║  # Calculate backup size                                                     ║
+║  SIZE=$(du -h "$BACKUP_DIR/$BACKUP_FILE" | cut -f1)                         ║
+║  echo "Backup created: $BACKUP_FILE ($SIZE)"                                 ║
+║                                                                              ║
+║  # Rotate old backups (keep last MAX_BACKUPS)                               ║
+║  cd "$BACKUP_DIR"                                                           ║
+║  ls -t | tail -n +$((MAX_BACKUPS + 1)) | xargs -r rm -f                     ║
+║  echo "Old backups cleaned. Keeping last $MAX_BACKUPS backups."             ║
+║                                                                              ║
+║  # Verify backup                                                             ║
+║  if tar -tzf "$BACKUP_DIR/$BACKUP_FILE" >/dev/null 2>&1; then               ║
+║      echo "✅ Backup verified successfully!"                                ║
+║  else                                                                        ║
+║      echo "❌ Backup verification failed!"                                  ║
+║      exit 1                                                                  ║
+║  fi                                                                          ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: 📡 Network Monitoring Script
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      NETWORK MONITORING SCRIPT                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION: Monitor network connectivity and log results                     ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Script: network_monitor.sh                                                  ║
+║  ─────────────────────                                                      ║
+║  #!/bin/bash                                                                ║
+║  # Network Connectivity Monitor                                              ║
+║                                                                              ║
+║  HOSTS=("google.com" "github.com" "8.8.8.8")                                ║
+║  LOG_FILE="$HOME/network_monitor.log"                                       ║
+║                                                                              ║
+║  log() {                                                                    ║
+║      echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"         ║
+║  }                                                                          ║
+║                                                                              ║
+║  check_host() {                                                             ║
+║      local host="$1"                                                        ║
+║      if ping -c 1 -W 2 "$host" >/dev/null 2>&1; then                       ║
+║          log "✅ $host is UP"                                               ║
+║          return 0                                                           ║
+║      else                                                                    ║
+║          log "❌ $host is DOWN"                                             ║
+║          return 1                                                           ║
+║      fi                                                                      ║
+║  }                                                                          ║
+║                                                                              ║
+║  log "Starting network monitoring..."                                       ║
+║  log "Checking ${#HOSTS[@]} hosts"                                          ║
+║                                                                              ║
+║  failures=0                                                                 ║
+║  for host in "${HOSTS[@]}"; do                                              ║
+║      check_host "$host" || ((failures++))                                   ║
+║  done                                                                        ║
+║                                                                              ║
+║  if [[ $failures -eq 0 ]]; then                                             ║
+║      log "All hosts reachable!"                                             ║
+║  else                                                                        ║
+║      log "⚠️  $failures host(s) unreachable"                                ║
+║  fi                                                                          ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 3: 🧹 System Cleanup Script
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      SYSTEM CLEANUP SCRIPT                                   ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION: Clean temporary files and free up storage space                 ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Script: cleanup.sh                                                          ║
+║  ───────────────                                                            ║
+║  #!/bin/bash                                                                ║
+║  # System Cleanup Script for Termux                                          ║
+║                                                                              ║
+║  echo "╔══════════════════════════════════════════════════╗"                  ║
+║  echo "║        TERMUX CLEANUP UTILITY                    ║"                  ║
+║  echo "╚══════════════════════════════════════════════════╝"                  ║
+║                                                                              ║
+║  # Get initial storage                                                       ║
+║  initial=$(df -h $HOME | tail -1 | awk '{print $4}')                        ║
+║  echo "Available storage before: $initial"                                   ║
+║                                                                              ║
+║  # Clean pip cache                                                           ║
+║  echo "Cleaning pip cache..."                                                ║
+║  pip cache purge 2>/dev/null || echo "  No pip cache"                       ║
+║                                                                              ║
+║  # Clean temporary files                                                     ║
+║  echo "Cleaning temp files..."                                               ║
+║  rm -rf /tmp/* 2>/dev/null                                                  ║
+║  rm -rf $HOME/.cache/* 2>/dev/null                                          ║
+║                                                                              ║
+║  # Clean old logs                                                            ║
+║  echo "Cleaning old logs..."                                                 ║
+║  find $HOME -name "*.log" -mtime +7 -delete 2>/dev/null                     ║
+║                                                                              ║
+║  # Clean Python cache                                                        ║
+║  echo "Cleaning Python cache..."                                             ║
+║  find $HOME -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null      ║
+║  find $HOME -name "*.pyc" -delete 2>/dev/null                               ║
+║                                                                              ║
+║  # Get final storage                                                         ║
+║  final=$(df -h $HOME | tail -1 | awk '{print $4}')                          ║
+║  echo ""                                                                     ║
+║  echo "✅ Cleanup complete!"                                                 ║
+║  echo "Available storage after: $final"                                      ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 4: 📊 Log File Analyzer
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                       LOG FILE ANALYZER                                      ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION: Analyze log files and generate summary report                   ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Script: analyze_logs.sh                                                     ║
+║  ─────────────────────                                                      ║
+║  #!/bin/bash                                                                ║
+║  # Log File Analyzer                                                        ║
+║                                                                              ║
+║  LOG_FILE="${1:-}"                                                          ║
+║                                                                              ║
+║  if [[ -z "$LOG_FILE" ]] || [[ ! -f "$LOG_FILE" ]]; then                    ║
+║      echo "Usage: $0 <logfile>"                                             ║
+║      exit 1                                                                  ║
+║  fi                                                                          ║
+║                                                                              ║
+║  echo "╔══════════════════════════════════════════════════╗"                  ║
+║  echo "║           LOG ANALYSIS REPORT                   ║"                  ║
+║  echo "╠══════════════════════════════════════════════════╣"                  ║
+║  echo "║ File: $LOG_FILE"                                ║"                  ║
+║  echo "╠══════════════════════════════════════════════════╣"                  ║
+║                                                                              ║
+║  # Basic stats                                                               ║
+║  total_lines=$(wc -l < "$LOG_FILE")                                         ║
+║  errors=$(grep -ci "error" "$LOG_FILE" 2>/dev/null || echo 0)               ║
+║  warnings=$(grep -ci "warning" "$LOG_FILE" 2>/dev/null || echo 0)           ║
+║                                                                              ║
+║  echo "║ Total Lines: $total_lines"                                         ║
+║  echo "║ Errors: $errors"                                                     ║
+║  echo "║ Warnings: $warnings"                                                  ║
+║  echo "╠══════════════════════════════════════════════════╣"                  ║
+║                                                                              ║
+║  # Top 5 IP addresses                                                        ║
+║  echo "║ Top 5 IP Addresses:"                                                ║
+║  grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' "$LOG_FILE" | \                    ║
+║      sort | uniq -c | sort -rn | head -5 | \                                ║
+║      while read count ip; do                                                ║
+║          echo "║   $ip: $count times"                                        ║
+║      done                                                                    ║
+║                                                                              ║
+║  echo "╚══════════════════════════════════════════════════╝"                  ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 5: 🔐 Password Generator
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                       PASSWORD GENERATOR                                     ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION: Generate secure random passwords                                ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Script: password_gen.sh                                                     ║
+║  ─────────────────────                                                      ║
+║  #!/bin/bash                                                                ║
+║  # Secure Password Generator                                                ║
+║                                                                              ║
+║  # Default length                                                            ║
+║  LENGTH="${1:-16}"                                                          ║
+║  COUNT="${2:-1}"                                                            ║
+║                                                                              ║
+║  # Character sets                                                            ║
+║  LOWER="abcdefghijklmnopqrstuvwxyz"                                        ║
+║  UPPER="ABCDEFGHIJKLMNOPQRSTUVWXYZ"                                        ║
+║  DIGITS="0123456789"                                                        ║
+║  SPECIAL="!@#$%^&*()_+-=[]{}|;:,.<>?"                                       ║
+║  ALL="$LOWER$UPPER$DIGITS$SPECIAL"                                          ║
+║                                                                              ║
+║  generate_password() {                                                       ║
+║      local length="$1"                                                      ║
+║      tr -dc "$ALL" < /dev/urandom | head -c "$length"                       ║
+║      echo ""                                                                 ║
+║  }                                                                          ║
+║                                                                              ║
+║  echo "╔══════════════════════════════════════════════════╗"                  ║
+║  echo "║        SECURE PASSWORD GENERATOR                 ║"                  ║
+║  echo "╠══════════════════════════════════════════════════╣"                  ║
+║  echo "║ Length: $LENGTH characters"                                        ║
+║  echo "║ Count: $COUNT password(s)"                                          ║
+║  echo "╠══════════════════════════════════════════════════╣"                  ║
+║                                                                              ║
+║  for ((i=1; i<=COUNT; i++)); do                                             ║
+║      echo "║ Password $i: $(generate_password "$LENGTH")"                   ║
+║  done                                                                        ║
+║                                                                              ║
+║  echo "╚══════════════════════════════════════════════════╝"                  ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Bash Script Execution Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    BASH SCRIPT EXECUTION FLOW                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌──────────────────────────────────────────────────────────────────┐     │
+│   │                     User executes script                          │     │
+│   │                  ./script.sh OR bash script.sh                    │     │
+│   └────────────────────────────┬─────────────────────────────────────┘     │
+│                                │                                             │
+│                                ▼                                             │
+│   ┌──────────────────────────────────────────────────────────────────┐     │
+│   │  Step 1: Shebang Processing                                      │     │
+│   │  ─────────────────────────────                                   │     │
+│   │  #!/bin/bash  →  System reads shebang                            │     │
+│   │                   Determines interpreter: /bin/bash              │     │
+│   └────────────────────────────┬─────────────────────────────────────┘     │
+│                                │                                             │
+│                                ▼                                             │
+│   ┌──────────────────────────────────────────────────────────────────┐     │
+│   │  Step 2: Parsing                                                 │     │
+│   │  ─────────────────                                               │     │
+│   │  • Read entire script                                            │     │
+│   │  • Check syntax errors                                          │     │
+│   │  • Build internal representation                                │     │
+│   └────────────────────────────┬─────────────────────────────────────┘     │
+│                                │                                             │
+│                                ▼                                             │
+│   ┌──────────────────────────────────────────────────────────────────┐     │
+│   │  Step 3: Execution                                               │     │
+│   │  ─────────────────                                               │     │
+│   │  Execute line by line:                                           │     │
+│   │  ┌─────────────────────────────────────────────────────────┐    │     │
+│   │  │ 1. Variable assignments    →  name="value"              │    │     │
+│   │  │ 2. Command execution       →  ls, grep, etc.            │    │     │
+│   │  │ 3. Control structures      →  if, for, while           │    │     │
+│   │  │ 4. Function calls          →  my_function               │    │     │
+│   │  │ 5. Subshells               →  $(command)               │    │     │
+│   │  └─────────────────────────────────────────────────────────┘    │     │
+│   └────────────────────────────┬─────────────────────────────────────┘     │
+│                                │                                             │
+│                                ▼                                             │
+│   ┌──────────────────────────────────────────────────────────────────┐     │
+│   │  Step 4: Exit                                                    │     │
+│   │  ─────────────────                                               │     │
+│   │  • Return exit status (0 = success, non-0 = error)              │     │
+│   │  • Execute trap handlers (if any)                                │     │
+│   │  • Clean up resources                                           │     │
+│   └──────────────────────────────────────────────────────────────────┘     │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: Bash Variable Scope
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    BASH VARIABLE SCOPE                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │                    Global Scope (Script Level)                      │  │
+│   │                                                                     │  │
+│   │   #!/bin/bash                                                       │  │
+│   │   GLOBAL_VAR="accessible everywhere"                               │  │
+│   │                                                                     │  │
+│   │   ┌─────────────────────────────────────────────────────────────┐  │  │
+│   │   │              Function Scope                                │  │  │
+│   │   │                                                             │  │  │
+│   │   │   my_function() {                                          │  │  │
+│   │   │       local local_var="only in function"  ←────────────┐  │  │  │
+│   │   │       global_in_func="also global"      ←─ No 'local' │  │  │  │
+│   │   │                                                         │  │  │  │
+│   │   │       echo "$GLOBAL_VAR"     ← Can read global        │  │  │  │
+│   │   │       echo "$local_var"      ← Can read local         │  │  │  │
+│   │   │   }                                                      │  │  │  │
+│   │   └─────────────────────────────────────────────────────────────┘  │  │
+│   │                                                                     │  │
+│   │   echo "$GLOBAL_VAR"         ← Works (global)                      │  │
+│   │   echo "$local_var"          ← Empty (local destroyed)             │  │
+│   │   echo "$global_in_func"     ← Works (created without local)       │  │
+│   └─────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │                    Special Variables                                │  │
+│   │                                                                     │  │
+│   │   $0         Script name                                           │  │
+│   │   $1-$9     Positional arguments 1-9                               │  │
+│   │   $#         Number of arguments                                   │  │
+│   │   $@         All arguments (array)                                 │  │
+│   │   $?         Exit status of last command                           │  │
+│   │   $$         Process ID of current shell                           │  │
+│   │   $!         PID of last background command                        │  │
+│   │   $PATH      Executable search path                                │  │
+│   │   $HOME      User's home directory                                 │  │
+│   │   $PWD       Current working directory                             │  │
+│   └─────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: Control Flow in Bash
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    BASH CONTROL FLOW                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   IF-ELIF-ELSE                         FOR LOOP                             │
+│   ─────────────                        ─────────                            │
+│                                                                              │
+│   ┌─────────────┐                     ┌─────────────────┐                 │
+│   │ if [cond1]  │                     │ for i in list   │                 │
+│   └──────┬──────┘                     └────────┬────────┘                 │
+│          │                                     │                           │
+│          ▼                                     ▼                           │
+│   ┌─────────────┐                     ┌─────────────────┐                 │
+│   │   cond1?    │                     │ Get next item   │                 │
+│   └──────┬──────┘                     └────────┬────────┘                 │
+│          │                                     │                           │
+│    ┌─────┴─────┐                         ┌─────┴─────┐                    │
+│    │           │                         │           │                    │
+│  True       False                    More?      Done                    │
+│    │           │                         │           │                    │
+│    ▼           ▼                         ▼           ▼                    │
+│ ┌──────┐  ┌───────────┐            ┌──────────┐  ┌──────────┐             │
+│ │Block1│  │ elif[cond2]│            │ Execute  │  │ Continue │             │
+│ └──────┘  └─────┬─────┘            │ commands │  │ after    │             │
+│               │                   └────┬─────┘  │ loop     │             │
+│               ▼                        │        └──────────┘             │
+│         ┌───────────┐                  │                                  │
+│         │  cond2?   │            ┌─────┴─────┐                            │
+│         └─────┬─────┘            │           │                            │
+│               │               break?    continue?                        │
+│         ┌─────┴─────┐              │           │                            │
+│       True       False            │           │                            │
+│         │           │              ▼           ▼                            │
+│         ▼           ▼         Exit loop   Next item                       │
+│    ┌────────┐  ┌────────┐                                                 │
+│    │Block2 │  │ else   │                                                 │
+│    └────────┘  │ Block3 │                                                 │
+│                └────────┘                                                 │
+│                                                                              │
+│   WHILE LOOP                           CASE STATEMENT                      │
+│   ───────────                          ──────────────                       │
+│                                                                              │
+│   ┌─────────────┐                     ┌─────────────────┐                 │
+│   │ while [cond]│                     │ case $var in    │                 │
+│   └──────┬──────┘                     └────────┬────────┘                 │
+│          │                                     │                           │
+│          ▼                                     ▼                           │
+│   ┌─────────────┐                     ┌─────────────────┐                 │
+│   │  cond true? │                     │ pattern1) cmd1 ;;│                │
+│   └──────┬──────┘                     │ pattern2) cmd2 ;;│                │
+│          │                            │ *)      default ;;│                │
+│    ┌─────┴─────┐                     └─────────────────┘                 │
+│    │           │                                                          │
+│  True       False                                                         │
+│    │           │                                                            │
+│    ▼           ▼                                                            │
+│ ┌──────────┐  Continue                                                   │
+│ │ Execute  │                                                              │
+│ │ commands │                                                              │
+│ └────┬─────┘                                                              │
+│      │                                                                     │
+│      └──────────► Loop back                                               │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## 🔗 RELATED CHAPTERS
 
 ### Prerequisites
-- **Chapter 2**: Basic Termux Commands
-- **Chapter 5**: Package Management
+| Chapter | Topic | Why Important |
+|---------|-------|---------------|
+| Ch 1 | Termux Installation | Base environment |
+| Ch 2 | Basic Commands | Terminal familiarity |
+| Ch 5 | Package Management | Installing tools |
 
 ### Next Steps
-- **Chapter 14**: Bash Scripting Advanced ← Continue with advanced topics
-- **Chapter 11**: Python Installation (alternative scripting)
+| Chapter | Topic | What You'll Learn |
+|---------|-------|-------------------|
+| **Ch 14** | **Bash Scripting Advanced** | Advanced techniques |
+| Ch 17 | Termux API Scripts | Android integration |
+| Ch 22 | Automation Scripts | Practical automation |
 
 ### Advanced Topics
-- **Chapter 17**: Termux API Scripts
-- **Chapter 22**: Automation Scripts
-- **Chapter 27**: Security Tools Development
+| Chapter | Topic | Prerequisites |
+|---------|-------|---------------|
+| Ch 27 | Security Tools | Scripting + Security |
+| Ch 30 | DevOps Scripts | Scripting + Deployment |
 
-### Related Programming
-- **Chapter 12**: Python Basics
-- **Chapter 16**: Node.js in Termux
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Technique 1: Bash Parameter Expansion
+
+```bash
+# Advanced parameter expansion techniques
+
+# Default values
+echo ${var:-"default"}        # Use default if unset/null
+echo ${var:="default"}        # Assign default if unset/null
+echo ${var:+"alternative"}    # Use alternative if set
+
+# String manipulation
+str="Hello World"
+echo ${str:0:5}              # Substring: Hello
+echo ${str: -5}              # Last 5 chars (note the space!)
+echo ${str^^}                # Uppercase: HELLO WORLD
+echo ${str,,}                # Lowercase: hello world
+echo ${str^}                 # First char upper: Hello world
+
+# Pattern substitution
+filename="backup.tar.gz"
+echo ${filename%.tar.gz}     # Remove suffix: backup
+echo ${filename#backup.}     # Remove prefix: tar.gz
+echo ${filename//./_}        # Replace all dots: backup_tar_gz
+
+# Array operations
+arr=(one two three four)
+echo ${arr[@]:1:2}           # Slice: two three
+echo ${#arr[@]}              # Length: 4
+echo ${!arr[@]}              # Indices: 0 1 2 3
+
+# Indirect expansion
+var="hello"
+ref="var"
+echo ${!ref}                 # Prints: hello
+
+# Case modification
+name="john doe"
+echo ${name^}                # John doe (first char)
+echo ${name^^}               # JOHN DOE (all chars)
+echo ${name~~}               # JOHN DOE (toggle case)
+```
+
+### Technique 2: Process Substitution
+
+```bash
+# Process substitution - treat command output as file
+
+# Compare outputs of two commands
+diff <(ls dir1) <(ls dir2)
+
+# Use in loops
+while read line; do
+    echo "Processing: $line"
+done < <(grep "error" /var/log/syslog)
+
+# Multiple inputs
+cat <(echo "Header") <(cat data.txt) <(echo "Footer")
+
+# Tee to multiple processes
+echo "data" | tee >(process1) >(process2) > output.txt
+
+# Named pipes (FIFOs)
+mkfifo mypipe
+command1 > mypipe &
+command2 < mypipe
+
+# Practical example: parallel processing
+process_file() {
+    echo "Processing: $1"
+}
+export -f process_file
+
+# Using parallel with process substitution
+find . -type f | parallel -j 4 process_file {}
+```
+
+### Technique 3: Bash Strict Mode Template
+
+```bash
+#!/usr/bin/env bash
+# Modern Bash strict mode template
+
+# Enable strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Script information
+readonly SCRIPT_NAME="$(basename "$0")"
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Colors for output
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[1;33m'
+readonly NC='\033[0m' # No Color
+
+# Logging functions
+log() { echo -e "${GREEN}[INFO]${NC} $*"; }
+warn() { echo -e "${YELLOW}[WARN]${NC} $*" >&2; }
+error() { echo -e "${RED}[ERROR]${NC} $*" >&2; }
+die() { error "$*"; exit 1; }
+
+# Cleanup function
+cleanup() {
+    # Remove temporary files
+    [[ -f "${TEMP_FILE:-}" ]] && rm -f "$TEMP_FILE"
+    log "Cleanup completed"
+}
+trap cleanup EXIT
+
+# Error trap with line number
+trap 'error "Error on line $LINENO. Command: $BASH_COMMAND"' ERR
+
+# Usage function
+usage() {
+    cat << EOF
+Usage: $SCRIPT_NAME [OPTIONS]
+
+Options:
+    -h, --help      Show this help message
+    -v, --verbose   Enable verbose output
+    -o, --output    Output file
+
+Examples:
+    $SCRIPT_NAME -v input.txt
+EOF
+}
+
+# Parse arguments
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -h|--help) usage; exit 0 ;;
+            -v|--verbose) VERBOSE=true; shift ;;
+            -o|--output) OUTPUT="$2"; shift 2 ;;
+            --) shift; break ;;
+            -*) error "Unknown option: $1"; usage; exit 1 ;;
+            *) POSITIONAL_ARGS+=("$1"); shift ;;
+        esac
+    done
+}
+
+# Main function
+main() {
+    parse_args "$@"
+    
+    log "Script started"
+    # Your code here
+    log "Script completed"
+}
+
+main "$@"
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### Fundamentals
+- [ ] Understood what is Bash scripting
+- [ ] Learned shebang (`#!/bin/bash`)
+- [ ] Created first script
+- [ ] Made script executable with `chmod +x`
+
+### Variables & Input
+- [ ] Declared variables correctly (no spaces around `=`)
+- [ ] Used `$variable` to access values
+- [ ] Learned special variables (`$1`, `$#`, `$@`, `$?`)
+- [ ] Used `read` for user input
+
+### Data Types & Operations
+- [ ] Performed arithmetic with `$(())`
+- [ ] Used comparison operators (`-eq`, `-lt`, `-gt`)
+- [ ] Manipulated strings
+
+### Control Flow
+- [ ] Wrote `if-elif-else` statements
+- [ ] Used test operators for files (`-f`, `-d`, `-e`)
+- [ ] Implemented `for` loops
+- [ ] Implemented `while` loops
+- [ ] Used `break` and `continue`
+
+### Data Structures
+- [ ] Created indexed arrays
+- [ ] Created associative arrays
+- [ ] Iterated over arrays
+
+### Functions
+- [ ] Defined functions
+- [ ] Passed arguments to functions
+- [ ] Used `local` variables
+
+### Debugging
+- [ ] Used `bash -x` for debugging
+- [ ] Implemented `set -e` for error handling
+
+---
+
+## 💡 PRO TIPS BOX
+
+> 💡 **Pro Tip #1:** Always use `#!/usr/bin/env bash` instead of `#!/bin/bash` for better portability across different systems.
+
+> 💡 **Pro Tip #2:** Use `[[ ]]` instead of `[ ]` for tests - it's more powerful and safer.
+
+> 💡 **Pro Tip #3:** Quote all variables: `"$var"` instead of `$var` to prevent word splitting issues.
+
+> 💡 **Pro Tip #4:** Use `set -euo pipefail` at the start of scripts for strict error handling.
+
+> 💡 **Pro Tip #5:** Use ShellCheck (`shellcheck script.sh`) to catch common mistakes before running.
 
 ---
 

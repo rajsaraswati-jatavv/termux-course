@@ -1,9 +1,32 @@
 # Chapter 2: First Setup & Configuration
 
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                                                               ║
+║   ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ ██████╗ ██████╗ ███████╗  ║
+║   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔════╝██╔═══██╗██╔════╝  ║
+║       ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║██║     ██║   ██║███████╗  ║
+║       ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██║     ██║   ██║╚════██║  ║
+║       ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║╚██████╗╚██████╔╝███████║  ║
+║       ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝  ║
+║                                                                               ║
+║   ███████╗ █████╗ ██╗     ███████╗███████╗███████╗██████╗ ██████╗ ██████╗ ██╗  ║
+║   ██╔════╝██╔══██╗██║     ██╔════╝██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗██║  ║
+║   █████╗  ███████║██║     █████╗  ███████╗█████╗  ██████╔╝██████╔╝██║  ██║██║  ║
+║   ██╔══╝  ██╔══██║██║     ██╔══╝  ╚════██║██╔══╝  ██╔══██╗██╔══██╗██║  ██║██║  ║
+║   ██║     ██║  ██║███████╗███████╗███████║███████╗██║  ██║██║  ██║██████╔╝██║  ║
+║   ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ║
+║                                                                               ║
+║                    🔧 SETUP & CUSTOMIZATION 🔧                                ║
+║                         By T3rmuxk1ng                                         ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
 > **Module:** 1 - Foundation  
 > **Chapter:** 2 of 61  
 > **Duration:** 15-20 Minutes  
 > **Difficulty:** ⭐ Beginner  
+> **Prerequisites:** Chapter 1 (Termux Installation)  
 
 ---
 
@@ -1763,6 +1786,1759 @@ Before moving to Chapter 3, verify:
 - Understanding permissions (chmod, chown)
 - File viewing commands (cat, less, head, tail)
 - Text searching with grep
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+Test your understanding of Termux configuration with these 15 questions!
+
+---
+
+### Question 1: What is the purpose of the .bashrc file?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) System configuration file  
+B) Shell configuration that runs on each terminal start  
+C) Network configuration file  
+D) Package manager settings  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) Shell configuration that runs on each terminal start**
+
+**Explanation:** The `.bashrc` file is a shell script that Bash runs whenever it is started interactively. It's used to set up your shell environment with aliases, functions, environment variables, and custom prompts. In Termux, it's located at `~/.bashrc` and runs every time you open the app.
+
+</details>
+
+---
+
+### Question 2: Where is Termux's main configuration file located?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `/etc/termux/`  
+B) `~/.termux/termux.properties`  
+C) `/system/termux/`  
+D) `~/.config/termux/`  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `~/.termux/termux.properties`**
+
+**Explanation:** Termux's application-level settings are stored in `~/.termux/termux.properties`. This file controls things like back key behavior, bell character handling, extra keys row configuration, and other Termux-specific settings. After editing, you must run `termux-reload-settings` or restart Termux.
+
+</details>
+
+---
+
+### Question 3: What command reloads Termux settings after editing termux.properties?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `source ~/.termux/termux.properties`  
+B) `termux-reload-settings`  
+C) `reload termux`  
+D) `restart-termux`  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `termux-reload-settings`**
+
+**Explanation:** The `termux-reload-settings` command tells Termux to re-read the `termux.properties` file and apply changes immediately. Without this, you would need to completely close and reopen Termux for changes to take effect.
+
+</details>
+
+---
+
+### Question 4: What does an alias do in Bash?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Creates a shortcut for a long command  
+B) Renames a file  
+C) Creates a symbolic link  
+D) Hides a file  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: A) Creates a shortcut for a long command**
+
+**Explanation:** An alias is a substitute for a command or set of commands. For example, `alias update='pkg update && pkg upgrade -y'` lets you type just `update` instead of the full command. Aliases make frequently used commands shorter and easier to remember.
+
+</details>
+
+---
+
+### Question 5: Which command makes an alias permanent?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `alias --save`  
+B) Adding it to .bashrc  
+C) `export alias`  
+D) Aliases are permanent by default  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) Adding it to .bashrc**
+
+**Explanation:** Aliases created on the command line are temporary and disappear when you close Termux. To make them permanent, add the alias definition to your `~/.bashrc` file. The .bashrc runs each time Termux starts, recreating your aliases.
+
+</details>
+
+---
+
+### Question 6: What does $PATH environment variable contain?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Current directory path  
+B) List of directories to search for executables  
+C) Path to home directory  
+D) Path to configuration files  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) List of directories to search for executables**
+
+**Explanation:** `$PATH` contains a colon-separated list of directories that the shell searches when you type a command. When you run `python`, the shell looks in each directory in PATH to find the python executable. You can add custom directories to run your own scripts from anywhere.
+
+</details>
+
+---
+
+### Question 7: How do you add a custom scripts directory to PATH?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `add-path ~/scripts`  
+B) `export PATH="$HOME/scripts:$PATH"`  
+C) `set PATH + ~/scripts`  
+D) `path --add ~/scripts`  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `export PATH="$HOME/scripts:$PATH"`**
+
+**Explanation:** To add a directory to PATH, use the export command. The syntax `$HOME/scripts:$PATH` prepends your scripts directory to the existing PATH. Put this in .bashrc to make it permanent. The shell will then find executables in ~/scripts.
+
+</details>
+
+---
+
+### Question 8: What is PS1 in Bash?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) First process ID  
+B) Prompt string variable that defines command prompt appearance  
+C) Primary shell  
+D) Process status 1  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) Prompt string variable that defines command prompt appearance**
+
+**Explanation:** PS1 is the primary prompt string variable. It defines what your command prompt looks like. You can customize it with special characters like `\w` (current directory), `\u` (username), colors, and more. Example: `PS1="\w $ "` shows current directory followed by $.
+
+</details>
+
+---
+
+### Question 9: Which file stores command history in Bash?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `.history`  
+B) `.bash_history`  
+C) `.command_history`  
+D) `.shell_history`  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `.bash_history`**
+
+**Explanation:** Bash stores your command history in `~/.bash_history`. You can control history size with `HISTSIZE` and `HISTFILESIZE` variables in .bashrc. Use `history` command to view past commands, and `!!` to repeat the last command.
+
+</details>
+
+---
+
+### Question 10: What does HISTCONTROL=ignoreboth do?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Ignores all history  
+B) Ignores duplicates and commands starting with space  
+C) Ignores errors in history  
+D) Clears history on exit  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) Ignores duplicates and commands starting with space**
+
+**Explanation:** `ignoreboth` is a shorthand for `ignorespace:ignoredups`. It means:
+- `ignorespace`: Commands starting with a space won't be saved to history
+- `ignoredups`: Duplicate consecutive commands won't be saved again
+This keeps your history cleaner and more useful.
+
+</details>
+
+---
+
+### Question 11: What is the difference between a function and an alias?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) No difference  
+B) Functions can take arguments, aliases cannot  
+C) Aliases are faster  
+D) Functions are only for scripts  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) Functions can take arguments, aliases cannot**
+
+**Explanation:** While both create shortcuts, functions are more powerful:
+- Functions can accept and process arguments ($1, $2, etc.)
+- Functions can contain multiple commands and logic
+- Aliases are simple text substitutions
+Example function: `mkcd() { mkdir -p "$1" && cd "$1"; }` - creates and enters a directory.
+
+</details>
+
+---
+
+### Question 12: Which environment variable sets your default editor?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) $DEFAULT_EDITOR  
+B) $EDITOR  
+C) $TEXT_EDITOR  
+D) $EDIT  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) $EDITOR**
+
+**Explanation:** The `EDITOR` environment variable specifies your preferred text editor. Many programs (like git, visudo, crontab) use this variable to open an editor. Set it in .bashrc: `export EDITOR=nano` or `export EDITOR=vim`.
+
+</details>
+
+---
+
+### Question 13: What does `source ~/.bashrc` do?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Opens .bashrc in editor  
+B) Re-runs .bashrc in current shell  
+C) Backs up .bashrc  
+D) Validates .bashrc syntax  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) Re-runs .bashrc in current shell**
+
+**Explanation:** The `source` command (also written as `.`) reads and executes commands from a file in the current shell. After editing .bashrc, `source ~/.bashrc` applies your changes immediately without needing to restart Termux. It's like running all the commands in that file.
+
+</details>
+
+---
+
+### Question 14: What is the correct syntax for an extra keys row in termux.properties?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `extra-keys = ESC, CTRL, ALT`  
+B) `extra-keys = [[ {key: ESC}, {key: CTRL} ]]`  
+C) `keys-extra = [ESC, CTRL, ALT]`  
+D) `additional-keys = ESC CTRL ALT`  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `extra-keys = [[ {key: ESC}, {key: CTRL} ]]`**
+
+**Explanation:** The extra-keys format uses JSON-like syntax with arrays and objects. Each key is defined as `{key: NAME}` or with popups as `{key: NAME, popup: ACTION}`. Double brackets `[[ ]]` define rows. This adds a customizable row of keys above your keyboard.
+
+</details>
+
+---
+
+### Question 15: How do you make a welcome message appear when Termux starts?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Edit /etc/motd  
+B) Add echo commands or a function to .bashrc  
+C) Configure in Termux settings  
+D) Create a .welcome file  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) Add echo commands or a function to .bashrc**
+
+**Explanation:** To show a custom welcome message, add echo statements or a function to your .bashrc:
+```bash
+echo "Welcome to Termux!"
+echo "Today is $(date)"
+```
+Or create a function that displays system info and call it at the end of .bashrc.
+
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+Prepare for technical interviews with these configuration-related questions!
+
+---
+
+### Q1: Explain the difference between .bashrc, .bash_profile, and .profile.
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+| File | When it runs | Purpose |
+|------|--------------|---------|
+| `.bash_profile` | Login shell | Set up environment once per session |
+| `.bashrc` | Every interactive shell | Aliases, functions, prompts |
+| `.profile` | Login shell (if no .bash_profile) | Generic POSIX settings |
+
+**In Termux:**
+- Termux starts as an interactive non-login shell
+- Only `.bashrc` runs automatically
+- You can source `.bash_profile` from `.bashrc` if needed
+
+**Best Practice:**
+```bash
+# In .bash_profile
+if [ -f ~/.bashrc ]; then
+    source ~/.bashrc
+fi
+```
+
+**Follow-up:** Why might you want settings in .bash_profile instead of .bashrc?
+**Answer:** For environment variables that should only be set once (like PATH modifications that accumulate), or for commands that only need to run at login (like starting SSH agent).
+
+</details>
+
+---
+
+### Q2: How would you organize a complex .bashrc file for maintainability?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Modular Organization:**
+
+```bash
+# ~/.bashrc - Main configuration file
+
+# Source separate configuration files
+for file in ~/.config/bash/{aliases,functions,env,prompt}; do
+    [ -f "$file" ] && source "$file"
+done
+
+# Or source individual files
+if [ -f ~/.bash_aliases ]; then
+    source ~/.bash_aliases
+fi
+
+if [ -f ~/.bash_functions ]; then
+    source ~/.bash_functions
+fi
+
+if [ -f ~/.bash_env ]; then
+    source ~/.bash_env
+fi
+```
+
+**Directory Structure:**
+```
+~/.config/bash/
+├── aliases      # All alias definitions
+├── functions    # All function definitions
+├── env          # Environment variables
+├── prompt       # PS1 customization
+└── completions  # Custom completions
+```
+
+**Benefits:**
+1. Easier to find specific configurations
+2. Can version control separate files
+3. Easier to share configurations
+4. Less conflicts when editing
+
+**Follow-up:** How would you handle machine-specific configurations?
+**Answer:**
+```bash
+# Source local machine-specific config
+if [ -f ~/.bashrc.local ]; then
+    source ~/.bashrc.local
+fi
+```
+
+</details>
+
+---
+
+### Q3: What security considerations should be taken with shell configuration?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Security Considerations:**
+
+1. **File Permissions:**
+```bash
+chmod 600 ~/.bashrc        # Only owner can read/write
+chmod 700 ~/scripts/       # Only owner can access
+```
+
+2. **Avoid Sensitive Data:**
+```bash
+# DON'T put passwords in .bashrc
+# BAD: export DB_PASSWORD="secret123"
+
+# BETTER: Use environment or prompt
+export DB_PASSWORD=$(cat ~/.secure/db_pass)
+# Or use SSH keys, credential helpers
+```
+
+3. **PATH Security:**
+```bash
+# Don't add world-writable directories to PATH
+# Check permissions before adding
+[ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
+```
+
+4. **Sourcing Files Safely:**
+```bash
+# Check file exists and is owned by you
+source_if_safe() {
+    local file=$1
+    if [ -f "$file" ] && [ -O "$file" ]; then
+        source "$file"
+    fi
+}
+```
+
+5. **History Security:**
+```bash
+# Don't save sensitive commands
+export HISTCONTROL=ignorespace
+# Type sensitive commands with leading space
+```
+
+**Follow-up:** What are the risks of sourcing untrusted files?
+**Answer:** Arbitrary code execution - the sourced file runs with your permissions and could do anything you can do: delete files, steal data, install backdoors, etc.
+
+</details>
+
+---
+
+### Q4: Explain how you would debug a problematic .bashrc.
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Debugging Steps:**
+
+1. **Start with default config:**
+```bash
+mv ~/.bashrc ~/.bashrc.broken
+# Termux will use default settings
+```
+
+2. **Run with error output:**
+```bash
+bash -x ~/.bashrc 2>&1 | less
+# Shows each command as it executes
+```
+
+3. **Check syntax:**
+```bash
+bash -n ~/.bashrc
+# Checks for syntax errors without running
+```
+
+4. **Add debug output:**
+```bash
+# In .bashrc
+set -x  # Print commands and arguments
+echo "Reached line $LINENO"
+set +x  # Turn off debug
+```
+
+5. **Source incrementally:**
+```bash
+# Comment out everything
+# Uncomment sections one at a time
+# Find which section causes the issue
+```
+
+6. **Common issues:**
+- Missing quotes around variables
+- Incorrect path separators (`:` vs ` `)
+- Unmatched quotes or brackets
+- Circular sourcing
+- Command not available at startup
+
+**Follow-up:** What if .bashrc prevents Termux from starting?
+**Answer:** Use a rescue method:
+1. Long-press Termux icon → Properties → Clear Data (last resort)
+2. Use `adb shell` if USB debugging enabled
+3. Use file manager to delete/rename .bashrc
+
+</details>
+
+---
+
+### Q5: How would you set up a consistent development environment across multiple devices?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Git-based Configuration Management:**
+
+```bash
+# Create config repository
+mkdir -p ~/dotfiles
+cd ~/dotfiles
+git init
+
+# Move and link configuration files
+mv ~/.bashrc ~/dotfiles/bashrc
+mv ~/.termux/termux.properties ~/dotfiles/termux.properties
+ln -s ~/dotfiles/bashrc ~/.bashrc
+ln -s ~/dotfiles/termux.properties ~/.termux/termux.properties
+
+# Create setup script
+cat > ~/dotfiles/setup.sh << 'EOF'
+#!/bin/bash
+# Link all dotfiles
+for file in bashrc bash_aliases bash_functions; do
+    ln -sf ~/dotfiles/$file ~/.$file
+done
+ln -sf ~/dotfiles/termux.properties ~/.termux/termux.properties
+termux-reload-settings
+source ~/.bashrc
+EOF
+
+# Push to GitHub
+git remote add origin https://github.com/user/dotfiles
+git push -u origin main
+```
+
+**On new device:**
+```bash
+git clone https://github.com/user/dotfiles ~/dotfiles
+cd ~/dotfiles && ./setup.sh
+```
+
+**Follow-up:** How do you handle device-specific configurations?
+**Answer:** Use hostname or create local override files:
+```bash
+if [ -f ~/.bashrc.$(hostname) ]; then
+    source ~/.bashrc.$(hostname)
+fi
+```
+
+</details>
+
+---
+
+### Q6: What are shell options (shopt) and how are they useful?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**shopt (shell options) controls optional shell behavior:**
+
+**Useful Options:**
+
+```bash
+# Autocorrect typos in cd
+shopt -s cdspell
+# cd ~/Documets → ~/Documents
+
+# Enable extended globbing
+shopt -s extglob
+# ls !(*.txt) - list all except .txt files
+
+# Append to history, don't overwrite
+shopt -s histappend
+
+# Check window size after each command
+shopt -s checkwinsize
+
+# Auto-correct directory names in path
+shopt -s dirspell
+
+# ** matches all files and directories
+shopt -s globstar
+# ls **/*.py - all Python files recursively
+```
+
+**View all options:**
+```bash
+shopt           # Show all options
+shopt -p        # Show in reusable format
+shopt -s        # Show enabled options
+shopt -u        # Show disabled options
+```
+
+**Follow-up:** What does `shopt -s extglob` enable?
+**Answer:** Extended pattern matching with these patterns:
+- `?(pattern)` - Zero or one occurrence
+- `*(pattern)` - Zero or more occurrences
+- `+(pattern)` - One or more occurrences
+- `@(pattern)` - Exactly one occurrence
+- `!(pattern)` - Anything except pattern
+
+</details>
+
+---
+
+### Q7: How would you create a custom command completion in Bash?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Basic Completion Setup:**
+
+```bash
+# Complete for custom command
+_mycommand_completion() {
+    local cur words
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    words="start stop restart status config help"
+    
+    COMPREPLY=($(compgen -W "${words}" -- "${cur}"))
+    return 0
+}
+
+# Register the completion
+complete -F _mycommand_completion mycommand
+```
+
+**Advanced Example with Files:**
+
+```bash
+# Completion that suggests files and keywords
+_script_completion() {
+    local cur prev words
+    _init_completion || return
+    
+    case $prev in
+        -f|--file)
+            _filedir
+            return
+            ;;
+        -d|--dir)
+            _filedir -d
+            return
+            ;;
+    esac
+    
+    if [[ $cur == -* ]]; then
+        COMPREPLY=($(compgen -W "--file --dir --help --version" -- "$cur"))
+    else
+        COMPREPLY=($(compgen -W "run test build deploy" -- "$cur"))
+    fi
+}
+
+complete -F _script_completion myscript
+```
+
+**Follow-up:** How do you use existing completion functions?
+**Answer:** Source the completion file first:
+```bash
+source /usr/share/bash-completion/bash_completion
+source /usr/share/bash-completion/completions/git
+```
+
+</details>
+
+---
+
+### Q8: Explain environment variable precedence and scope.
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Variable Types and Scope:**
+
+1. **Shell Variables (local):**
+```bash
+myvar="value"        # Only in current shell
+```
+
+2. **Environment Variables (exported):**
+```bash
+export MYVAR="value" # Available to child processes
+```
+
+3. **Precedence Order:**
+```
+System defaults → /etc/profile → ~/.bash_profile → ~/.bashrc → command line
+```
+
+**Export Behavior:**
+```bash
+# Not exported - child process can't see
+VAR="hello"
+bash -c 'echo $VAR'  # Output: (empty)
+
+# Exported - child inherits
+export VAR="hello"
+bash -c 'echo $VAR'  # Output: hello
+```
+
+**Important Environment Variables:**
+| Variable | Purpose |
+|----------|---------|
+| PATH | Executable search paths |
+| HOME | User's home directory |
+| USER | Current username |
+| SHELL | Current shell |
+| PWD | Current directory |
+| EDITOR | Default text editor |
+| LANG | Language/locale |
+
+**Follow-up:** How do you make variables persistent across sessions?
+**Answer:** Add export statements to .bashrc for non-login shells, or .bash_profile for login shells.
+
+</details>
+
+---
+
+### Q9: How would you implement a custom prompt that shows git branch?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Simple Git Prompt:**
+
+```bash
+# Function to get git branch
+parse_git_branch() {
+    git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+# Use in PS1
+export PS1="\u@\h \w\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
+```
+
+**Advanced Git Prompt with Status:**
+
+```bash
+# Colors
+RED='\[\033[0;31m\]'
+GREEN='\[\033[0;32m\]'
+YELLOW='\[\033[0;33m\]'
+BLUE='\[\033[0;34m\]'
+RESET='\[\033[0m\]'
+
+# Git status function
+git_status() {
+    local branch status
+    
+    if ! branch=$(git symbolic-ref --short HEAD 2>/dev/null); then
+        return
+    fi
+    
+    # Check for changes
+    if git diff --quiet 2>/dev/null; then
+        status="${GREEN}✓"
+    else
+        status="${RED}✗"
+    fi
+    
+    # Check for staged changes
+    if ! git diff --cached --quiet 2>/dev/null; then
+        status="${YELLOW}●${status}"
+    fi
+    
+    echo " (${branch})${status}${RESET}"
+}
+
+# Set prompt
+export PS1="${BLUE}\w${RESET}\$(git_status) $ "
+```
+
+**Using git-prompt.sh (if available):**
+```bash
+source /usr/share/git/completion/git-prompt.sh
+export PS1='\w$(__git_ps1 " (%s)") $ '
+```
+
+**Follow-up:** How would you optimize for performance in large repos?
+**Answer:** Use `__git_ps1` with `GIT_PS1_SHOWDIRTYSTATE=false` for faster response, or use async prompt updates.
+
+</details>
+
+---
+
+### Q10: How do Termux configuration files differ from standard Linux distributions?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Key Differences:**
+
+| Aspect | Standard Linux | Termux |
+|--------|---------------|--------|
+| Home location | `/home/user/` | `/data/data/com.termux/files/home/` |
+| Config location | `/etc/` or `~/.config/` | `~/.termux/` |
+| Shell path | `/bin/bash` | `$PREFIX/bin/bash` |
+| Shebang | `#!/bin/bash` | `#!/data/data/com.termux/files/usr/bin/bash` |
+| Root user | Yes | No (unless device rooted) |
+
+**Termux-Specific Files:**
+```
+~/.termux/
+├── termux.properties  # App settings (unique to Termux)
+├── colors.properties  # Color scheme
+└── font.ttf          # Custom font
+```
+
+**termux.properties Options:**
+```bash
+# Termux-specific settings
+back-key=escape
+bell-character=ignore
+extra-keys = [[ ... ]]
+# These don't exist in standard Linux
+```
+
+**Standard Linux Files Not Used in Termux:**
+- `/etc/passwd` (uses Android's user system)
+- `/etc/shadow` (no password authentication)
+- `/etc/fstab` (no mount control)
+
+**Follow-up:** How do you write portable scripts?
+**Answer:** Use environment variables instead of hardcoded paths:
+```bash
+#!/usr/bin/env bash  # Portable shebang
+# Or in Termux-specific:
+#!/data/data/com.termux/files/usr/bin/bash
+
+# Use variables
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+```
+
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+Practical scenarios you'll encounter when configuring Termux!
+
+---
+
+### Scenario 1: The "My Aliases Disappeared" Mystery
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                          😰 SCENARIO: LOST ALIASES                           │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  SITUATION: User created aliases yesterday but they're gone today            │
+│  They ran: alias update='pkg update && pkg upgrade -y'                       │
+│                                                                              │
+│  USER CONTEXT:                                                               │
+│  - Created aliases on command line                                           │
+│  - Didn't add to any file                                                    │
+│  - Closed and reopened Termux                                                │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🛠️ DIAGNOSIS & SOLUTION:                                                    │
+│                                                                              │
+│  Step 1: Understand the Problem                                              │
+│  ─────────────────────────────                                               │
+│  Command-line aliases are TEMPORARY                                          │
+│  They only exist in current shell session                                    │
+│  Closing Termux = starting new shell = aliases gone                          │
+│                                                                              │
+│  Step 2: Make Aliases Permanent                                              │
+│  ─────────────────────────────                                               │
+│  $ nano ~/.bashrc                                                            │
+│                                                                              │
+│  # Add at the end:                                                           │
+│  # === MY ALIASES ===                                                        │
+│  alias update='pkg update && pkg upgrade -y'                                 │
+│  alias install='pkg install'                                                 │
+│  alias ll='ls -la'                                                           │
+│  alias c='clear'                                                             │
+│                                                                              │
+│  Step 3: Apply Changes                                                       │
+│  ─────────────────────────────                                               │
+│  $ source ~/.bashrc                                                          │
+│                                                                              │
+│  Step 4: Verify                                                              │
+│  ─────────────────────────────                                               │
+│  $ alias                                                                     │
+│  # Should show your aliases                                                  │
+│                                                                              │
+│  $ update                                                                    │
+│  # Should work now!                                                          │
+│                                                                              │
+│  ✅ RESULT: Aliases now permanent!                                           │
+│                                                                              │
+│  💡 PREVENTION TIP: Always add aliases to .bashrc immediately!               │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Scenario 2: Creating a Productivity-Optimized Environment
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                   ⚡ SCENARIO: PRODUCTIVITY SETUP                            │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  SITUATION: Developer wants maximum productivity on mobile                   │
+│  Goal: Quick navigation, smart aliases, informative prompt                   │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🛠️ COMPLETE PRODUCTIVITY CONFIG:                                            │
+│                                                                              │
+│  # === CREATE CONFIGURATION ===                                              │
+│  cat >> ~/.bashrc << 'EOF'                                                   │
+│                                                                              │
+│  # ══════════════════════════════════════════════════════                   │
+│  # PRODUCTIVITY CONFIGURATION                                                │
+│  # ══════════════════════════════════════════════════════                   │
+│                                                                              │
+│  # === SMART NAVIGATION ===                                                  │
+│  alias ..='cd ..'                                                            │
+│  alias ...='cd ../..'                                                        │
+│  alias ....='cd ../../..'                                                    │
+│  alias ~='cd ~'                                                              │
+│  alias projects='cd ~/projects'                                              │
+│  alias downloads='cd ~/storage/downloads'                                    │
+│  alias back='cd "$OLDPWD"'                                                   │
+│                                                                              │
+│  # === QUICK ACTIONS ===                                                     │
+│  alias update='pkg update && pkg upgrade -y'                                 │
+│  alias install='pkg install'                                                 │
+│  alias search='pkg search'                                                   │
+│  alias rmb='rm -rf ~/.bash_history && history -c'  # Clear history           │
+│                                                                               │
+│  # === GIT SHORTCUTS ===                                                     │
+│  alias gs='git status'                                                       │
+│  alias ga='git add .'                                                        │
+│  alias gc='git commit -m'                                                    │
+│  alias gp='git push'                                                         │
+│  alias gl='git log --oneline -10'                                            │
+│  alias gd='git diff'                                                         │
+│  alias gb='git branch'                                                       │
+│  alias gco='git checkout'                                                    │
+│                                                                              │
+│  # === DEVELOPMENT HELPERS ===                                               │
+│  alias py='python'                                                           │
+│  alias pipi='pip install'                                                    │
+│  alias venv='python -m venv venv && source venv/bin/activate'               │
+│  alias serve='python -m http.server 8000'                                    │
+│  alias json='python -m json.tool'                                            │
+│                                                                              │
+│  # === USEFUL FUNCTIONS ===                                                  │
+│  # Create and enter directory                                                │
+│  mkcd() { mkdir -p "$1" && cd "$1"; }                                        │
+│                                                                              │
+│  # Quick backup                                                              │
+│  backup() { cp "$1" "$1.bak.$(date +%Y%m%d%H%M%S)"; }                        │
+│                                                                              │
+│  # Find file by name                                                         │
+│  ff() { find . -type f -iname "*$1*" 2>/dev/null; }                          │
+│                                                                              │
+│  # Count files in directory                                                  │
+│  count() { ls -1 | wc -l; }                                                  │
+│                                                                              │
+│  # Extract archives                                                          │
+│  extract() {                                                                 │
+│      case "$1" in                                                            │
+│          *.tar.gz) tar xzf "$1" ;;                                           │
+│          *.zip) unzip "$1" ;;                                                │
+│          *) echo "Unknown format" ;;                                         │
+│      esac                                                                    │
+│  }                                                                           │
+│                                                                              │
+│  # === INFORMATIVE PROMPT ===                                                │
+│  parse_git_branch() {                                                        │
+│      git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'       │
+│  }                                                                           │
+│                                                                              │
+│  GREEN='\[\033[0;32m\]'                                                      │
+│  BLUE='\[\033[0;34m\]'                                                       │
+│  YELLOW='\[\033[0;33m\]'                                                     │
+│  RESET='\[\033[0m\]'                                                         │
+│                                                                              │
+│  PS1="${GREEN}\u${RESET}:${BLUE}\w${YELLOW}\$(parse_git_branch)${RESET}\$ "  │
+│                                                                              │
+│  # === WELCOME MESSAGE ===                                                   │
+│  echo ""                                                                     │
+│  echo "👋 Welcome back, $(whoami)!"                                          │
+│  echo "📅 $(date '+%A, %B %d, %Y')"                                          │
+│  echo "📦 $(pkg list-installed | wc -l) packages installed"                  │
+│  echo ""                                                                     │
+│  EOF                                                                         │
+│                                                                              │
+│  $ source ~/.bashrc                                                          │
+│                                                                              │
+│  ✅ RESULT: Fully optimized productivity environment!                        │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Scenario 3: Setting Up Extra Keys Row for Coding
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                   ⌨️ SCENARIO: CODING KEYBOARD SETUP                         │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  SITUATION: Developer needs quick access to coding keys                      │
+│  Problem: On-screen keyboard lacks ESC, CTRL, TAB, brackets                  │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🛠️ CONFIGURATION:                                                           │
+│                                                                              │
+│  $ mkdir -p ~/.termux                                                        │
+│  $ nano ~/.termux/termux.properties                                          │
+│                                                                              │
+│  # Add this configuration:                                                   │
+│  extra-keys = [[                                                            │
+│    {key: ESC, popup: {macro: "CTRL d", display: "exit"}},                   │
+│    {key: CTRL, popup: {macro: "CTRL c", display: "cancel"}},                │
+│    {key: ALT, popup: {macro: "CTRL z", display: "undo"}},                   │
+│    {key: TAB, popup: {macro: "CTRL a", display: "all"}},                    │
+│    {key: '/', popup: '~'},                                                  │
+│    {key: '-', popup: '_'},                                                  │
+│    {key: HOME, popup: END},                                                 │
+│    {key: UP, popup: PGUP},                                                  │
+│    {key: DOWN, popup: PGDN}                                                 │
+│  ], [                                                                        │
+│    {key: KEYBOARD, popup: {macro: "KEYBOARD 5", display: "5"}},             │
+│    {key: {macro: "ALT ENTER", display: "search"}, popup: "ENTER"},          │
+│    {key: DEL, popup: BACKSPACE},                                            │
+│    {key: LEFT, popup: HOME},                                                │
+│    {key: RIGHT, popup: END}                                                 │
+│  ]]                                                                         │
+│                                                                              │
+│  # Alternative: Developer-focused layout                                     │
+│  extra-keys = [[                                                            │
+│    {key: ESC}, {key: '/'}, {key: '-'}, {key: HOME}, {key: UP}, {key: END},  │
+│    {key: TAB}, {key: CTRL}, {key: ALT}, {key: LEFT}, {key: DOWN},           │
+│    {key: RIGHT}                                                             │
+│  ], [                                                                        │
+│    {key: '('}, {key: ')'}, {key: '{'}, {key: '}'}, {key: '['}, {key: ']'},  │
+│    {key: '"'}, {key: "'"}, {key: '`'}, {key: ';'}, {key: ':'}, {key: '|'}   │
+│  ]]                                                                         │
+│                                                                              │
+│  $ termux-reload-settings                                                    │
+│                                                                              │
+│  ✅ RESULT: Extra keys row now visible above keyboard!                       │
+│                                                                              │
+│  💡 TIP: Long-press keys for popup alternatives!                             │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Scenario 4: Creating Project-Specific Configurations
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                   📁 SCENARIO: PROJECT CONFIGS                               │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  SITUATION: Developer works on multiple projects with different needs        │
+│  Goal: Auto-load project-specific aliases and environment when entering      │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🛠️ SOLUTION: AUTOMATIC PROJECT CONFIG                                       │
+│                                                                              │
+│  # Create project structure                                                  │
+│  mkdir -p ~/projects/{webapp,api,scripts}                                    │
+│                                                                              │
+│  # Add project-specific config files                                         │
+│  cat > ~/projects/webapp/.envrc << 'EOF'                                     │
+│  # Webapp project settings                                                   │
+│  export PROJECT_NAME="WebApp"                                                │
+│  alias run='python -m http.server 8000'                                      │
+│  alias test='python -m pytest tests/'                                        │
+│  alias build='npm run build'                                                 │
+│  alias dev='npm run dev'                                                     │
+│  echo "🌐 WebApp project loaded"                                             │
+│  EOF                                                                         │
+│                                                                              │
+│  cat > ~/projects/api/.envrc << 'EOF'                                        │
+│  # API project settings                                                      │
+│  export PROJECT_NAME="API"                                                   │
+│  export API_URL="http://localhost:3000"                                      │
+│  alias run='node server.js'                                                  │
+│  alias test='npm test'                                                       │
+│  alias migrate='node migrate.js'                                             │
+│  echo "🔌 API project loaded"                                                │
+│  EOF                                                                         │
+│                                                                              │
+│  # Add auto-load function to .bashrc                                         │
+│  cat >> ~/.bashrc << 'EOF'                                                   │
+│  # Auto-load project config when entering directory                          │
+│  cd() {                                                                      │
+│      builtin cd "$@"                                                         │
+│      if [ -f .envrc ]; then                                                  │
+│          source .envrc                                                       │
+│      fi                                                                      │
+│  }                                                                           │
+│  EOF                                                                         │
+│                                                                              │
+│  # Test it!                                                                  │
+│  $ source ~/.bashrc                                                          │
+│  $ cd ~/projects/webapp                                                      │
+│  🌐 WebApp project loaded                                                    │
+│  $ run      # Runs python -m http.server 8000                                │
+│  $ cd ~/projects/api                                                         │
+│  🔌 API project loaded                                                       │
+│  $ run      # Runs node server.js                                            │
+│                                                                              │
+│  ✅ RESULT: Project-specific configs auto-load on cd!                        │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Scenario 5: Troubleshooting a Broken Configuration
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                   🔧 SCENARIO: BROKEN BASHRC                                 │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  SITUATION: User added bad code to .bashrc, now Termux won't start properly  │
+│  Symptoms: Error messages, commands not working, weird behavior              │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🛠️ RECOVERY PROCEDURE:                                                      │
+│                                                                              │
+│  Step 1: Open Termux anyway (even with errors)                               │
+│  ─────────────────────────────                                               │
+│  Termux will try to run, errors will show but you get a prompt               │
+│                                                                              │
+│  Step 2: Find the error                                                      │
+│  ─────────────────────────────                                               │
+│  $ bash -x ~/.bashrc 2>&1 | head -50                                        │
+│  # This shows each line as it executes and stops at the error                │
+│                                                                              │
+│  Step 3: Check syntax                                                        │
+│  ─────────────────────────────                                               │
+│  $ bash -n ~/.bashrc                                                         │
+│  # Shows syntax errors without running                                       │
+│                                                                              │
+│  Step 4: Backup and fix                                                      │
+│  ─────────────────────────────                                               │
+│  $ cp ~/.bashrc ~/.bashrc.broken                                             │
+│  $ nano ~/.bashrc                                                            │
+│  # Comment out or remove the problematic lines                               │
+│                                                                              │
+│  Step 5: Test before applying                                                │
+│  ─────────────────────────────                                               │
+│  $ bash --norc  # Start shell without loading .bashrc                        │
+│  $ source ~/.bashrc  # Test your fixed version                               │
+│                                                                              │
+│  Step 6: If completely broken                                                │
+│  ─────────────────────────────                                               │
+│  # Reset to default (CAUTION: loses all customizations)                      │
+│  $ rm ~/.bashrc                                                              │
+│  $ pkg reinstall bash  # May restore default .bashrc                         │
+│                                                                              │
+│  # Or create minimal .bashrc                                                 │
+│  $ echo '# Basic .bashrc' > ~/.bashrc                                        │
+│  $ echo 'export PS1="$ "' >> ~/.bashrc                                       │
+│                                                                              │
+│  💡 PREVENTION: Always backup before editing!                                │
+│  $ cp ~/.bashrc ~/.bashrc.backup                                             │
+│                                                                              │
+│  ✅ RESULT: Termux working again!                                            │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+Visual understanding of Termux configuration!
+
+---
+
+### Diagram 1: Configuration File Loading Order
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    TERMUX CONFIGURATION LOADING ORDER                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   Termux App Start                                                          │
+│   ════════════════                                                          │
+│        │                                                                     │
+│        ▼                                                                     │
+│   ┌──────────────────────────────────────────────────────────────┐          │
+│   │  ~/.termux/termux.properties                                  │          │
+│   │  ───────────────────────────────                              │          │
+│   │  • Loads FIRST (app-level settings)                           │          │
+│   │  • Controls: back-key, bell, extra-keys, colors               │          │
+│   │  • Requires: termux-reload-settings OR app restart            │          │
+│   └──────────────────────────┬───────────────────────────────────┘          │
+│                              │                                               │
+│                              ▼                                               │
+│   ┌──────────────────────────────────────────────────────────────┐          │
+│   │  System-wide Bash Configuration                               │          │
+│   │  ───────────────────────────────                              │          │
+│   │  $PREFIX/etc/bash.bashrc                                      │          │
+│   │  • Default Termux bash settings                               │          │
+│   │  • Sets up basic environment                                  │          │
+│   └──────────────────────────┬───────────────────────────────────┘          │
+│                              │                                               │
+│                              ▼                                               │
+│   ┌──────────────────────────────────────────────────────────────┐          │
+│   │  User Bash Configuration                                      │          │
+│   │  ────────────────────────                                     │          │
+│   │  ~/.bashrc                                                    │          │
+│   │  ────────────                                                 │          │
+│   │  • Runs EVERY interactive shell                               │          │
+│   │  • Your customizations go here:                               │          │
+│   │    - Aliases                                                  │          │
+│   │    - Functions                                                │          │
+│   │    - Environment variables                                    │          │
+│   │    - Custom prompt (PS1)                                      │          │
+│   │    - Welcome messages                                         │          │
+│   └──────────────────────────┬───────────────────────────────────┘          │
+│                              │                                               │
+│                              ▼                                               │
+│   ┌──────────────────────────────────────────────────────────────┐          │
+│   │  Ready for User Input!                                        │          │
+│   └──────────────────────────────────────────────────────────────┘          │
+│                                                                              │
+│   NOTE: Termux uses non-login interactive shells,                           │
+│         so .bash_profile and .profile are NOT loaded by default.            │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Diagram 2: Environment Variable Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ENVIRONMENT VARIABLES FLOW                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌────────────────────────────────────────────────────────────────┐        │
+│   │                    SYSTEM DEFAULTS                              │        │
+│   ├────────────────────────────────────────────────────────────────┤        │
+│   │  HOME     = /data/data/com.termux/files/home                   │        │
+│   │  PREFIX   = /data/data/com.termux/files/usr                    │        │
+│   │  PATH     = $PREFIX/bin:$PREFIX/bin/applets                    │        │
+│   │  SHELL    = $PREFIX/bin/bash                                   │        │
+│   │  LANG     = en_US.UTF-8                                        │        │
+│   │  TERMUX_VERSION = 0.118.0                                      │        │
+│   └──────────────────────────┬─────────────────────────────────────┘        │
+│                              │                                               │
+│                              ▼                                               │
+│   ┌────────────────────────────────────────────────────────────────┐        │
+│   │                    USER ADDITIONS                               │        │
+│   │              (in ~/.bashrc)                                     │        │
+│   ├────────────────────────────────────────────────────────────────┤        │
+│   │  export EDITOR=nano                # Default editor            │        │
+│   │  export HISTSIZE=10000             # History size              │        │
+│   │  export PATH="$HOME/scripts:$PATH" # Add custom path          │        │
+│   │  export MY_PROJECT=/path/to/proj   # Custom variable          │        │
+│   └──────────────────────────┬─────────────────────────────────────┘        │
+│                              │                                               │
+│                              ▼                                               │
+│   ┌────────────────────────────────────────────────────────────────┐        │
+│   │                    SHELL SESSION                               │        │
+│   │                                                                 │        │
+│   │   echo $PATH                                                   │        │
+│   │   → /data/data/.../home/scripts:/data/.../usr/bin:...          │        │
+│   │                                                                 │        │
+│   │   echo $EDITOR                                                 │        │
+│   │   → nano                                                       │        │
+│   │                                                                 │        │
+│   │   $MY_VARIABLE                                                 │        │
+│   │   → Available to all child processes                           │        │
+│   └────────────────────────────────────────────────────────────────┘        │
+│                                                                              │
+│   ┌───────────────────────────────────────────────────────────────┐         │
+│   │  EXPORT VS NO EXPORT                                          │         │
+│   │  ───────────────────                                          │         │
+│   │  MY_VAR="value"      → Shell variable (current shell only)    │         │
+│   │  export MY_VAR="val" → Environment var (inherited by children)│         │
+│   └───────────────────────────────────────────────────────────────┘         │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Diagram 3: Alias vs Function vs Script
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ALIAS vs FUNCTION vs SCRIPT                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌───────────────────────────────────────────────────────────────┐         │
+│   │                       ALIAS                                    │         │
+│   │                   (Text Substitution)                          │         │
+│   ├───────────────────────────────────────────────────────────────┤         │
+│   │  Syntax: alias name='command'                                  │         │
+│   │                                                                 │         │
+│   │  Example:                                                      │         │
+│   │  alias ll='ls -la'                                             │         │
+│   │  alias update='pkg update && pkg upgrade -y'                   │         │
+│   │                                                                 │         │
+│   │  Characteristics:                                              │         │
+│   │  ✓ Simple text replacement                                     │         │
+│   │  ✓ No arguments possible                                       │         │
+│   │  ✓ Fast execution                                              │         │
+│   │  ✓ Defined in .bashrc                                          │         │
+│   │  ✗ Limited flexibility                                         │         │
+│   └───────────────────────────────────────────────────────────────┘         │
+│                              │                                               │
+│                              ▼                                               │
+│   ┌───────────────────────────────────────────────────────────────┐         │
+│   │                      FUNCTION                                  │         │
+│   │                   (Shell Code Block)                           │         │
+│   ├───────────────────────────────────────────────────────────────┤         │
+│   │  Syntax: name() { commands; }                                  │         │
+│   │                                                                 │         │
+│   │  Example:                                                      │         │
+│   │  mkcd() {                                                      │         │
+│   │      mkdir -p "$1"                                             │         │
+│   │      cd "$1"                                                   │         │
+│   │  }                                                             │         │
+│   │                                                                 │         │
+│   │  Characteristics:                                              │         │
+│   │  ✓ Accepts arguments ($1, $2, ...)                             │         │
+│   │  ✓ Can contain logic/conditionals                              │         │
+│   │  ✓ Runs in current shell                                       │         │
+│   │  ✓ Can modify environment                                      │         │
+│   │  ✓ Defined in .bashrc                                          │         │
+│   └───────────────────────────────────────────────────────────────┘         │
+│                              │                                               │
+│                              ▼                                               │
+│   ┌───────────────────────────────────────────────────────────────┐         │
+│   │                       SCRIPT                                   │         │
+│   │                   (Executable File)                            │         │
+│   ├───────────────────────────────────────────────────────────────┤         │
+│   │  File: ~/scripts/myscript.sh                                   │         │
+│   │  #!/data/data/com.termux/files/usr/bin/bash                    │         │
+│   │  # Complex script with multiple functions                      │         │
+│   │                                                                 │         │
+│   │  Characteristics:                                              │         │
+│   │  ✓ Standalone executable file                                  │         │
+│   │  ✓ Can be called from anywhere (if in PATH)                    │         │
+│   │  ✓ Runs in subprocess                                          │         │
+│   │  ✓ Can be version controlled                                   │         │
+│   │  ✓ Shareable between users                                     │         │
+│   │  ✓ Environment isolated (unless exported)                      │         │
+│   └───────────────────────────────────────────────────────────────┘         │
+│                                                                              │
+│   WHEN TO USE:                                                              │
+│   ────────────                                                              │
+│   • Alias   → Single command shortcuts, simple replacements                 │
+│   • Function → Multi-step operations with arguments, need current shell     │
+│   • Script  → Complex programs, reusable tools, sharing                     │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+Navigate the course efficiently!
+
+| Previous Chapter | Current Chapter | Next Chapter |
+|-----------------|-----------------|--------------|
+| [Ch 1: Termux Introduction](./Ch01-Termux-Introduction-Installation.md) | **Ch 2: First Setup & Configuration** | [Ch 3: Linux Basics Part 1](./Ch03-Linux-Basics-Part1.md) |
+
+### Prerequisites & Learning Path
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         MODULE 1: FOUNDATION                                 │
+│                                                                              │
+│  ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐              │
+│  │  Ch 1   │────▶│  Ch 2   │────▶│  Ch 3   │────▶│  Ch 4   │              │
+│  │Intro &  │     │ Setup & │     │ Linux   │     │ Linux   │              │
+│  │Install  │     │ Config  │     │Basic 1  │     │Basic 2  │              │
+│  └─────────┘     └─────────┘     └─────────┘     └─────────┘              │
+│       │               │                                                   │
+│       │               │                                                   │
+│       │          🎯 YOU ARE HERE                                          │
+│       │          Ch 2: First Setup & Configuration                        │
+│       │                                                                   │
+│       │              ┌─────────┐     ┌─────────┐                          │
+│       └─────────────▶│  Ch 5   │────▶│ Ch 6+   │                          │
+│                      │ Package │     │Advanced │                          │
+│                      │  Mgmt   │     │ Topics  │                          │
+│                      └─────────┘     └─────────┘                          │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+| Chapter | Title | Topics Covered | Difficulty |
+|---------|-------|---------------|------------|
+| Ch 1 | Termux Introduction & Installation | What is Termux, F-Droid install, First setup | ⭐ Beginner |
+| Ch 2 | First Setup & Configuration | .bashrc, aliases, environment variables | ⭐ Beginner |
+| Ch 3 | Linux Basics Part 1 | pwd, ls, cd, mkdir, rm, cp, mv | ⭐ Beginner |
+| Ch 4 | Linux Basics Part 2 | cat, touch, grep, find, chmod, pipes | ⭐⭐ Intermediate |
+| Ch 5 | Package Management | pkg, apt, dpkg, repositories | ⭐ Beginner |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+Advanced configuration techniques beyond the basics!
+
+---
+
+### Advanced 1: Dynamic Prompt with System Information
+
+```bash
+# Add to .bashrc for a professional, informative prompt
+
+# Colors
+RED='\[\033[0;31m\]'
+GREEN='\[\033[0;32m\]'
+YELLOW='\[\033[0;33m\]'
+BLUE='\[\033[0;34m\]'
+PURPLE='\[\033[0;35m\]'
+CYAN='\[\033[0;36m\]'
+WHITE='\[\033[0;37m\]'
+BOLD='\[\033[1m\]'
+RESET='\[\033[0m\]'
+
+# Git branch and status
+parse_git() {
+    local branch status
+    
+    # Check if in git repo
+    if ! git rev-parse --is-inside-work-tree &>/dev/null; then
+        return
+    fi
+    
+    # Get branch name
+    branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD)
+    
+    # Get status
+    local modified=$(git diff --name-only 2>/dev/null | wc -l)
+    local staged=$(git diff --cached --name-only 2>/dev/null | wc -l)
+    local untracked=$(git ls-files --others --exclude-standard 2>/dev/null | wc -l)
+    
+    status=""
+    [ "$modified" -gt 0 ] && status="${status}${RED}+${modified}${RESET}"
+    [ "$staged" -gt 0 ] && status="${status}${GREEN}*${staged}${RESET}"
+    [ "$untracked" -gt 0 ] && status="${status}${YELLOW}?${untracked}${RESET}"
+    
+    echo " (${CYAN}${branch}${RESET}${status})"
+}
+
+# Virtual environment detection
+parse_venv() {
+    if [ -n "$VIRTUAL_ENV" ]; then
+        echo "(${PURPLE}$(basename $VIRTUAL_ENV)${RESET})"
+    fi
+}
+
+# Battery status (requires termux-api)
+battery_status() {
+    if command -v termux-battery-status &>/dev/null; then
+        local battery=$(termux-battery-status 2>/dev/null | grep percentage | cut -d: -f2 | tr -d ' "%,')
+        if [ -n "$battery" ]; then
+            if [ "$battery" -gt 50 ]; then
+                echo "${GREEN}${battery}%${RESET}"
+            elif [ "$battery" -gt 20 ]; then
+                echo "${YELLOW}${battery}%${RESET}"
+            else
+                echo "${RED}${battery}%${RESET}"
+            fi
+        fi
+    fi
+}
+
+# Set dynamic prompt
+set_prompt() {
+    local battery=$(battery_status)
+    local venv=$(parse_venv)
+    local git=$(parse_git)
+    
+    PS1="${battery:+$battery }${GREEN}\u${RESET}@${BLUE}\h${RESET}:${YELLOW}\w${RESET}${venv}${git}\n${WHITE}\$${RESET} "
+}
+
+PROMPT_COMMAND=set_prompt
+```
+
+---
+
+### Advanced 2: Smart Command History with Fuzzy Search
+
+```bash
+# Install fzf for fuzzy finding
+pkg install fzf
+
+# Add to .bashrc for enhanced history search
+
+# Fuzzy search command history (Ctrl+R)
+bind -x '"\C-r": __fzf_history__'
+
+__fzf_history__() {
+    local selection
+    selection=$(HISTTIMEFORMAT= history | fzf --tac --no-sort --height=40% \
+        --preview='echo {}' --preview-window=down:1:wrap | cut -d' ' -f2-)
+    if [ -n "$selection" ]; then
+        READLINE_LINE="$selection"
+        READLINE_POINT=${#READLINE_LINE}
+    fi
+}
+
+# Fuzzy directory navigation (Alt+C)
+_fzf_cd() {
+    local dir
+    dir=$(find . -type d 2>/dev/null | fzf --height=40%)
+    if [ -n "$dir" ]; then
+        cd "$dir"
+    fi
+}
+bind -m emacs '"\ec": "_fzf_cd\n"'
+
+# Fuzzy file opening (Ctrl+T)
+_fzf_file() {
+    local file
+    file=$(find . -type f 2>/dev/null | fzf --height=40%)
+    if [ -n "$file" ]; then
+        ${EDITOR:-nano} "$file"
+    fi
+}
+bind -x '"\C-t": _fzf_file'
+
+# Auto-completion with fzf
+source $PREFIX/share/fzf/completion.bash
+source $PREFIX/share/fzf/key-bindings.bash
+```
+
+---
+
+### Advanced 3: Custom Termux Widget with Quick Actions
+
+```bash
+# Install Termux:Widget add-on from F-Droid first
+
+# Create widgets directory
+mkdir -p ~/.shortcuts
+
+# Quick update widget
+cat > ~/.shortcuts/Update << 'EOF'
+#!/data/data/com.termux/files/usr/bin/bash
+pkg update && pkg upgrade -y
+echo ""
+echo "✅ System updated!"
+read -p "Press Enter to close..."
+EOF
+chmod +x ~/.shortcuts/Update
+
+# Server status widget
+cat > ~/.shortcuts/Server\ Status << 'EOF'
+#!/data/data/com.termux/files/usr/bin/bash
+dialog --title "Server Status" \
+       --msgbox "$(echo "IP: $(curl -s ifconfig.me)\n\n"; netstat -tulanp | head -20)" \
+       20 60
+EOF
+chmod +x ~/.shortcuts/Server\ Status
+
+# Quick backup widget
+cat > ~/.shortcuts/Backup << 'EOF'
+#!/data/data/com.termux/files/usr/bin/bash
+BACKUP_DIR=~/storage/downloads/termux-backups
+mkdir -p "$BACKUP_DIR"
+
+BACKUP_FILE="$BACKUP_DIR/termux-$(date +%Y%m%d_%H%M%S).tar.gz"
+
+dialog --title "Backup Termux" \
+       --infobox "Creating backup...\nThis may take a minute." 5 50
+
+tar -czf "$BACKUP_FILE" \
+    --exclude='~/storage' \
+    --exclude='~/.cache' \
+    ~/ 2>/dev/null
+
+dialog --title "Backup Complete" \
+       --msgbox "Backup saved to:\n$BACKUP_FILE\n\nSize: $(du -h "$BACKUP_FILE" | cut -f1)" 10 60
+EOF
+chmod +x ~/.shortcuts/Backup
+
+# Quick Python shell widget
+cat > ~/.shortcuts/Python << 'EOF'
+#!/data/data/com.termux/files/usr/bin/bash
+python3
+EOF
+chmod +x ~/.shortcuts/Python
+
+# Network info widget
+cat > ~/.shortcuts/Network\ Info << 'EOF'
+#!/data/data/com.termux/files/usr/bin/bash
+dialog --title "Network Information" \
+       --msgbox "$(echo "Public IP: $(curl -s ifconfig.me)\n\nLocal IPs:\n$(hostname -I)\n\nDNS: $(cat /proc/net/route | awk '{print $2}' | head -2 | tail -1)")" 12 60
+EOF
+chmod +x ~/.shortcuts/Network\ Info
+
+echo "✅ Widgets created! Add Termux:Widget to home screen to use them."
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+Complete this checklist to verify your learning!
+
+### ✅ Concepts Understood
+
+- [ ] I understand the purpose of .bashrc file
+- [ ] I know the location of Termux configuration files
+- [ ] I understand the difference between .bashrc and termux.properties
+- [ ] I know what environment variables are and how to set them
+- [ ] I understand the difference between aliases and functions
+- [ ] I know what PS1 is and how to customize the prompt
+- [ ] I understand how to configure extra keys row
+
+### ✅ Skills Acquired
+
+- [ ] I can edit and reload .bashrc
+- [ ] I can create and use aliases
+- [ ] I can create shell functions with arguments
+- [ ] I can customize the command prompt
+- [ ] I can add directories to PATH
+- [ ] I can configure termux.properties
+- [ ] I can add extra keys row above keyboard
+
+### ✅ Practical Tasks Completed
+
+- [ ] Created at least 5 useful aliases
+- [ ] Created at least 1 shell function
+- [ ] Customized PS1 prompt with colors
+- [ ] Added custom scripts directory to PATH
+- [ ] Set up extra keys row in termux.properties
+- [ ] Created custom welcome message
+
+### ✅ Troubleshooting Knowledge
+
+- [ ] I know how to reload configuration after changes
+- [ ] I know how to debug .bashrc errors
+- [ ] I know how to backup and restore configuration
+- [ ] I know the difference between exported and non-exported variables
 
 ---
 

@@ -1,4 +1,27 @@
-# Chapter 12: Python Basics in Termux
+```
+ ██████╗██╗  ██╗███████╗███╗   ███╗██╗   ██╗███████╗████████╗███████╗██████╗ 
+██╔════╝██║  ██║██╔════╝████╗ ████║██║   ██║██╔════╝╚══██╔══╝██╔════╝██╔══██╗
+██║     ███████║█████╗  ██╔████╔██║██║   ██║███████╗   ██║   █████╗  ██████╔╝
+██║     ██╔══██║██╔══╝  ██║╚██╔╝██║██║   ██║╚════██║   ██║   ██╔══╝  ██╔══██╗
+╚██████╗██║  ██║███████╗██║ ╚═╝ ██║╚██████╔╝███████║   ██║   ███████╗██║  ██║
+ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+                                                                              
+ ██████╗ ██████╗  ██████╗ ██╗  ██╗██╗   ██╗    ███╗   ██╗ ██████╗ ██████╗ ███████╗
+██╔════╝ ██╔══██╗██╔═══██╗╚██╗██╔╝╚██╗ ██╔╝    ████╗  ██║██╔════╝██╔═══██╗██╔════╝
+██║  ███╗██████╔╝██║   ██║ ╚███╔╝  ╚████╔╝     ██╔██╗ ██║██║     ██║   ██║█████╗  
+██║   ██║██╔══██╗██║   ██║ ██╔██╗   ╚██╔╝      ██║╚██╗██║██║     ██║   ██║██╔══╝  
+╚██████╔╝██║  ██║╚██████╔╝██╔╝ ██╗   ██║       ██║ ╚████║╚██████╗╚██████╔╝███████╗
+ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝
+                                                                              
+ ██████╗ ██████╗  █████╗ ███╗   ███╗███████╗███████╗████████╗███████╗██████╗ 
+██╔════╝██╔═══██╗██╔══██╗████╗ ████║██╔════╝██╔════╝╚══██╔══╝██╔════╝██╔══██╗
+██║     ██║   ██║███████║██╔████╔██║█████╗  ███████╗   ██║   █████╗  ██████╔╝
+██║     ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ╚════██║   ██║   ██╔══╝  ██╔══██╗
+╚██████╗╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗███████║   ██║   ███████╗██║  ██║
+ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+```
+
+# 🐍 Chapter 12: Python Basics in Termux
 
 > **Module:** 3 - Programming  
 > **Chapter:** 12 of 61  
@@ -3726,6 +3749,1447 @@ Before moving to Chapter 13, verify:
 
 ---
 
+## 🎮 INTERACTIVE QUIZ
+
+### Test Your Python Basics Knowledge! (15 Questions)
+
+**Q1: What is the output of `type(3.14)`?**
+- A) `<class 'int'>`
+- B) `<class 'float'>`
+- C) `<class 'double'>`
+- D) `<class 'number'>`
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**B) `<class 'float'>`** - In Python, decimal numbers are of type float. There's no 'double' type in Python like in other languages.
+</details>
+
+---
+
+**Q2: What does `len("Hello")` return?**
+- A) 4
+- B) 5
+- C) 6
+- D) Error
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**B) 5** - The `len()` function returns the number of characters in a string. "Hello" has 5 characters: H, e, l, l, o.
+</details>
+
+---
+
+**Q3: Which is the correct way to create a list?**
+- A) `list = (1, 2, 3)`
+- B) `list = {1, 2, 3}`
+- C) `list = [1, 2, 3]`
+- D) `list = <1, 2, 3>`
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**C) `list = [1, 2, 3]`** - Lists in Python are created using square brackets `[]`. Parentheses `()` create tuples, and curly braces `{}` create sets or dictionaries.
+</details>
+
+---
+
+**Q4: What is `my_list[-1]` if `my_list = [1, 2, 3, 4, 5]`?**
+- A) 1
+- B) 5
+- C) Error
+- D) -1
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**B) 5** - Negative indexing in Python starts from the end. `-1` is the last element, `-2` is second to last, etc.
+</details>
+
+---
+
+**Q5: Which loop is used to iterate over a sequence?**
+- A) `for`
+- B) `while`
+- C) `foreach`
+- D) Both A and B
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**D) Both A and B** - While `for` is more common for iterating over sequences, `while` can also be used with a counter. Python doesn't have `foreach`.
+</details>
+
+---
+
+**Q6: What is the output of `10 // 3`?**
+- A) 3.33
+- B) 3
+- C) 4
+- D) 1
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**B) 3** - The `//` operator performs floor division, which divides and returns the largest integer less than or equal to the result.
+</details>
+
+---
+
+**Q7: Which statement exits a loop immediately?**
+- A) `exit`
+- B) `break`
+- C) `stop`
+- D) `return`
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**B) `break`** - The `break` statement immediately exits the innermost enclosing loop. `continue` skips to the next iteration.
+</details>
+
+---
+
+**Q8: How do you define a function in Python?**
+- A) `function myFunc():`
+- B) `def myFunc():`
+- C) `func myFunc():`
+- D) `define myFunc():`
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**B) `def myFunc():`** - Python uses the `def` keyword to define functions, followed by the function name and parentheses.
+</details>
+
+---
+
+**Q9: What is a dictionary in Python?**
+- A) An ordered list
+- B) A key-value pair collection
+- C) A string manipulation tool
+- D) A sorting algorithm
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**B) A key-value pair collection** - Dictionaries store data in key-value pairs. Keys must be unique and immutable. Example: `{"name": "John", "age": 25}`.
+</details>
+
+---
+
+**Q10: What does `**kwargs` mean in function definition?**
+- A) Keyword arguments as dictionary
+- B) Variable length positional arguments
+- C) Required arguments
+- D) Default arguments
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**A) Keyword arguments as dictionary** - `**kwargs` allows a function to accept any number of keyword arguments, which are accessible as a dictionary inside the function.
+</details>
+
+---
+
+**Q11: What is the output of `"hello".upper()`?**
+- A) "hello"
+- B) "Hello"
+- C) "HELLO"
+- D) Error
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**C) "HELLO"** - The `.upper()` method converts all characters in a string to uppercase.
+</details>
+
+---
+
+**Q12: Which method adds an element to the end of a list?**
+- A) `add()`
+- B) `insert()`
+- C) `append()`
+- D) `push()`
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**C) `append()`** - `append()` adds an element to the end of a list. `insert()` adds at a specific position.
+</details>
+
+---
+
+**Q13: What is the output of `bool("")`?**
+- A) True
+- B) False
+- C) None
+- D) Error
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**B) False** - Empty strings, empty lists, empty dictionaries, 0, and None all evaluate to False in Python.
+</details>
+
+---
+
+**Q14: Which is correct f-string syntax?**
+- A) `f"Hello {name}"`
+- B) `"Hello {name}f"`
+- C) `f'Hello name'`
+- D) `f"Hello $(name)"`
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**A) `f"Hello {name}"`** - f-strings start with `f` before the quotes and variables are placed inside `{}` braces.
+</details>
+
+---
+
+**Q15: What does `range(5)` produce?**
+- A) Numbers 1 to 5
+- B) Numbers 0 to 4
+- C) Numbers 0 to 5
+- D) Numbers 1 to 4
+
+<details>
+<summary>🔍 Click for Answer</summary>
+
+**B) Numbers 0 to 4** - `range(5)` produces 0, 1, 2, 3, 4. Python ranges are exclusive of the stop value and start at 0 by default.
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Python Basics Interview Questions (10 Questions with Detailed Answers)
+
+**Q1: Explain the difference between mutable and immutable objects in Python.**
+
+<details>
+<summary>💡 Show Answer</summary>
+
+**Answer:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    MUTABLE vs IMMUTABLE OBJECTS                          │
+├────────────────┬────────────────────────────────┬───────────────────────┤
+│ Type           │ Mutable                        │ Immutable             │
+├────────────────┼────────────────────────────────┼───────────────────────┤
+│ Can Change     │ ✅ Yes                         │ ❌ No                 │
+│ Examples       │ list, dict, set               │ int, str, tuple       │
+│ Memory         │ Same object, changes in place │ New object on change  │
+│ Hashable       │ ❌ No (can't be dict keys)    │ ✅ Yes (can be keys)  │
+│ Thread-safe    │ ❌ Need locks                  │ ✅ Naturally safe     │
+└────────────────┴────────────────────────────────┴───────────────────────┘
+
+Examples:
+─────────
+# Mutable - same ID after modification
+my_list = [1, 2, 3]
+print(id(my_list))        # 140123456
+my_list.append(4)
+print(id(my_list))        # 140123456 (same!)
+
+# Immutable - new ID after "modification"
+my_str = "hello"
+print(id(my_str))         # 140789012
+my_str = my_str + " world"
+print(id(my_str))         # 140789999 (different!)
+```
+
+**Key Point:** Immutable objects are safer for use as dictionary keys and in sets because their hash value never changes.
+</details>
+
+---
+
+**Q2: What is the difference between `==` and `is` operators?**
+
+<details>
+<summary>💡 Show Answer</summary>
+
+**Answer:**
+
+```python
+# == compares VALUES
+# is compares IDENTITY (memory location)
+
+a = [1, 2, 3]
+b = [1, 2, 3]
+c = a
+
+print(a == b)  # True - same values
+print(a is b)  # False - different objects
+print(a is c)  # True - same object
+
+# Memory diagram:
+# a ──────────────┐
+#                 ├──► [1, 2, 3] (Object 1)
+# c ──────────────┘
+# b ───────────────────► [1, 2, 3] (Object 2)
+
+# Special case - small integers are cached
+x = 256
+y = 256
+print(x is y)  # True (cached)
+
+x = 257
+y = 257
+print(x is y)  # May be False (not cached)
+
+# Best practice:
+# - Use == for value comparison
+# - Use is only for None, True, False checks
+if x is None:  # Correct
+if x == None:  # Works but not Pythonic
+```
+</details>
+
+---
+
+**Q3: Explain list comprehension with examples.**
+
+<details>
+<summary>💡 Show Answer</summary>
+
+**Answer:**
+
+```python
+# List comprehension - concise way to create lists
+
+# Basic syntax: [expression for item in iterable]
+
+# 1. Simple transformation
+squares = [x**2 for x in range(10)]
+# [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+# 2. With condition (filtering)
+evens = [x for x in range(20) if x % 2 == 0]
+# [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+
+# 3. With if-else (transformation)
+labels = ["even" if x % 2 == 0 else "odd" for x in range(5)]
+# ['even', 'odd', 'even', 'odd', 'even']
+
+# 4. Nested loops (matrix flattening)
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+flat = [num for row in matrix for num in row]
+# [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+# 5. Dictionary comprehension
+names = ['alice', 'bob', 'charlie']
+name_lengths = {name: len(name) for name in names}
+# {'alice': 5, 'bob': 3, 'charlie': 7}
+
+# 6. Set comprehension
+unique_lengths = {len(name) for name in names}
+# {3, 5, 7}
+
+# Performance tip: List comprehension is usually faster than loops
+# but avoid for very complex logic - readability matters!
+```
+</details>
+
+---
+
+**Q4: What are decorators in Python?**
+
+<details>
+<summary>💡 Show Answer</summary>
+
+**Answer:**
+
+```python
+# Decorators modify function behavior without changing the function itself
+
+# Basic decorator structure:
+def my_decorator(func):
+    def wrapper(*args, **kwargs):
+        print("Before function call")
+        result = func(*args, **kwargs)
+        print("After function call")
+        return result
+    return wrapper
+
+# Using decorator:
+@my_decorator
+def say_hello(name):
+    print(f"Hello, {name}!")
+
+say_hello("World")
+# Output:
+# Before function call
+# Hello, World!
+# After function call
+
+# Practical example - timing decorator:
+import time
+
+def timer(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__} took {end-start:.4f} seconds")
+        return result
+    return wrapper
+
+@timer
+def slow_function():
+    time.sleep(1)
+    return "Done"
+
+# Decorators with arguments:
+def repeat(times):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for _ in range(times):
+                result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return decorator
+
+@repeat(times=3)
+def greet(name):
+    print(f"Hi {name}!")
+```
+</details>
+
+---
+
+**Q5: Explain Python's GIL (Global Interpreter Lock).**
+
+<details>
+<summary>💡 Show Answer</summary>
+
+**Answer:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    GLOBAL INTERPRETER LOCK (GIL)                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  What is GIL?                                                           │
+│  ─────────────                                                          │
+│  • A mutex that allows only one thread to execute Python bytecode       │
+│  • Present in CPython (standard Python implementation)                  │
+│  • Prevents multiple threads from running Python code simultaneously    │
+│                                                                          │
+│  Why GIL exists?                                                        │
+│  ─────────────────                                                      │
+│  • Memory management in CPython is not thread-safe                      │
+│  • Simplifies implementation of CPython                                │
+│  • Improves performance of single-threaded programs                     │
+│                                                                          │
+│  Impact:                                                                │
+│  ────────                                                               │
+│  ✅ CPU-bound tasks: NO benefit from threading (GIL blocks)             │
+│  ✅ I/O-bound tasks: Threading still useful (GIL released during I/O)   │
+│                                                                          │
+│  Solutions for CPU-bound parallelism:                                   │
+│  ────────────────────────────────────────                               │
+│  • multiprocessing module (separate processes)                          │
+│  • concurrent.futures.ProcessPoolExecutor                              │
+│  • asyncio for I/O-bound tasks                                          │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+# Example - multiprocessing bypasses GIL:
+from multiprocessing import Pool
+
+def cpu_intensive(n):
+    return sum(i * i for i in range(n))
+
+with Pool(4) as p:
+    results = p.map(cpu_intensive, [10**6] * 4)
+```
+</details>
+
+---
+
+**Q6: What is the difference between `__str__` and `__repr__`?**
+
+<details>
+<summary>💡 Show Answer</summary>
+
+**Answer:**
+
+```python
+# __str__ - for readable string representation (end users)
+# __repr__ - for unambiguous representation (developers/debugging)
+
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    def __str__(self):
+        return f"{self.name} ({self.age} years old)"
+    
+    def __repr__(self):
+        return f"Person(name='{self.name}', age={self.age})"
+
+p = Person("Alice", 30)
+
+print(str(p))   # Alice (30 years old)
+print(repr(p))  # Person(name='Alice', age=30)
+
+# Key differences:
+# ┌────────────┬─────────────────────┬───────────────────────┐
+# │ Aspect     │ __str__             │ __repr__               │
+# ├────────────┼─────────────────────┼───────────────────────┤
+# │ Purpose    │ User-friendly       │ Developer-friendly     │
+# │ Called by  │ str(), print()      │ repr(), interactive    │
+# │ Goal       │ Readable            │ Unambiguous            │
+# │ Fallback   │ Uses __repr__       │ No fallback            │
+# └────────────┴─────────────────────┴───────────────────────┘
+
+# Best practice:
+# - Always implement __repr__
+# - Implement __str__ only if you need a user-friendly version
+# - __repr__ should ideally be valid Python code to recreate object
+```
+</details>
+
+---
+
+**Q7: Explain generators and the `yield` keyword.**
+
+<details>
+<summary>💡 Show Answer</summary>
+
+**Answer:**
+
+```python
+# Generators produce values one at a time, saving memory
+
+# Generator function:
+def countdown(n):
+    while n > 0:
+        yield n  # Pause and return value
+        n -= 1
+
+# Using generator:
+for i in countdown(5):
+    print(i)  # 5, 4, 3, 2, 1
+
+# Memory comparison:
+# List - all values in memory
+big_list = [x for x in range(10**6)]  # ~8MB memory
+
+# Generator - one value at a time
+big_gen = (x for x in range(10**6))   # ~100 bytes memory!
+
+# Generator expressions (like list comprehensions):
+squares = (x**2 for x in range(10))
+print(next(squares))  # 0
+print(next(squares))  # 1
+
+# Infinite generator:
+def infinite_counter():
+    n = 0
+    while True:
+        yield n
+        n += 1
+
+counter = infinite_counter()
+print(next(counter))  # 0
+print(next(counter))  # 1
+
+# Pipeline with generators:
+def read_lines(filename):
+    with open(filename) as f:
+        for line in f:
+            yield line.strip()
+
+def filter_comments(lines):
+    for line in lines:
+        if not line.startswith('#'):
+            yield line
+
+# Chain generators
+lines = read_lines('config.txt')
+filtered = filter_comments(lines)
+```
+</details>
+
+---
+
+**Q8: What is the difference between `*args` and `**kwargs`?**
+
+<details>
+<summary>💡 Show Answer</summary>
+
+**Answer:**
+
+```python
+# *args - variable positional arguments (tuple)
+# **kwargs - variable keyword arguments (dict)
+
+def example_function(*args, **kwargs):
+    print(f"args: {args}")       # Tuple
+    print(f"kwargs: {kwargs}")    # Dictionary
+
+example_function(1, 2, 3, name="Alice", age=30)
+# args: (1, 2, 3)
+# kwargs: {'name': 'Alice', 'age': 30}
+
+# Practical example:
+def create_element(tag, *children, **attributes):
+    attrs = ' '.join(f'{k}="{v}"' for k, v in attributes.items())
+    content = ''.join(str(child) for child in children)
+    return f"<{tag} {attrs}>{content}</{tag}>"
+
+html = create_element('div', 'Hello', 'World', 
+                      id='container', class_='main')
+# <div id="container" class="main">HelloWorld</div>
+
+# Unpacking with * and **:
+numbers = [1, 2, 3]
+print(*numbers)  # 1 2 3 (unpacks list)
+
+config = {'host': 'localhost', 'port': 8080}
+connect(**config)  # Equivalent to connect(host='localhost', port=8080)
+
+# Combining with regular parameters:
+def greet(greeting, *names, punctuation='!'):
+    for name in names:
+        print(f"{greeting}, {name}{punctuation}")
+
+greet("Hello", "Alice", "Bob", punctuation="?")
+# Hello, Alice?
+# Hello, Bob?
+```
+</details>
+
+---
+
+**Q9: How does Python handle memory management?**
+
+<details>
+<summary>💡 Show Answer</summary>
+
+**Answer:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PYTHON MEMORY MANAGEMENT                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  1. Reference Counting                                                  │
+│  ─────────────────────                                                  │
+│  • Every object has a reference counter                                 │
+│  • Counter increases when assigned to variable                          │
+│  • Counter decreases when reference is deleted                         │
+│  • When counter reaches 0, memory is freed                             │
+│                                                                          │
+│  2. Garbage Collection (GC)                                             │
+│  ───────────────────────────                                            │
+│  • Handles circular references                                         │
+│  • Generational (3 generations: 0, 1, 2)                               │
+│  • New objects start in generation 0                                   │
+│  • Surviving objects move to older generations                         │
+│                                                                          │
+│  3. Memory Pools ( pymalloc )                                          │
+│  ───────────────────────────                                            │
+│  • Small objects (< 512 bytes) use pools                               │
+│  • Reduces malloc/free overhead                                        │
+│  • Improves performance                                                │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+import sys
+import gc
+
+# Check reference count
+a = [1, 2, 3]
+print(sys.getrefcount(a) - 1)  # 1 (minus the getrefcount reference)
+
+# Force garbage collection
+gc.collect()
+
+# Disable/enable GC
+gc.disable()
+gc.enable()
+
+# Get GC thresholds
+print(gc.get_threshold())  # (700, 10, 10)
+```
+</details>
+
+---
+
+**Q10: What are context managers and the `with` statement?**
+
+<details>
+<summary>💡 Show Answer</summary>
+
+**Answer:**
+
+```python
+# Context managers handle setup and cleanup automatically
+
+# Using built-in context manager:
+with open('file.txt', 'w') as f:
+    f.write('Hello!')
+# File automatically closed, even if exception occurs
+
+# Creating custom context manager with class:
+class Timer:
+    def __enter__(self):
+        import time
+        self.start = time.time()
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        import time
+        self.end = time.time()
+        print(f"Elapsed: {self.end - self.start:.2f}s")
+        return False  # Don't suppress exceptions
+
+with Timer() as t:
+    # Some code
+    pass
+# Elapsed: 0.00s
+
+# Creating context manager with decorator:
+from contextlib import contextmanager
+
+@contextmanager
+def file_manager(filename, mode):
+    f = open(filename, mode)
+    try:
+        yield f
+    finally:
+        f.close()
+
+# Nested context managers:
+with open('in.txt') as infile, open('out.txt', 'w') as outfile:
+    outfile.write(infile.read())
+
+# Common use cases:
+# - File handling (automatic close)
+# - Database connections (automatic commit/rollback)
+# - Locks (automatic release)
+# - Timing code execution
+# - Changing directories temporarily
+```
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Building a Data Processing Pipeline
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    DATA PROCESSING PIPELINE IN PYTHON                         ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Goal: Process CSV data with multiple transformations                        ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+# Data processing pipeline
+import csv
+from typing import List, Dict, Any
+
+def load_csv(filename: str) -> List[Dict[str, Any]]:
+    """Load CSV file into list of dictionaries."""
+    with open(filename, 'r') as f:
+        return list(csv.DictReader(f))
+
+def filter_data(data: List[Dict], key: str, value: Any) -> List[Dict]:
+    """Filter data by key-value pair."""
+    return [row for row in data if row.get(key) == value]
+
+def transform_data(data: List[Dict], transformations: Dict[str, callable]) -> List[Dict]:
+    """Apply transformations to data."""
+    result = []
+    for row in data:
+        new_row = row.copy()
+        for key, func in transformations.items():
+            if key in new_row:
+                new_row[key] = func(new_row[key])
+        result.append(new_row)
+    return result
+
+def aggregate_data(data: List[Dict], group_by: str, agg_key: str) -> Dict[str, float]:
+    """Aggregate data by grouping."""
+    groups = {}
+    for row in data:
+        key = row.get(group_by, 'Unknown')
+        if key not in groups:
+            groups[key] = []
+        groups[key].append(float(row.get(agg_key, 0)))
+    return {k: sum(v)/len(v) for k, v in groups.items()}
+
+# Usage
+data = load_csv('sales.csv')
+filtered = filter_data(data, 'region', 'North')
+transformed = transform_data(filtered, {'price': float, 'quantity': int})
+summary = aggregate_data(transformed, 'product', 'price')
+```
+
+---
+
+### Scenario 2: Error Handling in Production Code
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    ROBUST ERROR HANDLING PATTERN                              ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Goal: Handle multiple failure modes gracefully                               ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+import logging
+from functools import wraps
+from typing import Callable, Any
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Retry decorator
+def retry(max_attempts: int = 3, delay: float = 1.0):
+    def decorator(func: Callable) -> Callable:
+        @wraps(func)
+        def wrapper(*args, **kwargs) -> Any:
+            last_exception = None
+            for attempt in range(max_attempts):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    last_exception = e
+                    logger.warning(
+                        f"Attempt {attempt + 1}/{max_attempts} failed: {e}"
+                    )
+                    if attempt < max_attempts - 1:
+                        import time
+                        time.sleep(delay * (attempt + 1))
+            raise last_exception
+        return wrapper
+    return decorator
+
+# Safe operation wrapper
+def safe_operation(default=None):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                logger.error(f"Error in {func.__name__}: {e}")
+                return default
+        return wrapper
+    return decorator
+
+# Usage
+@retry(max_attempts=3)
+def fetch_data(url: str) -> dict:
+    import requests
+    response = requests.get(url, timeout=10)
+    response.raise_for_status()
+    return response.json()
+
+@safe_operation(default=[])
+def process_data(data: dict) -> list:
+    return [item['value'] for item in data['items']]
+```
+
+---
+
+### Scenario 3: Configuration Management
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    CONFIGURATION MANAGEMENT SYSTEM                            ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Goal: Manage app configuration from multiple sources                        ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+import os
+import json
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class Config:
+    """Application configuration."""
+    debug: bool = False
+    database_url: str = "sqlite:///app.db"
+    api_key: Optional[str] = None
+    max_workers: int = 4
+    
+    @classmethod
+    def from_env(cls) -> 'Config':
+        """Load configuration from environment variables."""
+        return cls(
+            debug=os.getenv('DEBUG', 'false').lower() == 'true',
+            database_url=os.getenv('DATABASE_URL', 'sqlite:///app.db'),
+            api_key=os.getenv('API_KEY'),
+            max_workers=int(os.getenv('MAX_WORKERS', '4'))
+        )
+    
+    @classmethod
+    def from_file(cls, filename: str) -> 'Config':
+        """Load configuration from JSON file."""
+        with open(filename) as f:
+            data = json.load(f)
+        return cls(**data)
+    
+    def merge(self, other: 'Config') -> 'Config':
+        """Merge with another config (other takes precedence)."""
+        return Config(
+            debug=other.debug if other.debug != self.debug else self.debug,
+            database_url=other.database_url or self.database_url,
+            api_key=other.api_key or self.api_key,
+            max_workers=other.max_workers or self.max_workers
+        )
+
+# Usage
+# Priority: file < environment < runtime
+file_config = Config.from_file('config.json')
+env_config = Config.from_env()
+final_config = file_config.merge(env_config)
+```
+
+---
+
+### Scenario 4: Building a CLI Tool
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    COMMAND LINE TOOL DEVELOPMENT                              ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Goal: Create a professional CLI tool with argparse                          ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+"""CLI Tool for file operations."""
+
+import argparse
+import sys
+from pathlib import Path
+
+def create_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog='filetool',
+        description='A powerful file manipulation CLI tool',
+        epilog='Example: filetool process --input ./data --output ./out'
+    )
+    
+    # Subcommands
+    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    
+    # Process command
+    process_parser = subparsers.add_parser('process', help='Process files')
+    process_parser.add_argument('-i', '--input', required=True, type=Path,
+                               help='Input directory')
+    process_parser.add_argument('-o', '--output', type=Path, default=Path('.'),
+                               help='Output directory')
+    process_parser.add_argument('-v', '--verbose', action='store_true',
+                               help='Verbose output')
+    process_parser.add_argument('--format', choices=['json', 'csv', 'txt'],
+                               default='json', help='Output format')
+    
+    # Analyze command
+    analyze_parser = subparsers.add_parser('analyze', help='Analyze files')
+    analyze_parser.add_argument('path', type=Path, help='Path to analyze')
+    analyze_parser.add_argument('--recursive', '-r', action='store_true',
+                               help='Recursive analysis')
+    
+    return parser
+
+def main():
+    parser = create_parser()
+    args = parser.parse_args()
+    
+    if not args.command:
+        parser.print_help()
+        sys.exit(1)
+    
+    if args.command == 'process':
+        print(f"Processing {args.input} -> {args.output}")
+        if args.verbose:
+            print(f"Format: {args.format}")
+    
+    elif args.command == 'analyze':
+        print(f"Analyzing {args.path}")
+        if args.recursive:
+            print("Recursive mode enabled")
+
+if __name__ == '__main__':
+    main()
+```
+
+---
+
+### Scenario 5: Working with APIs
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    API CLIENT IMPLEMENTATION                                  ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Goal: Create a robust API client with error handling                        ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+import requests
+from typing import Dict, Any, Optional
+from dataclasses import dataclass
+import time
+
+@dataclass
+class APIResponse:
+    success: bool
+    data: Any
+    error: Optional[str] = None
+    status_code: int = 200
+
+class APIClient:
+    """Robust API client with retries and error handling."""
+    
+    def __init__(self, base_url: str, api_key: str, timeout: int = 30):
+        self.base_url = base_url.rstrip('/')
+        self.api_key = api_key
+        self.timeout = timeout
+        self.session = requests.Session()
+        self.session.headers.update({
+            'Authorization': f'Bearer {api_key}',
+            'Content-Type': 'application/json'
+        })
+    
+    def _request(self, method: str, endpoint: str, 
+                 params: Dict = None, data: Dict = None,
+                 retries: int = 3) -> APIResponse:
+        """Make HTTP request with retries."""
+        url = f"{self.base_url}/{endpoint.lstrip('/')}"
+        
+        for attempt in range(retries):
+            try:
+                response = self.session.request(
+                    method=method,
+                    url=url,
+                    params=params,
+                    json=data,
+                    timeout=self.timeout
+                )
+                
+                if response.status_code == 429:  # Rate limited
+                    wait = int(response.headers.get('Retry-After', 60))
+                    time.sleep(wait)
+                    continue
+                
+                response.raise_for_status()
+                return APIResponse(
+                    success=True,
+                    data=response.json(),
+                    status_code=response.status_code
+                )
+                
+            except requests.exceptions.JSONDecodeError:
+                return APIResponse(
+                    success=False,
+                    data=None,
+                    error="Invalid JSON response",
+                    status_code=response.status_code
+                )
+            except requests.exceptions.RequestException as e:
+                if attempt == retries - 1:
+                    return APIResponse(
+                        success=False,
+                        data=None,
+                        error=str(e),
+                        status_code=0
+                    )
+                time.sleep(2 ** attempt)  # Exponential backoff
+        
+        return APIResponse(success=False, data=None, error="Max retries exceeded")
+    
+    def get(self, endpoint: str, params: Dict = None) -> APIResponse:
+        return self._request('GET', endpoint, params=params)
+    
+    def post(self, endpoint: str, data: Dict) -> APIResponse:
+        return self._request('POST', endpoint, data=data)
+
+# Usage
+client = APIClient('https://api.example.com', 'your-api-key')
+response = client.get('/users', params={'page': 1})
+if response.success:
+    print(response.data)
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Python Data Types Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PYTHON DATA TYPES HIERARCHY                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│                           ┌───────────┐                                     │
+│                           │  object   │ (Base class)                        │
+│                           └─────┬─────┘                                     │
+│                    ┌────────────┼────────────┐                              │
+│                    │            │            │                              │
+│            ┌───────▼───────┐ ┌──▼──┐ ┌──────▼──────┐                      │
+│            │   Numbers     │ │  ... │ │ Collections │                      │
+│            └───────┬───────┘ └─────┘ └──────┬──────┘                      │
+│                    │                       │                               │
+│         ┌──────────┼──────────┐    ┌───────┼───────┐                      │
+│         │          │          │    │       │       │                       │
+│    ┌────▼───┐ ┌────▼───┐ ┌───▼──┐ │  ┌────▼────┐ │                       │
+│    │  int   │ │ float  │ │ bool │ │  │  list   │ │                       │
+│    └────────┘ └────────┘ └──────┘ │  └────┬────┘ │                       │
+│                                     │       │       │                       │
+│         ┌───────────────┐           │  ┌────▼────┐  │                       │
+│         │   complex     │           │  │  dict   │  │                       │
+│         └───────────────┘           │  └────────┘  │                       │
+│                                     │       │       │                       │
+│                                     │  ┌────▼────┐  │                       │
+│                                     │  │  set    │  │                       │
+│                                     │  └────────┘  │                       │
+│                                     │       │       │                       │
+│                                     │  ┌────▼────┐  │                       │
+│                                     └──│  tuple  │──┘                       │
+│                                        └────────┘                           │
+│                                                                              │
+│   Immutable: int, float, complex, bool, str, tuple, frozenset, bytes       │
+│   Mutable: list, dict, set, bytearray                                      │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Diagram 2: Python Function Call Stack
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PYTHON FUNCTION CALL MECHANISM                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   Code:                          Memory:                                    │
+│   ──────                         ───────                                    │
+│                                                                              │
+│   def outer(x):                  ┌─────────────────────┐                    │
+│       y = 10                     │    Call Stack       │                    │
+│       def inner(z):              ├─────────────────────┤                    │
+│           return x + y + z       │                     │                    │
+│       return inner(5)            │  ┌───────────────┐  │                    │
+│                                  │  │ inner(5)      │  │ ◄── Current frame │
+│   result = outer(3)              │  │ z=5           │  │                    │
+│                                  │  │ x=3, y=10     │  │                    │
+│                                  │  └───────────────┘  │                    │
+│                                  │         ▲          │                    │
+│                                  │         │ closure  │                    │
+│                                  │  ┌──────┴────────┐ │                    │
+│                                  │  │ outer(3)      │ │                    │
+│                                  │  │ x=3, y=10     │ │                    │
+│                                  │  └───────────────┘ │                    │
+│                                  │         ▲          │                    │
+│                                  │         │          │                    │
+│                                  │  ┌──────┴────────┐ │                    │
+│                                  │  │ __main__      │ │                    │
+│                                  │  │ result=...    │ │                    │
+│                                  │  └───────────────┘ │                    │
+│                                  └─────────────────────┘                    │
+│                                                                              │
+│   Execution Flow:                                                            │
+│   1. outer(3) called → new frame created with x=3                           │
+│   2. y=10 assigned in outer's frame                                         │
+│   3. inner(5) called → new frame with z=5                                   │
+│   4. inner accesses x and y from enclosing scope (closure)                  │
+│   5. Result returned up the stack, frames popped                            │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Diagram 3: Python Memory Model
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PYTHON MEMORY MODEL                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                         Stack Memory                                │   │
+│   │   ─────────────────────────────────────────                        │   │
+│   │   • Function calls and local variables                             │   │
+│   │   • Fixed size, fast access                                        │   │
+│   │   • Automatic management (LIFO)                                    │   │
+│   │                                                                     │   │
+│   │   Example:                                                          │   │
+│   │   def func():                                                       │   │
+│   │       x = 10        ← x is on stack                                │   │
+│   │       y = "hello"   ← y (reference) on stack                       │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                         Heap Memory                                 │   │
+│   │   ─────────────────────────────────────────                        │   │
+│   │   • Objects and data structures                                    │   │
+│   │   • Dynamic size                                                   │   │
+│   │   • Garbage collected                                              │   │
+│   │                                                                     │   │
+│   │   Example Objects:                                                  │   │
+│   │   ┌──────────┐  ┌──────────┐  ┌──────────────────┐               │   │
+│   │   │ int: 10  │  │str:"hello"│  │ list: [1,2,3]   │               │   │
+│   │   │ id: 123  │  │ id: 456  │  │ id: 789         │               │   │
+│   │   └──────────┘  └──────────┘  └──────────────────┘               │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                    Variable Assignment                              │   │
+│   │                                                                     │   │
+│   │   Code:                    Memory:                                 │   │
+│   │   ──────                   ───────                                 │   │
+│   │   a = 10                  Stack: a → [ref to int(10)]              │   │
+│   │   b = a                   Stack: b → [same ref to int(10)]         │   │
+│   │   a = 20                  Stack: a → [ref to int(20)]              │   │
+│   │                            Stack: b → [still ref to int(10)]       │   │
+│   │                                                                     │   │
+│   │   Note: Python variables are REFERENCES, not containers            │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Topic | Relevance |
+|---------|-------|-----------|
+| Chapter 11 | Python Installation | Prerequisite - Python setup |
+| Chapter 13 | Bash Scripting Basics | Combine Python with Bash |
+| Chapter 14 | Advanced Bash | Python + Bash integration |
+| Chapter 15 | Git Version Control | Version Python projects |
+| Chapter 16 | Node.js | Compare Python vs JavaScript |
+| Chapter 25 | Automation | Python automation scripts |
+| Chapter 30 | Web Development | Flask/Django frameworks |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Bonus 1: Python Iterators and Custom Iterables
+
+```python
+# Custom iterator class
+class Countdown:
+    def __init__(self, start):
+        self.start = start
+    
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self.start <= 0:
+            raise StopIteration
+        self.start -= 1
+        return self.start + 1
+
+# Usage
+for i in Countdown(5):
+    print(i)  # 5, 4, 3, 2, 1
+
+# Generator iterator (simpler)
+def countdown_gen(n):
+    while n > 0:
+        yield n
+        n -= 1
+
+# Custom range-like class
+class MyRange:
+    def __init__(self, start, stop=None, step=1):
+        if stop is None:
+            stop, start = start, 0
+        self.start, self.stop, self.step = start, stop, step
+    
+    def __iter__(self):
+        current = self.start
+        while current < self.stop:
+            yield current
+            current += self.step
+
+# Usage
+for i in MyRange(0, 10, 2):
+    print(i)  # 0, 2, 4, 6, 8
+```
+
+---
+
+### Bonus 2: Python Descriptors
+
+```python
+# Descriptor for type checking
+class TypedProperty:
+    def __init__(self, name, expected_type):
+        self.name = name
+        self.expected_type = expected_type
+    
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        return instance.__dict__.get(self.name)
+    
+    def __set__(self, instance, value):
+        if not isinstance(value, self.expected_type):
+            raise TypeError(
+                f"{self.name} must be {self.expected_type.__name__}"
+            )
+        instance.__dict__[self.name] = value
+    
+    def __delete__(self, instance):
+        raise AttributeError(f"Cannot delete {self.name}")
+
+class Person:
+    name = TypedProperty('name', str)
+    age = TypedProperty('age', int)
+    
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+# Usage
+p = Person("Alice", 30)
+p.name = "Bob"  # OK
+p.age = "thirty"  # TypeError: age must be int
+```
+
+---
+
+### Bonus 3: Python Metaclasses
+
+```python
+# Metaclass for automatic registration
+class RegisteredMeta(type):
+    _registry = {}
+    
+    def __new__(mcs, name, bases, namespace):
+        cls = super().__new__(mcs, name, bases, namespace)
+        if name != 'BasePlugin':  # Don't register base class
+            mcs._registry[name] = cls
+        return cls
+    
+    @classmethod
+    def get_plugins(mcs):
+        return dict(mcs._registry)
+
+class BasePlugin(metaclass=RegisteredMeta):
+    """Base class for all plugins."""
+    def run(self):
+        raise NotImplementedError
+
+class LoggingPlugin(BasePlugin):
+    def run(self):
+        print("Logging plugin running")
+
+class CachePlugin(BasePlugin):
+    def run(self):
+        print("Cache plugin running")
+
+# All plugins automatically registered
+print(RegisteredMeta.get_plugins())
+# {'LoggingPlugin': <class 'LoggingPlugin'>, 'CachePlugin': <class 'CachePlugin'>}
+
+# Singleton pattern using metaclass
+class SingletonMeta(type):
+    _instances = {}
+    
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+class Database(metaclass=SingletonMeta):
+    def __init__(self):
+        self.connection = "Connected"
+
+# Usage
+db1 = Database()
+db2 = Database()
+print(db1 is db2)  # True - same instance
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Python Basics Mastery Checklist
+
+**Variables & Data Types:**
+- [ ] Understand dynamic typing
+- [ ] Know basic types: int, float, str, bool
+- [ ] Understand None type
+- [ ] Can use type() and isinstance()
+
+**Data Structures:**
+- [ ] Create and manipulate lists
+- [ ] Use tuples for immutable sequences
+- [ ] Work with dictionaries
+- [ ] Understand sets for unique values
+- [ ] Can use list comprehensions
+
+**Control Flow:**
+- [ ] Write if/elif/else statements
+- [ ] Use for loops with range()
+- [ ] Write while loops
+- [ ] Use break and continue
+- [ ] Understand ternary operator
+
+**Functions:**
+- [ ] Define functions with def
+- [ ] Use parameters and return values
+- [ ] Understand default parameters
+- [ ] Use *args and **kwargs
+- [ ] Write lambda functions
+
+**File Handling:**
+- [ ] Open and close files properly
+- [ ] Use context managers (with)
+- [ ] Read and write files
+- [ ] Handle JSON data
+
+**Modules:**
+- [ ] Import modules
+- [ ] Use from...import
+- [ ] Create your own modules
+- [ ] Use standard library modules
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Use f-strings for string formatting - they're faster and more readable than `.format()` or `%` formatting.
@@ -5754,24 +7218,1317 @@ squares = [i ** 2 for i in range(10)]
 
 ---
 
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>Q1: Python mein variable declare karne ka sahi syntax kya hai?</b></summary>
+
+**Options:**
+- A) `var name = "John"`
+- B) `name = "John"`
+- C) `string name = "John"`
+- D) `let name = "John"`
+
+**Answer: B) `name = "John"`**
+
+**Explanation:** Python dynamically typed language hai - variable type automatically detect hota hai. Koi keyword (var, let) ki zarurat nahi hoti. Just variable name, equals sign, aur value.
+</details>
+
+<details>
+<summary><b>Q2: List aur Tuple mein kya main difference hai?</b></summary>
+
+**Options:**
+- A) List immutable hai, Tuple mutable
+- B) List mutable hai, Tuple immutable
+- C) Dono same hain
+- D) List sirf numbers store karta hai
+
+**Answer: B) List mutable hai, Tuple immutable**
+
+**Explanation:** List `[1, 2, 3]` mein elements add, remove, modify kar sakte ho. Tuple `(1, 2, 3)` mein changes nahi kar sakte after creation. Tuple use karo jab data constant rehna chahiye.
+</details>
+
+<details>
+<summary><b>Q3: `elif` keyword kahan use hota hai?</b></summary>
+
+**Options:**
+- A) For loop mein
+- B) While loop mein
+- C) If-else statement mein
+- D) Function definition mein
+
+**Answer: C) If-else statement mein**
+
+**Explanation:** `elif` (else if) multiple conditions check karne ke liye use hota hai. Ye `if` aur `else` ke beech mein aata hai jab multiple conditions check karni ho.
+</details>
+
+<details>
+<summary><b>Q4: Dictionary mein value access karne ka best way kya hai?</b></summary>
+
+**Options:**
+- A) `dict[key]`
+- B) `dict.get(key)`
+- C) `dict.value(key)`
+- D) A and B dono
+
+**Answer: D) A and B dono**
+
+**Explanation:** `dict[key]` direct access deta hai lekin key nahi ho to error aata hai. `dict.get(key)` safe hai - key nahi ho to None return karta hai, error nahi aata.
+</details>
+
+<details>
+<summary><b>Q5: List comprehension ka syntax kya hai?</b></summary>
+
+**Options:**
+- A) `[expression for item in iterable]`
+- B) `for item in iterable: [expression]`
+- C) `list(expression for item)`
+- D) `[item for expression in iterable]`
+
+**Answer: A) `[expression for item in iterable]`**
+
+**Explanation:** List comprehension concise way hai list create karne ka. Example: `[x**2 for x in range(5)]` creates `[0, 1, 4, 9, 16]`.
+</details>
+
+<details>
+<summary><b>Q6: Function mein default parameter kaise set karte hain?</b></summary>
+
+**Options:**
+- A) `def func(param = "default")`
+- B) `def func(param := "default")`
+- C) `def func(default param)`
+- D) `def func(param: "default")`
+
+**Answer: A) `def func(param = "default")`**
+
+**Explanation:** Default parameter function definition mein equals sign ke saath set hota hai. Agar caller value nahi deta to default use hoti hai.
+</details>
+
+<details>
+<summary><b>Q7: Python mein `pass` keyword ka kya use hai?</b></summary>
+
+**Options:**
+- A) Exit the loop
+- B) Skip current iteration
+- C) Placeholder for empty code block
+- D) Return value
+
+**Answer: C) Placeholder for empty code block**
+
+**Explanation:** `pass` ek null operation hai. Jab aapko empty function, class, ya loop likhna ho jo baad mein implement karenge, `pass` use karte hain syntax error se bachne ke liye.
+</details>
+
+<details>
+<summary><b>Q8: `*args` function mein kya represent karta hai?</b></summary>
+
+**Options:**
+- A) Required arguments
+- B) Variable positional arguments
+- C) Keyword arguments
+- D) Default arguments
+
+**Answer: B) Variable positional arguments**
+
+**Explanation:** `*args` se function ko kitne bhi positional arguments le sakte ho. Ye arguments tuple mein store hote hain. Example: `def func(*args):` - ab `func(1, 2, 3, 4)` call kar sakte ho.
+</details>
+
+<details>
+<summary><b>Q9: File ko safely open karne ka best practice kya hai?</b></summary>
+
+**Options:**
+- A) `f = open('file.txt')`
+- B) `with open('file.txt') as f:`
+- C) `file.open('file.txt')`
+- D) `open.file('file.txt')`
+
+**Answer: B) `with open('file.txt') as f:`**
+
+**Explanation:** `with` statement (context manager) automatically file close kar deta hai jab kaam ho jaye. Yaad se close karne ki zarurat nahi. Error aane pe bhi file close hogi.
+</details>
+
+<details>
+<summary><b>Q10: String mein f-string ka kya use hai?</b></summary>
+
+**Options:**
+- A) File path represent karne ke liye
+- B) Formatted string with variables
+- C) Float numbers ke liye
+- D) Function names ke liye
+
+**Answer: B) Formatted string with variables**
+
+**Explanation:** f-strings (Python 3.6+) se directly variables string mein embed kar sakte ho. Example: `name = "John"; print(f"Hello {name}")` → "Hello John". Cleaner aur faster than `.format()`.
+</details>
+
+<details>
+<summary><b>Q11: `range(5)` kitne numbers generate karega?</b></summary>
+
+**Options:**
+- A) 1 se 5 tak
+- B) 0 se 4 tak
+- C) 0 se 5 tak
+- D) 1 se 4 tak
+
+**Answer: B) 0 se 4 tak**
+
+**Explanation:** `range(5)` generates `[0, 1, 2, 3, 4]` - 5 numbers starting from 0. `range(start, stop)` mein stop value exclusive hai. `range(1, 5)` = `[1, 2, 3, 4]`.
+</details>
+
+<details>
+<summary><b>Q12: Dictionary iterate karne ke liye kaunsa method best hai?</b></summary>
+
+**Options:**
+- A) `for key in dict:`
+- B) `for key, value in dict.items():`
+- C) `for value in dict.values():`
+- D) All are valid
+
+**Answer: D) All are valid**
+
+**Explanation:** Teeno methods valid hain. A sirf keys deta hai, B keys aur values dono deta hai, C sirf values deta hai. Need ke according choose karo.
+</details>
+
+<details>
+<summary><b>Q13: `break` aur `continue` mein kya farak hai?</b></summary>
+
+**Options:**
+- A) break loop exit karta hai, continue next iteration pe jata hai
+- B) break pause karta hai, continue resume karta hai
+- C) Dono same hain
+- D) break if mein, continue loop mein use hota hai
+
+**Answer: A) break loop exit karta hai, continue next iteration pe jata hai**
+
+**Explanation:** `break` completely loop se bahar nikal jata hai. `continue` sirf current iteration skip karke next iteration pe jata hai, loop continue rehta hai.
+</details>
+
+<details>
+<summary><b>Q14: Module import karne ka sahi syntax kya hai?</b></summary>
+
+**Options:**
+- A) `import math`
+- B) `from math import sqrt`
+- C) `import math as m`
+- D) All are valid
+
+**Answer: D) All are valid**
+
+**Explanation:** Teeno valid import methods hain. A poora module import karta hai, B specific function import karta hai, C alias ke saath import karta hai. Need ke according use karo.
+</details>
+
+<details>
+<summary><b>Q15: Lambda function kya hai?</b></summary>
+
+**Options:**
+- A) Named function
+- B) Anonymous one-line function
+- C) Recursive function
+- D) Built-in function
+
+**Answer: B) Anonymous one-line function**
+
+**Explanation:** Lambda anonymous, single-expression function hai. Syntax: `lambda x: x * 2`. Quick functions ke liye use hota hai, especially `map()`, `filter()` ke saath.
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Q1: Python mein list aur dictionary comprehension explain karein with examples.
+
+**Answer:**
+
+**List Comprehension:**
+```python
+# Traditional way
+squares = []
+for i in range(10):
+    squares.append(i ** 2)
+
+# List comprehension
+squares = [i ** 2 for i in range(10)]
+
+# With condition
+evens = [i for i in range(20) if i % 2 == 0]
+
+# Nested
+matrix = [[j for j in range(3)] for i in range(3)]
+```
+
+**Dictionary Comprehension:**
+```python
+# Create dict from lists
+names = ['a', 'b', 'c']
+values = [1, 2, 3]
+d = {k: v for k, v in zip(names, values)}
+
+# With condition
+d = {k: v**2 for k, v in {'a': 1, 'b': 2}.items() if v > 0}
+```
+
+**Follow-up:** When would you NOT use comprehension?
+- When logic is complex (> 1-2 lines)
+- When debugging is needed
+- When readability suffers
+
+### Q2: Python mein shallow copy aur deep copy mein kya difference hai?
+
+**Answer:**
+
+```python
+import copy
+
+# Shallow Copy
+original = [[1, 2], [3, 4]]
+shallow = copy.copy(original)
+shallow[0][0] = 999  # Affects original!
+
+# Deep Copy
+original = [[1, 2], [3, 4]]
+deep = copy.deepcopy(original)
+deep[0][0] = 999  # Does NOT affect original
+```
+
+| Aspect | Shallow Copy | Deep Copy |
+|--------|-------------|-----------|
+| Top level | Copied | Copied |
+| Nested objects | Referenced | Recursively copied |
+| Speed | Faster | Slower |
+| Memory | Less | More |
+
+**Use shallow when:** Nested objects should be shared
+**Use deep when:** Complete independence needed
+
+**Follow-up:** How does `list.copy()` work?
+- Creates shallow copy
+- Same as `copy.copy()` for lists
+
+### Q3: Python mein *args aur **kwargs explain karein.
+
+**Answer:**
+
+```python
+def example(*args, **kwargs):
+    print(f"Args: {args}")      # Tuple
+    print(f"Kwargs: {kwargs}")  # Dictionary
+
+example(1, 2, 3, name="John", age=25)
+# Args: (1, 2, 3)
+# Kwargs: {'name': 'John', 'age': 25}
+
+# Real-world usage
+def log_message(*args, **kwargs):
+    timestamp = kwargs.get('timestamp', 'now')
+    level = kwargs.get('level', 'INFO')
+    message = ' '.join(str(arg) for arg in args)
+    print(f"[{timestamp}] {level}: {message}")
+
+log_message("User", "logged in", level="DEBUG")
+```
+
+**Best Practices:**
+1. Use `*args` for variable positional args
+2. Use `**kwargs` for optional named args
+3. Order: `def func(pos, *args, named, **kwargs)`
+
+**Follow-up:** Can you have multiple *args?
+- No, only one `*args` and one `**kwargs` allowed
+
+### Q4: Python mein context managers (with statement) kya hain?
+
+**Answer:**
+
+```python
+# Built-in example
+with open('file.txt', 'r') as f:
+    content = f.read()
+# File automatically closed
+
+# Custom context manager
+class Timer:
+    def __enter__(self):
+        import time
+        self.start = time.time()
+        return self
+    
+    def __exit__(self, *args):
+        import time
+        self.end = time.time()
+        print(f"Elapsed: {self.end - self.start:.2f}s")
+
+with Timer():
+    # Some operation
+    sum(range(1000000))
+```
+
+**Using contextlib:**
+```python
+from contextlib import contextmanager
+
+@contextmanager
+def timer():
+    import time
+    start = time.time()
+    yield
+    print(f"Elapsed: {time.time() - start:.2f}s")
+
+with timer():
+    sum(range(1000000))
+```
+
+**Follow-up:** Why use context managers?
+- Resource management (files, connections)
+- Exception safety
+- Clean code pattern
+
+### Q5: Python GIL (Global Interpreter Lock) kya hai?
+
+**Answer:**
+
+**GIL ek mutex hai jo Python objects ko protect karta hai:**
+- Sirf ek thread execute kar sakta hai Python bytecode
+- CPU-bound tasks mein threading effective nahi
+- I/O-bound tasks mein threading works fine
+
+**Solutions for CPU-bound:**
+```python
+# Multiprocessing (bypasses GIL)
+from multiprocessing import Pool
+
+def cpu_task(n):
+    return sum(i * i for i in range(n))
+
+with Pool(4) as p:
+    results = p.map(cpu_task, [1000000] * 4)
+
+# Or use asyncio for I/O
+import asyncio
+
+async def fetch(url):
+    # I/O operation
+    pass
+```
+
+**When GIL is okay:**
+- Web servers (I/O bound)
+- Data processing
+- Scripting tasks
+
+**Follow-up:** Which Python implementations don't have GIL?
+- Jython (Java)
+- IronPython (.NET)
+- PyPy (with STM)
+
+### Q6: Python mein decorators kya hote hain?
+
+**Answer:**
+
+```python
+# Basic decorator
+def my_decorator(func):
+    def wrapper(*args, **kwargs):
+        print("Before function")
+        result = func(*args, **kwargs)
+        print("After function")
+        return result
+    return wrapper
+
+@my_decorator
+def say_hello(name):
+    print(f"Hello, {name}!")
+
+# Decorator with arguments
+def repeat(times):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for _ in range(times):
+                result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return decorator
+
+@repeat(times=3)
+def greet():
+    print("Hi!")
+
+# Practical example
+import time
+
+def timing(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        print(f"{func.__name__} took {time.time()-start:.2f}s")
+        return result
+    return wrapper
+```
+
+**Follow-up:** Common built-in decorators?
+- `@property`, `@staticmethod`, `@classmethod`
+- `@functools.lru_cache`
+- `@contextlib.contextmanager`
+
+### Q7: Python mein exception handling best practices kya hain?
+
+**Answer:**
+
+```python
+# Good: Specific exceptions
+try:
+    result = 10 / x
+except ZeroDivisionError:
+    result = 0
+except ValueError as e:
+    print(f"Invalid value: {e}")
+except Exception as e:
+    print(f"Unexpected error: {e}")
+    raise  # Re-raise for logging
+finally:
+    print("Cleanup")
+
+# Better: Context manager
+try:
+    with open('file.txt') as f:
+        content = f.read()
+except FileNotFoundError:
+    content = ""
+
+# Custom exception
+class ValidationError(Exception):
+    def __init__(self, field, message):
+        self.field = field
+        self.message = message
+        super().__init__(f"{field}: {message}")
+
+# Raise with context
+raise ValueError("Invalid input") from original_error
+```
+
+**Best Practices:**
+1. Catch specific exceptions, not bare `except:`
+2. Use `finally` for cleanup
+3. Don't suppress errors silently
+4. Log exceptions with context
+
+**Follow-up:** What is exception chaining?
+- `raise NewError() from OriginalError`
+- Preserves original traceback
+
+### Q8: Python iterators aur generators mein kya difference hai?
+
+**Answer:**
+
+**Iterator:**
+```python
+class CountIterator:
+    def __init__(self, n):
+        self.n = n
+        self.current = 0
+    
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self.current < self.n:
+            self.current += 1
+            return self.current
+        raise StopIteration
+```
+
+**Generator (simpler):**
+```python
+def count_generator(n):
+    current = 0
+    while current < n:
+        current += 1
+        yield current
+
+# Generator expression
+squares = (x**2 for x in range(10))
+
+# Memory efficient
+def infinite_stream():
+    n = 0
+    while True:
+        yield n
+        n += 1
+```
+
+| Aspect | Iterator | Generator |
+|--------|----------|-----------|
+| Syntax | Class based | Function with yield |
+| State | Manual tracking | Automatic |
+| Memory | Depends on implementation | Minimal |
+| Use case | Complex state | Simple sequences |
+
+**Follow-up:** What is `yield from`?
+- Delegates to another generator
+- `yield from another_generator()`
+
+### Q9: Python mein data classes kya hain?
+
+**Answer:**
+
+```python
+from dataclasses import dataclass
+from typing import List
+
+@dataclass
+class Person:
+    name: str
+    age: int
+    skills: List[str] = None
+    
+    def __post_init__(self):
+        if self.skills is None:
+            self.skills = []
+    
+    def introduce(self):
+        return f"I'm {self.name}, {self.age} years old"
+
+# Auto-generated: __init__, __repr__, __eq__
+p1 = Person("Alice", 30, ["Python", "Bash"])
+p2 = Person("Bob", 25)
+print(p1)  # Person(name='Alice', age=30, skills=['Python', 'Bash'])
+
+# Frozen (immutable)
+@dataclass(frozen=True)
+class Point:
+    x: int
+    y: int
+
+# With ordering
+@dataclass(order=True)
+class Student:
+    grade: int
+    name: str
+```
+
+**Benefits over regular class:**
+- Less boilerplate
+- Auto `__init__`, `__repr__`, `__eq__`
+- Type hints enforced (with type checkers)
+- Easy to read
+
+**Follow-up:** When to use vs NamedTuple?
+- Dataclass: Mutable, methods needed
+- NamedTuple: Immutable, simple data
+
+### Q10: Python mein type hints ka purpose kya hai?
+
+**Answer:**
+
+```python
+from typing import List, Dict, Optional, Union, Callable
+
+# Basic types
+def greet(name: str) -> str:
+    return f"Hello, {name}"
+
+# Collections
+def process(items: List[int]) -> Dict[str, int]:
+    return {"count": len(items), "sum": sum(items)}
+
+# Optional (can be None)
+def find_user(id: int) -> Optional[str]:
+    if id > 0:
+        return "User"
+    return None
+
+# Union types
+def parse(value: Union[str, int]) -> int:
+    return int(value)
+
+# Callable
+def apply(func: Callable[[int], int], value: int) -> int:
+    return func(value)
+
+# Type aliases
+UserId = int
+UserName = str
+User = Dict[UserId, UserName]
+
+# Generic
+from typing import TypeVar, Generic
+
+T = TypeVar('T')
+
+class Stack(Generic[T]):
+    def __init__(self) -> None:
+        self.items: List[T] = []
+```
+
+**Tools for type checking:**
+- `mypy` - Static type checker
+- `pyright` - Microsoft's checker
+- IDE support (VS Code, PyCharm)
+
+**Follow-up:** Are types enforced at runtime?
+- No, they're hints for static analysis
+- Use `typing.get_type_hints()` to access them
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: 📊 Data Processing Script
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      DATA PROCESSING SCRIPT                                  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION: Process CSV file and generate summary report                    ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Code:                                                                       ║
+║                                                                              ║
+║  import csv                                                                  ║
+║  from collections import defaultdict                                        ║
+║  from typing import Dict, List                                              ║
+║                                                                              ║
+║  def process_csv(filename: str) -> Dict[str, float]:                        ║
+║      """Process CSV and return column statistics"""                         ║
+║      data = defaultdict(list)                                               ║
+║                                                                              ║
+║      with open(filename, 'r') as f:                                         ║
+║          reader = csv.DictReader(f)                                         ║
+║          for row in reader:                                                  ║
+║              for key, value in row.items():                                 ║
+║                  try:                                                        ║
+║                      data[key].append(float(value))                         ║
+║                  except ValueError:                                         ║
+║                      pass                                                    ║
+║                                                                              ║
+║      stats = {}                                                              ║
+║      for key, values in data.items():                                       ║
+║          if values:                                                          ║
+║              stats[f"{key}_avg"] = sum(values) / len(values)                ║
+║              stats[f"{key}_max"] = max(values)                              ║
+║              stats[f"{key}_min"] = min(values)                              ║
+║                                                                              ║
+║      return stats                                                            ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: 🌐 API Client Wrapper
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         API CLIENT WRAPPER                                   ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION: Create a reusable API client class for Termux                   ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Code:                                                                       ║
+║                                                                              ║
+║  import requests                                                             ║
+║  from typing import Dict, Any, Optional                                     ║
+║  from dataclasses import dataclass                                          ║
+║                                                                              ║
+║  @dataclass                                                                  ║
+║  class APIResponse:                                                          ║
+║      status: int                                                             ║
+║      data: Dict[str, Any]                                                    ║
+║      success: bool                                                           ║
+║                                                                              ║
+║  class APIClient:                                                            ║
+║      def __init__(self, base_url: str, timeout: int = 30):                  ║
+║          self.base_url = base_url.rstrip('/')                               ║
+║          self.timeout = timeout                                              ║
+║          self.session = requests.Session()                                   ║
+║                                                                              ║
+║      def get(self, endpoint: str, params: Dict = None) -> APIResponse:     ║
+║          url = f"{self.base_url}/{endpoint.lstrip('/')}"                    ║
+║          try:                                                                ║
+║              response = self.session.get(url, params=params,               ║
+║                                       timeout=self.timeout)                 ║
+║              return APIResponse(                                             ║
+║                  status=response.status_code,                                ║
+║                  data=response.json() if response.content else {},          ║
+║                  success=response.ok                                         ║
+║              )                                                               ║
+║          except requests.RequestException as e:                             ║
+║              return APIResponse(status=0, data={"error": str(e)},           ║
+║                                 success=False)                              ║
+║                                                                              ║
+║  # Usage                                                                     ║
+║  client = APIClient("https://api.github.com")                               ║
+║  result = client.get("/users/t3rmuxk1ng")                                   ║
+║  if result.success:                                                          ║
+║      print(f"User: {result.data.get('login')}")                             ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 3: 📁 File Organization Tool
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      FILE ORGANIZATION TOOL                                  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION: Organize files by extension in Termux downloads folder           ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Code:                                                                       ║
+║                                                                              ║
+║  import os                                                                   ║
+║  import shutil                                                               ║
+║  from pathlib import Path                                                   ║
+║  from collections import defaultdict                                        ║
+║                                                                              ║
+║  def organize_by_extension(directory: str, dry_run: bool = False):         ║
+║      """Organize files by their extensions"""                               ║
+║      path = Path(directory)                                                  ║
+║      if not path.exists():                                                   ║
+║          print(f"Directory not found: {directory}")                         ║
+║          return                                                              ║
+║                                                                              ║
+║      stats = defaultdict(int)                                               ║
+║                                                                              ║
+║      for file in path.iterdir():                                            ║
+║          if file.is_file():                                                  ║
+║              ext = file.suffix.lower() or 'no_extension'                    ║
+║              ext = ext.lstrip('.') if ext != 'no_extension' else ext        ║
+║                                                                              ║
+║              # Create directory for extension                               ║
+║              target_dir = path / ext                                        ║
+║              if not dry_run:                                                 ║
+║                  target_dir.mkdir(exist_ok=True)                            ║
+║                  shutil.move(str(file), str(target_dir / file.name))        ║
+║                                                                              ║
+║              stats[ext] += 1                                                ║
+║                                                                              ║
+║      # Print statistics                                                      ║
+║      print("\n📊 Organization Summary:")                                    ║
+║      for ext, count in sorted(stats.items()):                               ║
+║          print(f"  {ext}: {count} files")                                   ║
+║      print(f"\nTotal: {sum(stats.values())} files organized")               ║
+║                                                                              ║
+║  # Usage in Termux                                                           ║
+║  organize_by_extension("/sdcard/Download")                                  ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 4: 🔄 Log File Analyzer
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                       LOG FILE ANALYZER                                      ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION: Analyze log files for errors and patterns                       ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Code:                                                                       ║
+║                                                                              ║
+║  import re                                                                   ║
+║  from datetime import datetime                                              ║
+║  from collections import Counter                                            ║
+║  from typing import List, Dict                                              ║
+║                                                                              ║
+║  class LogAnalyzer:                                                          ║
+║      def __init__(self, log_file: str):                                     ║
+║          self.log_file = log_file                                            ║
+║          self.errors: List[str] = []                                        ║
+║          self.warnings: List[str] = []                                      ║
+║          self.ip_counter: Counter = Counter()                               ║
+║                                                                              ║
+║      def analyze(self) -> Dict:                                             ║
+║          patterns = {                                                        ║
+║              'error': re.compile(r'\[ERROR\](.*)'),                         ║
+║              'warning': re.compile(r'\[WARN\](.*)'),                        ║
+║              'ip': re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'),     ║
+║          }                                                                   ║
+║                                                                              ║
+║          with open(self.log_file, 'r') as f:                                ║
+║              for line_num, line in enumerate(f, 1):                         ║
+║                  if patterns['error'].search(line):                         ║
+║                      self.errors.append(f"Line {line_num}: {line.strip()}") ║
+║                  if patterns['warning'].search(line):                       ║
+║                      self.warnings.append(f"Line {line_num}: {line.strip()}")║
+║                  for ip in patterns['ip'].findall(line):                    ║
+║                      self.ip_counter[ip] += 1                               ║
+║                                                                              ║
+║          return {                                                            ║
+║              'total_errors': len(self.errors),                              ║
+║              'total_warnings': len(self.warnings),                          ║
+║              'unique_ips': len(self.ip_counter),                            ║
+║              'top_ips': self.ip_counter.most_common(5),                     ║
+║          }                                                                   ║
+║                                                                              ║
+║      def generate_report(self) -> str:                                      ║
+║          results = self.analyze()                                           ║
+║          report = f"""                                                       ║
+║  ╔════════════════════════════════════════════════╗                         ║
+║  ║           LOG ANALYSIS REPORT                   ║                         ║
+║  ╠════════════════════════════════════════════════╣                         ║
+║  ║ Errors:   {results['total_errors']:<37}║         ║
+║  ║ Warnings: {results['total_warnings']:<37}║         ║
+║  ║ Unique IPs: {results['unique_ips']:<35}║         ║
+║  ╠════════════════════════════════════════════════╣                         ║
+║  ║ Top IPs:                                        ║                         ║
+║  """                                                                         ║
+║          for ip, count in results['top_ips']:                               ║
+║              report += f"  ║   {ip}: {count} times{' '*22}║\n"             ║
+║          report += "  ╚════════════════════════════════════════════════╝"   ║
+║          return report                                                       ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 5: 📱 Termux Automation Helper
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      TERMUX AUTOMATION HELPER                                ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  SITUATION: Python helper for Termux automation tasks                       ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Code:                                                                       ║
+║                                                                              ║
+║  import subprocess                                                           ║
+║  import json                                                                 ║
+║  from typing import Dict, Any                                               ║
+║                                                                              ║
+║  class TermuxHelper:                                                         ║
+║      """Helper class for Termux API integration"""                          ║
+║                                                                              ║
+║      @staticmethod                                                           ║
+║      def run_cmd(command: str) -> Dict[str, Any]:                           ║
+║          """Run shell command and return result"""                          ║
+║          result = subprocess.run(command, shell=True,                       ║
+║                                 capture_output=True, text=True)             ║
+║          return {                                                            ║
+║              'success': result.returncode == 0,                             ║
+║              'output': result.stdout.strip(),                               ║
+║              'error': result.stderr.strip()                                 ║
+║          }                                                                   ║
+║                                                                              ║
+║      @staticmethod                                                           ║
+║      def get_battery() -> Dict:                                             ║
+║          """Get battery status using termux-api"""                          ║
+║          result = TermuxHelper.run_cmd('termux-battery-status')             ║
+║          return json.loads(result['output']) if result['success'] else {}   ║
+║                                                                              ║
+║      @staticmethod                                                           ║
+║      def notify(title: str, message: str) -> bool:                         ║
+║          """Send notification"""                                            ║
+║          cmd = f'termux-notification --title "{title}" --content "{message}"'║
+║          return TermuxHelper.run_cmd(cmd)['success']                        ║
+║                                                                              ║
+║      @staticmethod                                                           ║
+║      def vibrate(duration: int = 500) -> bool:                             ║
+║          """Vibrate device"""                                               ║
+║          cmd = f'termux-vibrate -d {duration}'                              ║
+║          return TermuxHelper.run_cmd(cmd)['success']                        ║
+║                                                                              ║
+║      @staticmethod                                                           ║
+║      def speak(text: str) -> bool:                                         ║
+║          """Text to speech"""                                               ║
+║          cmd = f'termux-tts-speak "{text}"'                                 ║
+║          return TermuxHelper.run_cmd(cmd)['success']                        ║
+║                                                                              ║
+║  # Usage examples                                                            ║
+║  if __name__ == "__main__":                                                 ║
+║      helper = TermuxHelper()                                                 ║
+║      battery = helper.get_battery()                                          ║
+║      print(f"Battery: {battery.get('percentage', 'N/A')}%")                 ║
+║      helper.notify("Python", "Script completed!")                           ║
+║      helper.vibrate(300)                                                     ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Python Data Types Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PYTHON DATA TYPES OVERVIEW                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│                         ┌──────────────┐                                    │
+│                         │  Data Types  │                                    │
+│                         └──────┬───────┘                                    │
+│                                │                                             │
+│           ┌────────────────────┼────────────────────┐                       │
+│           │                    │                    │                       │
+│    ┌──────▼──────┐      ┌──────▼──────┐     ┌──────▼──────┐               │
+│    │   Numeric   │      │  Sequence   │     │  Mapping    │               │
+│    └──────┬──────┘      └──────┬──────┘     └──────┬──────┘               │
+│           │                    │                   │                       │
+│    ┌──────┴──────┐      ┌──────┴──────┐           │                       │
+│    │             │      │             │           │                       │
+│ ┌──▼──┐     ┌───▼───┐ ┌─▼─┐     ┌────▼────┐ ┌───▼───┐                   │
+│ │ int │     │ float │ │str│     │  list   │ │ dict  │                   │
+│ └─────┘     └───────┘ └───┘     │  tuple  │ └───────┘                   │
+│                                 │  bytes  │                              │
+│ ┌───────┐                       └─────────┘                              │
+│ │complex│                                                                 │
+│ └───────┘                                                                 │
+│                                                                              │
+│                    ┌──────────────────────┐                                │
+│                    │   Boolean & None     │                                │
+│                    │  bool, NoneType      │                                │
+│                    └──────────────────────┘                                │
+│                                                                              │
+│                    ┌──────────────────────┐                                │
+│                    │      Set Types       │                                │
+│                    │   set, frozenset     │                                │
+│                    └──────────────────────┘                                │
+│                                                                              │
+│   MUTABILITY:                                                               │
+│   ──────────                                                                │
+│   Mutable:   list, dict, set                                               │
+│   Immutable: int, float, str, tuple, frozenset, bool, None                │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: Python Control Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PYTHON CONTROL FLOW                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   IF-ELIF-ELSE STATEMENT                                                    │
+│   ─────────────────                                                         │
+│                                                                              │
+│   ┌─────────────────┐                                                      │
+│   │ if condition1:  │──── True ───► [Block 1]                              │
+│   └────────┬────────┘                                                      │
+│            │ False                                                          │
+│            ▼                                                                │
+│   ┌─────────────────┐                                                      │
+│   │ elif condition2:│──── True ───► [Block 2]                              │
+│   └────────┬────────┘                                                      │
+│            │ False                                                          │
+│            ▼                                                                │
+│   ┌─────────────────┐                                                      │
+│   │ else:           │────────────► [Block 3]                               │
+│   └─────────────────┘                                                      │
+│                                                                              │
+│                                                                              │
+│   FOR LOOP                                                                  │
+│   ────────                                                                  │
+│                                                                              │
+│   ┌─────────────────────────────────┐                                      │
+│   │ for item in iterable:           │                                      │
+│   │     ┌───────────────────────┐   │                                      │
+│   │     │ Process item          │   │◄──┐                                  │
+│   │     │ break ──► Exit loop   │   │   │                                  │
+│   │     │ continue ──► Next item│   │   │                                  │
+│   │     └───────────────────────┘   │   │                                  │
+│   │ else: (runs if no break)        │   │                                  │
+│   └─────────────────────────────────┘   │                                  │
+│            ▲                              │                                  │
+│            └────────────────────────────┘                                  │
+│                                                                              │
+│                                                                              │
+│   WHILE LOOP                                                                │
+│   ───────────                                                               │
+│                                                                              │
+│   ┌───────────────────────┐                                                │
+│   │ while condition:      │◄──┐                                            │
+│   │     [Process]         │   │ Repeat while                               │
+│   │     condition is True │   │ condition is True                          │
+│   └───────────────────────┘   │                                            │
+│            │                  │                                            │
+│            └──────────────────┘                                            │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: Python Function Anatomy
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PYTHON FUNCTION ANATOMY                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌────────────────────────────────────────────────────────────────────┐   │
+│   │                                                                    │   │
+│   │   def function_name(pos1, pos2, *args, named=None, **kwargs):     │   │
+│   │   │    │   │         │     │      │        │          │            │   │
+│   │   │    │   │         │     │      │        │          │            │   │
+│   │   │    │   │         │     │      │        │          └─ kwargs   │   │
+│   │   │    │   │         │     │      │        │                       │   │
+│   │   │    │   │         │     │      │        └─ named (default)     │   │
+│   │   │    │   │         │     │      │                                │   │
+│   │   │    │   │         │     │      └─ keyword-only args            │   │
+│   │   │    │   │         │     │                                       │   │
+│   │   │    │   │         │     └─ *args (variable positional)         │   │
+│   │   │    │   │         │                                            │   │
+│   │   │    │   │         └─ positional arguments                     │   │
+│   │   │    │   │                                                      │   │
+│   │   │    │   └─ function name                                       │   │
+│   │   │    │                                                          │   │
+│   │   │    └─ def keyword                                             │   │
+│   │   │                                                              │   │
+│   │   │   """Docstring - function documentation"""                   │   │
+│   │   │                                                              │   │
+│   │   │   # Function body                                            │   │
+│   │   │   result = process(pos1, pos2, *args, named, **kwargs)      │   │
+│   │   │                                                              │   │
+│   │   │   return result    # Return value                            │   │
+│   │   │   # OR                                                       │   │
+│   │   │   yield value      # Generator                               │   │
+│   │   │                                                              │   │
+│   │   └────────────────────────────────────────────────────────────────┘   │
+│   │                                                                    │   │
+│   └────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   CALLING EXAMPLES:                                                         │
+│   ─────────────────                                                         │
+│   function_name(1, 2)                    # positional                     │
+│   function_name(1, 2, 3, 4)              # with *args                     │
+│   function_name(1, 2, named="value")     # with keyword                   │
+│   function_name(1, 2, 3, key="val")      # all types                      │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## 🔗 RELATED CHAPTERS
 
 ### Prerequisites
-- **Chapter 11**: Python Installation & Setup ← Install Python first
+| Chapter | Topic | Why Important |
+|---------|-------|---------------|
+| **Ch 11** | **Python Installation** | Must have Python installed first |
+| Ch 1 | Termux Setup | Basic environment |
+| Ch 2 | Basic Commands | Terminal familiarity |
 
 ### Next Steps
-- **Chapter 17**: Termux API with Python ← Integrate Python with Android
-- **Chapter 22**: Automation Scripts ← Build practical tools
-- **Chapter 25**: Web Scraping ← Extract data from websites
+| Chapter | Topic | What You'll Learn |
+|---------|-------|-------------------|
+| Ch 17 | Termux API with Python | Mobile-specific Python |
+| Ch 22 | Automation Scripts | Practical Python automation |
+| Ch 25 | Web Scraping | Data extraction |
 
-### Advanced Python Topics
-- **Chapter 27**: Python for Security Tools
-- **Chapter 30**: Machine Learning in Termux
-- **Chapter 35**: Flask/Django Web Development
+### Advanced Topics
+| Chapter | Topic | Prerequisites |
+|---------|-------|---------------|
+| Ch 27 | Security Tools | Python + networking |
+| Ch 30 | Machine Learning | Python + math |
+| Ch 35 | Web Development | Python + web basics |
 
-### Alternative Languages
-- **Chapter 13**: Bash Scripting Basics
-- **Chapter 16**: Node.js in Termux
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Technique 1: Async/Await for Concurrent Operations
+
+```python
+import asyncio
+import aiohttp
+from typing import List
+
+async def fetch_url(session, url: str) -> dict:
+    """Fetch a single URL asynchronously"""
+    async with session.get(url) as response:
+        return {
+            'url': url,
+            'status': response.status,
+            'data': await response.text()
+        }
+
+async def fetch_all(urls: List[str]) -> List[dict]:
+    """Fetch multiple URLs concurrently"""
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch_url(session, url) for url in urls]
+        return await asyncio.gather(*tasks)
+
+# Usage
+urls = [
+    'https://api.github.com',
+    'https://api.github.com/users/python',
+    'https://api.github.com/repos/python/cpython'
+]
+
+results = asyncio.run(fetch_all(urls))
+for r in results:
+    print(f"{r['url']}: {r['status']}")
+```
+
+**Benefits:**
+- Concurrent I/O operations
+- Much faster than sequential requests
+- Perfect for API calls, file I/O
+
+### Technique 2: Metaclasses for Advanced Class Customization
+
+```python
+class SingletonMeta(type):
+    """Metaclass for singleton pattern"""
+    _instances = {}
+    
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+class Database(metaclass=SingletonMeta):
+    def __init__(self):
+        self.connected = False
+    
+    def connect(self):
+        if not self.connected:
+            print("Connecting to database...")
+            self.connected = True
+
+# Usage - same instance every time
+db1 = Database()
+db2 = Database()
+print(db1 is db2)  # True
+
+# Registry pattern with metaclass
+class PluginMeta(type):
+    registry = {}
+    
+    def __new__(mcs, name, bases, namespace):
+        cls = super().__new__(mcs, name, bases, namespace)
+        if name != 'Plugin':  # Don't register base class
+            mcs.registry[name] = cls
+        return cls
+
+class Plugin(metaclass=PluginMeta):
+    pass
+
+class AuthPlugin(Plugin):
+    def execute(self):
+        return "Authenticating..."
+
+print(PluginMeta.registry)  # {'AuthPlugin': <class 'AuthPlugin'>}
+```
+
+### Technique 3: Descriptors for Property Validation
+
+```python
+class ValidatedAttribute:
+    """Descriptor for validated attributes"""
+    
+    def __init__(self, name: str, type_: type, min_val=None, max_val=None):
+        self.name = name
+        self.type = type_
+        self.min_val = min_val
+        self.max_val = max_val
+        self.private_name = f'_{name}'
+    
+    def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
+        return getattr(obj, self.private_name, None)
+    
+    def __set__(self, obj, value):
+        # Type validation
+        if not isinstance(value, self.type):
+            raise TypeError(f"{self.name} must be {self.type.__name__}")
+        
+        # Range validation for numbers
+        if self.min_val is not None and value < self.min_val:
+            raise ValueError(f"{self.name} must be >= {self.min_val}")
+        if self.max_val is not None and value > self.max_val:
+            raise ValueError(f"{self.name} must be <= {self.max_val}")
+        
+        setattr(obj, self.private_name, value)
+
+class User:
+    # Using descriptors
+    age = ValidatedAttribute('age', int, min_val=0, max_val=150)
+    name = ValidatedAttribute('name', str)
+    
+    def __init__(self, name: str, age: int):
+        self.name = name
+        self.age = age
+
+# Usage
+user = User("Alice", 30)
+print(user.name)  # Alice
+
+try:
+    user.age = -5  # ValueError: age must be >= 0
+except ValueError as e:
+    print(f"Error: {e}")
+
+try:
+    user.age = "twenty"  # TypeError: age must be int
+except TypeError as e:
+    print(f"Error: {e}")
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### Variables & Data Types
+- [ ] Understood dynamic typing in Python
+- [ ] Learned int, float, str, bool types
+- [ ] Practiced type conversion
+- [ ] Used type() to check types
+
+### Data Structures
+- [ ] Created and manipulated lists
+- [ ] Understood tuples (immutable)
+- [ ] Used dictionaries for key-value data
+- [ ] Worked with sets for unique items
+- [ ] Applied list/dict comprehensions
+
+### Control Flow
+- [ ] Wrote if-elif-else statements
+- [ ] Used for loops with range()
+- [ ] Implemented while loops
+- [ ] Applied break and continue
+- [ ] Used ternary operators
+
+### Functions
+- [ ] Defined functions with def
+- [ ] Used parameters and return values
+- [ ] Implemented default parameters
+- [ ] Worked with *args and **kwargs
+- [ ] Created lambda functions
+
+### File Handling
+- [ ] Opened files with context manager
+- [ ] Read and wrote file content
+- [ ] Handled JSON data
+- [ ] Used file modes correctly
+
+### Modules & Imports
+- [ ] Imported standard library modules
+- [ ] Used from...import syntax
+- [ ] Worked with module aliases
+- [ ] Installed packages with pip
+
+---
+
+## 💡 PRO TIPS BOX
+
+> 💡 **Pro Tip #1:** Use list comprehensions for simple transformations, but stick to regular loops for complex logic.
+
+> 💡 **Pro Tip #2:** Always use `with` statement for file handling - it automatically closes files even if errors occur.
+
+> 💡 **Pro Tip #3:** Use `dict.get(key, default)` instead of `dict[key]` to avoid KeyError exceptions.
+
+> 💡 **Pro Tip #4:** f-strings (f"{var}") are faster and more readable than `.format()` or `%` formatting.
+
+> 💡 **Pro Tip #5:** Use `enumerate()` when you need both index and value in a loop: `for i, item in enumerate(items):`
 
 ---
 

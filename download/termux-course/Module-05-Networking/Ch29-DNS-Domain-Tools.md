@@ -1,5 +1,22 @@
 # Chapter 29: DNS & Domain Tools
 
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                                                               ║
+║  🌐 ██████╗  ██████╗ ███████╗    ███████╗██╗   ██╗███╗   ██╗███████╗         ║
+║  🔌 ██╔══██╗██╔═══██╗██╔════╝    ██╔════╝██║   ██║████╗  ██║██╔════╝         ║
+║  📡 ██████╔╝██║   ██║███████╗    █████╗  ██║   ██║██╔██╗ ██║█████╗           ║
+║  📶 ██╔══██╗██║   ██║╚════██║    ██╔══╝  ██║   ██║██║╚██╗██║██╔══╝           ║
+║  🔗 ██║  ██║╚██████╔╝███████║    ██║     ╚██████╔╝██║ ╚████║███████╗         ║
+║  📶 ╚═╝  ╚═╝ ╚═════╝ ╚══════╝    ╚═╝      ╚═════╝ ╚═╝  ╚═══╝╚══════╝         ║
+║                                                                               ║
+║                    🎓 DNS & DOMAIN TOOLS 🎓                                   ║
+║                          Module 5 - Chapter 29                                ║
+║                     "Mastering DNS Enumeration"                               ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
 > **Module:** 5 - Networking  
 > **Chapter:** 29 of 61  
 > **Duration:** 15-20 Minutes  
@@ -1881,6 +1898,700 @@ Before moving to Chapter 30, verify:
 | Q10 | **B** | Zone transfer copies all DNS records from a server |
 | Q11 | **A** | DNS uses port 53 for both TCP and UDP |
 | Q12 | **B** | TTL = Time To Live (cache duration) |
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+<details>
+<summary><b>Click to reveal Interview Questions (10 Questions)</b></summary>
+
+### Q1: Explain how DNS resolution works from start to finish.
+**Answer:**
+1. **User enters URL**: Browser checks local cache first
+2. **Recursive Query**: If not cached, query goes to recursive resolver (ISP's DNS)
+3. **Root Server**: Resolver asks root server for TLD (e.g., .com)
+4. **TLD Server**: Root server directs to appropriate TLD server
+5. **Authoritative Server**: TLD server directs to domain's authoritative nameserver
+6. **Final Answer**: Authoritative server provides the IP address
+7. **Caching**: Result is cached at multiple levels for TTL duration
+8. **Connection**: Browser establishes TCP connection to the IP
+
+---
+
+### Q2: What are the different types of DNS records and their purposes?
+**Answer:**
+- **A Record**: Maps domain to IPv4 address
+- **AAAA Record**: Maps domain to IPv6 address
+- **CNAME**: Creates alias pointing to another domain
+- **MX**: Specifies mail servers for the domain
+- **NS**: Lists authoritative nameservers
+- **TXT**: Stores text data (SPF, DKIM, verification)
+- **SOA**: Start of Authority - zone administrative info
+- **PTR**: Reverse DNS - IP to domain mapping
+- **SRV**: Service location records
+- **CAA**: Certificate Authority Authorization
+
+---
+
+### Q3: What is DNS zone transfer and when is it a security risk?
+**Answer:**
+Zone transfer (AXFR) copies all DNS records from a nameserver.
+
+**Legitimate Use:**
+- Replicating DNS data between primary and secondary nameservers
+- Backup and disaster recovery
+
+**Security Risk:**
+- Unauthorized zone transfers expose entire network topology
+- Reveals internal hostnames, IP addresses, service locations
+- Provides attackers with complete reconnaissance data
+
+**Prevention:**
+- Restrict AXFR to authorized IPs only
+- Use TSIG authentication
+- Block public zone transfers
+
+---
+
+### Q4: What is the difference between recursive and iterative DNS queries?
+**Answer:**
+- **Recursive Query**:
+  - Client asks resolver to find complete answer
+  - Resolver does all the work
+  - Returns final IP address
+  - Typical for client-to-resolver communication
+
+- **Iterative Query**:
+  - Client asks for best answer available
+  - Server returns referral to next server
+  - Client follows referrals
+  - Used by resolvers to query root/TLD servers
+
+---
+
+### Q5: How does DNS caching affect troubleshooting?
+**Answer:**
+**Benefits:**
+- Reduces query latency
+- Decreases DNS server load
+- Improves browsing speed
+
+**Troubleshooting Challenges:**
+- Stale records persist until TTL expires
+- Changes don't propagate immediately
+- Different cache levels (browser, OS, resolver)
+- Inconsistent results across locations
+
+**Solutions:**
+- Flush local cache: `sudo systemd-resolve --flush-caches`
+- Use authoritative server directly: `dig @nameserver domain.com`
+- Lower TTL before planned changes
+- Check propagation: whatsmydns.net
+
+---
+
+### Q6: What is DNSSEC and why is it important?
+**Answer:**
+DNSSEC (DNS Security Extensions) provides:
+- **Authentication**: Verifies DNS response origin
+- **Integrity**: Ensures data wasn't modified in transit
+- **Non-repudiation**: Cryptographic signatures prove authenticity
+
+**How it works:**
+- Zones are signed with private keys
+- Public keys distributed via DS records
+- Chain of trust from root to domain
+- Resolvers verify signatures
+
+**Importance:**
+- Prevents DNS spoofing/cache poisoning
+- Protects against man-in-the-middle attacks
+- Essential for secure internet infrastructure
+
+---
+
+### Q7: How would you troubleshoot a DNS resolution failure?
+**Answer:**
+1. **Check connectivity**: `ping 8.8.8.8`
+2. **Test DNS directly**: `dig @8.8.8.8 domain.com`
+3. **Check local DNS**: `cat /etc/resolv.conf`
+4. **Flush cache**: Clear browser, OS, and resolver caches
+5. **Try different DNS**: Test with Google/Cloudflare DNS
+6. **Check for typos**: Verify domain spelling
+7. **Test from different location**: Rule out local issues
+8. **Check domain status**: Verify domain isn't expired
+9. **Trace DNS path**: `dig +trace domain.com`
+10. **Check firewall**: Ensure port 53 UDP/TCP isn't blocked
+
+---
+
+### Q8: What is split-horizon DNS and when would you use it?
+**Answer:**
+Split-horizon DNS serves different responses based on query source:
+- **Internal queries**: See internal IPs and private services
+- **External queries**: See public IPs only
+
+**Use Cases:**
+- Hide internal network structure
+- Provide different content to internal users
+- Load balancing based on geography
+- Security through obscurity for internal services
+- Compliance with internal/external access policies
+
+---
+
+### Q9: Explain DNS load balancing and its methods.
+**Answer:**
+**Round Robin DNS:**
+- Multiple A records for same domain
+- Rotates IP addresses in responses
+- Simple but doesn't consider server load
+
+**Weighted DNS:**
+- Assign weights to different IPs
+- Distribute traffic proportionally
+- `dig` shows all IPs with priorities
+
+**Geolocation DNS:**
+- Route based on client location
+- Reduces latency for users
+- Requires GeoIP database
+
+**Limitations:**
+- No health checking
+- Caching affects distribution
+- DNS-based only, no session persistence
+
+---
+
+### Q10: What are common DNS attacks and how to prevent them?
+**Answer:**
+| Attack | Description | Prevention |
+|--------|-------------|------------|
+| DNS Spoofing | Fake DNS responses | DNSSEC, DNS over HTTPS |
+| Cache Poisoning | Corrupt DNS cache | DNSSEC, random ports |
+| DDoS | Overwhelm DNS servers | Anycast, rate limiting |
+| Zone Transfer Attack | Unauthorized AXFR | Restrict AXFR access |
+| DNS Tunneling | Data exfiltration via DNS | Monitor query patterns |
+| Typosquatting | Similar domain names | Register variants, monitoring |
+
+**Best Practices:**
+- Implement DNSSEC
+- Use DNS filtering
+- Monitor DNS logs
+- Restrict zone transfers
+- Deploy DNS firewall
+
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔥 SCENARIO 1: DNS Reconnaissance for Penetration Testing                    ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Situation: Gathering DNS intelligence on a target domain.                    ║
+║                                                                               ║
+║  Step 1: Basic DNS Enumeration                                               ║
+║    $ dig target.com ANY                                                      ║
+║    $ dig target.com A                                                        ║
+║    $ dig target.com MX                                                       ║
+║    $ dig target.com NS                                                       ║
+║    $ dig target.com TXT                                                      ║
+║    → Gather all DNS records                                                  ║
+║                                                                               ║
+║  Step 2: Identify Nameservers                                                ║
+║    $ dig target.com NS +short                                                ║
+║    $ for ns in $(dig target.com NS +short); do dig @$ns target.com; done    ║
+║    → Query each nameserver directly                                          ║
+║                                                                               ║
+║  Step 3: Zone Transfer Attempt                                               ║
+║    $ dig AXFR @$ns target.com                                                ║
+║    → Attempt to get all records (usually blocked)                            ║
+║                                                                               ║
+║  Step 4: Subdomain Enumeration                                               ║
+║    $ for sub in www mail ftp admin api dev; do                               ║
+║        host $sub.target.com | grep "has address"                             ║
+║      done                                                                    ║
+║    → Discover additional hosts                                               ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔥 SCENARIO 2: Troubleshooting Email Delivery Issues                         ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Situation: Emails not being delivered to a domain.                           ║
+║                                                                               ║
+║  Step 1: Check MX Records                                                    ║
+║    $ dig target.com MX +short                                                ║
+║    → Verify mail server configuration                                        ║
+║                                                                               ║
+║  Step 2: Verify Mail Server IP                                               ║
+║    $ dig mail.target.com A +short                                            ║
+║    → Ensure mail server is reachable                                         ║
+║                                                                               ║
+║  Step 3: Check SPF Record                                                    ║
+║    $ dig target.com TXT | grep -i spf                                        ║
+║    → Verify sender authorization                                             ║
+║                                                                               ║
+║  Step 4: Check DKIM Record                                                   ║
+║    $ dig default._domainkey.target.com TXT                                   ║
+║    → Verify email signing key                                                ║
+║                                                                               ║
+║  Step 5: Check DMARC Policy                                                  ║
+║    $ dig _dmarc.target.com TXT                                               ║
+║    → Verify email authentication policy                                      ║
+║                                                                               ║
+║  Step 6: Reverse DNS Check                                                   ║
+║    $ dig -x MAIL_SERVER_IP                                                   ║
+║    → Verify PTR record for mail server                                       ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔥 SCENARIO 3: Investigating Suspicious Domain                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Situation: Analyzing a potentially malicious domain.                         ║
+║                                                                               ║
+║  Step 1: WHOIS Investigation                                                 ║
+║    $ whois suspicious-domain.com                                             ║
+║    → Check registration date, registrar, owner                               ║
+║                                                                               ║
+║  Step 2: DNS Record Analysis                                                 ║
+║    $ dig suspicious-domain.com ANY                                           ║
+║    → Check for unusual records                                               ║
+║                                                                               ║
+║  Step 3: IP Investigation                                                    ║
+║    $ dig suspicious-domain.com A +short                                      ║
+║    $ whois <IP_ADDRESS>                                                      ║
+║    → Check hosting provider and location                                     ║
+║                                                                               ║
+║  Step 4: Name Server Analysis                                                ║
+║    $ dig suspicious-domain.com NS +short                                     ║
+║    → Check if using reputable DNS providers                                  ║
+║                                                                               ║
+║  Step 5: Historical Analysis                                                 ║
+║    → Check Wayback Machine for website history                               ║
+║    → Use SecurityTrails for DNS history                                      ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔥 SCENARIO 4: DNS Migration and Propagation                                 ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Situation: Migrating domain to new DNS servers.                              ║
+║                                                                               ║
+║  Step 1: Lower TTL Before Migration                                          ║
+║    → Set TTL to 300 seconds (5 minutes)                                      ║
+║    → Wait for old TTL to expire                                              ║
+║                                                                               ║
+║  Step 2: Record Current DNS                                                  ║
+║    $ dig target.com ANY > old_dns_records.txt                                ║
+║    → Backup all existing records                                             ║
+║                                                                               ║
+║  Step 3: Configure New DNS Server                                            ║
+║    → Add all records to new nameserver                                       ║
+║    → Verify configuration with direct query                                  ║
+║    $ dig @new-ns.example.com target.com ANY                                  ║
+║                                                                               ║
+║  Step 4: Update Domain Registration                                          ║
+║    → Change nameserver records at registrar                                  ║
+║                                                                               ║
+║  Step 5: Monitor Propagation                                                 ║
+║    $ for dns in 8.8.8.8 1.1.1.1 9.9.9.9; do                                  ║
+║        echo "DNS: $dns"                                                      ║
+║        dig @$dns target.com NS +short                                        ║
+║      done                                                                    ║
+║    → Check propagation across multiple DNS servers                           ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔥 SCENARIO 5: Setting Up DNS for New Domain                                 ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Situation: Configuring DNS for a newly registered domain.                    ║
+║                                                                               ║
+║  Step 1: Create A Record                                                     ║
+║    example.com.    IN    A    93.184.216.34                                   ║
+║    → Points domain to web server                                             ║
+║                                                                               ║
+║  Step 2: Create www CNAME                                                    ║
+║    www.example.com.    IN    CNAME    example.com.                           ║
+║    → Alias www to main domain                                                ║
+║                                                                               ║
+║  Step 3: Create MX Records                                                   ║
+║    example.com.    IN    MX    10 mail.example.com.                          ║
+║    example.com.    IN    MX    20 mail2.example.com.                         ║
+║    → Configure email delivery                                                ║
+║                                                                               ║
+║  Step 4: Create SPF Record                                                   ║
+║    example.com.    IN    TXT    "v=spf1 mx -all"                             ║
+║    → Authorize mail servers                                                  ║
+║                                                                               ║
+║  Step 5: Create DMARC Record                                                 ║
+║    _dmarc.example.com.    IN    TXT    "v=DMARC1; p=quarantine"              ║
+║    → Email authentication policy                                             ║
+║                                                                               ║
+║  Step 6: Verify Configuration                                                ║
+║    $ dig example.com A                                                       ║
+║    $ dig example.com MX                                                      ║
+║    $ dig example.com TXT                                                     ║
+║    → Confirm all records are correct                                         ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: DNS Resolution Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         DNS RESOLUTION FLOW                                     │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│    USER types "www.example.com"                                                │
+│           │                                                                     │
+│           ▼                                                                     │
+│    ┌─────────────┐                                                             │
+│    │ BROWSER     │ ──► Check browser cache                                     │
+│    │ CACHE       │                                                             │
+│    └──────┬──────┘                                                             │
+│           │ Not found                                                          │
+│           ▼                                                                     │
+│    ┌─────────────┐                                                             │
+│    │ OS CACHE    │ ──► Check OS DNS cache                                      │
+│    │             │                                                             │
+│    └──────┬──────┘                                                             │
+│           │ Not found                                                          │
+│           ▼                                                                     │
+│    ┌─────────────┐     ┌─────────────┐     ┌─────────────┐                    │
+│    │ RECURSIVE   │ ──► │ ROOT SERVER │ ──► │ TLD SERVER  │                    │
+│    │ RESOLVER    │     │     (.)     │     │   (.com)    │                    │
+│    │  (ISP DNS)  │     └─────────────┘     └──────┬──────┘                    │
+│    └──────┬──────┘                                 │                           │
+│           │                                        ▼                           │
+│           │                                 ┌─────────────┐                    │
+│           │                                 │AUTHORITATIVE│                    │
+│           │◄────────────────────────────────│ NAMESERVER  │                    │
+│           │         IP: 93.184.216.34       │(example.com)│                    │
+│           │                                 └─────────────┘                    │
+│           ▼                                                                     │
+│    ┌─────────────────────────────────────────────────────────────┐            │
+│    │ RESPONSE: www.example.com = 93.184.216.34                   │            │
+│    │ Cached for TTL seconds                                      │            │
+│    └─────────────────────────────────────────────────────────────┘            │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: DNS Record Types Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                       DNS RECORD TYPES ARCHITECTURE                             │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│   Domain: example.com                                                          │
+│                                                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────┐  │
+│   │                          ZONE FILE                                       │  │
+│   ├─────────────────────────────────────────────────────────────────────────┤  │
+│   │                                                                          │  │
+│   │   A RECORDS (IPv4)                                                      │  │
+│   │   ├── example.com.        IN A      93.184.216.34                       │  │
+│   │   ├── www.example.com.    IN A      93.184.216.34                       │  │
+│   │   └── mail.example.com.   IN A      93.184.216.35                       │  │
+│   │                                                                          │  │
+│   │   AAAA RECORDS (IPv6)                                                   │  │
+│   │   └── example.com.        IN AAAA   2606:2800:220:1:248:1893:25c8:1946 │  │
+│   │                                                                          │  │
+│   │   MX RECORDS (Mail)                                                     │  │
+│   │   ├── example.com.        IN MX  10 mail.example.com.                   │  │
+│   │   └── example.com.        IN MX  20 mail2.example.com.                  │  │
+│   │                                                                          │  │
+│   │   NS RECORDS (Nameservers)                                              │  │
+│   │   ├── example.com.        IN NS    ns1.example.com.                     │  │
+│   │   └── example.com.        IN NS    ns2.example.com.                     │  │
+│   │                                                                          │  │
+│   │   TXT RECORDS (Text/SPF)                                                │  │
+│   │   └── example.com.        IN TXT   "v=spf1 mx -all"                     │  │
+│   │                                                                          │  │
+│   │   CNAME RECORDS (Aliases)                                               │  │
+│   │   ├── ftp.example.com.    IN CNAME example.com.                         │  │
+│   │   └── blog.example.com.   IN CNAME example.com.                         │  │
+│   │                                                                          │  │
+│   └─────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: DNS Security Layer
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         DNS SECURITY LAYERS                                     │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────┐  │
+│   │                         DNS SECURITY STACK                              │  │
+│   └─────────────────────────────────────────────────────────────────────────┘  │
+│                                    │                                            │
+│       ┌────────────────────────────┼────────────────────────────┐             │
+│       │                            │                            │              │
+│       ▼                            ▼                            ▼              │
+│   ┌─────────┐                ┌─────────────┐              ┌─────────────┐     │
+│   │ DNSSEC  │                │ DNS over    │              │  DNS        │     │
+│   │         │                │ HTTPS/TLS   │              │  Filtering  │     │
+│   ├─────────┤                ├─────────────┤              ├─────────────┤     │
+│   │• Auth   │                │• Encryption │              │• Block      │     │
+│   │• Integ  │                │• Privacy    │              │  malicious  │     │
+│   │• Chain  │                │• Prevent    │              │• Protect    │     │
+│   │  of     │                │  snooping   │              │  against    │     │
+│   │  trust  │                │• Bypass     │              │  phishing   │     │
+│   │         │                │  ISP DNS    │              │             │     │
+│   └─────────┘                └─────────────┘              └─────────────┘     │
+│                                                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────┐  │
+│   │                    ATTACK MITIGATION                                     │  │
+│   ├─────────────────────────────────────────────────────────────────────────┤  │
+│   │  Attack Type         │ Mitigation Technique                             │  │
+│   ├──────────────────────┼──────────────────────────────────────────────────┤  │
+│   │  Cache Poisoning     │ DNSSEC, Random ports                             │  │
+│   │  DNS Spoofing        │ DNSSEC, DoH/DoT                                  │  │
+│   │  DDoS                │ Anycast, Rate limiting                           │  │
+│   │  Zone Transfer       │ Restrict AXFR, TSIG                              │  │
+│   │  DNS Tunneling       │ Query analysis, filtering                        │  │
+│   └─────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter Type | Chapter Number | Title | Relationship |
+|-------------|----------------|-------|--------------|
+| **Prerequisite** | Ch 24 | Networking Basics | Network fundamentals |
+| **Prerequisite** | Ch 28 | HTTP Tools | Web communication |
+| **Current** | **Ch 29** | **DNS & Domain Tools** | **You are here** |
+| **Related** | Ch 25-26 | Nmap | DNS scanning with Nmap |
+| **Related** | Ch 27 | Netcat | Raw DNS queries |
+| **Advanced** | Ch 40+ | Security Tools | DNS exploitation |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Comprehensive DNS Enumeration Script
+
+```bash
+#!/bin/bash
+# dns-enumeration.sh - Complete DNS reconnaissance
+
+DOMAIN=$1
+
+if [ -z "$DOMAIN" ]; then
+    echo "Usage: $0 <domain>"
+    exit 1
+fi
+
+echo "=== DNS ENUMERATION FOR: $DOMAIN ==="
+
+# Basic Records
+echo -e "\n[+] A Records (IPv4):"
+dig +short $DOMAIN A
+
+echo -e "\n[+] AAAA Records (IPv6):"
+dig +short $DOMAIN AAAA
+
+echo -e "\n[+] MX Records (Mail):"
+dig +short $DOMAIN MX
+
+echo -e "\n[+] NS Records (Nameservers):"
+dig +short $DOMAIN NS
+
+echo -e "\n[+] TXT Records:"
+dig +short $DOMAIN TXT
+
+echo -e "\n[+] SOA Record:"
+dig +short $DOMAIN SOA
+
+# Get nameserver IPs
+echo -e "\n[+] Nameserver IPs:"
+for ns in $(dig +short $DOMAIN NS); do
+    echo "$ns: $(dig +short $ns)"
+done
+
+# Check for zone transfer
+echo -e "\n[+] Zone Transfer Attempt:"
+for ns in $(dig +short $DOMAIN NS); do
+    echo "Testing $ns..."
+    dig AXFR @$ns $DOMAIN 2>/dev/null | head -5
+done
+
+# Common subdomains
+echo -e "\n[+] Subdomain Enumeration:"
+for sub in www mail ftp admin api dev staging blog shop vpn db mysql; do
+    result=$(host $sub.$DOMAIN 2>/dev/null | grep "has address")
+    if [ -n "$result" ]; then
+        echo "$result"
+    fi
+done
+
+# SPF/DMARC Check
+echo -e "\n[+] Email Security:"
+echo "SPF: $(dig +short $DOMAIN TXT | grep -i spf)"
+echo "DMARC: $(dig +short _dmarc.$DOMAIN TXT)"
+
+# WHOIS info
+echo -e "\n[+] WHOIS Summary:"
+whois $DOMAIN 2>/dev/null | grep -E "(Registrar|Creation Date|Expiry)" | head -5
+
+echo -e "\n=== ENUMERATION COMPLETE ==="
+```
+
+### Advanced Technique 2: DNS Monitoring and Change Detection
+
+```bash
+#!/bin/bash
+# dns-monitor.sh - Monitor DNS changes
+
+DOMAIN=$1
+STATE_FILE="/tmp/dns_state_$DOMAIN.txt"
+
+if [ -z "$DOMAIN" ]; then
+    echo "Usage: $0 <domain>"
+    exit 1
+fi
+
+echo "=== DNS CHANGE MONITOR ==="
+
+# Get current state
+CURRENT=$(dig +short $DOMAIN A | sort)
+
+# Check if state file exists
+if [ -f "$STATE_FILE" ]; then
+    PREVIOUS=$(cat "$STATE_FILE")
+    
+    if [ "$CURRENT" != "$PREVIOUS" ]; then
+        echo "⚠️  CHANGE DETECTED!"
+        echo "Previous: $PREVIOUS"
+        echo "Current:  $CURRENT"
+        
+        # Alert (could send email/webhook)
+        # curl -X POST -d "DNS change for $DOMAIN" $WEBHOOK_URL
+    else
+        echo "✅ No changes detected"
+    fi
+else
+    echo "First run - storing initial state"
+fi
+
+# Store current state
+echo "$CURRENT" > "$STATE_FILE"
+echo "State saved to $STATE_FILE"
+```
+
+### Advanced Technique 3: DNS Tunneling Detection
+
+```bash
+#!/bin/bash
+# dns-tunnel-detect.sh - Detect potential DNS tunneling
+
+LOG_FILE=$1
+
+if [ -z "$LOG_FILE" ]; then
+    echo "Usage: $0 <dns_log_file>"
+    echo "Analyze DNS query logs for tunneling indicators"
+    exit 1
+fi
+
+echo "=== DNS TUNNELING DETECTION ==="
+
+# Check for unusually long queries
+echo -e "\n[+] Long DNS queries (>50 chars):"
+grep -E '[a-zA-Z0-9]{50,}' $LOG_FILE | head -10
+
+# Check for high frequency queries to same domain
+echo -e "\n[+] High frequency queries (possible beaconing):"
+awk '{print $1}' $LOG_FILE | sort | uniq -c | sort -rn | head -10
+
+# Check for TXT record abuse
+echo -e "\n[+] Unusual TXT queries:"
+grep "TXT" $LOG_FILE | grep -v -E '(spf|dkim|dmarc|google)' | head -10
+
+# Check for base64-like patterns
+echo -e "\n[+] Base64-like subdomain patterns:"
+grep -E '[A-Za-z0-9+/]{20,}=' $LOG_FILE | head -10
+
+echo -e "\n=== ANALYSIS COMPLETE ==="
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Concepts Mastered
+
+- [ ] **DNS Fundamentals**: Resolution process, hierarchy, caching
+- [ ] **DNS Record Types**: A, AAAA, MX, NS, TXT, CNAME, SOA, PTR
+- [ ] **DNS Tools**: dig, nslookup, host, whois
+- [ ] **DNS Security**: DNSSEC, zone transfer protection, SPF/DKIM/DMARC
+- [ ] **Reverse DNS**: IP to domain mapping
+
+### ✅ Commands Learned
+
+- [ ] `dig domain.com` - Basic DNS lookup
+- [ ] `dig +short domain.com` - Short output
+- [ ] `dig domain.com MX` - Specific record type
+- [ ] `dig @8.8.8.8 domain.com` - Use specific DNS server
+- [ ] `dig -x IP` - Reverse DNS lookup
+- [ ] `dig +trace domain.com` - Trace resolution path
+- [ ] `nslookup domain.com` - Classic DNS lookup
+- [ ] `host domain.com` - Simple DNS lookup
+- [ ] `whois domain.com` - Domain registration info
+- [ ] `whois IP_ADDRESS` - IP ownership info
+
+### ✅ Skills Acquired
+
+- [ ] DNS enumeration for reconnaissance
+- [ ] Email DNS troubleshooting (MX, SPF, DKIM, DMARC)
+- [ ] Subdomain discovery techniques
+- [ ] Zone transfer testing
+- [ ] DNS troubleshooting methodology
+- [ ] DNS security assessment
+- [ ] Domain investigation
+
+### ✅ Best Practices Learned
+
+- [ ] Use `+short` for scripting clean output
+- [ ] Query authoritative servers for authoritative answers
+- [ ] Check DNS propagation from multiple locations
+- [ ] Lower TTL before making DNS changes
+- [ ] Always verify SPF/DKIM/DMARC for email domains
+- [ ] Restrict zone transfers to authorized servers
+- [ ] Monitor DNS for security anomalies
+- [ ] Document DNS configurations before changes
 
 ---
 

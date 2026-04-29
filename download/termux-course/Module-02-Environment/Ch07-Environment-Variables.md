@@ -1,5 +1,24 @@
 # Chapter 7: Environment Variables
 
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                                                               ║
+║   🔧 ════════════════════════════════════════════════════════════════ 🔧      ║
+║                                                                               ║
+║        ███████╗███╗   ██╗███████╗██████╗  ██████╗ ███████╗██████╗             ║
+║        ██╔════╝████╗  ██║██╔════╝██╔══██╗██╔═══██╗██╔════╝██╔══██╗            ║
+║        █████╗  ██╔██╗ ██║█████╗  ██████╔╝██║   ██║█████╗  ██████╔╝            ║
+║        ██╔══╝  ██║╚██╗██║██╔══╝  ██╔══██╗██║   ██║██╔══╝  ██╔══██╗            ║
+║        ███████╗██║ ╚████║███████╗██║  ██║╚██████╔╝███████╗██║  ██║            ║
+║        ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝            ║
+║                                                                               ║
+║               🎛️ CONFIGURE YOUR TERMINAL ENVIRONMENT 🎛️                       ║
+║                                                                               ║
+║   🔧 ════════════════════════════════════════════════════════════════ 🔧      ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
 > **Module:** 2 - Environment
 > **Chapter:** 7 of 61
 > **Duration:** 15-20 Minutes
@@ -2526,6 +2545,1053 @@ Before moving to Chapter 8, verify:
 **Chapter Complete! 🎉**
 
 *Created by T3rmuxk1ng | Termux Full Course*
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>❓ Question 1: What is the purpose of the PATH environment variable?</b></summary>
+
+**Options:**
+- A) Store file paths
+- B) Define where shell looks for executable commands
+- C) Set the current directory
+- D) Store password hashes
+
+**✅ Answer: B) Define where shell looks for executable commands**
+
+**Explanation:** PATH contains a colon-separated list of directories. When you type a command, the shell searches these directories (left to right) to find the executable. If not found, you get "command not found".
+</details>
+
+<details>
+<summary><b>❓ Question 2: Which command makes a variable available to child processes?</b></summary>
+
+**Options:**
+- A) `set VAR=value`
+- B) `VAR=value`
+- C) `export VAR=value`
+- D) `define VAR=value`
+
+**✅ Answer: C) `export VAR=value`**
+
+**Explanation:** `export` marks the variable for export to child processes. Without export, the variable is only available in the current shell session.
+</details>
+
+<details>
+<summary><b>❓ Question 3: What file is typically used for permanent environment variables in Termux?</b></summary>
+
+**Options:**
+- A) /etc/environment
+- B) ~/.bashrc
+- C) /etc/profile
+- D) ~/.config
+
+**✅ Answer: B) ~/.bashrc**
+
+**Explanation:** ~/.bashrc is executed for each interactive shell session. This is where you add permanent environment variables, aliases, and functions in Termux.
+</details>
+
+<details>
+<summary><b>❓ Question 4: How do you view all environment variables?</b></summary>
+
+**Options:**
+- A) `list all`
+- B) `env` or `printenv`
+- C) `show vars`
+- D) `cat /etc/env`
+
+**✅ Answer: B) `env` or `printenv`**
+
+**Explanation:** Both `env` and `printenv` display all environment variables. `printenv VARNAME` shows a specific variable without needing the $ prefix.
+</details>
+
+<details>
+<summary><b>❓ Question 5: What does $PREFIX represent in Termux?</b></summary>
+
+**Options:**
+- A) Command prefix
+- B) Termux system root directory
+- C) User preferences
+- D) File prefix
+
+**✅ Answer: B) Termux system root directory**
+
+**Explanation:** $PREFIX points to /data/data/com.termux/files/usr - Termux's equivalent of /usr in standard Linux. It contains bin/, lib/, etc/, share/ directories.
+</details>
+
+<details>
+<summary><b>❓ Question 6: What happens when you run `source ~/.bashrc`?</b></summary>
+
+**Options:**
+- A) Deletes .bashrc
+- B) Reloads .bashrc in current shell
+- C) Creates backup
+- D) Opens in editor
+
+**✅ Answer: B) Reloads .bashrc in current shell**
+
+**Explanation:** `source` (or `.`) executes the file in the current shell, applying any changes immediately without needing to restart Termux.
+</details>
+
+<details>
+<summary><b>❓ Question 7: Which variable controls your terminal prompt appearance?</b></summary>
+
+**Options:**
+- A) $PROMPT
+- B) $PS1
+- C) $DISPLAY
+- D) $TERM
+
+**✅ Answer: B) $PS1**
+
+**Explanation:** PS1 (Prompt String 1) defines the primary prompt. You can customize it with special characters like \u (user), \w (directory), \t (time).
+</details>
+
+<details>
+<summary><b>❓ Question 8: How do you add ~/scripts to PATH permanently?</b></summary>
+
+**Options:**
+- A) `PATH=$PATH:~/scripts`
+- B) Add `export PATH="$PATH:$HOME/scripts"` to ~/.bashrc
+- C) `setpath ~/scripts`
+- D) `addpath ~/scripts`
+
+**✅ Answer: B) Add `export PATH="$PATH:$HOME/scripts"` to ~/.bashrc**
+
+**Explanation:** Adding the export command to ~/.bashrc makes it permanent. Without this, the change is lost when you close Termux.
+</details>
+
+<details>
+<summary><b>❓ Question 9: What is the difference between `VAR=value` and `export VAR=value`?</b></summary>
+
+**Options:**
+- A) No difference
+- B) `export` makes VAR available to child processes
+- C) `export` is faster
+- D) `VAR=value` is permanent
+
+**✅ Answer: B) `export` makes VAR available to child processes**
+
+**Explanation:** Direct assignment creates a shell variable. `export` creates an environment variable that child processes (scripts, programs) can access.
+</details>
+
+<details>
+<summary><b>❓ Question 10: How do you delete an environment variable?</b></summary>
+
+**Options:**
+- A) `delete VAR`
+- B) `unset VAR`
+- C) `remove VAR`
+- D) `VAR=""`
+
+**✅ Answer: B) `unset VAR`**
+
+**Explanation:** `unset VAR` completely removes the variable from both shell and environment. Setting it to empty string keeps the variable but with empty value.
+</details>
+
+<details>
+<summary><b>❓ Question 11: What does `${VAR:-default}` do?</b></summary>
+
+**Options:**
+- A) Sets VAR to default
+- B) Returns default if VAR is unset or empty
+- C) Deletes VAR
+- D) Checks if VAR equals default
+
+**✅ Answer: B) Returns default if VAR is unset or empty**
+
+**Explanation:** This is parameter expansion. If VAR is set and non-empty, returns its value. Otherwise returns "default" without modifying VAR.
+</details>
+
+<details>
+<summary><b>❓ Question 12: Which variable indicates your default text editor?</b></summary>
+
+**Options:**
+- A) $TEXTEDITOR
+- B) $EDITOR
+- C) $VIM
+- D) $EDIT
+
+**✅ Answer: B) $EDITOR**
+
+**Explanation:** $EDITOR is the standard variable for default editor. Programs like git, visudo, crontab use it. Common values: nano, vim, code.
+</details>
+
+<details>
+<summary><b>❓ Question 13: How do you check if a variable is set?</b></summary>
+
+**Options:**
+- A) `test $VAR`
+- B) `[ -z "${VAR+x}" ]`
+- C) `check VAR`
+- D) `isset VAR`
+
+**✅ Answer: B) `[ -z "${VAR+x}" ]`**
+
+**Explanation:** `${VAR+x}` expands to "x" if VAR is set (even if empty), or nothing if unset. `-z` tests for zero length, so this returns true if VAR is unset.
+</details>
+
+<details>
+<summary><b>❓ Question 14: What's the effect of `readonly VAR=value`?</b></summary>
+
+**Options:**
+- A) Makes VAR temporary
+- B) Makes VAR read-only (cannot be changed)
+- C) Deletes VAR after reading
+- D) Makes VAR global
+
+**✅ Answer: B) Makes VAR read-only (cannot be changed)**
+
+**Explanation:** `readonly` marks a variable as read-only. Any attempt to modify or unset it will fail. Useful for constants.
+</details>
+
+<details>
+<summary><b>❓ Question 15: How do you prepend a directory to PATH?</b></summary>
+
+**Options:**
+- A) `export PATH=/new/path:$PATH`
+- B) `export PATH=$PATH:/new/path`
+- C) `PATH.prepend /new/path`
+- D) `export PATH+=/new/path`
+
+**✅ Answer: A) `export PATH=/new/path:$PATH`**
+
+**Explanation:** Prepending (adding at beginning) gives the new directory higher priority. Appending (adding at end) gives lower priority. Use prepending to override system commands.
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Question 1: Explain the difference between shell variables and environment variables.
+
+**Answer:**
+**Shell Variables:**
+- Only accessible in the current shell
+- Not passed to child processes
+- Set by simple assignment: `VAR=value`
+- Example: PS1, HISTSIZE
+
+**Environment Variables:**
+- Accessible to current shell and child processes
+- Must be exported: `export VAR=value`
+- Inherited by scripts and programs
+- Example: PATH, HOME, USER
+
+```bash
+# Shell variable - not inherited
+MY_SHELL_VAR="test"
+bash -c 'echo $MY_SHELL_VAR'  # Empty
+
+# Environment variable - inherited
+export MY_ENV_VAR="test"
+bash -c 'echo $MY_ENV_VAR'    # Prints: test
+```
+
+**Follow-up:** How can you check if a variable is exported?
+> Use `declare -p VARNAME` or `export -p | grep VARNAME`. Exported variables show `declare -x`.
+
+### Question 2: How does the PATH variable work? What happens when you type a command?
+
+**Answer:**
+When you type a command, the shell:
+1. Checks if it's a shell builtin (cd, echo, etc.)
+2. Checks if it's an alias or function
+3. Searches PATH directories from left to right
+4. Executes the first matching executable found
+5. Returns "command not found" if no match
+
+```bash
+# View PATH directories
+echo "$PATH" | tr ':' '\n'
+
+# Find where a command is located
+which python
+type ls
+
+# Debug command resolution
+type -a python  # Shows all matches
+```
+
+**Follow-up:** How would you add a custom scripts directory to PATH?
+> Add to ~/.bashrc: `export PATH="$HOME/scripts:$PATH"` (prepend for priority) or `export PATH="$PATH:$HOME/scripts"` (append).
+
+### Question 3: A user's .bashrc has an error and Termux won't start properly. How do you fix it?
+
+**Answer:**
+1. **Start Termux with safe mode (if available)**
+2. **Edit from recovery:**
+   ```bash
+   # Comment out problematic lines
+   nano ~/.bashrc
+   # Or restore backup
+   cp ~/.bashrc.backup ~/.bashrc
+   ```
+3. **If terminal exits immediately:**
+   - Use another terminal app
+   - Or access via ADB: `adb shell`
+   - Navigate to Termux files and edit
+4. **Nuclear option - recreate .bashrc:**
+   ```bash
+   mv ~/.bashrc ~/.bashrc.broken
+   # Termux will create default on next start
+   ```
+
+**Follow-up:** How can you prevent this in the future?
+> Always backup before editing: `cp ~/.bashrc ~/.bashrc.backup.$(date +%Y%m%d)`. Test changes in a subshell first: `bash`.
+
+### Question 4: Explain PS1 customization and create a useful prompt.
+
+**Answer:**
+PS1 (Prompt String 1) defines the command prompt. Common escape sequences:
+- `\u` - Username
+- `\h` - Hostname
+- `\w` - Full working directory
+- `\W` - Current directory name
+- `\t` - Time (24-hour)
+- `\d` - Date
+
+**Useful Prompts:**
+```bash
+# Simple colored prompt
+export PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
+# With git branch
+export PS1='\[\033[1;34m\]\w\[\033[0;33m\]$(git branch 2>/dev/null | grep \* | head -1)\[\033[00m\]\$ '
+
+# Multi-line with time
+export PS1='\[\033[1;36m\][\t] \[\033[1;32m\]\u@\h\[\033[00m\]\n\w\$ '
+
+# Hacker style
+export PS1='\[\033[0;32m\]┌─[\[\033[1;32m\]\u@\h\[\033[0;32m\]]─[\[\033[1;34m\]\w\[\033[0;32m\]]\n└──╼ \[\033[1;32m\]\$\[\033[0m\] '
+```
+
+**Follow-up:** How do color codes work in prompts?
+> `\[\033[01;32m\]` starts bold green, `\[\033[00m\]` resets. The `\[ \]` pairs are crucial for proper line editing.
+
+### Question 5: How do you securely store and use API keys as environment variables?
+
+**Answer:**
+**Best Practices:**
+1. **Never commit to git:** Add to .gitignore
+2. **Use separate file for secrets:**
+   ```bash
+   # ~/.env (chmod 600)
+   export API_KEY="secret123"
+   export DB_PASSWORD="password"
+   
+   # In ~/.bashrc
+   [ -f ~/.env ] && source ~/.env
+   ```
+3. **Restrict file permissions:**
+   ```bash
+   chmod 600 ~/.env
+   ```
+4. **Use in scripts:**
+   ```bash
+   curl -H "Authorization: Bearer $API_KEY" https://api.example.com
+   ```
+
+**Warning:** Environment variables are visible to any process you run and in /proc.
+
+**Follow-up:** What's a more secure alternative for production?
+> Use a secrets manager, encrypted files, or environment-specific configuration. For Termux, consider gpg-encrypted files that decrypt at runtime.
+
+### Question 6: How do you debug environment variable issues?
+
+**Answer:**
+```bash
+# Check if variable is set
+[ -z "${VAR+x}" ] && echo "VAR not set" || echo "VAR is set"
+
+# See variable value and attributes
+declare -p VAR
+
+# Check if exported
+export -p | grep VAR
+
+# Debug script environment
+bash -x script.sh  # Show commands with variable expansion
+
+# Compare shell vs environment
+env | grep VAR     # Environment variables only
+set | grep VAR     # All variables
+
+# Check PATH for missing directories
+echo "$PATH" | tr ':' '\n'
+
+# Find where command is
+type -a command
+which command
+```
+
+**Follow-up:** How would you troubleshoot "command not found"?
+> Check `echo $PATH`, verify binary location with `find`, ensure file is executable with `ls -l`, check if directory is in PATH.
+
+### Question 7: Explain the load order of shell configuration files.
+
+**Answer:**
+**Interactive Login Shell:**
+1. /etc/profile (system-wide)
+2. ~/.bash_profile, ~/.bash_login, or ~/.profile (first found)
+3. ~/.bash_logout (on exit)
+
+**Interactive Non-Login Shell (Termux default):**
+1. ~/.bashrc
+
+**In Termux:**
+- Most sessions are non-login shells
+- ~/.bashrc is the primary config file
+- Can source ~/.bash_profile from ~/.bashrc
+
+```bash
+# Typical ~/.bashrc header
+if [[ -f ~/.bash_profile ]]; then
+    source ~/.bash_profile
+fi
+```
+
+**Follow-up:** Why does Termux primarily use .bashrc?
+> Termux starts interactive shells, not login shells. Each terminal session is a non-login interactive shell that sources .bashrc.
+
+### Question 8: How do you set up environment variables for different projects?
+
+**Answer:**
+**Method 1: .env files per project**
+```bash
+# project/.env
+export DATABASE_URL="postgres://localhost/mydb"
+export API_ENDPOINT="https://api.example.com"
+
+# Load in shell
+cd ~/projects/myproject
+source .env
+```
+
+**Method 2: direnv-style functions**
+```bash
+# In ~/.bashrc
+project_env() {
+    local env_file="$1/.env"
+    if [[ -f "$env_file" ]]; then
+        source "$env_file"
+        echo "Loaded environment from $env_file"
+    fi
+}
+
+# Usage
+cd ~/projects/webapp && project_env .
+```
+
+**Method 3: Automatic with cd**
+```bash
+# In ~/.bashrc
+cd() {
+    builtin cd "$@"
+    [[ -f .env ]] && source .env
+}
+```
+
+**Follow-up:** How do you unload environment variables when switching projects?
+> Create an `env_reset` function or use `unset` for each variable. Consider using subshells for isolation.
+
+### Question 9: How do you create persistent aliases and functions?
+
+**Answer:**
+**Aliases:**
+```bash
+# In ~/.bashrc
+alias ll='ls -la'
+alias la='ls -A'
+alias ..='cd ..'
+alias grep='grep --color=auto'
+alias cls='clear'
+alias h='history'
+alias ports='netstat -tulanp'
+
+# With variables
+alias scripts='cd $HOME/scripts'
+```
+
+**Functions (more powerful):**
+```bash
+# In ~/.bashrc
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+extract() {
+    if [[ -f "$1" ]]; then
+        case "$1" in
+            *.tar.bz2) tar xjf "$1" ;;
+            *.tar.gz)  tar xzf "$1" ;;
+            *.zip)     unzip "$1" ;;
+            *)         echo "Unknown format" ;;
+        esac
+    fi
+}
+
+backup() {
+    cp "$1" "$1.backup.$(date +%Y%m%d_%H%M%S)"
+}
+```
+
+**Follow-up:** What's the difference between alias and function?
+> Aliases are simple text substitutions, cannot take arguments directly, and are limited to single commands. Functions are mini-scripts that can have logic, arguments, variables, and multiple commands.
+
+### Question 10: How do you manage PATH modifications cleanly?
+
+**Answer:**
+**Clean PATH Management:**
+```bash
+# In ~/.bashrc
+
+# Function to add to PATH if not already present
+path_append() {
+    if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
+        export PATH="$PATH:$1"
+    fi
+}
+
+path_prepend() {
+    if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
+        export PATH="$1:$PATH"
+    fi
+}
+
+# Use functions
+path_append "$HOME/scripts"
+path_append "$HOME/.local/bin"
+path_prepend "$HOME/bin"
+
+# Function to remove from PATH
+path_remove() {
+    export PATH=$(echo "$PATH" | sed -e "s|:$1||g" -e "s|^$1:||g")
+}
+
+# Function to show PATH nicely
+path_show() {
+    echo "$PATH" | tr ':' '\n' | nl
+}
+```
+
+**Follow-up:** Why check if directory exists before adding?
+> Prevents errors and keeps PATH clean. Non-existent directories in PATH can cause command execution delays.
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: 🛠️ Setting Up Development Environment
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🛠️ SCENARIO: Configure a complete development environment in Termux          ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  # Create development .bashrc configuration                                   ║
+║  cat >> ~/.bashrc << 'EOF'                                                    ║
+║                                                                               ║
+║  # Development Environment Variables                                          ║
+║  export PROJECTS="$HOME/projects"                                            ║
+║  export EDITOR="nano"                                                         ║
+║  export VISUAL="vim"                                                          ║
+║  export BROWSER="firefox"                                                     ║
+║  export LANG="en_US.UTF-8"                                                    ║
+║                                                                               ║
+║  # Python Development                                                         ║
+║  export PYTHONDONTWRITEBYTECODE=1                                            ║
+║  export PYTHONUNBUFFERED=1                                                    ║
+║  export PIPENV_VENV_IN_PROJECT=1                                              ║
+║                                                                               ║
+║  # Node.js Development                                                        ║
+║  export NODE_ENV="development"                                                ║
+║  export NPM_CONFIG_PREFIX="$HOME/.npm-global"                                 ║
+║                                                                               ║
+║  # Add to PATH                                                                ║
+║  export PATH="$HOME/scripts:$HOME/.local/bin:$PATH"                          ║
+║                                                                               ║
+║  # Development Aliases                                                        ║
+║  alias p='python'                                                             ║
+║  alias pipi='pip install'                                                     ║
+║  alias nrs='npm run start'                                                    ║
+║  alias goto.proj='cd $PROJECTS'                                               ║
+║                                                                               ║
+║  EOF                                                                          ║
+║  source ~/.bashrc                                                             ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: 🔐 Secure API Key Management
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔐 SCENARIO: Manage API keys securely for different services                 ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  # Create secure secrets file (restricted permissions)                        ║
+║  touch ~/.secrets                                                             ║
+║  chmod 600 ~/.secrets                                                         ║
+║                                                                               ║
+║  # Add your secrets                                                           ║
+║  cat >> ~/.secrets << 'EOF'                                                   ║
+║  # API Keys - DO NOT SHARE OR COMMIT                                          ║
+║  export GITHUB_TOKEN="ghp_xxxxxxxxxxxx"                                       ║
+║  export OPENAI_API_KEY="sk-xxxxxxxxxxxx"                                      ║
+║  export AWS_ACCESS_KEY="AKIAXXXXXXXXXX"                                       ║
+║  export AWS_SECRET_KEY="xxxxxxxxxxxxxxxxxxxxxxxx"                             ║
+║  export TELEGRAM_BOT_TOKEN="123456:ABC-DEF..."                                ║
+║  EOF                                                                          ║
+║                                                                               ║
+║  # Source in .bashrc (add this line)                                          ║
+║  [ -f ~/.secrets ] && source ~/.secrets                                       ║
+║                                                                               ║
+║  # Use in scripts                                                             ║
+║  curl -H "Authorization: token $GITHUB_TOKEN" \                               ║
+║    https://api.github.com/user/repos                                          ║
+║                                                                               ║
+║  # Add to .gitignore to prevent accidents                                     ║
+║  echo ".secrets" >> ~/.gitignore                                              ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 3: 🎨 Professional Terminal Prompt
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🎨 SCENARIO: Create a professional, informative terminal prompt              ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  # Add to ~/.bashrc                                                           ║
+║                                                                               ║
+║  # Git branch function for prompt                                             ║
+║  parse_git_branch() {                                                         ║
+║      git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'        ║
+║  }                                                                            ║
+║                                                                               ║
+║  # Color definitions                                                           ║
+║  GREEN='\[\033[01;32m\]'                                                      ║
+║  BLUE='\[\033[01;34m\]'                                                       ║
+║  YELLOW='\[\033[01;33m\]'                                                     ║
+║  RED='\[\033[01;31m\]'                                                        ║
+║  RESET='\[\033[00m\]'                                                         ║
+║                                                                               ║
+║  # Professional prompt with git branch                                        ║
+║  export PS1="${GREEN}\u@\h${RESET}:${BLUE}\w${YELLOW}\$(parse_git_branch)${RESET}\$ "   ║
+║                                                                               ║
+║  # Result: user@host:~/projects (main)$                                       ║
+║                                                                               ║
+║  # Advanced multi-line prompt                                                 ║
+║  export PS1="\n${BLUE}┌──(${GREEN}\u@\h${BLUE})─[${YELLOW}\w${BLUE}]${RESET}\n└─\$ "     ║
+║                                                                               ║
+║  # Result:                                                                    ║
+║  ┌──(user@host)─[~/projects]                                                  ║
+║  └─$                                                                          ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 4: 🔄 Project-Specific Environment Switching
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🔄 SCENARIO: Switch between different project environments                   ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  # In ~/.bashrc - Project environment switcher                                ║
+║                                                                               ║
+║  # Define project environments                                                ║
+║  work_env() {                                                                 ║
+║      export PROJECT_NAME="work-project"                                       ║
+║      export API_URL="https://api.company.com"                                 ║
+║      export DB_HOST="company-db.internal"                                     ║
+║      export ENV="production"                                                  ║
+║      cd ~/projects/work                                                       ║
+║      echo "✅ Work environment loaded"                                         ║
+║  }                                                                            ║
+║                                                                               ║
+║  personal_env() {                                                             ║
+║      export PROJECT_NAME="personal"                                           ║
+║      export API_URL="https://api.personal.dev"                                ║
+║      export DB_HOST="localhost"                                               ║
+║      export ENV="development"                                                 ║
+║      cd ~/projects/personal                                                   ║
+║      echo "✅ Personal environment loaded"                                     ║
+║  }                                                                            ║
+║                                                                               ║
+║  show_env() {                                                                 ║
+║      echo "Project: $PROJECT_NAME"                                            ║
+║      echo "API: $API_URL"                                                     ║
+║      echo "Database: $DB_HOST"                                                ║
+║      echo "Environment: $ENV"                                                 ║
+║  }                                                                            ║
+║                                                                               ║
+║  # Usage:                                                                     ║
+║  # work_env      # Switch to work environment                                 ║
+║  # personal_env  # Switch to personal environment                             ║
+║  # show_env      # Display current environment                                ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 5: 🧪 Testing Environment Variables Script
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🧪 SCENARIO: Create a script to verify environment setup                     ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  #!/bin/bash                                                                  ║
+║  # check_env.sh - Verify environment configuration                            ║
+║                                                                               ║
+║  echo "═══════════════════════════════════════════════════════"               ║
+║  echo "         TERMUX ENVIRONMENT CHECK"                                     ║
+║  echo "═══════════════════════════════════════════════════════"               ║
+║                                                                               ║
+║  # Check essential variables                                                  ║
+║  check_var() {                                                                ║
+║      if [ -n "${!1}" ]; then                                                  ║
+║          echo "✅ $1 = ${!1}"                                                  ║
+║      else                                                                     ║
+║          echo "❌ $1 is not set"                                               ║
+║      fi                                                                       ║
+║  }                                                                            ║
+║                                                                               ║
+║  echo ""                                                                      ║
+║  echo "📋 Essential Variables:"                                               ║
+║  check_var "HOME"                                                             ║
+║  check_var "PREFIX"                                                           ║
+║  check_var "PATH"                                                             ║
+║  check_var "SHELL"                                                            ║
+║  check_var "TERM"                                                             ║
+║  check_var "USER"                                                             ║
+║                                                                               ║
+║  echo ""                                                                      ║
+║  echo "🔧 Development Variables:"                                             ║
+║  check_var "EDITOR"                                                           ║
+║  check_var "PROJECTS"                                                         ║
+║  check_var "LANG"                                                             ║
+║                                                                               ║
+║  echo ""                                                                      ║
+║  echo "📁 PATH Directories:"                                                  ║
+║  echo "$PATH" | tr ':' '\n' | while read dir; do                              ║
+║      if [ -d "$dir" ]; then                                                   ║
+║          echo "  ✅ $dir"                                                     ║
+║      else                                                                     ║
+║          echo "  ❌ $dir (not found)"                                          ║
+║      fi                                                                       ║
+║  done                                                                         ║
+║                                                                               ║
+║  echo ""                                                                      ║
+║  echo "═══════════════════════════════════════════════════════"               ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Environment Variable Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ENVIRONMENT VARIABLE HIERARCHY                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌────────────────────────────────────────────────────────────────────┐    │
+│   │                    Android/Linux Kernel                             │    │
+│   │   Sets initial process environment                                  │    │
+│   └───────────────────────────────┬─────────────────────────────────────┘    │
+│                                   │                                          │
+│                                   ▼                                          │
+│   ┌────────────────────────────────────────────────────────────────────┐    │
+│   │                    Termux Application                               │    │
+│   │   ┌──────────────────────────────────────────────────────────────┐ │    │
+│   │   │ Sets: PREFIX, HOME, TMPDIR, PATH (initial)                   │ │    │
+│   │   │ PATH=/data/data/com.termux/files/usr/bin:...                 │ │    │
+│   │   └──────────────────────────────────────────────────────────────┘ │    │
+│   └───────────────────────────────┬─────────────────────────────────────┘    │
+│                                   │                                          │
+│                                   ▼                                          │
+│   ┌────────────────────────────────────────────────────────────────────┐    │
+│   │                    Shell Initialization                             │    │
+│   │   ┌──────────────────────────────────────────────────────────────┐ │    │
+│   │   │ 1. Read ~/.bashrc                                            │ │    │
+│   │   │ 2. Set: PS1, HISTSIZE, EDITOR, aliases, functions            │ │    │
+│   │   │ 3. Modify: PATH, custom variables                            │ │    │
+│   │   └──────────────────────────────────────────────────────────────┘ │    │
+│   └───────────────────────────────┬─────────────────────────────────────┘    │
+│                                   │                                          │
+│                                   ▼                                          │
+│   ┌────────────────────────────────────────────────────────────────────┐    │
+│   │                    Your Shell Session                               │    │
+│   │   ┌──────────────────────────────────────────────────────────────┐ │    │
+│   │   │ export MY_VAR="value"   ← You set                            │ │    │
+│   │   │ PATH=$PATH:~/scripts    ← You modify                         │ │    │
+│   │   └──────────────────────────────────────────────────────────────┘ │    │
+│   └───────────────────────────────┬─────────────────────────────────────┘    │
+│                                   │                                          │
+│                                   ▼                                          │
+│   ┌────────────────────────────────────────────────────────────────────┐    │
+│   │                    Child Processes                                  │    │
+│   │   Scripts, Programs, Commands (inherit exported variables)          │    │
+│   └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: PATH Resolution Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         PATH RESOLUTION FLOW                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   User types: python                                                         │
+│                                                                              │
+│                    ┌─────────────────┐                                      │
+│                    │  Command Typed  │                                      │
+│                    │    "python"     │                                      │
+│                    └────────┬────────┘                                      │
+│                             │                                                │
+│                             ▼                                                │
+│                    ┌─────────────────┐                                      │
+│                    │ Shell Built-in? │                                      │
+│                    │      NO         │                                      │
+│                    └────────┬────────┘                                      │
+│                             │                                                │
+│                             ▼                                                │
+│                    ┌─────────────────┐                                      │
+│                    │ Alias/Function? │                                      │
+│                    │      NO         │                                      │
+│                    └────────┬────────┘                                      │
+│                             │                                                │
+│                             ▼                                                │
+│         ┌───────────────────────────────────────────────┐                  │
+│         │              SEARCH PATH DIRECTORIES           │                  │
+│         │                                                   │                  │
+│         │  $PREFIX/bin/                                    │                  │
+│         │  ├── Check: /data/.../usr/bin/python     ✅     │                  │
+│         │  │   FOUND! Execute this                        │                  │
+│         │  │                                               │                  │
+│         │  ├── Check: /data/.../usr/bin/python3    (skip) │                  │
+│         │  └── ...                                         │                  │
+│         │                                                   │                  │
+│         └───────────────────────────────────────────────┘                  │
+│                             │                                                │
+│                             ▼                                                │
+│                    ┌─────────────────┐                                      │
+│                    │   EXECUTE       │                                      │
+│                    │  /.../bin/python│                                      │
+│                    └─────────────────┘                                      │
+│                                                                              │
+│   If not found in any PATH directory → "command not found" error            │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: Variable Scope Comparison
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       VARIABLE SCOPE COMPARISON                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌────────────────────────────────────────────────────────────────────┐    │
+│   │                    SHELL VARIABLE                                   │    │
+│   │   VAR="value"                                                       │    │
+│   │                                                                      │    │
+│   │   ┌──────────────┐     ┌──────────────┐     ┌──────────────┐       │    │
+│   │   │ Current      │     │ Child        │     │ Parent       │       │    │
+│   │   │ Shell        │     │ Process      │     │ Process      │       │    │
+│   │   │              │     │              │     │              │       │    │
+│   │   │  ✅ Can      │     │  ❌ Cannot   │     │  ❌ Cannot   │       │    │
+│   │   │  access      │     │  access      │     │  access      │       │    │
+│   │   └──────────────┘     └──────────────┘     └──────────────┘       │    │
+│   └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│   ┌────────────────────────────────────────────────────────────────────┐    │
+│   │                    ENVIRONMENT VARIABLE                             │    │
+│   │   export VAR="value"                                                │    │
+│   │                                                                      │    │
+│   │   ┌──────────────┐     ┌──────────────┐     ┌──────────────┐       │    │
+│   │   │ Current      │     │ Child        │     │ Parent       │       │    │
+│   │   │ Shell        │     │ Process      │     │ Process      │       │    │
+│   │   │              │     │              │     │              │       │    │
+│   │   │  ✅ Can      │     │  ✅ Can      │     │  ❌ Cannot   │       │    │
+│   │   │  access      │     │  access      │     │  access      │       │    │
+│   │   └──────────────┘     └──────────────┘     └──────────────┘       │    │
+│   └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│   KEY: Environment variables inherit DOWN to children, not UP to parents    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Type | Chapter | Topic | Relevance |
+|------|---------|-------|-----------|
+| **📖 Prerequisite** | Chapter 6 | File System Structure | Understanding $PREFIX, $HOME paths |
+| **🔄 Current** | **Chapter 7** | **Environment Variables** | **You are here** |
+| **⏭️ Next** | Chapter 8 | Text Editors | Editing .bashrc, .vimrc |
+| **⏭️ Next** | Chapter 9 | Termux Styling | Customizing terminal appearance |
+| **📊 Related** | Chapter 10 | Termux API Setup | API environment configuration |
+| **📊 Related** | Chapter 15 | Shell Scripting | Using variables in scripts |
+| **📊 Advanced** | Chapter 20 | Bash Functions | Advanced variable techniques |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Dynamic Environment Loading
+
+```bash
+# Add to ~/.bashrc - Automatically load project-specific .env files
+
+# Function to load .env if it exists
+load_env() {
+    local env_file="${1:-.env}"
+    if [[ -f "$env_file" ]]; then
+        # Export each line as environment variable
+        while IFS= read -r line; do
+            # Skip comments and empty lines
+            [[ "$line" =~ ^#.*$ ]] && continue
+            [[ -z "$line" ]] && continue
+            export "$line"
+        done < "$env_file"
+        echo "✅ Loaded environment from $env_file"
+    fi
+}
+
+# Override cd to auto-load .env
+cd() {
+    builtin cd "$@" || return
+    [[ -f .env ]] && load_env .env
+}
+
+# Usage: Just cd into a project with .env file
+# Variables are automatically loaded
+```
+
+### Advanced Technique 2: Environment Variable Manager
+
+```bash
+# Add to ~/.bashrc - Complete environment variable management
+
+# Save current environment state
+env_save() {
+    local name="${1:-default}"
+    env > ~/.env_states/$name.env
+    echo "✅ Saved environment state: $name"
+}
+
+# Load saved environment state
+env_load() {
+    local name="${1:-default}"
+    if [[ -f ~/.env_states/$name.env ]]; then
+        # Clear current env
+        unset $(env | awk -F= '{print $1}')
+        # Load saved
+        source ~/.env_states/$name.env
+        echo "✅ Loaded environment state: $name"
+    else
+        echo "❌ State not found: $name"
+    fi
+}
+
+# List saved states
+env_list() {
+    echo "Saved environment states:"
+    ls -1 ~/.env_states/*.env 2>/dev/null | xargs -n1 basename | sed 's/.env$//'
+}
+
+# Initialize
+mkdir -p ~/.env_states
+```
+
+### Advanced Technique 3: Secret Injection from Encrypted File
+
+```bash
+# Securely manage secrets with GPG encryption
+
+# Encrypt secrets file
+secrets_encrypt() {
+    gpg --symmetric --cipher-algo AES256 ~/.secrets
+    shred -u ~/.secrets  # Securely delete unencrypted
+    echo "✅ Secrets encrypted"
+}
+
+# Decrypt and load secrets temporarily
+secrets_load() {
+    local temp_secrets=$(mktemp)
+    gpg --decrypt ~/.secrets.gpg > "$temp_secrets" 2>/dev/null
+    source "$temp_secrets"
+    shred -u "$temp_secrets"
+    echo "✅ Secrets loaded (in memory only)"
+}
+
+# Create encrypted secrets file
+secrets_create() {
+    cat > ~/.secrets << 'EOF'
+export API_KEY="your-secret-key"
+export DB_PASSWORD="your-password"
+EOF
+    secrets_encrypt
+}
+
+# Usage:
+# secrets_create   # First time setup
+# secrets_load     # Load secrets when needed
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+Complete this checklist to verify your understanding:
+
+- [ ] **Core Concepts**
+  - [ ] Understand what environment variables are
+  - [ ] Know the difference between shell and environment variables
+  - [ ] Understand variable inheritance (export)
+
+- [ ] **Important Variables**
+  - [ ] Know what $PATH does and how it works
+  - [ ] Understand $HOME and $PREFIX in Termux
+  - [ ] Know $SHELL, $USER, $TERM purposes
+
+- [ ] **Variable Operations**
+  - [ ] Can view variables with echo, env, printenv
+  - [ ] Can set temporary variables
+  - [ ] Can set permanent variables in .bashrc
+  - [ ] Can delete variables with unset
+
+- [ ] **PATH Management**
+  - [ ] Can add directories to PATH
+  - [ ] Understand prepend vs append
+  - [ ] Can make PATH changes permanent
+
+- [ ] **Customization**
+  - [ ] Can customize PS1 prompt
+  - [ ] Can create aliases in .bashrc
+  - [ ] Can create functions in .bashrc
+
+- [ ] **Configuration Files**
+  - [ ] Know the purpose of .bashrc
+  - [ ] Know how to reload .bashrc
+  - [ ] Can backup and restore .bashrc
+
+- [ ] **Practical Skills**
+  - [ ] Created useful custom variables
+  - [ ] Set up development environment
+  - [ ] Configured a custom prompt
 
 ---
 

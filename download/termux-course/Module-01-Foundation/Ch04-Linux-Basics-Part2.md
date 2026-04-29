@@ -1,9 +1,35 @@
 # Chapter 4: Linux Basics - Part 2
 
+```
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                                   ║
+║   ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ ██████╗ ██████╗ ███████╗                      ║
+║   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔════╝██╔═══██╗██╔════╝                      ║
+║       ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║██║     ██║   ██║███████╗                      ║
+║       ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██║     ██║   ██║╚════██║                      ║
+║       ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║╚██████╗╚██████╔╝███████║                      ║
+║       ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝                      ║
+║                                                                                                   ║
+║   ██╗      ██████╗ ██╗  ██╗██╗███╗   ██╗ ██████╗     ██████╗ ██████╗ ███████╗ ██████╗ ██╗   ██╗   ║
+║   ██║     ██╔═══██╗██║ ██╔╝██║████╗  ██║██╔════╝    ██╔════╝██╔═══██╗██╔════╝██╔═══██╗██║   ██║   ║
+║   ██║     ██║   ██║█████╔╝ ██║██╔██╗ ██║██║  ███╗   ██║     ██║   ██║███████╗██║   ██║██║   ██║   ║
+║   ██║     ██║   ██║██╔═██╗ ██║██║╚██╗██║██║   ██║   ██║     ██║   ██║╚════██║██║   ██║██║   ██║   ║
+║   ███████╗╚██████╔╝██║  ██╗██║██║ ╚████║╚██████╔╝   ╚██████╗╚██████╔╝███████║╚██████╔╝╚██████╔╝   ║
+║   ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝     ╚═════╝ ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝    ║
+║                                                                                                   ║
+║   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   ║
+║   ┃  ⚡ CHAPTER 4: ADVANCED OPERATIONS - grep • find • chmod • pipes • redirection ⚡        ┃   ║
+║   ┃  📚 Module 1: Foundation | ⭐⭐ Difficulty | ⏱️ 15-20 Minutes | By T3rmuxk1ng            ┃   ║
+║   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   ║
+║                                                                                                   ║
+╚═══════════════════════════════════════════════════════════════════════════════════════════════════╝
+```
+
 > **Module:** 1 - Foundation  
 > **Chapter:** 4 of 61  
 > **Duration:** 15-20 Minutes  
 > **Difficulty:** ⭐⭐ Beginner-Intermediate  
+> **Prerequisites:** Chapters 1-3 (Termux Installation, Setup, Linux Basics Part 1)  
 
 ---
 
@@ -2303,6 +2329,1002 @@ Before moving to Chapter 5, verify:
 - Finding packages with pkg search
 - Handling dependencies
 - Package troubleshooting
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+**Score yourself: 10 points per correct answer (150 points total)**
+
+**Question 1:** What does `grep -i "error" logfile.txt` do?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** Performs a case-insensitive search for "error" in the file. It will match "error", "Error", "ERROR", etc.
+</details>
+
+**Question 2:** Which command finds all files larger than 100MB?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** `find . -size +100M`
+- The `+` means "greater than"
+- `100M` means 100 megabytes
+- Use `-size -100M` for smaller than 100MB
+</details>
+
+**Question 3:** What permission does `chmod 755` set?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** rwxr-xr-x
+- Owner (7): read + write + execute (4+2+1)
+- Group (5): read + execute (4+0+1)
+- Others (5): read + execute (4+0+1)
+- Commonly used for executable scripts
+</details>
+
+**Question 4:** What is the difference between `>` and `>>`?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:**
+- `>` - Overwrites the file (destructive)
+- `>>` - Appends to the file (non-destructive)
+- Use `>>` for logs and `>` for creating new files
+</details>
+
+**Question 5:** How do you make a script executable?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** `chmod +x script.sh`
+- Adds execute permission for all users
+- Equivalent to `chmod a+x script.sh`
+- After this, run with `./script.sh`
+</details>
+
+**Question 6:** What does `tail -f logfile.txt` do?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** Follows the file in real-time, showing new lines as they're added.
+- Essential for monitoring logs
+- Press Ctrl+C to stop following
+- Use `-F` instead of `-f` to handle file rotation
+</details>
+
+**Question 7:** Which command shows lines 50-60 of a file?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** Multiple approaches:
+```bash
+sed -n '50,60p' file.txt
+head -60 file.txt | tail -11
+awk 'NR>=50 && NR<=60' file.txt
+```
+The `sed` method is most efficient.
+</details>
+
+**Question 8:** What does `grep -v "^#" config.txt` do?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** Shows all lines that do NOT start with `#`
+- `-v` inverts the match (excludes matching lines)
+- `^#` matches lines starting with `#`
+- Useful for removing comments from config files
+</details>
+
+**Question 9:** How do you find all empty files in a directory?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** `find . -type f -empty`
+- `-type f` - Only regular files
+- `-empty` - Only empty files
+- Add `-delete` to remove them: `find . -type f -empty -delete`
+</details>
+
+**Question 10:** What does `cat file.txt | sort | uniq -c` do?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** 
+1. `cat file.txt` - Outputs file contents
+2. `sort` - Sorts lines alphabetically
+3. `uniq -c` - Removes duplicates and shows count
+- Result: Unique lines with their occurrence count
+</details>
+
+**Question 11:** What is `chmod 600` used for?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** rw------- (read + write for owner only)
+- Used for private files like SSH keys, passwords
+- No access for group or others
+- Maximum security for sensitive data
+</details>
+
+**Question 12:** How do you find files modified in the last 24 hours?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** `find . -mtime -1`
+- `-mtime` - Modification time in days
+- `-1` - Less than 1 day (within last 24 hours)
+- Use `-mmin -60` for minutes (last 60 minutes)
+</details>
+
+**Question 13:** What does `2>&1` mean in redirection?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** Redirects stderr (file descriptor 2) to stdout (file descriptor 1)
+- `2` = stderr (error messages)
+- `>` = redirect
+- `&1` = to the same place as stdout
+- Example: `command > output.txt 2>&1` captures both output and errors
+</details>
+
+**Question 14:** What is the purpose of `grep -r "pattern" directory/`?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** Recursively searches for "pattern" in all files within the directory.
+- `-r` = recursive
+- Searches all subdirectories
+- Shows matching lines with file paths
+- Use `-l` to show only filenames: `grep -rl "pattern" directory/`
+</details>
+
+**Question 15:** What does `wc -l file.txt` output?
+<details>
+<summary>🔍 Click to reveal answer</summary>
+
+**Answer:** The number of lines in the file.
+- `wc` = word count
+- `-l` = lines only
+- Other options: `-w` (words), `-c` (bytes), `-m` (characters)
+- Often used in pipes: `grep "error" log.txt | wc -l`
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+**Q1: Explain the difference between `grep` and `find` commands.**
+<details>
+<summary>💼 Click to reveal detailed answer</summary>
+
+**Answer:**
+- **grep** searches for **text patterns** within files
+  - Searches file contents
+  - Uses regular expressions
+  - Example: `grep "error" logfile.txt`
+
+- **find** searches for **files and directories** based on criteria
+  - Searches file system
+  - Uses file attributes (name, size, time, permissions)
+  - Example: `find . -name "*.log" -size +1M`
+
+**Common combination:**
+```bash
+find . -name "*.txt" -exec grep "pattern" {} \;
+# Finds .txt files, then searches for pattern within them
+```
+</details>
+
+**Q2: How would you troubleshoot a "Permission denied" error when running a script?**
+<details>
+<summary>💼 Click to reveal detailed answer</summary>
+
+**Answer:**
+1. **Check current permissions:**
+   ```bash
+   ls -la script.sh
+   ```
+
+2. **Add execute permission:**
+   ```bash
+   chmod +x script.sh
+   ```
+
+3. **If still failing, check directory permissions:**
+   ```bash
+   ls -la .  # Current directory
+   ls -la ~/bin  # Script location
+   ```
+
+4. **Alternative solutions:**
+   - Run with interpreter: `bash script.sh` or `python script.py`
+   - Check if script owner matches your user: `whoami`
+   - Use `chmod 755 script.sh` for proper script permissions
+
+5. **Verify script has shebang:**
+   ```bash
+   head -1 script.sh  # Should show #!/bin/bash
+   ```
+</details>
+
+**Q3: Explain the pipe (`|`) operator with a practical example.**
+<details>
+<summary>💼 Click to reveal detailed answer</summary>
+
+**Answer:**
+The pipe operator sends the output of one command as input to another command.
+
+**How it works:**
+```
+Command1 → [stdout] → | → [stdin] → Command2
+```
+
+**Practical example - Log analysis:**
+```bash
+cat access.log | grep "404" | cut -d' ' -f1 | sort | uniq -c | sort -nr | head -10
+```
+1. `cat access.log` - Read log file
+2. `grep "404"` - Filter lines with 404 errors
+3. `cut -d' ' -f1` - Extract IP addresses
+4. `sort` - Sort IPs
+5. `uniq -c` - Count occurrences
+6. `sort -nr` - Sort by count (descending)
+7. `head -10` - Show top 10
+
+**Result:** Top 10 IPs causing 404 errors
+</details>
+
+**Q4: How do you search for a specific text pattern across multiple files recursively?**
+<details>
+<summary>💼 Click to reveal detailed answer</summary>
+
+**Answer:**
+```bash
+# Basic recursive search
+grep -r "pattern" /path/to/search/
+
+# With line numbers and case-insensitive
+grep -rni "pattern" /path/to/search/
+
+# Show only filenames with matches
+grep -rl "pattern" /path/to/search/
+
+# Search specific file types only
+grep -r --include="*.py" "import" ./src/
+
+# Exclude certain directories
+grep -r --exclude-dir="node_modules" "pattern" ./
+
+# Count matches per file
+grep -rc "pattern" ./ | grep -v ":0$"
+```
+
+**Useful flags:**
+- `-r` - Recursive
+- `-n` - Show line numbers
+- `-i` - Case insensitive
+- `-l` - Filenames only
+- `-c` - Count matches
+</details>
+
+**Q5: What is the significance of file permissions in Linux security?**
+<details>
+<summary>💼 Click to reveal detailed answer</summary>
+
+**Answer:**
+File permissions are crucial for Linux security:
+
+**1. Access Control:**
+- Prevents unauthorized access to sensitive files
+- Limits what users can do with files (read/write/execute)
+
+**2. Permission Categories:**
+- **User (u)** - File owner
+- **Group (g)** - Users in file's group
+- **Others (o)** - Everyone else
+
+**3. Security Best Practices:**
+- `chmod 600` for private files (keys, passwords)
+- `chmod 644` for readable documents
+- `chmod 755` for executable scripts
+- Never use `chmod 777` unless absolutely necessary
+
+**4. Security Implications:**
+```bash
+# DANGEROUS - World-writable
+chmod 777 secret.txt  # ❌ Anyone can modify
+
+# SECURE - Owner only
+chmod 600 secret.txt  # ✅ Only owner can access
+```
+
+**5. Real-world scenarios:**
+- SSH keys must be 600 or SSH refuses to use them
+- Config files with passwords should be 600
+- Web content typically 644 (files) and 755 (directories)
+</details>
+
+**Q6: How would you monitor a log file in real-time while filtering for errors?**
+<details>
+<summary>💼 Click to reveal detailed answer</summary>
+
+**Answer:**
+```bash
+# Basic real-time monitoring
+tail -f /var/log/application.log
+
+# Filter for errors only
+tail -f /var/log/application.log | grep --line-buffered "ERROR"
+
+# Multiple patterns (ERROR or WARNING)
+tail -f /var/log/application.log | grep --line-buffered -E "ERROR|WARNING"
+
+# With timestamps and color
+tail -f /var/log/application.log | grep --line-buffered --color=auto "ERROR"
+
+# Handle log rotation
+tail -F /var/log/application.log | grep --line-buffered "ERROR"
+
+# Multiple files
+tail -f /var/log/*.log | grep --line-buffered "ERROR"
+```
+
+**Important flags:**
+- `-f` - Follow (real-time)
+- `-F` - Follow with rotation handling
+- `--line-buffered` - Ensures immediate output in pipes
+</details>
+
+**Q7: Explain the difference between symbolic and octal permission notation.**
+<details>
+<summary>💼 Click to reveal detailed answer</summary>
+
+**Answer:**
+Both achieve the same result but use different formats:
+
+**Symbolic Notation (letters):**
+```bash
+chmod u+x script.sh    # Add execute for user
+chmod g-w file.txt     # Remove write from group
+chmod o=r file.txt     # Set read-only for others
+chmod a+x script.sh    # Add execute for all
+chmod u=rwx,g=rx,o=r file.txt  # Set all at once
+```
+
+**Octal Notation (numbers):**
+```bash
+chmod 755 script.sh    # rwxr-xr-x
+chmod 644 file.txt     # rw-r--r--
+chmod 600 private.key  # rw-------
+chmod 700 directory/   # rwx------
+```
+
+**When to use each:**
+- **Symbolic** - Making incremental changes, more readable
+- **Octal** - Setting exact permissions, scripting, faster
+
+**Octal calculation:**
+```
+r = 4, w = 2, x = 1
+rwx = 4+2+1 = 7
+rw- = 4+2+0 = 6
+r-x = 4+0+1 = 5
+r-- = 4+0+0 = 4
+```
+</details>
+
+**Q8: How would you find and delete all `.tmp` files older than 7 days?**
+<details>
+<summary>💼 Click to reveal detailed answer</summary>
+
+**Answer:**
+```bash
+# First, preview what will be deleted
+find . -name "*.tmp" -mtime +7 -ls
+
+# Then delete
+find . -name "*.tmp" -mtime +7 -delete
+
+# Alternative with -exec
+find . -name "*.tmp" -mtime +7 -exec rm -v {} \;
+
+# More efficient (multiple files at once)
+find . -name "*.tmp" -mtime +7 -exec rm -v {} +
+
+# For safety, always preview first!
+find . -name "*.tmp" -mtime +7 -print0 | xargs -0 rm -v
+```
+
+**Explanation:**
+- `-name "*.tmp"` - Match .tmp files
+- `-mtime +7` - Modified more than 7 days ago
+- `-delete` - Delete found files
+- `-print0 | xargs -0` - Handle filenames with spaces
+</details>
+
+**Q9: What are standard input, output, and error streams in Linux?**
+<details>
+<summary>💼 Click to reveal detailed answer</summary>
+
+**Answer:**
+Linux has three standard streams:
+
+| Stream | File Descriptor | Default | Purpose |
+|--------|----------------|---------|---------|
+| stdin | 0 | Keyboard | Input to program |
+| stdout | 1 | Terminal | Normal output |
+| stderr | 2 | Terminal | Error messages |
+
+**Practical redirection examples:**
+```bash
+# Redirect stdout to file
+command > output.txt
+
+# Redirect stderr to file
+command 2> errors.txt
+
+# Redirect both stdout and stderr
+command > output.txt 2>&1
+command &> output.txt  # Bash shorthand
+
+# Redirect stderr to /dev/null (discard)
+command 2>/dev/null
+
+# Redirect both to different files
+command > output.txt 2> errors.txt
+
+# Pipe stdout and stderr
+command 2>&1 | grep "pattern"
+
+# Input redirection
+sort < unsorted.txt
+```
+</details>
+
+**Q10: How would you analyze a large log file to find the most frequent error patterns?**
+<details>
+<summary>💼 Click to reveal detailed answer</summary>
+
+**Answer:**
+```bash
+# Extract and count error types
+grep "ERROR" application.log | \
+  awk '{print $4}' | \
+  sort | \
+  uniq -c | \
+  sort -nr | \
+  head -20
+
+# Full analysis pipeline
+cat application.log | \
+  grep -E "ERROR|FAIL|CRITICAL" | \
+  sed 's/.*\] //' | \
+  sort | \
+  uniq -c | \
+  sort -nr | \
+  head -10
+
+# Errors by hour
+grep "ERROR" application.log | \
+  cut -d' ' -f1-2 | \
+  cut -d: -f1-2 | \
+  sort | \
+  uniq -c
+
+# Top 10 error-producing IPs
+grep "ERROR" application.log | \
+  grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | \
+  sort | \
+  uniq -c | \
+  sort -nr | \
+  head -10
+```
+
+**Tools used:**
+- `grep` - Filter errors
+- `awk`/`cut` - Extract fields
+- `sort` - Sort lines
+- `uniq -c` - Count duplicates
+- `head` - Limit output
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Security Audit - Finding Sensitive Data
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         🔒 SECURITY AUDIT SCENARIO                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  SITUATION: You're auditing a server for exposed credentials                │
+│                                                                             │
+│  CHALLENGE: Find files containing passwords, API keys, or secrets          │
+│                                                                             │
+│  SOLUTION:                                                                  │
+│  # Search for common credential patterns                                    │
+│  grep -rn --include="*.py" --include="*.js" --include="*.env" \            │
+│       -E "(password|api_key|secret|token).*=.*['\"][^'\"]+['\"]" .          │
+│                                                                             │
+│  # Find world-readable files with sensitive names                          │
+│  find . -type f \( -name "*.key" -o -name "*.pem" -o -name "*secret*" \) \ │
+│       -perm -004 -ls                                                        │
+│                                                                             │
+│  # Check for hardcoded IPs or internal URLs                                │
+│  grep -rn --include="*.py" "192\.168\." .                                   │
+│  grep -rn --include="*.js" "api\." .                                        │
+│                                                                             │
+│  BEST PRACTICE: Always check file permissions on sensitive files!          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 2: Log Analysis for Performance Issues
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      ⚡ PERFORMANCE DEBUGGING SCENARIO                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  SITUATION: Application is slow, need to identify bottlenecks              │
+│                                                                             │
+│  CHALLENGE: Analyze 500MB of logs to find slow endpoints                   │
+│                                                                             │
+│  SOLUTION:                                                                  │
+│  # Find slowest requests (response time > 1 second)                        │
+│  grep -E "took [0-9]{4,}ms" access.log | \                                 │
+│      awk '{print $NF}' | sort -nr | head -20                               │
+│                                                                             │
+│  # Find most frequent endpoints                                            │
+│  cut -d'"' -f2 access.log | cut -d' ' -f2 | \                              │
+│      sort | uniq -c | sort -nr | head -10                                  │
+│                                                                             │
+│  # Find 5xx errors with context                                            │
+│  grep " 5[0-9][0-9] " access.log | \                                       │
+│      awk '{print $4, $7}' | sort | uniq -c                                 │
+│                                                                             │
+│  # Real-time monitoring of errors                                          │
+│  tail -f access.log | grep --line-buffered -E "(5[0-9][0-9]|ERROR)"        │
+│                                                                             │
+│  TIP: Pipe to `less` for browsing large results!                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 3: Automated Backup with Find and Compression
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        💾 BACKUP AUTOMATION SCENARIO                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  SITUATION: Need to backup all modified files from last 24 hours          │
+│                                                                             │
+│  CHALLENGE: Create compressed archive of recent changes only               │
+│                                                                             │
+│  SOLUTION:                                                                  │
+│  # Find recently modified files                                            │
+│  find /project -type f -mtime -1 -print0 | \                               │
+│      tar -czvf backup_$(date +%Y%m%d).tar.gz --null -T -                   │
+│                                                                             │
+│  # Alternative: Find specific file types                                   │
+│  find /project -type f \( -name "*.py" -o -name "*.js" -o -name "*.md" \) \│
+│      -mtime -1 -exec tar -rvf backup.tar {} \;                             │
+│                                                                             │
+│  # Compress after collection                                               │
+│  gzip backup.tar                                                           │
+│                                                                             │
+│  # Verify backup contents                                                  │
+│  tar -tzvf backup_$(date +%Y%m%d).tar.gz | head -20                        │
+│                                                                             │
+│  # Schedule with cron (runs at midnight)                                   │
+│  0 0 * * * find /project -mtime -1 -print0 | tar -czvf /backup/daily.tgz   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 4: Cleaning Up a Messy Project Directory
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         🧹 PROJECT CLEANUP SCENARIO                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  SITUATION: Project has accumulated junk files over time                   │
+│                                                                             │
+│  CHALLENGE: Remove temporary files, caches, and duplicates                 │
+│                                                                             │
+│  SOLUTION:                                                                  │
+│  # Find and remove Python cache                                            │
+│  find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null          │
+│  find . -type f -name "*.pyc" -delete                                      │
+│                                                                             │
+│  # Remove node_modules (reinstall with npm install)                        │
+│  find . -type d -name "node_modules" -exec rm -rf {} + 2>/dev/null         │
+│                                                                             │
+│  # Find and remove empty directories                                       │
+│  find . -type d -empty -delete                                             │
+│                                                                             │
+│  # Find duplicate files (same size first, then compare content)            │
+│  find . -type f -exec md5sum {} \; | sort | uniq -w32 -dD                  │
+│                                                                             │
+│  # Find large files (>100MB) for review                                    │
+│  find . -type f -size +100M -exec ls -lh {} \;                             │
+│                                                                             │
+│  ALWAYS preview with -print before using -delete!                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 5: User Activity Investigation
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        🔍 USER AUDIT SCENARIO                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  SITUATION: Need to investigate user activity for security review          │
+│                                                                             │
+│  CHALLENGE: Find all files created/modified by a specific user             │
+│                                                                             │
+│  SOLUTION:                                                                  │
+│  # In Termux, you are the owner, so check modification times instead       │
+│                                                                             │
+│  # Find files modified by specific time window (user's work hours)         │
+│  find . -type f -newermt "2024-01-15 09:00:00" \                           │
+│            ! -newermt "2024-01-15 17:00:00" -ls                            │
+│                                                                             │
+│  # Find files accessed recently (potential data access)                    │
+│  find . -type f -atime -1 -ls                                              │
+│                                                                             │
+│  # Search command history for patterns                                     │
+│  grep -E "(rm|chmod|chown|wget|curl)" ~/.bash_history                      │
+│                                                                             │
+│  # Find files with specific permissions (security concern)                 │
+│  find . -type f -perm -002 -ls  # World-writable files                     │
+│  find . -type f -perm -004 -ls  # World-readable files                     │
+│                                                                             │
+│  TIP: Combine with ls -la for detailed file information!                   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Linux Command Pipeline Flow
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    COMMAND PIPELINE ARCHITECTURE                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   USER INPUT                                                                │
+│       │                                                                     │
+│       ▼                                                                     │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │                        SHELL (bash)                                  │  │
+│   │   ┌─────────────────┐    ┌─────────────────┐    ┌────────────────┐ │  │
+│   │   │   Parse Input   │───►│  Expand Wildcards│───►│ Execute Command│ │  │
+│   │   └─────────────────┘    └─────────────────┘    └────────────────┘ │  │
+│   └─────────────────────────────────────────────────────────────────────┘  │
+│       │                           │                    │                   │
+│       │                           ▼                    ▼                   │
+│       │              ┌─────────────────────┐   ┌─────────────────┐        │
+│       │              │   FILE OPERATIONS   │   │   DATA FLOW     │        │
+│       │              │                     │   │                 │        │
+│       │              │  ┌─────┐ ┌─────┐   │   │ stdin  (0) ────►│        │
+│       │              │  │ cat │ │find │   │   │                 │        │
+│       │              │  └─────┘ └─────┘   │   │ stdout (1) ────►│        │
+│       │              │  ┌─────┐ ┌─────┐   │   │                 │        │
+│       │              │  │touch│ │chmod│   │   │ stderr (2) ────►│        │
+│       │              │  └─────┘ └─────┘   │   │                 │        │
+│       │              └─────────────────────┘   └─────────────────┘        │
+│       │                           │                    │                   │
+│       │                           ▼                    ▼                   │
+│       │              ┌─────────────────────┐   ┌─────────────────┐        │
+│       │              │   TEXT PROCESSING   │   │   REDIRECTION   │        │
+│       │              │                     │   │                 │        │
+│       │              │  ┌─────┐ ┌─────┐   │   │  >  (write)     │        │
+│       │              │  │grep │ │sort │   │   │  >> (append)    │        │
+│       │              │  └─────┘ └─────┘   │   │  <  (input)     │        │
+│       │              │  ┌─────┐ ┌─────┐   │   │  |  (pipe)      │        │
+│       │              │  │head │ │tail │   │   │  2> (stderr)    │        │
+│       │              │  └─────┘ └─────┘   │   │  2>&1 (merge)   │        │
+│       │              └─────────────────────┘   └─────────────────┘        │
+│       │                           │                    │                   │
+│       └───────────────────────────┼────────────────────┘                   │
+│                                   ▼                                        │
+│                            ┌─────────────┐                                 │
+│                            │   OUTPUT    │                                 │
+│                            │  Terminal   │                                 │
+│                            │    File     │                                 │
+│                            │  Next Cmd   │                                 │
+│                            └─────────────┘                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: File Permission Structure
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    FILE PERMISSION ARCHITECTURE                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   Example: -rwxr-xr-- 1 user group 1234 Jan 15 file.txt                    │
+│            │                                                               │
+│            ▼                                                               │
+│   ┌────────────────────────────────────────────────────────────────────┐  │
+│   │  File Type  │  User  │  Group  │  Others  │  Links  Owner  Size   │  │
+│   │     -       │  rwx   │  r-x    │   r--    │    1    user  1234    │  │
+│   │     │       │   │    │   │     │    │     │                        │  │
+│   │   File      │   │    │   │     │    │     │                        │  │
+│   │   d=dir     │   │    │   │     │    │     │                        │  │
+│   │   l=link    │   ▼    │   ▼     │    ▼     │                        │  │
+│   └─────────────┼────────┼─────────┼──────────┼────────────────────────┘  │
+│                 │        │         │          │                            │
+│                 ▼        ▼         ▼          │                            │
+│   ┌─────────────────────────────────────┐    │                            │
+│   │         PERMISSION BITS              │    │                            │
+│   │                                      │    │                            │
+│   │    User (4+2+1=7)  Group (4+1=5)    │    │                            │
+│   │    ┌───┬───┬───┐   ┌───┬───┬───┐   │    │                            │
+│   │    │ r │ w │ x │   │ r │ - │ x │   │    │                            │
+│   │    │ 4 │ 2 │ 1 │   │ 4 │ 0 │ 1 │   │    │                            │
+│   │    └───┴───┴───┘   └───┴───┴───┘   │    │                            │
+│   │                                      │    │                            │
+│   │    Others (4=4)                     │    │                            │
+│   │    ┌───┬───┬───┐                    │    │                            │
+│   │    │ r │ - │ - │                    │    │                            │
+│   │    │ 4 │ 0 │ 0 │                    │    │                            │
+│   │    └───┴───┴───┘                    │    │                            │
+│   └─────────────────────────────────────┘    │                            │
+│                                              │                            │
+│   OCTAL NOTATION: chmod 754 file.txt         │                            │
+│                                              │                            │
+│   SYMBOLIC NOTATION: chmod u=rwx,g=rx,o=r    │                            │
+│                                              │                            │
+│   ┌──────────────────────────────────────────────────────────────────┐    │
+│   │                    COMMON PERMISSIONS                             │    │
+│   ├───────────┬─────────────┬────────────────────────────────────────┤    │
+│   │  Octal    │  Symbolic   │  Use Case                              │    │
+│   ├───────────┼─────────────┼────────────────────────────────────────┤    │
+│   │   755     │ rwxr-xr-x   │ Executable scripts, programs           │    │
+│   │   644     │ rw-r--r--   │ Regular files, documents               │    │
+│   │   600     │ rw-------   │ Private files, keys, credentials       │    │
+│   │   700     │ rwx------   │ Private scripts, directories           │    │
+│   │   775     │ rwxrwxr-x   │ Shared directories                     │    │
+│   └───────────┴─────────────┴────────────────────────────────────────┘    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: Grep Search Decision Tree
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    GREP SEARCH DECISION FLOW                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│                        Start: Need to search?                               │
+│                              │                                              │
+│              ┌───────────────┼───────────────┐                              │
+│              │               │               │                              │
+│         In single       In directory    In multiple                         │
+│           file              │            files                              │
+│              │               │               │                              │
+│              ▼               ▼               ▼                              │
+│      ┌─────────────┐ ┌─────────────┐ ┌─────────────┐                       │
+│      │ grep "pat"  │ │ grep -r     │ │ grep "pat"  │                       │
+│      │ file.txt    │ │ "pat" dir/  │ │ file1 file2 │                       │
+│      └──────┬──────┘ └──────┬──────┘ └──────┬──────┘                       │
+│              │               │               │                              │
+│              └───────────────┼───────────────┘                              │
+│                              │                                              │
+│                              ▼                                              │
+│                     Need more options?                                      │
+│                              │                                              │
+│         ┌────────────────────┼────────────────────┐                        │
+│         │                    │                    │                        │
+│    Case matters?        Show context?        Exclude lines?               │
+│         │                    │                    │                        │
+│         ▼                    ▼                    ▼                        │
+│   ┌───────────┐       ┌───────────┐        ┌───────────┐                  │
+│   │ -i = no   │       │ -A N      │        │ -v "pat"  │                  │
+│   │ default   │       │ -B N      │        │ exclude   │                  │
+│   │ = yes     │       │ -C N      │        │ matches   │                  │
+│   └───────────┘       └───────────┘        └───────────┘                  │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐ │
+│   │                     USEFUL FLAG COMBINATIONS                         │ │
+│   ├─────────────────────────────────────────────────────────────────────┤ │
+│   │ grep -rni "pattern" dir/    # Recursive, line numbers, case-insensitive │
+│   │ grep -rl "pattern" dir/     # Just filenames with matches            │ │
+│   │ grep -rc "pattern" *.txt    # Count matches per file                 │ │
+│   │ grep -E "pat1|pat2" file    # Multiple patterns (OR)                │ │
+│   │ grep -v "^#" file           # Remove comment lines                   │ │
+│   │ grep --color=auto "pat"     # Highlight matches                      │ │
+│   └─────────────────────────────────────────────────────────────────────┘ │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+### Chapter Dependencies
+
+| Chapter | Type | Description |
+|---------|------|-------------|
+| **Ch01: Termux Installation** | Prerequisite | Required before using commands |
+| **Ch02: Initial Setup** | Prerequisite | Basic Termux configuration |
+| **Ch03: Linux Basics Part 1** | Prerequisite | Basic commands (ls, cd, mkdir, rm, cp, mv) |
+| **Ch04: Linux Basics Part 2** | **YOU ARE HERE** | File operations, permissions, text processing |
+| **Ch05: Package Management** | Next | Installing tools and packages |
+| **Ch06: File System Structure** | Next | Understanding Termux directories |
+| **Ch07: Bash Scripting Basics** | Advanced | Using these commands in scripts |
+| **Ch08: Text Processing** | Advanced | sed, awk, advanced text tools |
+
+### Learning Path
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         FOUNDATION LEARNING PATH                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   Ch01 ──► Ch02 ──► Ch03 ──► Ch04 ──► Ch05 ──► Ch06                         │
+│   │        │        │        │        │        │                           │
+│   │        │        │        │        │        │                           │
+│   ▼        ▼        ▼        ▼        ▼        ▼                           │
+│ Install   Setup   Basic   Advanced  Package  File                         │
+│  Termux   Config  Cmds    Cmds      Mgmt     System                       │
+│                          │                                                   │
+│                          ▼                                                   │
+│                    ┌───────────┐                                            │
+│                    │ MODULE 1  │                                            │
+│                    │  COMPLETE │                                            │
+│                    └───────────┘                                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Process Substitution for Comparing Command Outputs
+
+```bash
+# Compare outputs without creating temporary files
+diff <(sort file1.txt) <(sort file2.txt)
+
+# Compare directory listings
+diff <(ls dir1) <(ls dir2)
+
+# Use with grep for complex filtering
+comm -3 <(grep "ERROR" log1.txt | sort) <(grep "ERROR" log2.txt | sort)
+
+# Find unique lines across multiple files
+comm -3 <(sort file1.txt | uniq) <(sort file2.txt | uniq)
+
+# Compare package lists before and after
+diff <(pkg list-installed) <(pkg list-installed)
+```
+
+**Use Case:** DevOps comparison of configurations across environments without temp files.
+
+### Advanced Technique 2: Parallel Processing with xargs
+
+```bash
+# Parallel grep (4 processes) - much faster on multi-core
+find . -type f -name "*.txt" | xargs -P 4 -I {} grep "pattern" {}
+
+# Parallel file processing
+find . -name "*.jpg" | xargs -P 4 -I {} convert {} {}.png
+
+# Batch file operations with progress
+find . -name "*.log" -print0 | xargs -0 -P 4 -I {} sh -c '
+    echo "Processing: {}"
+    gzip "{}"
+'
+
+# Count files in parallel across directories
+ls -d */ | xargs -P 4 -I {} sh -c 'echo "{}: $(ls -1 {} | wc -l)"'
+
+# Parallel downloads
+cat urls.txt | xargs -P 4 -I {} wget {}
+```
+
+**Use Case:** Processing thousands of files efficiently using all CPU cores.
+
+### Advanced Technique 3: Complex Log Analysis Pipelines
+
+```bash
+# Extract and visualize request timing percentiles
+awk '{print $NF}' access.log | \
+    grep -oE '[0-9]+' | \
+    sort -n | \
+    awk '{
+        a[NR]=$1;
+        if(NR%100==0) print NR, $1, a[int(NR*0.5)], a[int(NR*0.95)]
+    }'
+
+# Find anomalous IP behavior (more than 100 requests in a minute)
+awk '{print substr($4,2,16), $1}' access.log | \
+    sort | uniq -c | \
+    awk '$1>100 {print $0}' | \
+    sort -nr
+
+# Build a real-time dashboard (simple)
+watch -n 1 'echo "=== Last 10 Errors ==="; \
+    grep ERROR app.log | tail -10; \
+    echo ""; \
+    echo "=== Request Rate ==="; \
+    tail -100 access.log | grep -c "."; \
+    echo ""; \
+    echo "=== Top IPs ==="; \
+    tail -1000 access.log | cut -d" " -f1 | sort | uniq -c | sort -nr | head -5'
+
+# Detect potential attacks (multiple 4xx from same IP)
+grep -E " 4[0-9][0-9] " access.log | \
+    awk '{print $1}' | \
+    sort | uniq -c | \
+    awk '$1>50 {print "Potential attack: " $2 " (" $1 " errors)"}'
+```
+
+**Use Case:** Security monitoring and performance analysis for production systems.
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Commands Mastered
+
+- [ ] **cat** - View, create, and concatenate files
+- [ ] **touch** - Create empty files, update timestamps
+- [ ] **grep** - Search text patterns with options (-i, -r, -n, -v, -c, -l, -w)
+- [ ] **find** - Search files by name, type, size, time, permissions
+- [ ] **chmod** - Change permissions (octal: 755, 644, 600, 700)
+- [ ] **chmod** - Change permissions (symbolic: u+x, g-w, o=r)
+- [ ] **chown** - Change file ownership
+- [ ] **head** - View first lines of file
+- [ ] **tail** - View last lines, follow files with -f
+- [ ] **wc** - Count lines, words, bytes
+- [ ] **sort** - Sort lines (alphabetical, numeric, reverse)
+- [ ] **uniq** - Remove duplicates, count occurrences
+- [ ] **diff** - Compare files
+
+### ✅ Concepts Understood
+
+- [ ] File permissions (r, w, x)
+- [ ] Permission categories (user, group, others)
+- [ ] Octal permission notation (0-7)
+- [ | Symbolic permission notation (u, g, o, a)
+- [ ] Standard streams (stdin, stdout, stderr)
+- [ ] Output redirection (> and >>)
+- [ ] Input redirection (<)
+- [ ] Error redirection (2>)
+- [ ] Pipes (|)
+- [ ] Command chaining
+
+### ✅ Skills Acquired
+
+- [ ] Can search for text patterns in files
+- [ ] Can find files by various criteria
+- [ ] Can set appropriate file permissions
+- [ ] Can view and analyze file contents
+- [ ] Can process and transform text data
+- [ ] Can chain commands with pipes
+- [ ] Can redirect output to files
+- [ ] Can monitor log files in real-time
+
+### ✅ Best Practices Learned
+
+- [ ] Use minimum necessary permissions (principle of least privilege)
+- [ ] Always preview before destructive operations
+- [ ] Use `>>` for logs, `>` for new files
+- [ ] Quote patterns to prevent shell expansion
+- [ ] Use `--color=auto` to highlight matches
+- [ ] Check permissions with `ls -la` before editing
 
 ---
 

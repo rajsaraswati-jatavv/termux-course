@@ -1,9 +1,32 @@
-# Chapter 17: Termux API - File Operations
+# 📁 Chapter 17: Termux API - File Operations
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║   ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗               ║
+║   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║               ║
+║      ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║               ║
+║      ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║               ║
+║      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗          ║
+║      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝          ║
+║                                                                              ║
+║   ██████╗  █████╗ ██████╗ ██╗  ██╗███╗   ██╗███████╗                         ║
+║   ██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝████╗  ██║██╔════╝                         ║
+║   ██████╔╝███████║██████╔╝█████╔╝ ██╔██╗ ██║█████╗                           ║
+║   ██╔══██╗██╔══██║██╔══██╗██╔═██╗ ██║╚██╗██║██╔══╝                           ║
+║   ██║  ██║██║  ██║██║  ██║██║  ██╗██║ ╚████║███████╗                         ║
+║   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝                         ║
+║                                                                              ║
+║                    📂 FILE OPERATIONS CHAPTER 📂                             ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
 
 > **Module:** 4 - APIs  
 > **Chapter:** 17 of 61  
 > **Duration:** 15-20 Minutes  
 > **Difficulty:** ⭐⭐ Intermediate  
+> **Prerequisites:** Chapters 1-16 (Basic Termux Setup)
 
 ---
 
@@ -2433,3 +2456,2539 @@ find . -name "*.json" -exec jq '.' {} \;
 11. **C** - Maximum 3 buttons (button1, button2, button3)
 12. **B** - `-c 0` selects camera ID 0 (typically back camera)
 
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Question 1: File Operations Security
+**Q:** What security considerations should you keep in mind when using `termux-storage-get`?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** Key security considerations include:
+1. **Permission Scope:** Only request storage permissions when needed
+2. **File Validation:** Always verify file type and size before processing
+3. **Sensitive Data:** Be cautious with user-selected files that may contain personal data
+4. **Path Traversal:** Validate and sanitize file paths
+5. **Temporary Files:** Clean up copied files after processing
+
+```bash
+# Example: Safe file handling
+termux-storage-get ~/temp_file
+FILE_TYPE=$(file -b ~/temp_file)
+EXPECTED_TYPES="JPEG PDF PNG MP4"
+if [[ ! " $EXPECTED_TYPES " =~ " $FILE_TYPE " ]]; then
+    echo "Invalid file type"
+    rm ~/temp_file
+    exit 1
+fi
+```
+
+**Follow-up:** How would you implement file type validation in a production script?
+</details>
+
+### Question 2: Download Manager Integration
+**Q:** Explain how `termux-download` differs from using `wget` or `curl`.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** Key differences:
+
+| Feature | termux-download | wget/curl |
+|---------|-----------------|-----------|
+| Background execution | ✅ Yes (Android Download Manager) | ❌ No (process-bound) |
+| Resume support | ✅ Automatic | ✅ Manual (-c flag) |
+| Notification | ✅ Built-in | ❌ Requires manual setup |
+| Survives app kill | ✅ Yes | ❌ No |
+| Progress tracking | ✅ System UI | ❌ Terminal only |
+
+**Use Cases:**
+- Use `termux-download` for user-facing downloads with progress
+- Use `wget/curl` for programmatic downloads in scripts
+
+**Follow-up:** When would you prefer `curl` over `termux-download`?
+</details>
+
+### Question 3: Media Scanner Implementation
+**Q:** Why does Android require media scanning after file operations?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** Android's MediaStore is a content provider that indexes media files for:
+- Gallery apps to display photos/videos
+- Music players to find audio files
+- Document viewers to list files
+
+When files are created outside standard apps, they're not indexed. `termux-media-scan` triggers:
+1. File metadata extraction
+2. Database entry creation in MediaStore
+3. Thumbnail generation
+4. Notification to media apps
+
+```bash
+# Batch media scan implementation
+for file in /sdcard/DCIM/Camera/*.jpg; do
+    termux-media-scan "$file"
+done
+```
+
+**Follow-up:** What happens if you don't run media-scan after creating a photo?
+</details>
+
+### Question 4: File Share Architecture
+**Q:** Describe the data flow when using `termux-share` with a file.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** The flow involves:
+```
+Termux CLI → termux-share → Termux:API App → Android Intent System → Share Sheet → Target App
+```
+
+Steps:
+1. Command reads file content
+2. Creates a share Intent with URI
+3. Android resolves capable apps via intent filters
+4. User selects target app
+5. Content is passed via ContentProvider or direct file access
+
+**Key consideration:** Apps can only access files they have permission for. Use content:// URIs for secure sharing.
+
+**Follow-up:** How would you share to a specific app programmatically?
+</details>
+
+### Question 5: Storage Access Framework
+**Q:** How does Termux interact with Android's Storage Access Framework?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** `termux-storage-get` uses SAF which:
+1. Opens system file picker UI
+2. User selects file from any provider (Drive, local, etc.)
+3. Returns a content:// URI to the app
+4. App receives temporary read access
+5. File is copied to specified destination
+
+**Benefits:**
+- Access files from cloud storage
+- No need for broad storage permissions
+- User has full control over file selection
+
+**Limitations:**
+- Cannot access files without user interaction
+- Temporary access only
+- File is copied, not moved
+
+**Follow-up:** What are the implications of "copy vs move" in SAF?
+</details>
+
+### Question 6: Error Handling Best Practices
+**Q:** Write a robust error handling pattern for file operations.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:**
+```bash
+#!/bin/bash
+safe_file_operation() {
+    local dest="$1"
+    local temp_file="/tmp/operation_$$"
+    
+    # Trap for cleanup on error
+    trap 'rm -f "$temp_file" 2>/dev/null; exit 1' ERR INT TERM
+    
+    # Attempt file picker
+    if ! termux-storage-get "$temp_file" 2>/dev/null; then
+        echo "Error: User cancelled or no permission"
+        return 1
+    fi
+    
+    # Verify file exists and is readable
+    if [[ ! -r "$temp_file" ]]; then
+        echo "Error: Cannot read selected file"
+        return 1
+    fi
+    
+    # Check file size (prevent empty files)
+    if [[ ! -s "$temp_file" ]]; then
+        echo "Error: Selected file is empty"
+        rm -f "$temp_file"
+        return 1
+    fi
+    
+    # Move to final destination
+    if ! mv "$temp_file" "$dest"; then
+        echo "Error: Cannot move file to destination"
+        return 1
+    fi
+    
+    # Cleanup trap
+    trap - ERR INT TERM
+    echo "Success: File saved to $dest"
+    return 0
+}
+```
+
+**Follow-up:** How would you add logging and retry logic?
+</details>
+
+### Question 7: MIME Type Handling
+**Q:** Why is proper MIME type specification important when sharing files?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** MIME types determine:
+1. **App filtering:** Which apps appear in share sheet
+2. **Preview rendering:** How content is displayed
+3. **Default action:** View vs edit vs send
+4. **Security:** Prevents executing files as wrong type
+
+```bash
+# Correct MIME type examples
+termux-share -c "image/jpeg" photo.jpg      # Opens in image viewers
+termux-share -c "application/pdf" doc.pdf   # Opens in PDF readers
+termux-share -c "text/plain" notes.txt      # Opens in text editors
+
+# Wrong MIME type can cause issues
+termux-share -c "application/octet-stream" photo.jpg  # May not open correctly
+```
+
+**Follow-up:** What happens if you specify wrong MIME type for a sensitive file?
+</details>
+
+### Question 8: Performance Optimization
+**Q:** How would you optimize batch file operations in Termux?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:**
+```bash
+# Parallel processing for media scanning
+process_files_parallel() {
+    local dir="$1"
+    local jobs=4
+    
+    find "$dir" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.mp4" \) | \
+    xargs -P $jobs -I {} termux-media-scan {}
+}
+
+# Memory-efficient batch download
+batch_download() {
+    local url_file="$1"
+    local dest="/sdcard/Download"
+    
+    while IFS= read -r url; do
+        # Download one at a time to avoid memory issues
+        termux-download -d "$dest" "$url"
+        
+        # Small delay to prevent rate limiting
+        sleep 0.5
+    done < "$url_file"
+}
+
+# Use file descriptors for large files
+exec 3< large_file.txt
+while IFS= read -r -u 3 line; do
+    process_line "$line"
+done
+exec 3<&-
+```
+
+**Follow-up:** What are the trade-offs between parallel and sequential processing?
+</details>
+
+### Question 9: Cross-Platform Considerations
+**Q:** How do Android version differences affect file operations?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:**
+
+| Android Version | Storage Access | Key Differences |
+|-----------------|----------------|-----------------|
+| 9 and below | Direct storage access | Full /sdcard access |
+| 10 | Scoped Storage | Limited to app directories |
+| 11+ | Enhanced Scoped Storage | MANAGE_EXTERNAL_STORAGE required |
+| 13+ | Photo Picker | System picker for media |
+
+**Handling differences:**
+```bash
+# Check Android version
+API_LEVEL=$(getprop ro.build.version.sdk)
+
+if [ "$API_LEVEL" -ge 30 ]; then
+    # Android 11+: Use SAF for most operations
+    termux-storage-get ~/file
+else
+    # Older: Can access /sdcard directly
+    cp /sdcard/file.txt ~/
+fi
+```
+
+**Follow-up:** How would you write version-agnostic file operation code?
+</details>
+
+### Question 10: Integration Architecture
+**Q:** Design a complete file management system using all Termux file APIs.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:**
+```bash
+#!/bin/bash
+# file_manager.sh - Complete file management system
+
+class FileManager {
+    # Pick and process file
+    pick_file() {
+        local dest="$1"
+        termux-storage-get "$dest" && echo "File picked successfully"
+    }
+    
+    # Download with progress
+    download_file() {
+        local url="$1"
+        local dest="${2:-/sdcard/Download}"
+        termux-download -d "$dest" "$url"
+    }
+    
+    # Share to apps
+    share_file() {
+        local file="$1"
+        local mime="$2"
+        termux-share -c "$mime" "$file"
+    }
+    
+    # Make visible in gallery
+    register_media() {
+        local file="$1"
+        termux-media-scan "$file"
+    }
+    
+    # Complete workflow
+    workflow() {
+        local url="$1"
+        local filename=$(basename "$url")
+        
+        echo "Downloading $filename..."
+        this.download_file "$url"
+        
+        echo "Registering in gallery..."
+        this.register_media "/sdcard/Download/$filename"
+        
+        echo "Sharing..."
+        this.share_file "/sdcard/Download/$filename" "application/octet-stream"
+    }
+}
+
+# Usage
+fm=new FileManager
+fm.workflow "https://example.com/file.pdf"
+```
+
+**Follow-up:** How would you add error handling and logging to this system?
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Automated Backup System
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         🔄 AUTOMATED BACKUP SYSTEM                          ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Need to backup photos from DCIM to cloud storage weekly          ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   # 1. Scan for new photos                                                   ║
+║   termux-media-scan /sdcard/DCIM/Camera/                                     ║
+║                                                                              ║
+║   # 2. Create backup archive                                                 ║
+║   tar -czf backup_$(date +%Y%m%d).tar.gz /sdcard/DCIM/Camera/*.jpg           ║
+║                                                                              ║
+║   # 3. Share to cloud app                                                    ║
+║   termux-share -c "application/gzip" backup_*.tar.gz                         ║
+║                                                                              ║
+║ Automation: Run via cron weekly                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: Bulk Document Download
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        📥 BULK DOCUMENT DOWNLOADER                          ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Download 50 PDF documents from a list of URLs                    ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   # Create download list file                                                ║
+║   cat > urls.txt << EOF                                                      ║
+║   https://example.com/doc1.pdf                                               ║
+║   https://example.com/doc2.pdf                                               ║
+║   EOF                                                                        ║
+║                                                                              ║
+║   # Batch download with progress                                             ║
+║   while read url; do                                                         ║
+║       echo "Downloading: $url"                                               ║
+║       termux-download -d /sdcard/Documents "$url"                            ║
+║       sleep 1                                                                ║
+║   done < urls.txt                                                            ║
+║                                                                              ║
+║ Result: All PDFs in /sdcard/Documents with notifications                     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 3: Photo Organization Pipeline
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                       📷 PHOTO ORGANIZATION PIPELINE                        ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Organize photos by date and share selected ones                  ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   # 1. Organize by date                                                      ║
+║   for photo in /sdcard/DCIM/Camera/*.jpg; do                                 ║
+║       date=$(stat -c %y "$photo" | cut -d' ' -f1)                           ║
+║       mkdir -p "/sdcard/Pictures/$date"                                     ║
+║       cp "$photo" "/sdcard/Pictures/$date/"                                  ║
+║       termux-media-scan "/sdcard/Pictures/$date/$(basename $photo)"         ║
+║   done                                                                       ║
+║                                                                              ║
+║   # 2. Share specific album                                                  ║
+║   termux-share /sdcard/Pictures/2024-01-15/selected_photo.jpg               ║
+║                                                                              ║
+║ Result: Photos organized in dated folders, visible in gallery               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 4: Secure File Transfer
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        🔐 SECURE FILE TRANSFER                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Securely transfer encrypted file to another device               ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   # 1. Pick file to transfer                                                 ║
+║   termux-storage-get ~/transfer_file                                        ║
+║                                                                              ║
+║   # 2. Encrypt the file                                                      ║
+║   gpg -c ~/transfer_file                                                    ║
+║                                                                              ║
+║   # 3. Share encrypted file                                                  ║
+║   termux-share -c "application/pgp-encrypted" ~/transfer_file.gpg          ║
+║                                                                              ║
+║   # 4. Clean up                                                              ║
+║   rm ~/transfer_file ~/transfer_file.gpg                                    ║
+║                                                                              ║
+║ Result: Encrypted file shared securely, originals cleaned up                ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 5: Document Scanner Workflow
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                       📄 DOCUMENT SCANNER WORKFLOW                          ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Capture, process, and share document photos                     ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   # 1. Capture document photo                                                ║
+║   termux-camera-photo -c 0 ~/document_scan.jpg                              ║
+║                                                                              ║
+║   # 2. Process with imagemagick                                              ║
+║   convert ~/document_scan.jpg -deskew 40% -trim ~/document_processed.jpg    ║
+║                                                                              ║
+║   # 3. Register for gallery                                                  ║
+║   termux-media-scan ~/document_processed.jpg                                ║
+║                                                                              ║
+║   # 4. Copy to documents folder                                              ║
+║   cp ~/document_processed.jpg /sdcard/Documents/                            ║
+║                                                                              ║
+║   # 5. Share via email                                                       ║
+║   termux-share -c "image/jpeg" ~/document_processed.jpg                     ║
+║                                                                              ║
+║ Result: Professional document scan ready for sharing                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: File Operations API Flow
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    FILE OPERATIONS API ARCHITECTURE                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────────┐                                                        │
+│  │  User Command   │                                                        │
+│  │  termux-*       │                                                        │
+│  └────────┬────────┘                                                        │
+│           │                                                                  │
+│           ▼                                                                  │
+│  ┌─────────────────────────────────────────────────────────────┐            │
+│  │                    TERMUX:API BRIDGE                         │            │
+│  │  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐   │            │
+│  │  │ Storage   │ │ Share     │ │ Download  │ │ Media     │   │            │
+│  │  │ Access    │ │ Intent    │ │ Manager   │ │ Scanner   │   │            │
+│  │  │ Framework │ │ Service   │ │ Service   │ │ Service   │   │            │
+│  │  └─────┬─────┘ └─────┬─────┘ └─────┬─────┘ └─────┬─────┘   │            │
+│  └────────┼─────────────┼─────────────┼─────────────┼─────────┘            │
+│           │             │             │             │                       │
+│           ▼             ▼             ▼             ▼                       │
+│  ┌─────────────────────────────────────────────────────────────┐            │
+│  │                    ANDROID SYSTEM SERVICES                   │            │
+│  │                                                              │            │
+│  │  ┌─────────────────┐    ┌─────────────────┐                 │            │
+│  │  │ ContentProvider │    │ DownloadManager │                 │            │
+│  │  │ (SAF)           │    │ (Background)    │                 │            │
+│  │  └─────────────────┘    └─────────────────┘                 │            │
+│  │                                                              │            │
+│  │  ┌─────────────────┐    ┌─────────────────┐                 │            │
+│  │  │ Intent System   │    │ MediaStore      │                 │            │
+│  │  │ (Share Sheet)   │    │ (Gallery Index) │                 │            │
+│  │  └─────────────────┘    └─────────────────┘                 │            │
+│  └─────────────────────────────────────────────────────────────┘            │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: Download Flow
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         DOWNLOAD OPERATION FLOW                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   User                Termux            Termux:API         Android DM       │
+│     │                   │                   │                   │            │
+│     │ termux-download   │                   │                   │            │
+│     │──────────────────>│                   │                   │            │
+│     │                   │                   │                   │            │
+│     │                   │  Broadcast Intent │                   │            │
+│     │                   │──────────────────>│                   │            │
+│     │                   │                   │                   │            │
+│     │                   │                   │  Enqueue Download │            │
+│     │                   │                   │──────────────────>│            │
+│     │                   │                   │                   │            │
+│     │                   │                   │                   │ [Download │
+│     │                   │                   │                   │  Progress]│
+│     │                   │                   │                   │            │
+│     │<──────────────────│                   │                   │            │
+│     │  Command returns  │                   │                   │            │
+│     │  immediately      │                   │                   │            │
+│     │                   │                   │                   │            │
+│     │  [Notification shows progress]        │                   │            │
+│     │                   │                   │                   │            │
+│     │  [Download completes - file saved]    │                   │            │
+│     │                   │                   │                   │            │
+│     │  [Media scan triggered automatically] │                   │            │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: Share Intent Flow
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          SHARE OPERATION FLOW                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────────────┐   │
+│  │  File/   │     │  Termux  │     │  Android │     │  Target App      │   │
+│  │  Text    │────>│  Share   │────>│  Intent  │────>│  (WhatsApp,      │   │
+│  │  Source  │     │  Command │     │  Resolver│     │   Gmail, etc.)   │   │
+│  └──────────┘     └──────────┘     └──────────┘     └──────────────────┘   │
+│                                                                              │
+│  Process Steps:                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ 1. Content Preparation                                               │    │
+│  │    - Read file content or use text                                   │    │
+│  │    - Determine MIME type                                             │    │
+│  │                                                                      │    │
+│  │ 2. Intent Creation                                                   │    │
+│  │    - Create ACTION_SEND intent                                       │    │
+│  │    - Add content URI or text                                         │    │
+│  │    - Set MIME type                                                   │    │
+│  │                                                                      │    │
+│  │ 3. Resolver Activity                                                 │    │
+│  │    - Android queries apps with matching intent filters               │    │
+│  │    - Shows Share Sheet to user                                       │    │
+│  │                                                                      │    │
+│  │ 4. Target App Reception                                              │    │
+│  │    - Selected app receives intent                                    │    │
+│  │    - Processes content                                               │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Parallel File Processing
+```bash
+#!/bin/bash
+# parallel_processor.sh - Process multiple files simultaneously
+
+process_file() {
+    local file="$1"
+    local output_dir="$2"
+    
+    # Process each file
+    filename=$(basename "$file")
+    termux-media-scan "$file"
+    cp "$file" "$output_dir/$filename"
+    echo "Processed: $filename"
+}
+
+export -f process_file
+
+# Process all JPG files in parallel with 4 jobs
+find /sdcard/DCIM/Camera -name "*.jpg" -type f | \
+    parallel -j 4 process_file {} /sdcard/Pictures/Processed
+```
+
+### Advanced Technique 2: Watch Directory for Changes
+```bash
+#!/bin/bash
+# watch_directory.sh - Monitor and auto-process new files
+
+WATCH_DIR="/sdcard/Download"
+PROCESSED_DIR="/sdcard/Documents/Processed"
+
+mkdir -p "$PROCESSED_DIR"
+
+echo "Watching $WATCH_DIR for new files..."
+
+inotifywait -m -e create -e moved_to "$WATCH_DIR" 2>/dev/null | \
+while read dir action file; do
+    echo "New file detected: $file"
+    
+    filepath="$dir$file"
+    
+    # Process based on file type
+    case "${file##*.}" in
+        pdf)
+            termux-media-scan "$filepath"
+            termux-notification --title "New PDF" --content "$file"
+            ;;
+        jpg|png)
+            termux-media-scan "$filepath"
+            termux-share "$filepath"
+            ;;
+        *)
+            echo "Unknown file type: $file"
+            ;;
+    esac
+done
+```
+
+### Advanced Technique 3: Smart File Deduplication
+```bash
+#!/bin/bash
+# deduplicate.sh - Find and handle duplicate files
+
+TARGET_DIR="/sdcard/DCIM/Camera"
+HASH_FILE="$HOME/.file_hashes"
+
+declare -A file_hashes
+
+# Build hash database
+echo "Building hash database..."
+find "$TARGET_DIR" -type f | while read file; do
+    hash=$(md5sum "$file" | cut -d' ' -f1)
+    echo "$hash|$file" >> "$HASH_FILE.tmp"
+done
+
+# Find duplicates
+echo "Finding duplicates..."
+sort "$HASH_FILE.tmp" | uniq -w32 -D > "$HASH_FILE.duplicates"
+
+# Process duplicates
+echo "Processing duplicates..."
+while IFS='|' read hash file; do
+    if [[ -n "${file_hashes[$hash]}" ]]; then
+        echo "Duplicate found: $file"
+        echo "  Original: ${file_hashes[$hash]}"
+        read -p "Delete duplicate? (y/n): " choice
+        if [[ "$choice" == "y" ]]; then
+            rm "$file"
+            echo "  Deleted!"
+        fi
+    else
+        file_hashes[$hash]="$file"
+    fi
+done < "$HASH_FILE.duplicates"
+
+# Cleanup
+rm -f "$HASH_FILE.tmp" "$HASH_FILE.duplicates"
+echo "Deduplication complete!"
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ What You Learned
+
+- [ ] **termux-storage-get** - Opens Android file picker for selecting files
+- [ ] **termux-share** - Shares files and text through Android share sheet
+- [ ] **termux-download** - Downloads files using Android Download Manager
+- [ ] **termux-media-scan** - Registers files in MediaStore for gallery visibility
+- [ ] **MIME types** - Proper content type specification for file sharing
+- [ ] **Storage paths** - Understanding Termux home vs shared storage locations
+- [ ] **Python integration** - Using subprocess to call Termux APIs
+- [ ] **Bash scripting** - Creating automation scripts for file operations
+- [ ] **Error handling** - Checking return codes and file existence
+- [ ] **Batch processing** - Processing multiple files efficiently
+
+### 📋 Quick Reference Commands
+```bash
+# File picker
+termux-storage-get ~/picked_file
+
+# Share file
+termux-share document.pdf
+
+# Share text
+echo "Hello" | termux-share
+
+# Download file
+termux-download "https://example.com/file.pdf"
+
+# Download to specific folder
+termux-download -d /sdcard/Documents "URL"
+
+# Make visible in gallery
+termux-media-scan /sdcard/DCIM/photo.jpg
+
+# Share with MIME type
+termux-share -c "application/pdf" doc.pdf
+```
+
+### 🎯 Next Steps
+1. Practice file operations with different file types
+2. Create automated backup scripts
+3. Integrate with other Termux APIs
+4. Build a complete file management tool
+
+### 📚 Recommended Practice
+- Create a photo organization script
+- Build a document scanner workflow
+- Implement a file sync system
+
+---
+
+*Chapter 17 Complete! Ready for Chapter 18: Device Information APIs*
+
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>❓ Question 1: Which Termux API command opens the Android file picker?</b></summary>
+
+**Answer:** `termux-storage-get`
+
+This command opens Android's Storage Access Framework file picker, allowing users to select any file from their device. The selected file is copied to the specified destination path in Termux.
+
+Example: `termux-storage-get ~/my_selected_file`
+</details>
+
+<details>
+<summary><b>❓ Question 2: What is the default download location for termux-download?</b></summary>
+
+**Answer:** `/sdcard/Download`
+
+The termux-download command uses Android's Download Manager, which saves files to the default Downloads folder. You can change this with the `-d` or `--path` flag.
+
+Example: `termux-download -d /sdcard/Documents "https://example.com/file.pdf"`
+</details>
+
+<details>
+<summary><b>❓ Question 3: How do you share text directly from the terminal?</b></summary>
+
+**Answer:** Using pipe with `termux-share`:
+
+```bash
+echo "Your text here" | termux-share
+```
+
+This opens the Android share sheet with the text ready to share to any app.
+</details>
+
+<details>
+<summary><b>❓ Question 4: Why doesn't my downloaded image appear in the gallery?</b></summary>
+
+**Answer:** Android's MediaStore needs to be updated. Use `termux-media-scan`:
+
+```bash
+termux-media-scan /sdcard/Download/image.jpg
+```
+
+This registers the file with Android's media database, making it visible in gallery apps.
+</details>
+
+<details>
+<summary><b>❓ Question 5: What does the -c flag do in termux-share?</b></summary>
+
+**Answer:** The `-c` flag specifies the MIME content type:
+
+```bash
+termux-share -c "image/jpeg" photo.jpg
+termux-share -c "application/pdf" document.pdf
+termux-share -c "text/plain" notes.txt
+```
+
+This helps apps properly handle the shared content.
+</details>
+
+<details>
+<summary><b>❓ Question 6: Does termux-storage-get move or copy files?</b></summary>
+
+**Answer:** It **copies** files. The original file remains in its source location. Only a copy is saved to the Termux destination path.
+
+This is important for preserving the original file while making it accessible in Termux.
+</details>
+
+<details>
+<summary><b>❓ Question 7: What permission is required before using file operation APIs?</b></summary>
+
+**Answer:** Storage permission must be granted:
+
+```bash
+termux-setup-storage
+```
+
+This creates symlinks to shared storage directories and grants Termux access to Android's shared storage.
+</details>
+
+<details>
+<summary><b>❓ Question 8: How can you download multiple files programmatically?</b></summary>
+
+**Answer:** Use a loop with the download command:
+
+```bash
+while IFS= read -r url; do
+    termux-download "$url"
+    sleep 2
+done < urls.txt
+```
+
+The delay between downloads prevents overwhelming the download manager.
+</details>
+
+<details>
+<summary><b>❓ Question 9: What is the difference between termux-share and termux-storage-get?</b></summary>
+
+**Answer:**
+
+| Command | Purpose | Direction |
+|---------|---------|-----------|
+| `termux-storage-get` | File picker | Android → Termux |
+| `termux-share` | Share content | Termux → Android apps |
+
+`termux-storage-get` brings files INTO Termux, while `termux-share` sends files OUT to other apps.
+</details>
+
+<details>
+<summary><b>❓ Question 10: How do you specify a custom notification title for downloads?</b></summary>
+
+**Answer:** Use the `-t` flag:
+
+```bash
+termux-download -t "My Document" "https://example.com/file.pdf"
+```
+
+This sets a custom title in the download notification.
+</details>
+
+<details>
+<summary><b>❓ Question 11: Can termux-download handle background downloads?</b></summary>
+
+**Answer:** Yes! This is one of its main advantages. Downloads continue even when Termux is closed because it uses Android's system Download Manager.
+
+The download runs as a system service and shows progress in the notification shade.
+</details>
+
+<details>
+<summary><b>❓ Question 12: What Python module is used to call Termux API commands?</b></summary>
+
+**Answer:** The `subprocess` module:
+
+```python
+import subprocess
+result = subprocess.run(['termux-storage-get', '~/file'], capture_output=True)
+```
+
+This allows Python scripts to execute shell commands and capture their output.
+</details>
+
+<details>
+<summary><b>❓ Question 13: How do you share a file for viewing instead of sending?</b></summary>
+
+**Answer:** Use the `-a view` flag:
+
+```bash
+termux-share -a view photo.jpg
+```
+
+Available actions: `send` (default), `view`, `edit`
+</details>
+
+<details>
+<summary><b>❓ Question 14: What file types can termux-storage-get handle?</b></summary>
+
+**Answer:** Virtually **any file type**:
+
+- Images (jpg, png, gif, webp)
+- Videos (mp4, mkv, avi)
+- Documents (pdf, doc, txt)
+- Archives (zip, tar, gz)
+- Audio files (mp3, wav, flac)
+- Any other file type the user can access
+
+The file picker shows all accessible files regardless of type.
+</details>
+
+<details>
+<summary><b>❓ Question 15: What happens if termux-storage-get fails?</b></summary>
+
+**Answer:** It returns a non-zero exit code. You can check this in scripts:
+
+```bash
+if termux-storage-get ~/file; then
+    echo "File selected successfully"
+else
+    echo "No file selected or error occurred"
+fi
+```
+
+Common causes: user cancelled, no permission, destination path not writable.
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Q1: How would you implement a file synchronization system using Termux APIs?
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import os
+import json
+import hashlib
+
+class FileSyncManager:
+    def __init__(self, source_dir, dest_dir):
+        self.source = source_dir
+        self.dest = dest_dir
+        
+    def get_file_hash(self, filepath):
+        """Calculate MD5 hash for file comparison"""
+        hash_md5 = hashlib.md5()
+        with open(filepath, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
+    
+    def sync_files(self):
+        """Synchronize files between directories"""
+        synced = []
+        for root, dirs, files in os.walk(self.source):
+            for file in files:
+                src_path = os.path.join(root, file)
+                rel_path = os.path.relpath(src_path, self.source)
+                dest_path = os.path.join(self.dest, rel_path)
+                
+                # Create destination directory
+                os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+                
+                # Check if sync needed
+                needs_sync = True
+                if os.path.exists(dest_path):
+                    src_hash = self.get_file_hash(src_path)
+                    dest_hash = self.get_file_hash(dest_path)
+                    needs_sync = (src_hash != dest_hash)
+                
+                if needs_sync:
+                    # Use termux-share for cross-app sync
+                    subprocess.run(['cp', src_path, dest_path])
+                    subprocess.run(['termux-media-scan', dest_path])
+                    synced.append(rel_path)
+        
+        return synced
+
+# Usage
+sync = FileSyncManager('/sdcard/DCIM', '/sdcard/Backup')
+synced_files = sync.sync_files()
+print(f"Synced {len(synced_files)} files")
+```
+
+Key considerations:
+- Hash comparison for change detection
+- Directory structure preservation
+- MediaStore updates for gallery visibility
+- Error handling for permission issues
+</details>
+
+### Q2: Explain the security implications of Termux file APIs.
+
+**Answer:**
+
+**Security Considerations:**
+
+1. **Permission Model:**
+   - Storage permission grants broad access
+   - No fine-grained control per file
+   - Apps can access all shared storage
+
+2. **Data Exposure:**
+   - Files copied to Termux are readable by Termux
+   - Shared files pass through Android intents
+   - Clipboard content is system-wide accessible
+
+3. **Best Practices:**
+```bash
+# Always verify file operations
+if termux-storage-get ~/sensitive_file; then
+    # Encrypt sensitive data
+    gpg -c ~/sensitive_file
+    # Secure delete original
+    shred -u ~/sensitive_file
+fi
+
+# Check file permissions
+stat -c "%a %n" ~/file
+
+# Limit share scope
+termux-share -c "application/octet-stream" encrypted_file.gpg
+```
+
+4. **Mitigation Strategies:**
+   - Encrypt sensitive files before sharing
+   - Use app-specific directories when possible
+   - Clear clipboard after sensitive operations
+   - Audit file permissions regularly
+</details>
+
+### Q3: Design a batch download manager with progress tracking.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import os
+from datetime import datetime
+
+class BatchDownloadManager:
+    def __init__(self, download_dir="/sdcard/Download/BatchDownloads"):
+        self.download_dir = download_dir
+        self.state_file = os.path.expanduser("~/.download_state.json")
+        os.makedirs(download_dir, exist_ok=True)
+        
+    def load_state(self):
+        """Load previous download state"""
+        try:
+            with open(self.state_file, 'r') as f:
+                return json.load(f)
+        except:
+            return {"completed": [], "failed": [], "pending": []}
+    
+    def save_state(self, state):
+        """Save current download state"""
+        with open(self.state_file, 'w') as f:
+            json.dump(state, f, indent=2)
+    
+    def add_urls(self, urls):
+        """Add URLs to download queue"""
+        state = self.load_state()
+        for url in urls:
+            if url not in state["completed"] and url not in state["pending"]:
+                state["pending"].append({
+                    "url": url,
+                    "added": datetime.now().isoformat()
+                })
+        self.save_state(state)
+    
+    def download_next(self):
+        """Download next file in queue"""
+        state = self.load_state()
+        
+        if not state["pending"]:
+            return None
+        
+        item = state["pending"].pop(0)
+        url = item["url"]
+        
+        try:
+            # Start download
+            result = subprocess.run(
+                ['termux-download', '-d', self.download_dir, url],
+                capture_output=True,
+                timeout=300  # 5 minute timeout
+            )
+            
+            if result.returncode == 0:
+                state["completed"].append({
+                    "url": url,
+                    "completed": datetime.now().isoformat()
+                })
+            else:
+                state["failed"].append({
+                    "url": url,
+                    "error": result.stderr.decode(),
+                    "timestamp": datetime.now().isoformat()
+                })
+        except Exception as e:
+            state["failed"].append({
+                "url": url,
+                "error": str(e),
+                "timestamp": datetime.now().isoformat()
+            })
+        
+        self.save_state(state)
+        return item
+    
+    def process_all(self):
+        """Process entire download queue"""
+        while True:
+            item = self.download_next()
+            if item is None:
+                break
+            print(f"Downloaded: {item['url']}")
+        
+        state = self.load_state()
+        print(f"\nSummary:")
+        print(f"  Completed: {len(state['completed'])}")
+        print(f"  Failed: {len(state['failed'])}")
+
+# Usage
+manager = BatchDownloadManager()
+manager.add_urls([
+    "https://example.com/file1.pdf",
+    "https://example.com/file2.pdf",
+])
+manager.process_all()
+```
+
+Features:
+- State persistence for resume capability
+- Error tracking and logging
+- Timeout handling
+- Progress reporting
+</details>
+
+### Q4: How would you integrate Termux file APIs with a CI/CD pipeline?
+
+**Answer:**
+
+```bash
+#!/bin/bash
+# ci_file_pipeline.sh - CI/CD integration script
+
+set -e  # Exit on error
+
+# Configuration
+BUILD_DIR="$HOME/build_$(date +%Y%m%d_%H%M%S)"
+REPORT_DIR="$HOME/reports"
+NOTIFICATION_WEBHOOK="https://hooks.example.com/ci"
+
+# Functions
+log() {
+    echo "[$(date '+%H:%M:%S')] $1"
+}
+
+send_notification() {
+    local status="$1"
+    local message="$2"
+    
+    # Send to webhook
+    curl -s -X POST "$NOTIFICATION_WEBHOOK" \
+        -H "Content-Type: application/json" \
+        -d "{\"status\":\"$status\",\"message\":\"$message\"}" &
+    
+    # Also send local notification
+    termux-notification \
+        --title "CI Pipeline: $status" \
+        --content "$message" \
+        --priority high \
+        --sound
+}
+
+# Main pipeline
+main() {
+    log "Starting CI pipeline..."
+    mkdir -p "$BUILD_DIR" "$REPORT_DIR"
+    
+    # Step 1: Get configuration file
+    log "Fetching configuration..."
+    if termux-storage-get "$BUILD_DIR/config.json"; then
+        log "Configuration loaded"
+    else
+        send_notification "FAILED" "Configuration file required"
+        exit 1
+    fi
+    
+    # Step 2: Run tests
+    log "Running tests..."
+    pytest tests/ --json="$REPORT_DIR/test_results.json" || {
+        send_notification "TESTS FAILED" "Check test results"
+        termux-share "$REPORT_DIR/test_results.json"
+        exit 1
+    }
+    
+    # Step 3: Build
+    log "Building..."
+    python setup.py build 2>&1 | tee "$REPORT_DIR/build.log"
+    
+    # Step 4: Generate report
+    log "Generating report..."
+    cat > "$REPORT_DIR/summary.txt" << EOF
+Build: $BUILD_DIR
+Date: $(date)
+Status: SUCCESS
+Tests: $(jq '.summary.passed' "$REPORT_DIR/test_results.json") passed
+EOF
+    
+    # Step 5: Share results
+    termux-share "$REPORT_DIR/summary.txt"
+    
+    # Step 6: Backup artifacts
+    for artifact in "$BUILD_DIR"/*; do
+        termux-media-scan "$artifact" 2>/dev/null || true
+    done
+    
+    send_notification "SUCCESS" "Pipeline completed successfully"
+    log "Pipeline complete!"
+}
+
+main "$@"
+```
+
+Integration points:
+- Notification system for build status
+- File sharing for reports and logs
+- Media scanning for artifact visibility
+- Configuration loading from user files
+</details>
+
+### Q5: Compare termux-download vs wget/curl for file downloading.
+
+**Answer:**
+
+| Feature | termux-download | wget/curl |
+|---------|----------------|-----------|
+| **Background download** | ✅ Yes (system service) | ❌ No (process-bound) |
+| **Progress notification** | ✅ System notification | ❌ Terminal only |
+| **Resume support** | ✅ Automatic | ⚠️ Manual flags needed |
+| **Storage location** | Shared storage | Any (Termux filesystem) |
+| **Battery optimization** | ✅ System managed | ❌ Runs in foreground |
+| **Network handling** | ✅ System handles | ❌ Manual retry logic |
+
+**When to use each:**
+
+```bash
+# Use termux-download for user-facing downloads
+termux-download "https://example.com/movie.mp4"  # Large files, user visible
+
+# Use wget/curl for scripts and automation
+wget -O data.json "https://api.example.com/data"  # Script data
+curl -s "https://api.example.com/config" | jq '.'  # API calls
+
+# Combined approach for best of both
+download_and_process() {
+    # Download with system manager
+    termux-download "https://example.com/data.json"
+    
+    # Process with Termux tools
+    jq '.' /sdcard/Download/data.json > ~/processed_data.json
+    
+    # Share result
+    termux-share ~/processed_data.json
+}
+```
+
+**Recommendation:** Use `termux-download` for large files and user-initiated downloads; use `curl/wget` for API calls and script automation.
+</details>
+
+### Q6: Implement a file change detection and backup system.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""File Change Detection and Backup System"""
+
+import os
+import hashlib
+import json
+import subprocess
+from datetime import datetime
+from pathlib import Path
+
+class FileChangeDetector:
+    def __init__(self, watch_dirs, backup_dir):
+        self.watch_dirs = watch_dirs
+        self.backup_dir = Path(backup_dir)
+        self.snapshot_file = Path("~/.file_snapshot.json").expanduser()
+        self.backup_dir.mkdir(parents=True, exist_ok=True)
+    
+    def calculate_hash(self, filepath):
+        """Calculate file hash for change detection"""
+        hasher = hashlib.sha256()
+        try:
+            with open(filepath, 'rb') as f:
+                for chunk in iter(lambda: f.read(65536), b''):
+                    hasher.update(chunk)
+            return hasher.hexdigest()
+        except:
+            return None
+    
+    def create_snapshot(self):
+        """Create snapshot of all watched directories"""
+        snapshot = {}
+        
+        for watch_dir in self.watch_dirs:
+            watch_path = Path(watch_dir)
+            if not watch_path.exists():
+                continue
+                
+            for filepath in watch_path.rglob('*'):
+                if filepath.is_file():
+                    rel_path = str(filepath.relative_to(watch_path))
+                    file_hash = self.calculate_hash(filepath)
+                    if file_hash:
+                        snapshot[f"{watch_dir}:{rel_path}"] = {
+                            'hash': file_hash,
+                            'size': filepath.stat().st_size,
+                            'modified': datetime.fromtimestamp(
+                                filepath.stat().st_mtime
+                            ).isoformat()
+                        }
+        
+        return snapshot
+    
+    def load_snapshot(self):
+        """Load previous snapshot"""
+        try:
+            with open(self.snapshot_file, 'r') as f:
+                return json.load(f)
+        except:
+            return {}
+    
+    def detect_changes(self):
+        """Detect file changes since last snapshot"""
+        current = self.create_snapshot()
+        previous = self.load_snapshot()
+        
+        changes = {
+            'added': [],
+            'modified': [],
+            'deleted': []
+        }
+        
+        # Find added and modified
+        for key, info in current.items():
+            if key not in previous:
+                changes['added'].append(key)
+            elif info['hash'] != previous[key]['hash']:
+                changes['modified'].append(key)
+        
+        # Find deleted
+        for key in previous:
+            if key not in current:
+                changes['deleted'].append(key)
+        
+        return changes
+    
+    def backup_changed(self, changes):
+        """Backup changed files"""
+        backed_up = []
+        
+        for key in changes['added'] + changes['modified']:
+            watch_dir, rel_path = key.split(':', 1)
+            source = Path(watch_dir) / rel_path
+            
+            # Create dated backup
+            date_dir = self.backup_dir / datetime.now().strftime('%Y-%m-%d')
+            dest = date_dir / rel_path
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Copy file
+            import shutil
+            shutil.copy2(source, dest)
+            
+            # Scan for gallery if media file
+            if source.suffix.lower() in ['.jpg', '.png', '.mp4', '.mp3']:
+                subprocess.run(['termux-media-scan', str(dest)], 
+                             capture_output=True)
+            
+            backed_up.append(str(dest))
+        
+        return backed_up
+    
+    def run(self):
+        """Run change detection and backup"""
+        changes = self.detect_changes()
+        
+        if any(changes.values()):
+            # Backup changed files
+            backed_up = self.backup_changed(changes)
+            
+            # Update snapshot
+            current = self.create_snapshot()
+            with open(self.snapshot_file, 'w') as f:
+                json.dump(current, f, indent=2)
+            
+            # Notify
+            subprocess.run([
+                'termux-notification',
+                '--title', 'File Backup Complete',
+                '--content', f"{len(backed_up)} files backed up",
+                '--sound'
+            ])
+            
+            return changes
+        else:
+            return None
+
+# Usage
+detector = FileChangeDetector(
+    watch_dirs=['/sdcard/DCIM', '/sdcard/Documents'],
+    backup_dir='/sdcard/Backup'
+)
+detector.run()
+```
+
+Features:
+- SHA256 hash-based change detection
+- Automatic backup of modified files
+- Gallery integration for media
+- Notification system
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Photo Backup Automation
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  📸 SCENARIO: Automatic Photo Backup to Cloud Storage                 ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User wants all new photos automatically backed up to cloud storage   ║
+║  when connected to WiFi and charging.                                 ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```bash
+#!/bin/bash
+# auto_photo_backup.sh
+
+PHOTO_DIR="/sdcard/DCIM/Camera"
+BACKUP_LOG="$HOME/.photo_backup.log"
+LAST_BACKUP="$HOME/.last_photo_backup"
+
+# Check conditions
+check_conditions() {
+    # Check charging
+    battery=$(termux-battery-status | jq -r '.plugged')
+    [ "$battery" = "PLUGGED_AC" ] || [ "$battery" = "PLUGGED_USB" ] || return 1
+    
+    # Check WiFi
+    wifi=$(termux-wifi-connectioninfo | jq -r '.ssid' 2>/dev/null)
+    [ -n "$wifi" ] && [ "$wifi" != "null" ] || return 1
+    
+    return 0
+}
+
+# Get last backup timestamp
+get_last_backup() {
+    if [ -f "$LAST_BACKUP" ]; then
+        cat "$LAST_BACKUP"
+    else
+        echo "0"
+    fi
+}
+
+# Backup new photos
+backup_photos() {
+    local last=$(get_last_backup)
+    local count=0
+    
+    for photo in "$PHOTO_DIR"/*.jpg "$PHOTO_DIR"/*.mp4; do
+        [ -f "$photo" ] || continue
+        
+        local mtime=$(stat -c %Y "$photo")
+        
+        if [ "$mtime" -gt "$last" ]; then
+            # Upload to cloud (example with rclone)
+            rclone copy "$photo" gdrive:Photos/Backup/ 2>/dev/null
+            
+            if [ $? -eq 0 ]; then
+                echo "$(date): Backed up $photo" >> "$BACKUP_LOG"
+                ((count++))
+            fi
+        fi
+    done
+    
+    # Update last backup time
+    date +%s > "$LAST_BACKUP"
+    
+    return $count
+}
+
+# Main
+if check_conditions; then
+    backup_photos
+    count=$?
+    
+    if [ $count -gt 0 ]; then
+        termux-notification \
+            --title "📸 Photo Backup" \
+            --content "$count photos backed up to cloud" \
+            --priority low
+    fi
+fi
+```
+
+---
+
+### Scenario 2: Document Scanner Workflow
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  📄 SCENARIO: Document Scanner and OCR Pipeline                       ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User needs to scan documents using camera, OCR them, and share      ║
+║  the text output.                                                     ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```bash
+#!/bin/bash
+# document_scanner.sh
+
+SCAN_DIR="$HOME/scans"
+mkdir -p "$SCAN_DIR"
+
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+PHOTO="$SCAN_DIR/doc_$TIMESTAMP.jpg"
+TEXT="$SCAN_DIR/doc_$TIMESTAMP.txt"
+
+echo "📄 Document Scanner"
+echo "==================="
+echo ""
+
+# Capture photo
+echo "Capturing document..."
+termux-camera-photo -c 0 "$PHOTO"
+
+if [ ! -f "$PHOTO" ]; then
+    echo "❌ Failed to capture photo"
+    exit 1
+fi
+
+echo "✅ Photo captured: $PHOTO"
+
+# Process with OCR (requires tesseract)
+echo ""
+echo "Running OCR..."
+if command -v tesseract &> /dev/null; then
+    tesseract "$PHOTO" "${TEXT%.txt}" 2>/dev/null
+    
+    if [ -f "$TEXT" ]; then
+        echo "✅ OCR complete!"
+        
+        # Copy text to clipboard
+        cat "$TEXT" | termux-clipboard-set
+        echo "📋 Text copied to clipboard"
+        
+        # Show preview
+        echo ""
+        echo "Preview:"
+        echo "--------"
+        head -10 "$TEXT"
+        echo "..."
+        
+        # Ask to share
+        read -p "Share document? (y/n): " share
+        if [ "$share" = "y" ]; then
+            termux-share "$TEXT"
+        fi
+    else
+        echo "❌ OCR failed"
+    fi
+else
+    echo "⚠️ Tesseract not installed"
+    echo "Install with: pkg install tesseract"
+    
+    # Share image instead
+    termux-share "$PHOTO"
+fi
+
+# Scan for gallery
+termux-media-scan "$PHOTO"
+```
+
+---
+
+### Scenario 3: Bulk File Organizer
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  📁 SCENARIO: Automatic File Organizer by Type                        ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  Downloads folder is cluttered with mixed file types. User wants     ║
+║  automatic organization by file type.                                 ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```bash
+#!/bin/bash
+# file_organizer.sh
+
+SOURCE_DIR="/sdcard/Download"
+ORGANIZED_DIR="/sdcard/Organized"
+
+# File type mappings
+declare -A FILE_TYPES=(
+    ["jpg jpeg png gif webp"]="Images"
+    ["mp4 mkv avi mov"]="Videos"
+    ["mp3 wav flac aac"]="Audio"
+    ["pdf"]="Documents/PDFs"
+    ["doc docx"]="Documents/Word"
+    ["xls xlsx"]="Documents/Excel"
+    ["ppt pptx"]="Documents/PowerPoint"
+    ["zip tar gz rar"]="Archives"
+    ["apk"]="APKs"
+    ["json xml csv"]="Data"
+)
+
+organize_file() {
+    local file="$1"
+    local ext="${file##*.}"
+    ext="${ext,,}"  # lowercase
+    
+    local found=0
+    
+    for types in "${!FILE_TYPES[@]}"; do
+        if [[ " $types " =~ " $ext " ]]; then
+            dest_folder="${FILE_TYPES[$types]}"
+            found=1
+            break
+        fi
+    done
+    
+    if [ $found -eq 0 ]; then
+        dest_folder="Other"
+    fi
+    
+    dest_path="$ORGANIZED_DIR/$dest_folder"
+    mkdir -p "$dest_path"
+    
+    filename=$(basename "$file")
+    
+    # Move file
+    mv "$file" "$dest_path/$filename"
+    
+    # Scan for media if applicable
+    if [[ "$dest_folder" == "Images" ]] || [[ "$dest_folder" == "Videos" ]]; then
+        termux-media-scan "$dest_path/$filename"
+    fi
+    
+    echo "Moved: $filename → $dest_folder"
+}
+
+# Main
+echo "📁 File Organizer"
+echo "================="
+echo ""
+echo "Organizing files in: $SOURCE_DIR"
+echo ""
+
+count=0
+for file in "$SOURCE_DIR"/*; do
+    [ -f "$file" ] || continue
+    organize_file "$file"
+    ((count++))
+done
+
+echo ""
+echo "✅ Organized $count files!"
+
+# Notification
+termux-notification \
+    --title "📁 File Organizer" \
+    --content "Organized $count files" \
+    --priority low
+
+# Show organized structure
+echo ""
+echo "New structure:"
+find "$ORGANIZED_DIR" -type d | head -20
+```
+
+---
+
+### Scenario 4: Secure File Transfer
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  🔐 SCENARIO: Encrypted File Transfer Between Devices                 ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User needs to securely transfer sensitive files between devices     ║
+║  with encryption.                                                     ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```bash
+#!/bin/bash
+# secure_transfer.sh
+
+TEMP_DIR="$HOME/secure_transfer"
+mkdir -p "$TEMP_DIR"
+
+# Generate encryption key
+generate_key() {
+    openssl rand -base64 32 > "$TEMP_DIR/key.txt"
+    echo "🔑 Key generated: $TEMP_DIR/key.txt"
+    
+    # Copy key to clipboard for sharing
+    cat "$TEMP_DIR/key.txt" | termux-clipboard-set
+    echo "📋 Key copied to clipboard (share securely!)"
+}
+
+# Encrypt file
+encrypt_file() {
+    local input="$1"
+    local output="$TEMP_DIR/$(basename "$input").enc"
+    
+    openssl enc -aes-256-cbc -salt -pbkdf2 \
+        -in "$input" \
+        -out "$output" \
+        -pass file:"$TEMP_DIR/key.txt"
+    
+    echo "🔒 Encrypted: $output"
+    
+    # Share encrypted file
+    termux-share "$output"
+}
+
+# Decrypt file
+decrypt_file() {
+    local input="$1"
+    local output="${input%.enc}"
+    
+    openssl enc -aes-256-cbc -d -pbkdf2 \
+        -in "$input" \
+        -out "$output" \
+        -pass file:"$TEMP_DIR/key.txt"
+    
+    echo "🔓 Decrypted: $output"
+}
+
+# Interactive menu
+show_menu() {
+    echo ""
+    echo "🔐 Secure File Transfer"
+    echo "======================="
+    echo "1. Generate encryption key"
+    echo "2. Encrypt and share file"
+    echo "3. Decrypt received file"
+    echo "4. Pick and encrypt file"
+    echo "5. Exit"
+    echo ""
+    read -p "Choice: " choice
+    
+    case $choice in
+        1)
+            generate_key
+            ;;
+        2)
+            read -p "File to encrypt: " filepath
+            [ -f "$filepath" ] && encrypt_file "$filepath"
+            ;;
+        3)
+            read -p "Encrypted file: " filepath
+            [ -f "$filepath" ] && decrypt_file "$filepath"
+            ;;
+        4)
+            termux-storage-get "$TEMP_DIR/picked_file"
+            [ -f "$TEMP_DIR/picked_file" ] && encrypt_file "$TEMP_DIR/picked_file"
+            ;;
+        5)
+            exit 0
+            ;;
+    esac
+}
+
+# Main loop
+while true; do
+    show_menu
+done
+```
+
+---
+
+### Scenario 5: Media Collection Backup
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  💽 SCENARIO: Complete Media Collection Backup                        ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User wants to backup all media files with metadata preservation     ║
+║  and generate a catalog.                                              ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```bash
+#!/bin/bash
+# media_backup.sh
+
+SOURCE_DIRS=("/sdcard/DCIM" "/sdcard/Pictures" "/sdcard/Music" "/sdcard/Movies")
+BACKUP_DIR="/sdcard/Backup/Media_$(date +%Y%m%d)"
+CATALOG="$BACKUP_DIR/catalog.json"
+
+mkdir -p "$BACKUP_DIR"
+
+echo "💾 Media Collection Backup"
+echo "========================="
+echo ""
+echo "Source directories:"
+for dir in "${SOURCE_DIRS[@]}"; do
+    echo "  - $dir"
+done
+echo ""
+echo "Backup location: $BACKUP_DIR"
+echo ""
+
+# Initialize catalog
+echo '{"backup_date": "'$(date -Iseconds)'", "files": []}' > "$CATALOG"
+
+total_files=0
+total_size=0
+
+backup_media() {
+    local source="$1"
+    local type="$2"
+    
+    for file in "$source"/*; do
+        [ -f "$file" ] || continue
+        
+        local filename=$(basename "$file")
+        local ext="${filename##*.}"
+        ext="${ext,,}"
+        
+        # Check if media file
+        case "$ext" in
+            jpg|jpeg|png|gif|webp|mp4|mkv|avi|mp3|wav|flac)
+                local dest="$BACKUP_DIR/$type"
+                mkdir -p "$dest"
+                
+                # Copy file
+                cp "$file" "$dest/$filename"
+                
+                # Get file info
+                local size=$(stat -c %s "$file")
+                local mtime=$(stat -c %Y "$file")
+                
+                # Add to catalog
+                local entry="{\"name\":\"$filename\",\"type\":\"$type\",\"size\":$size,\"modified\":$mtime}"
+                jq ".files += [$entry]" "$CATALOG" > "$CATALOG.tmp" && mv "$CATALOG.tmp" "$CATALOG"
+                
+                # Scan for gallery
+                termux-media-scan "$dest/$filename" 2>/dev/null
+                
+                ((total_files++))
+                ((total_size+=size))
+                
+                echo "  ✓ $filename"
+                ;;
+        esac
+    done
+}
+
+# Process each source
+for dir in "${SOURCE_DIRS[@]}"; do
+    if [ -d "$dir" ]; then
+        echo "Processing: $dir"
+        type=$(basename "$dir")
+        backup_media "$dir" "$type"
+        echo ""
+    fi
+done
+
+# Calculate totals
+total_size_mb=$((total_size / 1048576))
+
+echo "=================================="
+echo "Backup Complete!"
+echo "Files backed up: $total_files"
+echo "Total size: ${total_size_mb} MB"
+echo "Catalog: $CATALOG"
+echo ""
+
+# Share catalog
+read -p "Share backup catalog? (y/n): " share
+[ "$share" = "y" ] && termux-share "$CATALOG"
+
+# Notification
+termux-notification \
+    --title "💾 Media Backup Complete" \
+    --content "$total_files files (${total_size_mb}MB)" \
+    --priority low \
+    --sound
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: File Operation API Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    FILE OPERATION API FLOW                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   USER ACTION                                                            │
+│       │                                                                  │
+│       ▼                                                                  │
+│   ┌─────────────┐                                                        │
+│   │   Termux    │                                                        │
+│   │   Command   │                                                        │
+│   └──────┬──────┘                                                        │
+│          │                                                               │
+│          ▼                                                               │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    TERMUX:API BRIDGE                             │   │
+│   │                                                                  │   │
+│   │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │   │
+│   │  │ termux-      │  │ termux-      │  │ termux-      │          │   │
+│   │  │ storage-get  │  │ share        │  │ download     │          │   │
+│   │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘          │   │
+│   │         │                 │                 │                   │   │
+│   └─────────┼─────────────────┼─────────────────┼───────────────────┘   │
+│             │                 │                 │                        │
+│             ▼                 ▼                 ▼                        │
+│   ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐           │
+│   │ Android SAF     │ │ Android Share   │ │ Android Download│           │
+│   │ (File Picker)   │ │ Intent          │ │ Manager         │           │
+│   └────────┬────────┘ └────────┬────────┘ └────────┬────────┘           │
+│            │                   │                   │                     │
+│            ▼                   ▼                   ▼                     │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    ANDROID SYSTEM SERVICES                       │   │
+│   │                                                                  │   │
+│   │  • Storage Access Framework    • Intent Resolution               │   │
+│   │  • MediaStore                  • Notification Manager             │   │
+│   │  • Content Providers           • Download Service                 │   │
+│   │                                                                  │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: Share Mechanism Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    SHARE MECHANISM ARCHITECTURE                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    TERMUX TERMINAL                               │   │
+│   │                                                                  │   │
+│   │   $ termux-share document.pdf                                    │   │
+│   │   $ echo "text" | termux-share                                   │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                │ Intent: ACTION_SEND                     │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    ANDROID SHARE SHEET                           │   │
+│   │                                                                  │   │
+│   │   ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐       │   │
+│   │   │WhatsApp│ │Telegram│ │ Gmail  │ │Bluetooth│ │ More  │       │   │
+│   │   └────┬───┘ └────┬───┘ └────┬───┘ └────┬───┘ └────────┘       │   │
+│   │        │          │          │          │                        │   │
+│   └────────┼──────────┼──────────┼──────────┼────────────────────────┘   │
+│            │          │          │          │                             │
+│            ▼          ▼          ▼          ▼                             │
+│   ┌────────────────────────────────────────────────────────────────┐    │
+│   │                    TARGET APPLICATIONS                           │    │
+│   │                                                                  │    │
+│   │   WhatsApp: Message to contact/chat                             │    │
+│   │   Telegram: Share to chat/saved messages                        │    │
+│   │   Gmail:    Attach to email                                     │    │
+│   │   Bluetooth: Send to paired device                              │    │
+│   │                                                                  │    │
+│   └────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│   DATA FLOW:                                                            │
+│   ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐         │
+│   │ Termux   │───▶│ Intent   │───▶│ Share    │───▶│ Target   │         │
+│   │ File     │    │ System   │    │ Sheet    │    │ App      │         │
+│   └──────────┘    └──────────┘    └──────────┘    └──────────┘         │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: Download Manager Integration
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    DOWNLOAD MANAGER INTEGRATION                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    DOWNLOAD INITIATION                           │   │
+│   │                                                                  │   │
+│   │   $ termux-download "https://example.com/file.pdf"              │   │
+│   │                                                                  │   │
+│   │   ┌──────────────────────────────────────────────────────────┐  │   │
+│   │   │ 1. Parse URL                                             │  │   │
+│   │   │ 2. Create DownloadManager.Request                        │  │   │
+│   │   │ 3. Set destination path                                  │  │   │
+│   │   │ 4. Configure notification                                │  │   │
+│   │   │ 5. Enqueue download                                      │  │   │
+│   │   └──────────────────────────────────────────────────────────┘  │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    ANDROID DOWNLOAD SERVICE                      │   │
+│   │                                                                  │   │
+│   │   ┌──────────────────────────────────────────────────────────┐  │   │
+│   │   │                    Download Queue                        │  │   │
+│   │   │                                                          │  │   │
+│   │   │   ┌─────────┐  ┌─────────┐  ┌─────────┐                 │  │   │
+│   │   │   │ File 1  │  │ File 2  │  │ File 3  │  ...            │  │   │
+│   │   │   │ [====]  │  │ [==  ]  │  │ [     ] │                 │  │   │
+│   │   │   │  60%    │  │  25%    │  │  Queued │                 │  │   │
+│   │   │   └─────────┘  └─────────┘  └─────────┘                 │  │   │
+│   │   │                                                          │  │   │
+│   │   └──────────────────────────────────────────────────────────┘  │   │
+│   │                                                                  │   │
+│   │   FEATURES:                                                      │   │
+│   │   • Background download (even when Termux closed)               │   │
+│   │   • Auto-resume on network recovery                             │   │
+│   │   • Progress notification                                        │   │
+│   │   • WiFi-only option (configurable)                             │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    COMPLETION                                    │   │
+│   │                                                                  │   │
+│   │   ┌─────────────────┐    ┌─────────────────┐                    │   │
+│   │   │ File saved to   │    │ Notification    │                    │   │
+│   │   │ /sdcard/Download│    │ shown           │                    │   │
+│   │   └─────────────────┘    └─────────────────┘                    │   │
+│   │                                                                  │   │
+│   │   ┌─────────────────┐    ┌─────────────────┐                    │   │
+│   │   │ MediaStore      │    │ File appears   │                    │   │
+│   │   │ updated         │    │ in gallery     │                    │   │
+│   │   └─────────────────┘    └─────────────────┘                    │   │
+│   │                                                                  │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Relationship | Chapter | Topic |
+|--------------|---------|-------|
+| **Prerequisites** | Ch 1-3 | Termux Installation & Basic Commands |
+| **Prerequisites** | Ch 10 | Termux API Setup & Configuration |
+| **Prerequisites** | Ch 14 | File System & Permissions |
+| **Related** | Ch 18 | Device Information APIs |
+| **Related** | Ch 19 | Camera & Media APIs |
+| **Related** | Ch 20 | Network Operations |
+| **Related** | Ch 23 | Clipboard & Share APIs |
+| **Next** | Ch 18 | Device Information APIs |
+| **Advanced** | Ch 45 | Automation Scripts |
+| **Advanced** | Ch 52 | Python Integration |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Concurrent Download Manager
+
+```python
+#!/usr/bin/env python3
+"""Concurrent download manager with progress tracking"""
+
+import subprocess
+import threading
+import queue
+import time
+from dataclasses import dataclass
+from typing import List, Optional
+import json
+
+@dataclass
+class DownloadTask:
+    url: str
+    destination: str
+    title: str = ""
+    status: str = "pending"
+    progress: int = 0
+
+class ConcurrentDownloadManager:
+    def __init__(self, max_workers: int = 3):
+        self.max_workers = max_workers
+        self.task_queue = queue.Queue()
+        self.tasks: List[DownloadTask] = []
+        self.workers = []
+        self.running = False
+        
+    def add_task(self, url: str, destination: str = "/sdcard/Download", 
+                 title: str = ""):
+        task = DownloadTask(url=url, destination=destination, title=title)
+        self.tasks.append(task)
+        self.task_queue.put(task)
+        
+    def worker(self):
+        while self.running:
+            try:
+                task = self.task_queue.get(timeout=1)
+                task.status = "downloading"
+                
+                # Build command
+                cmd = ['termux-download', '-d', task.destination]
+                if task.title:
+                    cmd.extend(['-t', task.title])
+                cmd.append(task.url)
+                
+                # Execute download
+                result = subprocess.run(cmd, capture_output=True)
+                
+                task.status = "completed" if result.returncode == 0 else "failed"
+                self.task_queue.task_done()
+                
+            except queue.Empty:
+                continue
+                
+    def start(self):
+        self.running = True
+        for _ in range(self.max_workers):
+            worker = threading.Thread(target=self.worker, daemon=True)
+            worker.start()
+            self.workers.append(worker)
+            
+    def stop(self):
+        self.running = False
+        for worker in self.workers:
+            worker.join()
+            
+    def get_status(self) -> dict:
+        completed = sum(1 for t in self.tasks if t.status == "completed")
+        failed = sum(1 for t in self.tasks if t.status == "failed")
+        downloading = sum(1 for t in self.tasks if t.status == "downloading")
+        pending = sum(1 for t in self.tasks if t.status == "pending")
+        
+        return {
+            "total": len(self.tasks),
+            "completed": completed,
+            "failed": failed,
+            "downloading": downloading,
+            "pending": pending
+        }
+        
+    def show_progress(self):
+        status = self.get_status()
+        print(f"\rCompleted: {status['completed']}/{status['total']} | "
+              f"Active: {status['downloading']} | "
+              f"Failed: {status['failed']}", end="")
+        
+    def wait_completion(self):
+        while True:
+            status = self.get_status()
+            self.show_progress()
+            if status['pending'] == 0 and status['downloading'] == 0:
+                break
+            time.sleep(1)
+        print("\nAll downloads complete!")
+
+# Usage
+manager = ConcurrentDownloadManager(max_workers=3)
+manager.add_task("https://example.com/file1.pdf")
+manager.add_task("https://example.com/file2.pdf")
+manager.add_task("https://example.com/file3.pdf")
+
+manager.start()
+manager.wait_completion()
+manager.stop()
+```
+
+### Advanced Technique 2: Intelligent File Type Detection
+
+```python
+#!/usr/bin/env python3
+"""Intelligent file type detection and handling"""
+
+import subprocess
+import os
+import magic  # python-magic library
+from pathlib import Path
+from typing import Tuple, Optional
+import json
+
+class IntelligentFileHandler:
+    MIME_HANDLERS = {
+        'image/jpeg': {'share_type': 'image/jpeg', 'scan': True},
+        'image/png': {'share_type': 'image/png', 'scan': True},
+        'video/mp4': {'share_type': 'video/mp4', 'scan': True},
+        'audio/mpeg': {'share_type': 'audio/mpeg', 'scan': True},
+        'application/pdf': {'share_type': 'application/pdf', 'scan': False},
+        'application/zip': {'share_type': 'application/zip', 'scan': False},
+        'text/plain': {'share_type': 'text/plain', 'scan': False},
+        'application/json': {'share_type': 'application/json', 'scan': False},
+    }
+    
+    def __init__(self):
+        self.mime_detector = magic.Magic(mime=True)
+        
+    def detect_type(self, filepath: str) -> Tuple[str, Optional[dict]]:
+        """Detect file MIME type and get handler info"""
+        try:
+            mime_type = self.mime_detector.from_file(filepath)
+            handler = self.MIME_HANDLERS.get(mime_type, {
+                'share_type': 'application/octet-stream',
+                'scan': False
+            })
+            return mime_type, handler
+        except:
+            return 'application/octet-stream', {
+                'share_type': 'application/octet-stream',
+                'scan': False
+            }
+            
+    def process_file(self, filepath: str, action: str = 'share') -> dict:
+        """Process file with appropriate handler"""
+        filepath = os.path.expanduser(filepath)
+        
+        if not os.path.exists(filepath):
+            return {'success': False, 'error': 'File not found'}
+            
+        mime_type, handler = self.detect_type(filepath)
+        result = {
+            'filepath': filepath,
+            'mime_type': mime_type,
+            'handler': handler
+        }
+        
+        if action == 'share':
+            # Share with correct MIME type
+            cmd = ['termux-share', '-c', handler['share_type'], filepath]
+            subprocess.run(cmd)
+            result['action'] = 'shared'
+            
+        elif action == 'scan':
+            if handler['scan']:
+                subprocess.run(['termux-media-scan', filepath])
+                result['action'] = 'scanned'
+            else:
+                result['action'] = 'scan_not_needed'
+                
+        elif action == 'info':
+            stat = os.stat(filepath)
+            result['info'] = {
+                'size': stat.st_size,
+                'modified': stat.st_mtime,
+                'mime': mime_type
+            }
+            
+        result['success'] = True
+        return result
+        
+    def batch_process(self, directory: str, action: str = 'scan') -> list:
+        """Process all files in directory"""
+        results = []
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                filepath = os.path.join(root, file)
+                result = self.process_file(filepath, action)
+                results.append(result)
+        return results
+
+# Usage
+handler = IntelligentFileHandler()
+
+# Detect file type
+mime, info = handler.detect_type("/sdcard/Download/photo.jpg")
+print(f"Detected: {mime}")
+
+# Share with correct type
+handler.process_file("/sdcard/Download/photo.jpg", 'share')
+
+# Batch scan directory
+results = handler.batch_process("/sdcard/DCIM/Camera", 'scan')
+```
+
+### Advanced Technique 3: Encrypted File Vault
+
+```python
+#!/usr/bin/env python3
+"""Encrypted file vault with Termux API integration"""
+
+import subprocess
+import os
+import hashlib
+import base64
+from cryptography.fernet import Fernet
+from pathlib import Path
+import json
+from datetime import datetime
+
+class EncryptedVault:
+    def __init__(self, vault_path: str = "~/vault"):
+        self.vault_path = Path(vault_path).expanduser()
+        self.metadata_file = self.vault_path / ".vault_metadata"
+        self.key_file = self.vault_path / ".vault_key"
+        self.vault_path.mkdir(parents=True, exist_ok=True)
+        
+    def generate_key(self, password: str) -> bytes:
+        """Generate encryption key from password"""
+        key = hashlib.sha256(password.encode()).digest()
+        return base64.urlsafe_b64encode(key)
+        
+    def initialize_vault(self, password: str):
+        """Initialize vault with password"""
+        key = self.generate_key(password)
+        with open(self.key_file, 'wb') as f:
+            f.write(key)
+        
+        # Initialize metadata
+        metadata = {
+            'created': datetime.now().isoformat(),
+            'files': {}
+        }
+        self._save_metadata(metadata)
+        
+    def _load_key(self) -> bytes:
+        """Load encryption key"""
+        with open(self.key_file, 'rb') as f:
+            return f.read()
+            
+    def _save_metadata(self, metadata: dict):
+        """Save vault metadata"""
+        with open(self.metadata_file, 'w') as f:
+            json.dump(metadata, f, indent=2)
+            
+    def _load_metadata(self) -> dict:
+        """Load vault metadata"""
+        try:
+            with open(self.metadata_file, 'r') as f:
+                return json.load(f)
+        except:
+            return {'files': {}}
+            
+    def encrypt_file(self, source: str, password: str) -> str:
+        """Encrypt and store file in vault"""
+        key = self.generate_key(password)
+        fernet = Fernet(key)
+        
+        # Read source file
+        with open(source, 'rb') as f:
+            data = f.read()
+            
+        # Encrypt
+        encrypted = fernet.encrypt(data)
+        
+        # Generate vault filename
+        filename = hashlib.sha256(
+            f"{source}{datetime.now()}".encode()
+        ).hexdigest()[:16]
+        dest = self.vault_path / f"{filename}.enc"
+        
+        # Save encrypted file
+        with open(dest, 'wb') as f:
+            f.write(encrypted)
+            
+        # Update metadata
+        metadata = self._load_metadata()
+        metadata['files'][filename] = {
+            'original_name': os.path.basename(source),
+            'size': len(data),
+            'encrypted': datetime.now().isoformat()
+        }
+        self._save_metadata(metadata)
+        
+        return str(dest)
+        
+    def decrypt_file(self, vault_file: str, password: str, 
+                     output: str = None) -> str:
+        """Decrypt file from vault"""
+        key = self.generate_key(password)
+        fernet = Fernet(key)
+        
+        # Read encrypted file
+        with open(vault_file, 'rb') as f:
+            encrypted = f.read()
+            
+        # Decrypt
+        data = fernet.decrypt(encrypted)
+        
+        # Determine output path
+        if output is None:
+            metadata = self._load_metadata()
+            filename = os.path.basename(vault_file).replace('.enc', '')
+            original = metadata['files'].get(filename, {}).get(
+                'original_name', 'decrypted_file'
+            )
+            output = f"~/decrypted_{original}"
+            
+        output = os.path.expanduser(output)
+        
+        # Save decrypted file
+        with open(output, 'wb') as f:
+            f.write(data)
+            
+        # Scan for gallery if media
+        if output.lower().endswith(('.jpg', '.png', '.mp4', '.mp3')):
+            subprocess.run(['termux-media-scan', output])
+            
+        return output
+        
+    def import_and_encrypt(self, password: str) -> str:
+        """Pick file, encrypt, and store in vault"""
+        temp_file = self.vault_path / "temp_import"
+        
+        # Pick file
+        subprocess.run(['termux-storage-get', str(temp_file)])
+        
+        if temp_file.exists():
+            # Encrypt
+            encrypted_path = self.encrypt_file(str(temp_file), password)
+            
+            # Delete temp
+            temp_file.unlink()
+            
+            # Notification
+            subprocess.run([
+                'termux-notification',
+                '--title', '🔐 Vault',
+                '--content', 'File encrypted and stored',
+                '--priority', 'low'
+            ])
+            
+            return encrypted_path
+            
+        return None
+        
+    def list_vault(self) -> list:
+        """List files in vault"""
+        metadata = self._load_metadata()
+        return [
+            {'id': fid, **info}
+            for fid, info in metadata['files'].items()
+        ]
+
+# Usage
+vault = EncryptedVault()
+
+# Initialize vault
+vault.initialize_vault("my_secret_password")
+
+# Import and encrypt file
+vault.import_and_encrypt("my_secret_password")
+
+# Decrypt file
+vault.decrypt_file("~/vault/abc123.enc", "my_secret_password", 
+                   "~/decrypted_photo.jpg")
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Commands Learned
+- [ ] `termux-storage-get` - Opens Android file picker
+- [ ] `termux-share` - Shares files and text
+- [ ] `termux-download` - Downloads files using system manager
+- [ ] `termux-media-scan` - Registers files in MediaStore
+
+### ✅ Concepts Understood
+- [ ] Android Storage Access Framework integration
+- [ ] Share Intent mechanism
+- [ ] Download Manager service
+- [ ] MediaStore and gallery visibility
+- [ ] MIME types for content sharing
+- [ ] Termux storage paths vs shared storage
+
+### ✅ Skills Acquired
+- [ ] File picking from Android storage
+- [ ] Sharing files to other apps
+- [ ] Background file downloads
+- [ ] Making files visible in gallery
+- [ ] Python integration for automation
+- [ ] Bash scripting for file operations
+
+### ✅ Practical Applications
+- [ ] File backup automation
+- [ ] Media organization scripts
+- [ ] Secure file transfer systems
+- [ ] Document scanning workflows
+- [ ] Batch download management
+
+### ✅ Best Practices
+- [ ] Always check file permissions
+- [ ] Use appropriate MIME types
+- [ ] Handle errors gracefully
+- [ ] Scan media files for gallery visibility
+- [ ] Secure sensitive data before sharing
+
+---
+
+*Chapter 17 Complete! Ready for Chapter 18: Device Information APIs*

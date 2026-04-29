@@ -1,9 +1,32 @@
-# Chapter 20: Termux API - Network Operations
+# 📡 Chapter 20: Termux API - Network Operations
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║   ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗               ║
+║   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║               ║
+║      ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║               ║
+║      ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║               ║
+║      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗          ║
+║      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝          ║
+║                                                                              ║
+║   ██████╗  █████╗ ██████╗ ██╗  ██╗███╗   ██╗███████╗                         ║
+║   ██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝████╗  ██║██╔════╝                         ║
+║   ██████╔╝███████║██████╔╝█████╔╝ ██╔██╗ ██║█████╗                           ║
+║   ██╔══██╗██╔══██║██╔══██╗██╔═██╗ ██║╚██╗██║██╔══╝                           ║
+║   ██║  ██║██║  ██║██║  ██║██║  ██╗██║ ╚████║███████╗                         ║
+║   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝                         ║
+║                                                                              ║
+║                     🌐 NETWORK OPERATIONS CHAPTER 🌐                         ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
 
 > **Module:** 4 - APIs  
 > **Chapter:** 20 of 61  
 > **Duration:** 15-20 Minutes  
 > **Difficulty:** ⭐⭐ Intermediate  
+> **Prerequisites:** Chapters 1-19 (All previous API chapters)  
 
 ---
 
@@ -3543,3 +3566,1710 @@ termux-wifi-scaninfo | jq '.[] | select(.capabilities | contains("WPA2"))'
 11. **B** - `[WPA2-PSK]` indicates WPA2 security
 12. **B** - Hidden networks have empty SSID string
 
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Question 1: WiFi Security Assessment
+**Q:** How would you assess the security of nearby WiFi networks using Termux?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+```bash
+# WiFi security assessment script
+assess_wifi_security() {
+    termux-wifi-scaninfo | jq -r '.[] | "SSID: \(.ssid // \"Hidden\")\n" +
+        "Security: \(.capabilities)\n" +
+        "Signal: \(.rssi) dBm\n" +
+        (if .capabilities | contains("WPS") then "⚠️  WPS Vulnerable!" else "" end)'
+}
+```
+
+**Follow-up:** How would you report vulnerable networks to network administrators?
+</details>
+
+### Question 2: Network Monitoring System
+**Q:** Design a network monitoring solution that logs connectivity changes.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+```bash
+#!/bin/bash
+# network_monitor.sh
+LOG=~/network_log.txt
+
+while true; do
+    WIFI=$(termux-wifi-connectioninfo 2>/dev/null | jq -r '.ssid // "Disconnected"')
+    IP=$(curl -s --max-time 5 ifconfig.me 2>/dev/null || echo "No Internet")
+    echo "$(date): WiFi=$WIFI, IP=$IP" >> $LOG
+    sleep 300
+done
+```
+
+**Follow-up:** How would you add automatic reconnection logic?
+</details>
+
+### Question 3-10: Additional Network Questions
+<details>
+<summary>📖 Show More Questions</summary>
+
+**Q3:** Explain the difference between RSSI and signal quality percentage.
+**Q4:** How would you implement a WiFi signal strength mapper?
+**Q5:** What are the security implications of WPS-enabled networks?
+**Q6:** Design a script that switches between WiFi networks based on signal strength.
+**Q7:** How would you detect rogue access points?
+**Q8:** Create a bandwidth monitoring tool using available APIs.
+**Q9:** How to handle network handoffs in mobile environments?
+**Q10:** Implement a connection quality scoring system.
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: WiFi Analyzer Tool
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                       📶 WIFI ANALYZER TOOL                                 ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Analyze and rank WiFi networks by signal strength                ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   termux-wifi-scaninfo | jq -r 'sort_by(.rssi) | reverse | .[] |           ║
+║     "\(.rssi) dBm | \(.ssid // \"Hidden\") | \(.frequency) MHz"'            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: Network Connectivity Monitor
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    📊 NETWORK CONNECTIVITY MONITOR                          ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Monitor and log network status changes                          ║
+║ Commands: while true; do ping -c 1 google.com && echo "Online" || echo "Offline"; sleep 60; done ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Network API Flow
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       NETWORK API ARCHITECTURE                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   termux-wifi-* commands ──► Termux:API ──► Android WifiManager              │
+│                                                                              │
+│   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐                  │
+│   │ wifi-enable  │    │wifi-scaninfo │    │wifi-connect  │                  │
+│   └──────────────┘    └──────────────┘    └──────────────┘                  │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Topic | Relation |
+|---------|-------|----------|
+| Chapter 17 | File Operations | Download files from URLs |
+| Chapter 18 | Device Info | Combine with telephony info |
+| Chapter 21 | Notifications | Network status alerts |
+| Chapter 22 | Contacts & SMS | Network-dependent messaging |
+| Chapter 23 | Clipboard & Share | Share network data |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: WiFi Signal Mapper
+```bash
+#!/bin/bash
+# Map WiFi signal strength as you move around
+while true; do
+    LOC=$(termux-location -p network 2>/dev/null | jq -r '@base64')
+    WIFI=$(termux-wifi-connectioninfo | jq -r '.rssi')
+    echo "$LOC|$WIFI" >> ~/wifi_map.log
+    sleep 5
+done
+```
+
+### Advanced Technique 2: Network Change Detector
+```bash
+#!/bin/bash
+LAST_SSID=""
+while true; do
+    CURRENT=$(termux-wifi-connectioninfo 2>/dev/null | jq -r '.ssid // ""')
+    if [ "$CURRENT" != "$LAST_SSID" ]; then
+        termux-notification --title "Network Changed" --content "Now on: $CURRENT"
+        LAST_SSID="$CURRENT"
+    fi
+    sleep 10
+done
+```
+
+### Advanced Technique 3: Auto WiFi Optimizer
+```python
+#!/usr/bin/env python3
+import subprocess, json
+
+def optimize_wifi():
+    # Scan and find best network
+    result = subprocess.run(['termux-wifi-scaninfo'], capture_output=True)
+    networks = json.loads(result.stdout)
+    best = max(networks, key=lambda x: x['rssi'])
+    print(f"Best network: {best.get('ssid', 'Hidden')} ({best['rssi']} dBm)")
+    return best
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ What You Learned
+- [ ] **termux-wifi-connectioninfo** - Current WiFi details
+- [ ] **termux-wifi-enable** - WiFi on/off control
+- [ ] **termux-wifi-scaninfo** - Network scanning
+- [ ] **RSSI values** - Signal strength interpretation
+- [ ] **Security analysis** - Identifying vulnerable networks
+- [ ] **IP addressing** - Internal and external IPs
+- [ ] **MAC addresses** - Device identification
+- [ ] **Network monitoring** - Continuous status checks
+
+### 📋 Quick Reference
+```bash
+termux-wifi-connectioninfo        # Current WiFi
+termux-wifi-enable true          # Enable WiFi
+termux-wifi-scaninfo             # Scan networks
+curl -s ifconfig.me              # Public IP
+ip addr show wlan0               # Local IP
+ip route | grep default          # Gateway
+```
+
+---
+
+*Chapter 20 Complete! Ready for Chapter 21: Notifications APIs*
+
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>❓ Question 1: Which command returns current WiFi connection details?</b></summary>
+
+**Answer:** `termux-wifi-connectioninfo`
+
+Returns JSON with: bssid, ssid, ip, mac, rssi, link_speed, network_id, frequency.
+</details>
+
+<details>
+<summary><b>❓ Question 2: How do you turn WiFi ON from Termux?</b></summary>
+
+**Answer:** Use `termux-wifi-enable true`:
+
+```bash
+termux-wifi-enable true   # Turn ON
+termux-wifi-enable false  # Turn OFF
+```
+
+Note: Requires location permission on Android 10+.
+</details>
+
+<details>
+<summary><b>❓ Question 3: What command scans for nearby WiFi networks?</b></summary>
+
+**Answer:** `termux-wifi-scaninfo`
+
+Returns array of networks with: ssid, bssid, frequency, rssi, capabilities.
+</details>
+
+<details>
+<summary><b>❓ Question 4: What is RSSI and what do its values mean?</b></summary>
+
+**Answer:** RSSI (Received Signal Strength Indicator) in dBm:
+
+| RSSI | Quality |
+|------|---------|
+| -30 to -50 | Excellent |
+| -50 to -60 | Good |
+| -60 to -70 | Fair |
+| -70 to -80 | Weak |
+| Below -80 | Very Poor |
+
+Higher (closer to 0) is better.
+</details>
+
+<details>
+<summary><b>❓ Question 5: How do you get your public IP address?</b></summary>
+
+**Answer:** Use curl with external service:
+
+```bash
+curl -s ifconfig.me
+curl -s icanhazip.com
+curl -s api.ipify.org
+```
+</details>
+
+<details>
+<summary><b>❓ Question 6: What does "capabilities" field in WiFi scan show?</b></summary>
+
+**Answer:** Security features of the network:
+
+```
+[WPA2-PSK-CCMP][ESS]     # WPA2 with PSK
+[WPA3-SAE][ESS]          # WPA3
+[WPS][ESS]               # WPS enabled (potential vulnerability)
+[ESS]                    # Open network
+```
+</details>
+
+<details>
+<summary><b>❓ Question 7: How do you check local IP address?</b></summary>
+
+**Answer:** Use ip command or ifconfig:
+
+```bash
+ip addr show wlan0
+ifconfig wlan0 | grep "inet "
+termux-wifi-connectioninfo | jq '.ip'
+```
+</details>
+
+<details>
+<summary><b>❓ Question 8: What is BSSID?</b></summary>
+
+**Answer:** BSSID (Basic Service Set Identifier) is the MAC address of the WiFi access point/router.
+
+Example: `aa:bb:cc:dd:ee:ff`
+
+It uniquely identifies the specific router/access point.
+</details>
+
+<details>
+<summary><b>❓ Question 9: How do you find open (no password) WiFi networks?</b></summary>
+
+**Answer:** Filter scan results:
+
+```bash
+termux-wifi-scaninfo | jq '.[] | select(.capabilities | contains("ESS") and contains("WPA") | not)'
+```
+
+Look for networks with capabilities containing only `[ESS]`.
+</details>
+
+<details>
+<summary><b>❓ Question 10: What command shows the default gateway?</b></summary>
+
+**Answer:** Use ip route:
+
+```bash
+ip route | grep default
+# Output: default via 192.168.1.1 dev wlan0
+```
+
+Or with net-tools: `route -n`
+</details>
+
+<details>
+<summary><b>❓ Question 11: How do you check DNS servers?</b></summary>
+
+**Answer:** Check /etc/resolv.conf:
+
+```bash
+cat /etc/resolv.conf
+```
+
+Or with root: `su -c "getprop | grep dns"`
+</details>
+
+<details>
+<summary><b>❓ Question 12: What frequency bands do WiFi networks use?</b></summary>
+
+**Answer:**
+
+| Band | Frequency | Common Channels |
+|------|-----------|-----------------|
+| 2.4 GHz | 2412-2484 MHz | 1-14 |
+| 5 GHz | 5170-5825 MHz | 36-165 |
+
+Check with: `termux-wifi-scaninfo | jq '.[].frequency'`
+</details>
+
+<details>
+<summary><b>❓ Question 13: How do you find WPS-enabled networks?</b></summary>
+
+**Answer:** Filter for WPS capability:
+
+```bash
+termux-wifi-scaninfo | jq '.[] | select(.capabilities | contains("WPS"))'
+```
+
+WPS-enabled networks may be vulnerable to brute-force attacks.
+</details>
+
+<details>
+<summary><b>❓ Question 14: What's the difference between SSID and BSSID?</b></summary>
+
+**Answer:**
+
+| Term | Meaning | Example |
+|------|---------|---------|
+| SSID | Network name (user-friendly) | "MyWiFi" |
+| BSSID | Router's MAC address | "aa:bb:cc:dd:ee:ff" |
+
+SSID is what you see, BSSID is the hardware identifier.
+</details>
+
+<details>
+<summary><b>❓ Question 15: How do you check network connectivity?</b></summary>
+
+**Answer:** Use ping:
+
+```bash
+ping -c 4 google.com     # Internet connectivity
+ping -c 4 192.168.1.1    # Local gateway
+```
+
+Or check DNS: `nslookup google.com`
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Q1: Design a network monitoring system using Termux APIs.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Comprehensive network monitoring system"""
+
+import subprocess
+import json
+import time
+import threading
+from datetime import datetime
+from collections import deque
+
+class NetworkMonitor:
+    def __init__(self, history_size=100):
+        self.history = deque(maxlen=history_size)
+        self.running = False
+        self.alerts = []
+        self.callbacks = []
+        
+    def get_wifi_info(self):
+        """Get current WiFi connection info"""
+        result = subprocess.run(
+            ['termux-wifi-connectioninfo'],
+            capture_output=True, text=True
+        )
+        return json.loads(result.stdout) if result.returncode == 0 else None
+        
+    def get_public_ip(self):
+        """Get public IP address"""
+        try:
+            result = subprocess.run(
+                ['curl', '-s', '--max-time', '5', 'ifconfig.me'],
+                capture_output=True, text=True
+            )
+            return result.stdout.strip() if result.returncode == 0 else None
+        except:
+            return None
+            
+    def check_internet(self):
+        """Check internet connectivity"""
+        hosts = ['google.com', 'cloudflare.com', 'github.com']
+        
+        for host in hosts:
+            result = subprocess.run(
+                ['ping', '-c', '1', '-W', '2', host],
+                capture_output=True
+            )
+            if result.returncode == 0:
+                return True
+        return False
+        
+    def scan_networks(self):
+        """Scan for WiFi networks"""
+        result = subprocess.run(
+            ['termux-wifi-scaninfo'],
+            capture_output=True, text=True
+        )
+        return json.loads(result.stdout) if result.returncode == 0 else []
+        
+    def collect_metrics(self):
+        """Collect all network metrics"""
+        wifi = self.get_wifi_info()
+        public_ip = self.get_public_ip()
+        internet = self.check_internet()
+        networks = self.scan_networks()
+        
+        metrics = {
+            'timestamp': datetime.now().isoformat(),
+            'wifi_connected': wifi is not None,
+            'wifi_ssid': wifi.get('ssid') if wifi else None,
+            'wifi_signal': wifi.get('rssi') if wifi else None,
+            'wifi_speed': wifi.get('link_speed_mbps') if wifi else None,
+            'local_ip': wifi.get('ip') if wifi else None,
+            'public_ip': public_ip,
+            'internet_available': internet,
+            'network_count': len(networks),
+            'open_networks': len([n for n in networks if 'WPA' not in n.get('capabilities', '')])
+        }
+        
+        self.history.append(metrics)
+        return metrics
+        
+    def check_alerts(self, metrics):
+        """Check for alert conditions"""
+        alerts = []
+        
+        # No WiFi connection
+        if not metrics['wifi_connected']:
+            alerts.append({
+                'type': 'wifi_disconnected',
+                'message': 'WiFi disconnected',
+                'severity': 'high'
+            })
+            
+        # Weak signal
+        if metrics['wifi_signal'] and metrics['wifi_signal'] < -75:
+            alerts.append({
+                'type': 'weak_signal',
+                'message': f"Weak WiFi signal: {metrics['wifi_signal']} dBm",
+                'severity': 'medium'
+            })
+            
+        # No internet
+        if metrics['wifi_connected'] and not metrics['internet_available']:
+            alerts.append({
+                'type': 'no_internet',
+                'message': 'WiFi connected but no internet',
+                'severity': 'high'
+            })
+            
+        return alerts
+        
+    def send_notification(self, alert):
+        """Send alert notification"""
+        subprocess.run([
+            'termux-notification',
+            '--title', f"⚠️ Network Alert: {alert['type']}",
+            '--content', alert['message'],
+            '--priority', 'high' if alert['severity'] == 'high' else 'default'
+        ])
+        
+    def run(self, interval=30):
+        """Main monitoring loop"""
+        self.running = True
+        
+        while self.running:
+            metrics = self.collect_metrics()
+            alerts = self.check_alerts(metrics)
+            
+            for alert in alerts:
+                self.alerts.append({**alert, 'timestamp': metrics['timestamp']})
+                self.send_notification(alert)
+                
+            for callback in self.callbacks:
+                callback(metrics, alerts)
+                
+            time.sleep(interval)
+            
+    def start(self):
+        """Start monitoring thread"""
+        thread = threading.Thread(target=self.run, daemon=True)
+        thread.start()
+        
+    def stop(self):
+        """Stop monitoring"""
+        self.running = False
+        
+    def get_report(self):
+        """Generate monitoring report"""
+        if not self.history:
+            return None
+            
+        connected_count = sum(1 for m in self.history if m['wifi_connected'])
+        avg_signal = sum(m['wifi_signal'] or 0 for m in self.history) / len(self.history)
+        
+        return {
+            'total_checks': len(self.history),
+            'wifi_uptime': f"{connected_count/len(self.history)*100:.1f}%",
+            'avg_signal_strength': f"{avg_signal:.1f} dBm",
+            'total_alerts': len(self.alerts)
+        }
+
+# Usage
+monitor = NetworkMonitor()
+
+def on_metrics(metrics, alerts):
+    print(f"[{metrics['timestamp']}] WiFi: {metrics['wifi_ssid']} | "
+          f"Signal: {metrics['wifi_signal']} dBm | "
+          f"Internet: {'✓' if metrics['internet_available'] else '✗'}")
+
+monitor.callbacks.append(on_metrics)
+monitor.start()
+```
+
+Features:
+- WiFi connection monitoring
+- Internet connectivity checks
+- Signal strength tracking
+- Alert notifications
+- Historical metrics
+</details>
+
+### Q2: Implement a WiFi security analyzer.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""WiFi security analyzer"""
+
+import subprocess
+import json
+from dataclasses import dataclass
+from typing import List
+
+@dataclass
+class SecurityAssessment:
+    ssid: str
+    bssid: str
+    security_type: str
+    wps_enabled: bool
+    risk_level: str
+    recommendations: List[str]
+
+class WiFiSecurityAnalyzer:
+    def __init__(self):
+        self.networks = []
+        
+    def scan(self):
+        """Scan for networks"""
+        result = subprocess.run(
+            ['termux-wifi-scaninfo'],
+            capture_output=True, text=True
+        )
+        
+        if result.returncode == 0:
+            self.networks = json.loads(result.stdout)
+        return self.networks
+        
+    def analyze_security(self, capabilities: str) -> dict:
+        """Analyze network security from capabilities string"""
+        caps = capabilities.upper()
+        
+        security = {
+            'wpa3': 'WPA3' in caps or 'SAE' in caps,
+            'wpa2': 'WPA2' in caps,
+            'wpa': 'WPA-' in caps and 'WPA2' not in caps and 'WPA3' not in caps,
+            'wep': 'WEP' in caps,
+            'open': 'ESS' in caps and 'WPA' not in caps and 'WEP' not in caps,
+            'wps': 'WPS' in caps
+        }
+        
+        return security
+        
+    def get_risk_level(self, security: dict) -> str:
+        """Determine risk level"""
+        if security['open']:
+            return 'HIGH'
+        elif security['wps']:
+            return 'MEDIUM'
+        elif security['wep']:
+            return 'CRITICAL'
+        elif security['wpa']:
+            return 'MEDIUM'
+        elif security['wpa2']:
+            return 'LOW'
+        elif security['wpa3']:
+            return 'MINIMAL'
+        return 'UNKNOWN'
+        
+    def get_recommendations(self, security: dict, risk: str) -> List[str]:
+        """Get security recommendations"""
+        recs = []
+        
+        if security['open']:
+            recs.append("Avoid connecting - No encryption")
+            recs.append("Use VPN if connection required")
+        if security['wps']:
+            recs.append("WPS may be vulnerable to brute-force")
+            recs.append("Disable WPS on your router")
+        if security['wep']:
+            recs.append("WEP is completely insecure")
+            recs.append("Upgrade router immediately")
+        if security['wpa']:
+            recs.append("WPA is outdated, upgrade to WPA2/WPA3")
+        if security['wpa2']:
+            recs.append("Use strong password (12+ chars)")
+        if security['wpa3']:
+            recs.append("Good security standard")
+            
+        return recs
+        
+    def assess_network(self, network: dict) -> SecurityAssessment:
+        """Assess single network"""
+        caps = network.get('capabilities', '')
+        security = self.analyze_security(caps)
+        risk = self.get_risk_level(security)
+        recs = self.get_recommendations(security, risk)
+        
+        security_type = 'Open' if security['open'] else \
+                       'WPA3' if security['wpa3'] else \
+                       'WPA2' if security['wpa2'] else \
+                       'WPA' if security['wpa'] else \
+                       'WEP' if security['wep'] else 'Unknown'
+        
+        return SecurityAssessment(
+            ssid=network.get('ssid', 'Hidden'),
+            bssid=network.get('bssid', 'Unknown'),
+            security_type=security_type,
+            wps_enabled=security['wps'],
+            risk_level=risk,
+            recommendations=recs
+        )
+        
+    def generate_report(self) -> dict:
+        """Generate security report"""
+        self.scan()
+        
+        assessments = [self.assess_network(n) for n in self.networks]
+        
+        # Statistics
+        stats = {
+            'total_networks': len(assessments),
+            'open_networks': sum(1 for a in assessments if a.security_type == 'Open'),
+            'wps_enabled': sum(1 for a in assessments if a.wps_enabled),
+            'wpa3_networks': sum(1 for a in assessments if a.security_type == 'WPA3'),
+            'high_risk': sum(1 for a in assessments if a.risk_level in ['HIGH', 'CRITICAL'])
+        }
+        
+        return {
+            'statistics': stats,
+            'assessments': [{
+                'ssid': a.ssid,
+                'security': a.security_type,
+                'risk': a.risk_level,
+                'wps': a.wps_enabled,
+                'recommendations': a.recommendations
+            } for a in assessments]
+        }
+        
+    def print_report(self):
+        """Print formatted report"""
+        report = self.generate_report()
+        
+        print("\n🔒 WiFi Security Report")
+        print("=" * 50)
+        
+        stats = report['statistics']
+        print(f"\n📊 Statistics:")
+        print(f"   Total Networks: {stats['total_networks']}")
+        print(f"   Open Networks: {stats['open_networks']} ⚠️")
+        print(f"   WPS Enabled: {stats['wps_enabled']} ⚠️")
+        print(f"   WPA3 Networks: {stats['wpa3_networks']} ✓")
+        print(f"   High Risk: {stats['high_risk']} 🚨")
+        
+        print("\n📋 Network Details:")
+        for a in report['assessments']:
+            risk_icon = {'MINIMAL': '✓', 'LOW': '✓', 'MEDIUM': '⚠️', 
+                        'HIGH': '🚨', 'CRITICAL': '💀'}.get(a['risk'], '?')
+            print(f"\n   {risk_icon} {a['ssid'] or 'Hidden'}")
+            print(f"     Security: {a['security']}")
+            print(f"     Risk: {a['risk']}")
+
+# Usage
+analyzer = WiFiSecurityAnalyzer()
+analyzer.print_report()
+```
+
+Features:
+- Security protocol detection
+- Risk assessment
+- WPS vulnerability detection
+- Security recommendations
+</details>
+
+### Q3: Create a network troubleshooting toolkit.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Network troubleshooting toolkit"""
+
+import subprocess
+import json
+import time
+from typing import Optional, List
+
+class NetworkTroubleshooter:
+    def __init__(self):
+        self.results = {}
+        
+    def check_wifi_status(self) -> dict:
+        """Check WiFi connection status"""
+        result = subprocess.run(
+            ['termux-wifi-connectioninfo'],
+            capture_output=True, text=True
+        )
+        
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            return {
+                'connected': True,
+                'ssid': data.get('ssid'),
+                'ip': data.get('ip'),
+                'signal': data.get('rssi'),
+                'speed': data.get('link_speed_mbps'),
+                'frequency': data.get('frequency_mhz')
+            }
+        return {'connected': False}
+        
+    def ping_test(self, host: str = "google.com", count: int = 4) -> dict:
+        """Run ping test"""
+        result = subprocess.run(
+            ['ping', '-c', str(count), host],
+            capture_output=True, text=True
+        )
+        
+        output = result.stdout
+        success = result.returncode == 0
+        
+        # Parse statistics
+        packet_loss = 0
+        avg_time = 0
+        
+        if 'packet loss' in output:
+            try:
+                loss_line = [l for l in output.split('\n') if 'packet loss' in l][0]
+                packet_loss = int(loss_line.split('%')[0].split()[-1])
+            except:
+                pass
+                
+        if 'avg' in output:
+            try:
+                stats_line = [l for l in output.split('\n') if 'avg' in l][0]
+                avg_time = float(stats_line.split('=')[1].split('/')[1])
+            except:
+                pass
+                
+        return {
+            'host': host,
+            'success': success,
+            'packet_loss': packet_loss,
+            'avg_latency_ms': avg_time
+        }
+        
+    def dns_test(self, domain: str = "google.com") -> dict:
+        """Test DNS resolution"""
+        result = subprocess.run(
+            ['nslookup', domain],
+            capture_output=True, text=True
+        )
+        
+        success = result.returncode == 0
+        ips = []
+        
+        if success:
+            for line in result.stdout.split('\n'):
+                if 'Address:' in line and '.' in line.split(':')[-1]:
+                    ip = line.split(':')[-1].strip()
+                    if ip.count('.') == 3:
+                        ips.append(ip)
+                        
+        return {
+            'domain': domain,
+            'success': success,
+            'resolved_ips': ips
+        }
+        
+    def port_test(self, host: str, port: int, timeout: int = 5) -> dict:
+        """Test if port is open"""
+        result = subprocess.run(
+            ['timeout', str(timeout), 'nc', '-zv', host, str(port)],
+            capture_output=True, text=True
+        )
+        
+        return {
+            'host': host,
+            'port': port,
+            'open': result.returncode == 0
+        }
+        
+    def get_gateway(self) -> Optional[str]:
+        """Get default gateway"""
+        result = subprocess.run(
+            ['ip', 'route'],
+            capture_output=True, text=True
+        )
+        
+        for line in result.stdout.split('\n'):
+            if 'default' in line:
+                parts = line.split()
+                if 'via' in parts:
+                    return parts[parts.index('via') + 1]
+        return None
+        
+    def check_dns_servers(self) -> List[str]:
+        """Get DNS servers"""
+        result = subprocess.run(
+            ['cat', '/etc/resolv.conf'],
+            capture_output=True, text=True
+        )
+        
+        servers = []
+        for line in result.stdout.split('\n'):
+            if line.startswith('nameserver'):
+                servers.append(line.split()[1])
+        return servers
+        
+    def run_full_diagnosis(self) -> dict:
+        """Run complete network diagnosis"""
+        diagnosis = {
+            'timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'checks': {}
+        }
+        
+        # Check WiFi
+        diagnosis['checks']['wifi'] = self.check_wifi_status()
+        
+        if diagnosis['checks']['wifi']['connected']:
+            # Get gateway
+            diagnosis['checks']['gateway'] = self.get_gateway()
+            
+            # Ping gateway
+            if diagnosis['checks']['gateway']:
+                diagnosis['checks']['gateway_ping'] = self.ping_test(
+                    diagnosis['checks']['gateway'], 2
+                )
+                
+            # DNS test
+            diagnosis['checks']['dns'] = self.dns_test()
+            
+            # Ping internet
+            diagnosis['checks']['internet_ping'] = self.ping_test('google.com', 2)
+            
+            # Get DNS servers
+            diagnosis['checks']['dns_servers'] = self.check_dns_servers()
+            
+        # Determine issues
+        issues = []
+        
+        if not diagnosis['checks']['wifi']['connected']:
+            issues.append("WiFi not connected")
+        elif not diagnosis['checks'].get('internet_ping', {}).get('success'):
+            if not diagnosis['checks'].get('gateway_ping', {}).get('success'):
+                issues.append("Cannot reach gateway - local network issue")
+            elif not diagnosis['checks'].get('dns', {}).get('success'):
+                issues.append("DNS resolution failing - check DNS settings")
+            else:
+                issues.append("Internet unreachable - ISP issue")
+                
+        diagnosis['issues'] = issues
+        diagnosis['status'] = "OK" if not issues else "PROBLEMS DETECTED"
+        
+        return diagnosis
+        
+    def print_diagnosis(self, diagnosis: dict):
+        """Print formatted diagnosis"""
+        print("\n🔍 Network Diagnosis Report")
+        print("=" * 50)
+        print(f"Timestamp: {diagnosis['timestamp']}")
+        print(f"Status: {diagnosis['status']}")
+        print()
+        
+        checks = diagnosis['checks']
+        
+        # WiFi
+        wifi = checks.get('wifi', {})
+        if wifi.get('connected'):
+            print(f"✓ WiFi: Connected to {wifi.get('ssid')}")
+            print(f"  IP: {wifi.get('ip')}")
+            print(f"  Signal: {wifi.get('signal')} dBm")
+        else:
+            print("✗ WiFi: Not connected")
+            
+        # Gateway
+        if 'gateway' in checks:
+            print(f"✓ Gateway: {checks['gateway']}")
+            
+        # DNS
+        if 'dns' in checks:
+            dns = checks['dns']
+            if dns.get('success'):
+                print(f"✓ DNS: Resolved {dns['domain']}")
+            else:
+                print("✗ DNS: Resolution failed")
+                
+        # Internet
+        if 'internet_ping' in checks:
+            ping = checks['internet_ping']
+            if ping.get('success'):
+                print(f"✓ Internet: {ping['avg_latency_ms']}ms latency")
+            else:
+                print("✗ Internet: Cannot reach")
+                
+        # Issues
+        if diagnosis['issues']:
+            print("\n⚠️ Issues Found:")
+            for issue in diagnosis['issues']:
+                print(f"  - {issue}")
+
+# Usage
+troubleshooter = NetworkTroubleshooter()
+diagnosis = troubleshooter.run_full_diagnosis()
+troubleshooter.print_diagnosis(diagnosis)
+```
+
+Features:
+- WiFi status check
+- Ping testing
+- DNS resolution testing
+- Port scanning
+- Gateway detection
+- Issue diagnosis
+</details>
+
+### Q4: Compare Termux WiFi APIs vs Android WifiManager.
+
+**Answer:**
+
+**Architecture Comparison:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    ANDROID WIFIMANAGER VS TERMUX API                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ANDROID WIFIMANAGER (Java/Kotlin)                                     │
+│   ─────────────────────────────────                                     │
+│   • Full programmatic control                                          │
+│   • Requires Android app development                                   │
+│   • Complex API with callbacks                                         │
+│   • Direct hardware access                                             │
+│   • Background service support                                         │
+│                                                                          │
+│   TERMUX API (Shell Commands)                                          │
+│   ───────────────────────────                                           │
+│   • Simple command-line interface                                      │
+│   • No app development required                                        │
+│   • JSON output for easy parsing                                       │
+│   • Limited to API-provided features                                   │
+│   • Great for automation scripts                                       │
+│                                                                          │
+│   COMPARISON TABLE:                                                     │
+│   ┌──────────────────┬─────────────────┬─────────────────┐             │
+│   │ Feature          │ WifiManager     │ Termux API      │             │
+│   ├──────────────────┼─────────────────┼─────────────────┤             │
+│   │ Connect to WiFi  │ ✓ Full control  │ ✗ Not available │             │
+│   │ Scan networks    │ ✓ Yes           │ ✓ Yes           │             │
+│   │ Get connection   │ ✓ Yes           │ ✓ Yes           │             │
+│   │ Enable/Disable   │ ✓ Yes           │ ✓ Yes           │             │
+│   │ Get RSSI         │ ✓ Yes           │ ✓ Yes           │             │
+│   │ Configure hotspot│ ✓ Yes           │ ✗ Limited       │             │
+│   │ Forget networks  │ ✓ Yes           │ ✗ Not available │             │
+│   │ Add network      │ ✓ Yes           │ ✗ Not available │             │
+│   └──────────────────┴─────────────────┴─────────────────┘             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**When to use each:**
+
+| Use Termux API When... | Use Android WifiManager When... |
+|------------------------|--------------------------------|
+| Quick scripts needed | Building Android apps |
+| Automation tasks | Custom WiFi manager app |
+| CLI-based workflows | Background services required |
+| Learning/testing | Production app development |
+| Prototyping | Advanced WiFi features needed |
+</details>
+
+### Q5: Design a network automation system for IoT devices.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""IoT network automation system"""
+
+import subprocess
+import json
+import time
+import threading
+from dataclasses import dataclass
+from typing import Dict, List, Optional
+from datetime import datetime
+
+@dataclass
+class IoTDevice:
+    name: str
+    mac: str
+    ip: Optional[str] = None
+    last_seen: Optional[datetime] = None
+    status: str = "offline"
+    
+class IoTAutomation:
+    def __init__(self):
+        self.devices: Dict[str, IoTDevice] = {}
+        self.running = False
+        self.rules = []
+        
+    def add_device(self, name: str, mac: str):
+        """Register IoT device"""
+        self.devices[mac] = IoTDevice(name=name, mac=mac)
+        
+    def get_arp_table(self) -> Dict[str, str]:
+        """Get ARP table (IP -> MAC mapping)"""
+        result = subprocess.run(
+            ['cat', '/proc/net/arp'],
+            capture_output=True, text=True
+        )
+        
+        arp = {}
+        for line in result.stdout.split('\n')[1:]:
+            parts = line.split()
+            if len(parts) >= 4:
+                ip = parts[0]
+                mac = parts[3]
+                if mac != '00:00:00:00:00:00':
+                    arp[mac] = ip
+        return arp
+        
+    def ping_device(self, ip: str) -> bool:
+        """Check if device is reachable"""
+        result = subprocess.run(
+            ['ping', '-c', '1', '-W', '2', ip],
+            capture_output=True
+        )
+        return result.returncode == 0
+        
+    def scan_network(self, base_ip: str = "192.168.1"):
+        """Scan network for devices"""
+        devices_found = []
+        
+        # Quick ping sweep
+        for i in range(1, 255):
+            ip = f"{base_ip}.{i}"
+            result = subprocess.run(
+                ['ping', '-c', '1', '-W', '1', ip],
+                capture_output=True
+            )
+            if result.returncode == 0:
+                devices_found.append(ip)
+                
+        return devices_found
+        
+    def check_device_status(self, device: IoTDevice) -> str:
+        """Check device status"""
+        arp = self.get_arp_table()
+        
+        if device.mac in arp:
+            device.ip = arp[device.mac]
+            if device.ip and self.ping_device(device.ip):
+                device.last_seen = datetime.now()
+                return "online"
+        return "offline"
+        
+    def update_all_devices(self):
+        """Update status of all registered devices"""
+        for mac, device in self.devices.items():
+            device.status = self.check_device_status(device)
+            
+    def add_rule(self, condition: callable, action: callable):
+        """Add automation rule"""
+        self.rules.append({'condition': condition, 'action': action})
+        
+    def evaluate_rules(self):
+        """Evaluate all automation rules"""
+        for rule in self.rules:
+            devices_to_check = list(self.devices.values())
+            for device in devices_to_check:
+                if rule['condition'](device):
+                    rule['action'](device)
+                    
+    def notify_device_status(self, device: IoTDevice):
+        """Send notification for device status change"""
+        status_icon = "🟢" if device.status == "online" else "🔴"
+        subprocess.run([
+            'termux-notification',
+            '--title', f'{status_icon} IoT: {device.name}',
+            '--content', f'Device is now {device.status}',
+            '--priority', 'default'
+        ])
+        
+    def run(self, interval: int = 60):
+        """Main automation loop"""
+        self.running = True
+        previous_status = {}
+        
+        while self.running:
+            self.update_all_devices()
+            
+            # Check for status changes
+            for mac, device in self.devices.items():
+                old_status = previous_status.get(mac, "unknown")
+                
+                if device.status != old_status:
+                    self.notify_device_status(device)
+                    previous_status[mac] = device.status
+                    
+            # Evaluate rules
+            self.evaluate_rules()
+            
+            time.sleep(interval)
+            
+    def start(self):
+        """Start automation thread"""
+        thread = threading.Thread(target=self.run, daemon=True)
+        thread.start()
+        
+    def stop(self):
+        """Stop automation"""
+        self.running = False
+        
+    def get_dashboard(self) -> dict:
+        """Get device dashboard"""
+        online = [d for d in self.devices.values() if d.status == "online"]
+        offline = [d for d in self.devices.values() if d.status == "offline"]
+        
+        return {
+            'total_devices': len(self.devices),
+            'online': len(online),
+            'offline': len(offline),
+            'devices': [
+                {
+                    'name': d.name,
+                    'mac': d.mac,
+                    'ip': d.ip,
+                    'status': d.status,
+                    'last_seen': str(d.last_seen)
+                }
+                for d in self.devices.values()
+            ]
+        }
+
+# Usage
+iot = IoTAutomation()
+
+# Register devices
+iot.add_device("Smart TV", "aa:bb:cc:dd:ee:01")
+iot.add_device("Smart Speaker", "aa:bb:cc:dd:ee:02")
+iot.add_device("Security Camera", "aa:bb:cc:dd:ee:03")
+
+# Add automation rule
+def offline_alert(device):
+    if device.status == "offline":
+        print(f"Alert: {device.name} is offline!")
+
+iot.add_rule(
+    condition=lambda d: d.status == "offline",
+    action=offline_alert
+)
+
+iot.start()
+```
+
+Features:
+- Device registration and tracking
+- Network scanning
+- Status monitoring
+- Automation rules
+- Notifications
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: WiFi Coverage Mapper
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  📶 SCENARIO: WiFi Signal Strength Mapper                             ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User wants to map WiFi signal strength throughout their home to      ║
+║  find dead zones and optimize router placement.                      ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import time
+from datetime import datetime
+import os
+
+class WiFiMapper:
+    def __init__(self):
+        self.readings = []
+        
+    def take_reading(self, location):
+        """Take signal reading at location"""
+        result = subprocess.run(
+            ['termux-wifi-connectioninfo'],
+            capture_output=True, text=True
+        )
+        
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            
+            reading = {
+                'timestamp': datetime.now().isoformat(),
+                'location': location,
+                'ssid': data.get('ssid'),
+                'rssi': data.get('rssi'),
+                'link_speed': data.get('link_speed_mbps'),
+                'frequency': data.get('frequency_mhz'),
+                'ip': data.get('ip')
+            }
+            
+            self.readings.append(reading)
+            return reading
+        return None
+        
+    def get_signal_quality(self, rssi):
+        """Get signal quality description"""
+        if rssi >= -50:
+            return "Excellent"
+        elif rssi >= -60:
+            return "Good"
+        elif rssi >= -70:
+            return "Fair"
+        elif rssi >= -80:
+            return "Weak"
+        else:
+            return "Very Weak"
+            
+    def interactive_map(self):
+        """Interactive mapping session"""
+        print("📶 WiFi Coverage Mapper")
+        print("=" * 40)
+        print("Walk around and record signal at each location")
+        print("Type 'done' when finished\n")
+        
+        while True:
+            location = input("Enter location (e.g., 'Living Room'): ")
+            
+            if location.lower() == 'done':
+                break
+                
+            reading = self.take_reading(location)
+            
+            if reading:
+                quality = self.get_signal_quality(reading['rssi'])
+                print(f"  Signal: {reading['rssi']} dBm ({quality})")
+                print(f"  Speed: {reading['link_speed']} Mbps\n")
+                
+    def generate_report(self):
+        """Generate coverage report"""
+        if not self.readings:
+            print("No readings taken yet")
+            return
+            
+        print("\n📊 WiFi Coverage Report")
+        print("=" * 50)
+        
+        for r in self.readings:
+            quality = self.get_signal_quality(r['rssi'])
+            print(f"\n📍 {r['location']}")
+            print(f"   Signal: {r['rssi']} dBm ({quality})")
+            print(f"   Speed: {r['link_speed']} Mbps")
+            
+        # Find best and worst locations
+        best = max(self.readings, key=lambda x: x['rssi'])
+        worst = min(self.readings, key=lambda x: x['rssi'])
+        
+        print(f"\n✅ Best: {best['location']} ({best['rssi']} dBm)")
+        print(f"❌ Worst: {worst['location']} ({worst['rssi']} dBm)")
+        
+    def save_readings(self, filename='wifi_map.json'):
+        """Save readings to file"""
+        with open(filename, 'w') as f:
+            json.dump(self.readings, f, indent=2)
+        print(f"Readings saved to {filename}")
+
+# Usage
+mapper = WiFiMapper()
+mapper.interactive_map()
+mapper.generate_report()
+```
+
+---
+
+### Scenario 2: Network Speed Tracker
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  ⚡ SCENARIO: Network Speed Monitoring                                ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User wants to track network performance over time to identify       ║
+║  issues with their ISP.                                               ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import time
+from datetime import datetime
+
+class SpeedTracker:
+    def __init__(self):
+        self.history = []
+        
+    def measure_speed(self):
+        """Measure download speed"""
+        # Download test file
+        test_file = "http://speedtest.tele2.net/1MB.zip"
+        
+        result = subprocess.run(
+            ['curl', '-o', '/dev/null', '-w', '%{speed_download}', 
+             '-s', test_file],
+            capture_output=True, text=True
+        )
+        
+        if result.returncode == 0:
+            bytes_per_sec = float(result.stdout.strip())
+            mbps = (bytes_per_sec * 8) / 1_000_000
+            
+            return {
+                'timestamp': datetime.now().isoformat(),
+                'download_mbps': round(mbps, 2)
+            }
+        return None
+        
+    def measure_latency(self, host='google.com'):
+        """Measure latency"""
+        result = subprocess.run(
+            ['ping', '-c', '4', host],
+            capture_output=True, text=True
+        )
+        
+        if result.returncode == 0:
+            output = result.stdout
+            for line in output.split('\n'):
+                if 'avg' in line:
+                    latency = float(line.split('=')[1].split('/')[1])
+                    return latency
+        return None
+        
+    def run_test(self):
+        """Run complete speed test"""
+        print("Running speed test...")
+        
+        speed = self.measure_speed()
+        latency = self.measure_latency()
+        
+        if speed:
+            speed['latency_ms'] = latency
+            self.history.append(speed)
+            
+            print(f"Download: {speed['download_mbps']} Mbps")
+            print(f"Latency: {latency} ms")
+            
+        return speed
+        
+    def get_stats(self):
+        """Get speed statistics"""
+        if not self.history:
+            return None
+            
+        speeds = [h['download_mbps'] for h in self.history]
+        
+        return {
+            'tests': len(self.history),
+            'average': sum(speeds) / len(speeds),
+            'max': max(speeds),
+            'min': min(speeds)
+        }
+
+# Usage
+tracker = SpeedTracker()
+tracker.run_test()
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: WiFi API Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    WIFI API ARCHITECTURE                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   COMMANDS                        OUTPUT FORMAT                          │
+│   ─────────                       ────────────                           │
+│                                                                          │
+│   termux-wifi-connectioninfo  →  {                                      │
+│                                    "ssid": "NetworkName",               │
+│                                    "bssid": "aa:bb:cc:dd:ee:ff",       │
+│                                    "ip": "192.168.1.100",               │
+│                                    "rssi": -65,                         │
+│                                    "link_speed_mbps": 72                │
+│                                  }                                       │
+│                                                                          │
+│   termux-wifi-enable true    →  (enables WiFi)                          │
+│   termux-wifi-enable false   →  (disables WiFi)                         │
+│                                                                          │
+│   termux-wifi-scaninfo       →  [                                       │
+│                                    {                                    │
+│                                      "ssid": "Network1",                │
+│                                      "bssid": "aa:bb:cc:11:22:33",     │
+│                                      "frequency": 2437,                 │
+│                                      "rssi": -55,                       │
+│                                      "capabilities": "[WPA2-PSK-CCMP]" │
+│                                    },                                   │
+│                                    ...                                  │
+│                                  ]                                       │
+│                                                                          │
+│   INTERNAL FLOW:                                                         │
+│   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐                │
+│   │ Termux      │ → │ Termux:API  │ → │ Android     │                 │
+│   │ Command     │    │ Bridge      │    │ WifiManager │                 │
+│   └─────────────┘    └─────────────┘    └─────────────┘                │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: Network Troubleshooting Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    NETWORK TROUBLESHOOTING FLOW                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   START                                                                  │
+│     │                                                                    │
+│     ▼                                                                    │
+│   ┌─────────────────────┐                                               │
+│   │ Check WiFi Status   │──[Not Connected]──► Connect to WiFi           │
+│   └─────────┬───────────┘                        │                       │
+│             │ [Connected]                         │                       │
+│             ▼                                     │                       │
+│   ┌─────────────────────┐                        │                       │
+│   │ Check IP Address    │──[No IP]──► Restart DHCP                        │
+│   └─────────┬───────────┘                        │                       │
+│             │ [Has IP]                           │                       │
+│             ▼                                     │                       │
+│   ┌─────────────────────┐                        │                       │
+│   │ Ping Gateway        │──[Fail]──► Router Issue                        │
+│   └─────────┬───────────┘                        │                       │
+│             │ [Success]                          │                       │
+│             ▼                                     │                       │
+│   ┌─────────────────────┐                        │                       │
+│   │ DNS Resolution      │──[Fail]──► DNS Issue                            │
+│   └─────────┬───────────┘                        │                       │
+│             │ [Success]                          │                       │
+│             ▼                                     │                       │
+│   ┌─────────────────────┐                        │                       │
+│   │ Ping Internet       │──[Fail]──► ISP Issue                            │
+│   └─────────┬───────────┘                        │                       │
+│             │ [Success]                          │                       │
+│             ▼                                     │                       │
+│        NETWORK OK                                 │                       │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Relationship | Chapter | Topic |
+|--------------|---------|-------|
+| **Prerequisites** | Ch 1-17 | Termux Basics & APIs |
+| **Prerequisites** | Ch 18 | Device Information |
+| **Related** | Ch 19 | Camera & Media |
+| **Related** | Ch 21 | Notifications |
+| **Related** | Ch 22 | Contacts & SMS |
+| **Next** | Ch 21 | Notifications APIs |
+| **Advanced** | Ch 45 | Automation Scripts |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Network Change Detector
+
+```python
+#!/usr/bin/env python3
+"""Detect network changes and trigger actions"""
+
+import subprocess
+import json
+import time
+import threading
+
+class NetworkChangeDetector:
+    def __init__(self):
+        self.last_wifi = None
+        self.last_ip = None
+        self.callbacks = {'wifi_change': [], 'ip_change': [], 'connect': [], 'disconnect': []}
+        
+    def get_wifi_info(self):
+        result = subprocess.run(['termux-wifi-connectioninfo'], capture_output=True, text=True)
+        return json.loads(result.stdout) if result.returncode == 0 else None
+        
+    def on(self, event, callback):
+        self.callbacks[event].append(callback)
+        
+    def check_changes(self):
+        wifi = self.get_wifi_info()
+        
+        current_ssid = wifi.get('ssid') if wifi else None
+        current_ip = wifi.get('ip') if wifi else None
+        
+        # WiFi change detected
+        if current_ssid != self.last_wifi:
+            for cb in self.callbacks['wifi_change']:
+                cb(self.last_wifi, current_ssid)
+                
+        # IP change detected
+        if current_ip != self.last_ip:
+            for cb in self.callbacks['ip_change']:
+                cb(self.last_ip, current_ip)
+                
+        # Connection state change
+        if self.last_wifi is None and current_ssid:
+            for cb in self.callbacks['connect']:
+                cb(current_ssid)
+        elif self.last_wifi and current_ssid is None:
+            for cb in self.callbacks['disconnect']:
+                cb(self.last_wifi)
+                
+        self.last_wifi = current_ssid
+        self.last_ip = current_ip
+        
+    def run(self, interval=5):
+        while True:
+            self.check_changes()
+            time.sleep(interval)
+```
+
+### Advanced Technique 2: WiFi Heatmap Generator
+
+```python
+#!/usr/bin/env python3
+"""Generate WiFi signal heatmap"""
+
+import subprocess
+import json
+import matplotlib.pyplot as plt
+import numpy as np
+
+class WiFiHeatmap:
+    def __init__(self, width=10, height=10):
+        self.grid = np.full((height, width), np.nan)
+        self.width = width
+        self.height = height
+        
+    def record(self, x, y):
+        """Record signal at grid position"""
+        result = subprocess.run(['termux-wifi-connectioninfo'], capture_output=True, text=True)
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            rssi = data.get('rssi', -100)
+            self.grid[y, x] = rssi
+            return rssi
+        return None
+        
+    def generate_heatmap(self, filename='wifi_heatmap.png'):
+        """Generate heatmap image"""
+        plt.figure(figsize=(10, 8))
+        plt.imshow(self.grid, cmap='RdYlGn', aspect='auto')
+        plt.colorbar(label='Signal Strength (dBm)')
+        plt.title('WiFi Signal Heatmap')
+        plt.xlabel('X Position')
+        plt.ylabel('Y Position')
+        plt.savefig(filename)
+        plt.close()
+        return filename
+```
+
+### Advanced Technique 3: Network Forensics Logger
+
+```python
+#!/usr/bin/env python3
+"""Network forensics and logging"""
+
+import subprocess
+import json
+import time
+from datetime import datetime
+import os
+
+class NetworkForensics:
+    def __init__(self, log_dir='/sdcard/NetworkLogs'):
+        self.log_dir = log_dir
+        os.makedirs(log_dir, exist_ok=True)
+        self.log_file = os.path.join(log_dir, f'network_{datetime.now():%Y%m%d}.log')
+        
+    def log_event(self, event_type, data):
+        """Log network event"""
+        entry = {
+            'timestamp': datetime.now().isoformat(),
+            'event': event_type,
+            'data': data
+        }
+        
+        with open(self.log_file, 'a') as f:
+            f.write(json.dumps(entry) + '\n')
+            
+    def capture_network_state(self):
+        """Capture current network state"""
+        wifi = subprocess.run(['termux-wifi-connectioninfo'], capture_output=True, text=True)
+        scan = subprocess.run(['termux-wifi-scaninfo'], capture_output=True, text=True)
+        
+        state = {
+            'wifi': json.loads(wifi.stdout) if wifi.returncode == 0 else None,
+            'networks': json.loads(scan.stdout) if scan.returncode == 0 else []
+        }
+        
+        self.log_event('state_capture', state)
+        return state
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Commands Learned
+- [ ] `termux-wifi-connectioninfo` - Current WiFi details
+- [ ] `termux-wifi-enable` - WiFi on/off control
+- [ ] `termux-wifi-scaninfo` - Network scanning
+
+### ✅ Concepts Understood
+- [ ] RSSI signal strength interpretation
+- [ ] WiFi security capabilities
+- [ ] Network troubleshooting methodology
+- [ ] IP addressing basics
+
+---
+
+*Chapter 20 Complete! Ready for Chapter 21: Notifications APIs*

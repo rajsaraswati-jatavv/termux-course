@@ -1,5 +1,28 @@
 # Chapter 10: Termux API Setup & Overview
 
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗            ║
+║   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║            ║
+║      ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║            ║
+║      ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║            ║
+║      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗       ║
+║      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝       ║
+║                                                                           ║
+║   █████╗ ██████╗ ██████╗ ██╗   ██╗████████╗    █████╗ ███████╗████████╗   ║
+║  ██╔══██╗██╔══██╗██╔══██╗██║   ██║╚══██╔══╝   ██╔══██╗██╔════╝╚══██╔══╝   ║
+║  ███████║██████╔╝██████╔╝██║   ██║   ██║      ███████║███████╗   ██║      ║
+║  ██╔══██║██╔═══╝ ██╔═══╝ ██║   ██║   ██║      ██╔══██║╚════██║   ██║      ║
+║  ██║  ██║██║     ██║     ╚██████╔╝   ██║      ██║  ██║███████║   ██║      ║
+║  ╚═╝  ╚═╝╚═╝     ╚═╝      ╚═════╝    ╚═╝      ╚═╝  ╚═╝╚══════╝   ╚═╝      ║
+║                                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                   📱 CONTROL YOUR PHONE FROM TERMINAL 📱                  ║
+║                      Camera • SMS • Location • Sensors                    ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
 > **Module:** 2 - Environment  
 > **Chapter:** 10 of 61  
 > **Duration:** 15-20 Minutes  
@@ -1825,6 +1848,1108 @@ Q11: B) termux-camera-photo
 Q12: B) F-Droid
 ```
 
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>Q1. What two components are required for Termux API to work?</b></summary>
+
+**Answer:** 
+1. **Termux:API App** - The Android application (installed from F-Droid)
+2. **termux-api package** - The CLI package installed via `pkg install termux-api`
+
+Both must be installed from the same source (F-Droid) for compatibility.
+</details>
+
+<details>
+<summary><b>Q2. Which command checks battery status?</b></summary>
+
+**Answer:** `termux-battery-status` returns JSON with:
+- percentage: Battery level (0-100)
+- status: CHARGING, DISCHARGING, FULL, NOT_CHARGING
+- health: GOOD, OVERHEAT, DEAD, etc.
+- temperature: Temperature in Celsius
+</details>
+
+<details>
+<summary><b>Q3. How do you turn on the flashlight?</b></summary>
+
+**Answer:** 
+```bash
+termux-torch on    # Turn on
+termux-torch off   # Turn off
+```
+Requires flashlight permission for Termux:API app in Android settings.
+</details>
+
+<details>
+<summary><b>Q4. What command captures a photo from camera?</b></summary>
+
+**Answer:** 
+```bash
+termux-camera-photo photo.jpg        # Back camera (default)
+termux-camera-photo -c 0 photo.jpg   # Back camera (explicit)
+termux-camera-photo -c 1 selfie.jpg  # Front camera
+```
+Requires Camera permission granted to Termux:API app.
+</details>
+
+<details>
+<summary><b>Q5. Which permission is needed for termux-location?</b></summary>
+
+**Answer:** **Location permission** - Both "Allow all the time" or "Allow only while using" work. The first time you run `termux-location`, Android will prompt for permission.
+
+```bash
+termux-location -p gps      # GPS (most accurate)
+termux-location -p network  # Network-based (faster)
+```
+</details>
+
+<details>
+<summary><b>Q6. How do you send an SMS from Termux?</b></summary>
+
+**Answer:** 
+```bash
+termux-sms-send -n "+919876543210" "Hello from Termux!"
+
+# From file:
+cat message.txt | termux-sms-send -n "+919876543210"
+
+# Multiple recipients:
+termux-sms-send -n "+91XXXXXXXXXX" -n "+91YYYYYYYYYY" "Broadcast message"
+```
+Requires SMS permission in Android settings.
+</details>
+
+<details>
+<summary><b>Q7. What does termux-notification do?</b></summary>
+
+**Answer:** Creates Android notifications with customizable options:
+```bash
+termux-notification \
+  --title "Download Complete" \
+  --content "File saved successfully" \
+  --sound \
+  --vibrate 500 \
+  --led-color FF0000 \
+  --priority high
+```
+Useful for script alerts, completion notifications, and automation feedback.
+</details>
+
+<details>
+<summary><b>Q8. What is the brightness value range?</b></summary>
+
+**Answer:** **0-255** (0 = minimum, 255 = maximum)
+```bash
+termux-brightness 50   # Low brightness
+termux-brightness 100  # Medium
+termux-brightness 255  # Maximum
+```
+Requires WRITE_SETTINGS permission or works on some devices without it.
+</details>
+
+<details>
+<summary><b>Q9. How do you get WiFi information?</b></summary>
+
+**Answer:** 
+```bash
+termux-wifi-connectioninfo   # Current connection (SSID, IP, MAC, signal)
+termux-wifi-scaninfo         # Scan nearby networks
+termux-wifi-enable true      # Turn on WiFi
+termux-wifi-enable false     # Turn off WiFi
+```
+Requires Location permission for WiFi scanning on Android 8.1+.
+</details>
+
+<details>
+<summary><b>Q10. How do you create a toast message?</b></summary>
+
+**Answer:** 
+```bash
+termux-toast "Hello World!"           # Default duration
+termux-toast -s "Short message"       # Short duration
+termux-toast -l "Long message"        # Long duration
+termux-toast -g center "Centered!"    # Position: top, center, bottom
+```
+Toast messages are quick popup notifications that disappear automatically.
+</details>
+
+<details>
+<summary><b>Q11. Which command lists contacts?</b></summary>
+
+**Answer:** 
+```bash
+termux-contact-list
+
+# Output format (JSON):
+# [{"name": "John Doe", "number": "+919876543210"}, ...]
+
+# Search for specific contact:
+termux-contact-list | grep -i "John"
+```
+Requires Contacts permission granted to Termux:API app.
+</details>
+
+<details>
+<summary><b>Q12. Where should Termux:API app be installed from?</b></summary>
+
+**Answer:** **F-Droid** - This is critical because:
+- F-Droid Termux app requires F-Droid Termux:API
+- Play Store versions are incompatible with F-Droid versions
+- Using mismatched sources causes "API not installed" errors
+
+Always match your Termux and add-on app sources!
+</details>
+
+<details>
+<summary><b>Q13. How do you vibrate the phone?</b></summary>
+
+**Answer:** 
+```bash
+termux-vibrate              # Default vibration
+termux-vibrate -d 1000      # Vibrate for 1 second (1000ms)
+termux-vibrate -d 3000      # Vibrate for 3 seconds
+```
+Works without special permissions - VIBRATE permission is normal permission.
+</details>
+
+<details>
+<summary><b>Q14. What command accesses the clipboard?</b></summary>
+
+**Answer:** 
+```bash
+# Get clipboard content:
+termux-clipboard-get
+
+# Set clipboard content:
+termux-clipboard-set "Text to copy"
+
+# From command output:
+echo "$(date)" | termux-clipboard-set
+```
+Great for automation scripts that need to interact with other apps.
+</details>
+
+<details>
+<summary><b>Q15. How do you control volume levels?</b></summary>
+
+**Answer:** 
+```bash
+termux-volume <stream> <value>
+
+# Streams: call, notification, alarm, music, ring, system
+# Value: 0-15 (varies by device)
+
+termux-volume music 10      # Music volume
+termux-volume ring 0        # Silent ring
+termux-volume alarm 15      # Maximum alarm
+termux-volume notification 5
+```
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Q1: What is the architecture of Termux:API and how does it work?
+
+**Answer:**
+Termux:API uses a client-server architecture:
+
+1. **Termux Terminal** - Runs CLI commands like `termux-battery-status`
+2. **Broadcast Intent** - Commands are sent as Android broadcast intents
+3. **Termux:API App** - Android application that receives intents
+4. **Android System APIs** - The app accesses native Android features
+
+**Flow:**
+```
+Command → Intent → Termux:API App → Android API → Response → Terminal
+```
+
+This separation allows the terminal to access restricted Android features without root, using the Termux:API app as a privileged bridge.
+
+### Q2: Why must Termux:API app be installed from F-Droid?
+
+**Answer:**
+**Compatibility reasons:**
+1. **Package signing** - Both apps must be signed by the same certificate
+2. **Version matching** - F-Droid Termux and F-Droid Termux:API are built together
+3. **Shared UID** - They communicate through a shared user ID
+
+**Play Store issues:**
+- Play Store Termux is outdated and incompatible
+- Different signing certificates break communication
+- Google Play restrictions limit functionality
+
+**Best practice:** Install ALL Termux ecosystem apps from F-Droid: Termux, Termux:API, Termux:Styling, Termux:Float, etc.
+
+### Q3: How would you create an automation script using Termux:API?
+
+**Answer:**
+Example automation script:
+
+```bash
+#!/bin/bash
+# smart_battery_alert.sh
+
+while true; do
+    battery=$(termux-battery-status | grep -o '"percentage": [0-9]*' | grep -o '[0-9]*')
+    status=$(termux-battery-status | grep -o '"status": "[^"]*"' | cut -d'"' -f4)
+    
+    if [ "$battery" -le 20 ] && [ "$status" = "DISCHARGING" ]; then
+        termux-notification \
+            --title "⚠️ Low Battery" \
+            --content "Battery at ${battery}% - Connect charger!" \
+            --sound \
+            --priority high \
+            --vibrate 500,200,500
+    fi
+    
+    sleep 300  # Check every 5 minutes
+done
+```
+
+This script demonstrates:
+- JSON parsing
+- Conditional logic
+- User notification
+- Background execution
+
+### Q4: What security considerations should be made when using Termux:API?
+
+**Answer:**
+**Security considerations:**
+
+1. **Permission Management:**
+   - Grant only necessary permissions
+   - Review permissions regularly
+   - Be cautious with SMS/Contacts/Location access
+
+2. **Script Security:**
+   - Don't hardcode sensitive data
+   - Use environment variables for secrets
+   - Validate all inputs
+
+3. **API Key Protection:**
+   ```bash
+   # Store keys in protected files
+   chmod 600 ~/.api_keys
+   source ~/.api_keys
+   ```
+
+4. **Ethical Use:**
+   - Never send spam SMS
+   - Respect privacy with contacts/messages
+   - Use location responsibly
+
+5. **App Security:**
+   - Keep Termux and add-ons updated
+   - Don't install from unknown sources
+   - Review running processes
+
+### Q5: How would you implement a location tracking system?
+
+**Answer:**
+Complete implementation:
+
+```bash
+#!/bin/bash
+# location_tracker.sh
+
+LOG_FILE="$HOME/location_log.csv"
+INTERVAL=60  # seconds
+
+# Create log file with header
+[ ! -f "$LOG_FILE" ] && echo "timestamp,latitude,longitude,accuracy,provider" > "$LOG_FILE"
+
+while true; do
+    # Get location with timeout
+    location=$(timeout 30 termux-location -p network 2>/dev/null)
+    
+    if [ $? -eq 0 ]; then
+        # Parse JSON
+        lat=$(echo "$location" | grep -o '"latitude": [0-9.]*' | grep -o '[0-9.]*')
+        lon=$(echo "$location" | grep -o '"longitude": [0-9.]*' | grep -o '[0-9.]*')
+        acc=$(echo "$location" | grep -o '"accuracy": [0-9.]*' | grep -o '[0-9.]*')
+        prov=$(echo "$location" | grep -o '"provider": "[^"]*"' | cut -d'"' -f4)
+        ts=$(date -Iseconds)
+        
+        # Log to CSV
+        echo "$ts,$lat,$lon,$acc,$prov" >> "$LOG_FILE"
+        
+        # Optional: Send to server
+        # curl -X POST -d "lat=$lat&lon=$lon" https://api.example.com/location
+    fi
+    
+    sleep "$INTERVAL"
+done
+```
+
+### Q6: Explain how you would set up SMS automation for alerts.
+
+**Answer:**
+SMS automation setup:
+
+```bash
+#!/bin/bash
+# sms_alert_system.sh
+
+# Configuration
+RECIPIENTS=("+91XXXXXXXXXX" "+91YYYYYYYYYY")
+ALERT_FILE="/tmp/alerts.txt"
+
+send_alert() {
+    local message="$1"
+    local priority="$2"
+    
+    for number in "${RECIPIENTS[@]}"; do
+        termux-sms-send -n "$number" "$message"
+        
+        # Log the alert
+        echo "$(date): Sent to $number - $message" >> "$ALERT_FILE"
+    done
+    
+    # Also show notification
+    termux-notification \
+        --title "Alert Sent" \
+        --content "$message" \
+        --priority "$priority"
+}
+
+# Usage examples:
+# send_alert "Server down!" "high"
+# send_alert "Backup completed" "default"
+
+# CRITICAL: Always get consent before sending automated SMS!
+```
+
+### Q7: How do you handle API command failures gracefully?
+
+**Answer:**
+Error handling pattern:
+
+```bash
+#!/bin/bash
+# robust_api_script.sh
+
+# Function to safely execute API commands
+safe_api_call() {
+    local cmd="$1"
+    local max_retries=3
+    local retry_delay=5
+    
+    for ((i=1; i<=max_retries; i++)); do
+        result=$($cmd 2>&1)
+        exit_code=$?
+        
+        if [ $exit_code -eq 0 ]; then
+            echo "$result"
+            return 0
+        fi
+        
+        # Check for specific errors
+        if echo "$result" | grep -q "not installed"; then
+            echo "ERROR: Termux:API app not installed" >&2
+            return 1
+        fi
+        
+        if echo "$result" | grep -q "permission"; then
+            echo "ERROR: Permission denied. Grant in Android Settings" >&2
+            return 1
+        fi
+        
+        # Retry for transient errors
+        echo "Attempt $i failed, retrying in ${retry_delay}s..." >&2
+        sleep "$retry_delay"
+    done
+    
+    echo "ERROR: Command failed after $max_retries attempts" >&2
+    return 1
+}
+
+# Usage:
+battery=$(safe_api_call "termux-battery-status")
+if [ $? -eq 0 ]; then
+    echo "Battery: $(echo "$battery" | grep -o '"percentage": [0-9]*')"
+else
+    echo "Failed to get battery status"
+fi
+```
+
+### Q8: What are the limitations of Termux:API on different Android versions?
+
+**Answer:**
+**Version-specific limitations:**
+
+| Android Version | Limitations |
+|-----------------|-------------|
+| 6.0-7.1 | Generally good API access |
+| 8.0-8.1 | Background limits, need Location for WiFi |
+| 9.0 | Restricted background access, microphone limits |
+| 10+ | Scoped storage, WiFi toggle requires special permission |
+| 11+ | More aggressive background restrictions |
+| 12+ | Even stricter foreground service requirements |
+
+**Workarounds:**
+- Use `termux-wake-lock` for long operations
+- Request "Allow all the time" for Location
+- Use WorkManager via Termux:Tasker for reliability
+- Consider root access for full functionality
+
+### Q9: How would you integrate Termux:API with Tasker?
+
+**Answer:**
+Termux:Tasker integration:
+
+1. **Install Termux:Tasker** from F-Droid
+2. **Enable Tasker plugin** in Termux settings
+
+**Tasker → Termux flow:**
+```
+Tasker Event → Plugin → Termux:Tasker → Run Script
+```
+
+**Termux → Tasker flow:**
+```bash
+# In Termux script
+termux-notification \
+    --title "Tasker Trigger" \
+    --action "tasker://runtask?taskname=MyTask"
+```
+
+**Example automation:**
+```bash
+#!/bin/bash
+# termux_tasker_bridge.sh
+
+battery=$(termux-battery-status | grep -o '"percentage": [0-9]*' | grep -o '[0-9]*')
+
+if [ "$battery" -lt 20 ]; then
+    # Trigger Tasker task
+    termux-notification \
+        --title "LowBattery" \
+        --content "$battery" \
+        --action "tasker://runtask?taskname=PowerSaving"
+fi
+```
+
+### Q10: How would you implement a complete device monitoring system?
+
+**Answer:**
+Complete monitoring system:
+
+```bash
+#!/bin/bash
+# device_monitor.sh
+
+MONITOR_DIR="$HOME/monitoring"
+mkdir -p "$MONITOR_DIR"
+
+collect_metrics() {
+    local ts=$(date -Iseconds)
+    local log_file="$MONITOR_DIR/metrics_$(date +%Y%m%d).csv"
+    
+    # Battery
+    local battery_json=$(termux-battery-status)
+    local battery_pct=$(echo "$battery_json" | grep -o '"percentage": [0-9]*' | grep -o '[0-9]*')
+    local battery_temp=$(echo "$battery_json" | grep -o '"temperature": [0-9.]*' | grep -o '[0-9.]*')
+    
+    # WiFi
+    local wifi_ssid="N/A"
+    local wifi_signal="N/A"
+    if wifi_json=$(termux-wifi-connectioninfo 2>/dev/null); then
+        wifi_ssid=$(echo "$wifi_json" | grep -o '"ssid": "[^"]*"' | cut -d'"' -f4)
+        wifi_signal=$(echo "$wifi_json" | grep -o '"rssi": -[0-9]*' | grep -o '\-[0-9]*')
+    fi
+    
+    # Location (if available)
+    local location="N/A"
+    if loc_json=$(timeout 10 termux-location -p network 2>/dev/null); then
+        local lat=$(echo "$loc_json" | grep -o '"latitude": [0-9.]*' | grep -o '[0-9.]*')
+        local lon=$(echo "$loc_json" | grep -o '"longitude": [0-9.]*' | grep -o '[0-9.]*')
+        location="$lat,$lon"
+    fi
+    
+    # Log to CSV
+    echo "$ts,$battery_pct,$battery_temp,$wifi_ssid,$wifi_signal,$location" >> "$log_file"
+    
+    # Check thresholds
+    [ "$battery_pct" -lt 20 ] && termux-notification --title "Low Battery" --content "${battery_pct}%"
+}
+
+# Main loop
+while true; do
+    collect_metrics
+    sleep 300  # Every 5 minutes
+done
+```
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                    SCENARIO 1: SERVER MONITORING AGENT                    │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  SITUATION: You're running a home server and want to receive SMS        │
+│  alerts when critical events occur                                       │
+│                                                                           │
+│  SOLUTION:                                                                │
+│  ```bash                                                                 │
+│  #!/bin/bash                                                             │
+│  # server_monitor.sh                                                     │
+│                                                                           │
+│  SERVER_IP="192.168.1.100"                                               │
+│  ADMIN_SMS="+919876543210"                                               │
+│                                                                           │
+│  while true; do                                                          │
+│      if ! ping -c 1 -W 5 "$SERVER_IP" > /dev/null 2>&1; then             │
+│          termux-sms-send -n "$ADMIN_SMS" "ALERT: Server unreachable!"    │
+│          termux-notification --title "Server Down" --priority max        │
+│      fi                                                                  │
+│      sleep 60                                                            │
+│  done                                                                    │
+│  ```                                                                     │
+│                                                                           │
+│  RUN: Use `nohup ./server_monitor.sh &` for background execution         │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                   SCENARIO 2: AUTOMATED BACKUP SYSTEM                     │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  SITUATION: Automatically backup important files and receive            │
+│  notifications when backup completes or fails                            │
+│                                                                           │
+│  SOLUTION:                                                                │
+│  ```bash                                                                 │
+│  #!/bin/bash                                                             │
+│  # auto_backup.sh                                                        │
+│                                                                           │
+│  SOURCE="/sdcard/Documents"                                              │
+│  DEST="/sdcard/Backup/$(date +%Y%m%d)"                                   │
+│                                                                           │
+│  mkdir -p "$DEST"                                                        │
+│                                                                           │
+│  if cp -r "$SOURCE"/* "$DEST/" 2>/dev/null; then                         │
+│      termux-notification \                                               │
+│          --title "Backup Complete" \                                     │
+│          --content "Files saved to $DEST" \                              │
+│          --sound                                                         │
+│      termux-toast "Backup successful!"                                   │
+│  else                                                                    │
+│      termux-notification \                                               │
+│          --title "Backup Failed" \                                       │
+│          --content "Check storage permissions" \                         │
+│          --priority high \                                               │
+│          --sound                                                         │
+│  fi                                                                      │
+│  ```                                                                     │
+│                                                                           │
+│  SCHEDULE: Run via cron at specific times                                 │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                  SCENARIO 3: SECURITY CAMERA INTEGRATION                  │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  SITUATION: Capture photos automatically when motion is detected        │
+│  or at scheduled intervals for security monitoring                       │
+│                                                                           │
+│  SOLUTION:                                                                │
+│  ```bash                                                                 │
+│  #!/bin/bash                                                             │
+│  # security_camera.sh                                                    │
+│                                                                           │
+│  PHOTO_DIR="/sdcard/SecurityCam"                                         │
+│  mkdir -p "$PHOTO_DIR"                                                   │
+│                                                                           │
+│  while true; do                                                          │
+│      TIMESTAMP=$(date +%Y%m%d_%H%M%S)                                    │
+│      PHOTO="$PHOTO_DIR/photo_$TIMESTAMP.jpg"                             │
+│                                                                           │
+│      # Capture photo from back camera                                    │
+│      termux-camera-photo -c 0 "$PHOTO"                                   │
+│                                                                           │
+│      # Log capture                                                       │
+│      echo "$(date): Photo captured - $PHOTO" >> security.log            │
+│                                                                           │
+│      # Optional: Upload to cloud                                         │
+│      # rclone copy "$PHOTO" gdrive:security/                             │
+│                                                                           │
+│      sleep 300  # Every 5 minutes                                        │
+│  done                                                                    │
+│  ```                                                                     │
+│                                                                           │
+│  TIP: Combine with motion detection using Termux sensors                 │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                    SCENARIO 4: LOCATION TRACKER                           │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  SITUATION: Track device location for family safety or fleet           │
+│  management, logging coordinates periodically                            │
+│                                                                           │
+│  SOLUTION:                                                                │
+│  ```bash                                                                 │
+│  #!/bin/bash                                                             │
+│  # location_tracker.sh                                                   │
+│                                                                           │
+│  LOG_FILE="$HOME/location_history.csv"                                   │
+│  echo "timestamp,latitude,longitude,accuracy" > "$LOG_FILE"              │
+│                                                                           │
+│  while true; do                                                          │
+│      LOCATION=$(termux-location -p network 2>/dev/null)                  │
+│                                                                           │
+│      if [ $? -eq 0 ]; then                                               │
+│          LAT=$(echo "$LOCATION" | grep -o '"latitude": [0-9.]*' | \      │
+│                grep -o '[0-9.]*')                                        │
+│          LON=$(echo "$LOCATION" | grep -o '"longitude": [0-9.]*' | \     │
+│                grep -o '[0-9.]*')                                        │
+│          ACC=$(echo "$LOCATION" | grep -o '"accuracy": [0-9.]*' | \      │
+│                grep -o '[0-9.]*')                                        │
+│                                                                           │
+│          echo "$(date -Iseconds),$LAT,$LON,$ACC" >> "$LOG_FILE"          │
+│      fi                                                                  │
+│                                                                           │
+│      sleep 600  # Every 10 minutes                                       │
+│  done                                                                    │
+│  ```                                                                     │
+│                                                                           │
+│  PRIVACY: Always get consent before tracking anyone's location            │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+```
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                   SCENARIO 5: SMART HOME CONTROLLER                       │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  SITUATION: Control device functions and integrate with smart home     │
+│  systems using Termux API commands                                       │
+│                                                                           │
+│  SOLUTION:                                                                │
+│  ```bash                                                                 │
+│  #!/bin/bash                                                             │
+│  # smart_home.sh                                                         │
+│                                                                           │
+│  # Morning routine                                                       │
+│  morning_routine() {                                                     │
+│      termux-brightness 200        # Bright screen                        │
+│      termux-volume music 10       # Set music volume                     │
+│      termux-notification --title "Good Morning!" \                       │
+│          --content "Have a great day!"                                   │
+│      termux-toast "Morning routine activated"                            │
+│  }                                                                       │
+│                                                                           │
+│  # Night routine                                                         │
+│  night_routine() {                                                       │
+│      termux-brightness 50         # Dim screen                           │
+│      termux-volume ring 0         # Silent ring                          │
+│      termux-volume notification 0 # Silent notifications                 │
+│      termux-notification --title "Good Night" \                          │
+│          --content "Sleep well!"                                         │
+│  }                                                                       │
+│                                                                           │
+│  # Auto-trigger based on time                                            │
+│  hour=$(date +%H)                                                        │
+│  if [ "$hour" -eq 7 ]; then morning_routine; fi                          │
+│  if [ "$hour" -eq 22 ]; then night_routine; fi                           │
+│  ```                                                                     │
+│                                                                           │
+│  EXTEND: Add Tasker integration for more complex automations              │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Termux:API Communication Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    TERMUX:API COMMUNICATION FLOW                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                     USER LAYER                                   │   │
+│   │                                                                  │   │
+│   │   $ termux-battery-status                                       │   │
+│   │   $ termux-torch on                                             │   │
+│   │   $ termux-notification --title "Hi"                            │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                  TERMUX TERMINAL (CLI)                           │   │
+│   │                                                                  │   │
+│   │   ┌───────────────────────────────────────────────────────────┐ │   │
+│   │   │  termux-api package                                      │ │   │
+│   │   │  - termux-battery-status                                 │ │   │
+│   │   │  - termux-torch                                          │ │   │
+│   │   │  - termux-notification                                   │ │   │
+│   │   │  - termux-camera-photo                                   │ │   │
+│   │   │  - ... (40+ commands)                                    │ │   │
+│   │   └───────────────────────────────────────────────────────────┘ │   │
+│   │                            │                                     │   │
+│   │                            │ Broadcast Intent                    │   │
+│   │                            │ com.termux.api.*                     │   │
+│   └────────────────────────────┼────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                  TERMUX:API APPLICATION                          │   │
+│   │                                                                  │   │
+│   │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │   │
+│   │   │  Receivers  │  │  Services   │  │  Activities │             │   │
+│   │   └──────┬──────┘  └──────┬──────┘  └──────┬──────┘             │   │
+│   │          │                │                │                      │   │
+│   │          └────────────────┼────────────────┘                      │   │
+│   │                           │                                        │   │
+│   └───────────────────────────┼───────────────────────────────────────┘   │
+│                               │                                          │
+│                               ▼                                          │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    ANDROID SYSTEM APIs                           │   │
+│   │                                                                  │   │
+│   │   ┌─────────────┐ ┌─────────────┐ ┌─────────────┐               │   │
+│   │   │CameraManager│ │  SmsManager │ │LocationMgr  │               │   │
+│   │   └─────────────┘ └─────────────┘ └─────────────┘               │   │
+│   │   ┌─────────────┐ ┌─────────────┐ ┌─────────────┐               │   │
+│   │   │ AudioManager│ │ Vibrator    │ │Notification │               │   │
+│   │   └─────────────┘ └─────────────┘ └─────────────┘               │   │
+│   │                                                                  │   │
+│   └──────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### API Permission Mapping
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    API COMMAND → PERMISSION MAPPING                      │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌────────────────────────────────────────────────────────────────┐    │
+│   │                 DEVICE INFO APIs                               │    │
+│   ├────────────────────────────────────────────────────────────────┤    │
+│   │ termux-battery-status    → No special permission               │    │
+│   │ termux-telephony-*       → READ_PHONE_STATE                    │    │
+│   │ termux-wifi-*            → LOCATION / NEARBY_DEVICES            │    │
+│   │ termux-sensor            → No special permission               │    │
+│   └────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│   ┌────────────────────────────────────────────────────────────────┐    │
+│   │                 HARDWARE CONTROL APIs                          │    │
+│   ├────────────────────────────────────────────────────────────────┤    │
+│   │ termux-torch             → FLASHLIGHT / CAMERA                 │    │
+│   │ termux-brightness        → WRITE_SETTINGS                       │    │
+│   │ termux-volume            → No special permission               │    │
+│   │ termux-vibrate           → VIBRATE                              │    │
+│   │ termux-camera-*          → CAMERA                               │    │
+│   │ termux-fingerprint       → USE_BIOMETRIC                        │    │
+│   └────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│   ┌────────────────────────────────────────────────────────────────┐    │
+│   │                 COMMUNICATION APIs                             │    │
+│   ├────────────────────────────────────────────────────────────────┤    │
+│   │ termux-sms-*             → READ_SMS, SEND_SMS                   │    │
+│   │ termux-call-log          → READ_CALL_LOG                        │    │
+│   │ termux-contact-list      → READ_CONTACTS                        │    │
+│   └────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│   ┌────────────────────────────────────────────────────────────────┐    │
+│   │                 LOCATION & STORAGE APIs                        │    │
+│   ├────────────────────────────────────────────────────────────────┤    │
+│   │ termux-location          → ACCESS_FINE_LOCATION                 │    │
+│   │ termux-storage-get       → READ_EXTERNAL_STORAGE                │    │
+│   │ termux-share            → No special permission               │    │
+│   └────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### API Script Integration Pattern
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    API SCRIPT INTEGRATION PATTERN                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌──────────────────────────────────────────────────────────────────┐  │
+│   │                    TRIGGER LAYER                                  │  │
+│   │                                                                   │  │
+│   │   ┌────────────┐  ┌────────────┐  ┌────────────┐                │  │
+│   │   │   Cron     │  │  Tasker    │  │   Manual   │                │  │
+│   │   │  Schedule  │  │  Events    │  │  Execution │                │  │
+│   │   └─────┬──────┘  └─────┬──────┘  └─────┬──────┘                │  │
+│   │         │               │               │                         │  │
+│   └─────────┼───────────────┼───────────────┼─────────────────────────┘  │
+│             │               │               │                             │
+│             └───────────────┼───────────────┘                             │
+│                             ▼                                             │
+│   ┌──────────────────────────────────────────────────────────────────┐  │
+│   │                    SCRIPT LAYER                                   │  │
+│   │                                                                   │  │
+│   │   #!/bin/bash                                                     │  │
+│   │   1. Check conditions (battery, time, location)                   │  │
+│   │   2. Execute API commands                                         │  │
+│   │   3. Process results (parse JSON, make decisions)                 │  │
+│   │   4. Take action (notify, log, trigger next)                      │  │
+│   │                                                                   │  │
+│   └──────────────────────────────────────────────────────────────────┘  │
+│                             │                                             │
+│                             ▼                                             │
+│   ┌──────────────────────────────────────────────────────────────────┐  │
+│   │                    API EXECUTION LAYER                            │  │
+│   │                                                                   │  │
+│   │   termux-battery-status  →  termux-notification                  │  │
+│   │   termux-location         →  termux-sms-send                     │  │
+│   │   termux-wifi-scaninfo    →  termux-toast                        │  │
+│   │   termux-camera-photo     →  termux-vibrate                      │  │
+│   │                                                                   │  │
+│   └──────────────────────────────────────────────────────────────────┘  │
+│                             │                                             │
+│                             ▼                                             │
+│   ┌──────────────────────────────────────────────────────────────────┐  │
+│   │                    OUTPUT LAYER                                   │  │
+│   │                                                                   │  │
+│   │   ┌────────────┐  ┌────────────┐  ┌────────────┐                │  │
+│   │   │  Log File  │  │ Notification│  │   SMS/    │                │  │
+│   │   │  Records   │  │   Alerts    │  │   Alerts  │                │  │
+│   │   └────────────┘  └────────────┘  └────────────┘                │  │
+│   │                                                                   │  │
+│   └──────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Relationship | Chapter | Description |
+|--------------|---------|-------------|
+| **Prerequisites** | Ch 1: Termux Installation | Install Termux before API |
+| **Prerequisites** | Ch 2: Initial Setup | Basic configuration |
+| **Prerequisites** | Ch 8: Text Editors | Write scripts using Nano/Vim |
+| **Prerequisites** | Ch 9: Termux Styling | Customize appearance |
+| **Current** | Ch 10: Termux:API Setup | **You are here** |
+| **Next** | Ch 11: Shell Customization | Advanced shell configuration |
+| **Related** | Ch 15: Shell Scripting | Write automation scripts |
+| **Related** | Ch 20: Cron Jobs | Schedule automated tasks |
+| **Related** | Ch 25: Git Version Control | API for git hooks |
+| **Advanced** | Ch 30: Tasker Integration | Advanced automation |
+| **Advanced** | Ch 45: IoT Integration | Control IoT devices via API |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: JSON Response Parsing Library
+
+Create a reusable parsing library for Termux:API responses:
+
+```bash
+# ~/.termux/api_utils.sh - API parsing utilities
+
+# Parse battery status
+get_battery_percentage() {
+    termux-battery-status | grep -o '"percentage": [0-9]*' | grep -o '[0-9]*'
+}
+
+get_battery_status() {
+    termux-battery-status | grep -o '"status": "[^"]*"' | cut -d'"' -f4
+}
+
+get_battery_temperature() {
+    termux-battery-status | grep -o '"temperature": [0-9.]*' | grep -o '[0-9.]*'
+}
+
+# Parse location
+get_location_lat() {
+    termux-location "$@" | grep -o '"latitude": [0-9.]*' | grep -o '[0-9.]*'
+}
+
+get_location_lon() {
+    termux-location "$@" | grep -o '"longitude": [0-9.]*' | grep -o '[0-9.]*'
+}
+
+# Parse WiFi info
+get_wifi_ssid() {
+    termux-wifi-connectioninfo | grep -o '"ssid": "[^"]*"' | cut -d'"' -f4
+}
+
+get_wifi_ip() {
+    termux-wifi-connectioninfo | grep -o '"ip": "[^"]*"' | cut -d'"' -f4
+}
+
+# Usage example:
+# source ~/.termux/api_utils.sh
+# battery=$(get_battery_percentage)
+# ssid=$(get_wifi_ssid)
+```
+
+### Advanced Technique 2: Event-Driven API Automation
+
+Create a system that responds to device events:
+
+```bash
+#!/bin/bash
+# event_responder.sh - React to device state changes
+
+# State tracking directory
+STATE_DIR="$HOME/.device_state"
+mkdir -p "$STATE_DIR"
+
+# Check and react to battery changes
+check_battery() {
+    local current=$(get_battery_percentage)
+    local previous=$(cat "$STATE_DIR/battery" 2>/dev/null || echo "100")
+    
+    # State changed?
+    if [ "$current" != "$previous" ]; then
+        # React to low battery
+        if [ "$current" -le 20 ] && [ "$previous" -gt 20 ]; then
+            termux-notification --title "Low Battery" --content "${current}%"
+            termux-volume ring 0  # Silent ring
+        fi
+        
+        # React to charging
+        local status=$(get_battery_status)
+        if [ "$status" = "CHARGING" ] && [ "$previous_status" != "CHARGING" ]; then
+            termux-toast "Charging started"
+        fi
+        
+        # Save new state
+        echo "$current" > "$STATE_DIR/battery"
+        echo "$status" > "$STATE_DIR/battery_status"
+    fi
+}
+
+# Check and react to WiFi changes
+check_wifi() {
+    local current_ssid=$(get_wifi_ssid 2>/dev/null || echo "disconnected")
+    local previous_ssid=$(cat "$STATE_DIR/wifi_ssid" 2>/dev/null || echo "disconnected")
+    
+    if [ "$current_ssid" != "$previous_ssid" ]; then
+        if [ "$current_ssid" = "disconnected" ]; then
+            termux-notification --title "WiFi Lost" --content "Disconnected"
+        else
+            termux-notification --title "WiFi Connected" --content "$current_ssid"
+        fi
+        echo "$current_ssid" > "$STATE_DIR/wifi_ssid"
+    fi
+}
+
+# Main monitoring loop
+while true; do
+    check_battery
+    check_wifi
+    sleep 30
+done
+```
+
+### Advanced Technique 3: API Command Scheduler
+
+Create a flexible scheduling system for API commands:
+
+```bash
+#!/bin/bash
+# api_scheduler.sh - Schedule Termux:API commands
+
+SCHEDULE_FILE="$HOME/.api_schedule"
+LOG_FILE="$HOME/.api_schedule.log"
+
+# Schedule format: HH:MM:command:args
+# Example: 08:00:termux-notification:--title Morning --content "Time to wake up"
+
+add_schedule() {
+    local time="$1"
+    local cmd="$2"
+    local args="$3"
+    echo "$time:$cmd:$args" >> "$SCHEDULE_FILE"
+    echo "Scheduled: $time - $cmd $args"
+}
+
+run_scheduler() {
+    while true; do
+        local current_time=$(date +%H:%M)
+        
+        while IFS=: read -r time cmd args; do
+            if [ "$time" = "$current_time" ]; then
+                echo "$(date): Running $cmd $args" >> "$LOG_FILE"
+                $cmd $args
+            fi
+        done < "$SCHEDULE_FILE"
+        
+        sleep 60
+    done
+}
+
+# Usage examples:
+# ./api_scheduler.sh add 08:00 termux-notification "--title Morning --content Wake\ up"
+# ./api_scheduler.sh add 22:00 termux-brightness "50"
+# ./api_scheduler.sh add 22:00 termux-volume "ring 0"
+
+case "$1" in
+    add) add_schedule "$2" "$3" "$4" ;;
+    run) run_scheduler ;;
+    *) echo "Usage: $0 {add|run} [time] [command] [args]" ;;
+esac
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+After completing this chapter, you should be able to:
+
+- [ ] Install Termux:API app from F-Droid
+- [ ] Install termux-api package with `pkg install termux-api`
+- [ ] Grant necessary permissions to Termux:API app
+- [ ] Check battery status with `termux-battery-status`
+- [ ] Control flashlight with `termux-torch`
+- [ ] Adjust brightness with `termux-brightness`
+- [ ] Control volume levels with `termux-volume`
+- [ ] Vibrate device with `termux-vibrate`
+- [ ] Capture photos with `termux-camera-photo`
+- [ ] Use fingerprint authentication with `termux-fingerprint`
+- [ ] Create notifications with `termux-notification`
+- [ ] Show toast messages with `termux-toast`
+- [ ] Control media playback with `termux-media-player`
+- [ ] List contacts with `termux-contact-list`
+- [ ] Send SMS with `termux-sms-send`
+- [ ] List SMS with `termux-sms-list`
+- [ ] View call log with `termux-call-log`
+- [ ] Get location with `termux-location`
+- [ ] Scan WiFi networks with `termux-wifi-scaninfo`
+- [ ] Use clipboard with `termux-clipboard-get/set`
+- [ ] Share content with `termux-share`
+- [ ] Pick files with `termux-storage-get`
+- [ ] Write automation scripts using API commands
+- [ ] Troubleshoot API permission issues
+
+---
+
 ---
 
 ## 💡 PRO TIPS BOX
@@ -2154,212 +3279,6 @@ check_wifi_changes() {
    - Multiple providers (gps, network, passive)
    - Sensor data streaming
 
----
-
-## 🎯 INTERVIEW QUESTIONS
-
-### Q1: What is the difference between Termux app and Termux:API app?
-**Answer:** Termux is the terminal emulator that provides a Linux environment. Termux:API is a companion app that acts as a bridge between Termux commands and Android system features. Both must be installed for API commands to work.
-
-### Q2: Why must both Termux:API app and termux-api package be installed?
-**Answer:** The Termux:API app handles Android system interactions and permissions. The termux-api package provides the CLI commands (termux-battery-status, etc.) that communicate with the API app. Without both, commands won't work.
-
-### Q3: What happens if you install Termux:API from Play Store with F-Droid Termux?
-**Answer:** They won't be compatible. F-Droid and Play Store versions have different signatures. Always install both Termux and Termux:API from the same source (F-Droid recommended).
-
-### Q4: Which permissions are required for termux-location?
-**Answer:** Location permission (ACCESS_FINE_LOCATION for GPS, ACCESS_COARSE_LOCATION for network-based). The app will prompt for runtime permission on first use.
-
-### Q5: How would you automate a daily backup of SMS messages?
-**Answer:** Create a script using `termux-sms-list -l N > backup.json` and schedule it with cron. The script would save to a dated file in a backup directory.
-
-### Q6: What is the difference between termux-toast and termux-notification?
-**Answer:** `termux-toast` shows a temporary popup that disappears automatically. `termux-notification` creates a persistent notification in the status bar that can have buttons, sounds, and LED indicators.
-
-### Q7: How do you capture a photo without user interaction?
-**Answer:** Use `termux-camera-photo -c N filename.jpg` where N is camera ID (0=back, 1=front). Requires Camera permission and can be automated in scripts.
-
-### Q8: What is JSON parsing in context of Termux API?
-**Answer:** Most API commands return JSON data. You can parse this with tools like `jq`, Python's `json` module, or grep to extract specific values for use in scripts.
-
-### Q9: How would you create a geofencing script?
-**Answer:** Use `termux-location` to get coordinates, compare against defined boundaries using mathematical distance calculation, and trigger `termux-notification` when boundaries are crossed.
-
-### Q10: What security considerations apply to Termux API?
-**Answer:** 
-- SMS and call log access is sensitive - use ethically
-- Location data is personal - protect logs
-- Camera access should be transparent
-- API permissions should be minimal (principle of least privilege)
-
----
-
-## 🚀 BEST PRACTICES
-
-### ✅ DO:
-- Always install Termux:API from F-Droid
-- Grant permissions before first API use
-- Test API with `termux-battery-status`
-- Handle JSON parsing errors gracefully
-- Use appropriate location providers (GPS vs network)
-- Clean up notification IDs to avoid buildup
-
-### ❌ DON'T:
-- Don't mix F-Droid and Play Store versions
-- Don't skip permission grants
-- Don't use SMS APIs unethically
-- Don't hardcode sensitive phone numbers
-- Don't ignore API errors silently
-- Don't create infinite notification loops
-
-### Common Mistakes to Avoid:
-
-1. **Mistake:** Installing only termux-api package
-   **Fix:** Also install Termux:API app from F-Droid
-
-2. **Mistake:** Forgetting to grant permissions
-   **Fix:** Go to Settings → Apps → Termux:API → Permissions
-
-3. **Mistake:** Using wrong camera ID
-   **Fix:** Run `termux-camera-info` first to identify cameras
-
-4. **Mistake:** Not handling JSON parsing errors
-   **Fix:** Use try-catch in Python or error checking in bash
-
-5. **Mistake:** Battery drain from continuous location updates
-   **Fix:** Use `-r last` for cached location, limit update frequency
-
----
-
-## 📊 ASCII DIAGRAMS
-
-### Termux API Architecture
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    TERMUX API WORKFLOW                           │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  User Types Command                                             │
-│       │                                                          │
-│       ▼                                                          │
-│  ┌─────────────┐                                                │
-│  │   Termux    │  termux-battery-status                         │
-│  │  Terminal   │  termux-torch on                               │
-│  │             │  termux-notification ...                       │
-│  └──────┬──────┘                                                │
-│         │                                                        │
-│         │ Broadcast Intent                                       │
-│         │ (com.termux.api.*)                                     │
-│         ▼                                                        │
-│  ┌─────────────────────────────────────────────────┐            │
-│  │              Termux:API App                     │            │
-│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐      │            │
-│  │  │Receiver  │  │ Service  │  │ Activity │      │            │
-│  │  └────┬─────┘  └────┬─────┘  └────┬─────┘      │            │
-│  └───────┼─────────────┼─────────────┼────────────┘            │
-│          │             │             │                          │
-│          ▼             ▼             ▼                          │
-│  ┌─────────────────────────────────────────────────┐            │
-│  │           Android System APIs                    │            │
-│  │  BatteryManager │ CameraManager │ SmsManager    │            │
-│  │  LocationManager │ AudioManager │ Vibrator      │            │
-│  └─────────────────────────────────────────────────┘            │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### API Categories Overview
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    TERMUX API CATEGORIES                         │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐       │
-│  │    DEVICE     │  │   HARDWARE    │  │     MEDIA     │       │
-│  │ INFORMATION   │  │   CONTROL     │  │   & NOTIF     │       │
-│  ├───────────────┤  ├───────────────┤  ├───────────────┤       │
-│  │ battery-status│  │ torch         │  │ notification  │       │
-│  │ telephony-*   │  │ brightness    │  │ toast         │       │
-│  │ wifi-*        │  │ volume        │  │ media-player  │       │
-│  │ camera-info   │  │ vibrate       │  │ media-scan    │       │
-│  │ sensor        │  │ camera-photo  │  │ download      │       │
-│  └───────────────┘  └───────────────┘  └───────────────┘       │
-│                                                                  │
-│  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐       │
-│  │COMMUNICATION │  │   LOCATION    │  │   STORAGE &   │       │
-│  │   & CONTACT  │  │   & SENSORS   │  │   CLIPBOARD   │       │
-│  ├───────────────┤  ├───────────────┤  ├───────────────┤       │
-│  │ sms-list      │  │ location      │  │ storage-get   │       │
-│  │ sms-send      │  │ sensor        │  │ share         │       │
-│  │ contact-list  │  │ wifi-scaninfo │  │ clipboard-get │       │
-│  │ call-log      │  │               │  │ clipboard-set │       │
-│  └───────────────┘  └───────────────┘  └───────────────┘       │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Permission Flow
-```
-                    Command Executed
-                          │
-                          ▼
-              ┌──────────────────────┐
-              │  Permission Check    │
-              └──────────┬───────────┘
-                         │
-         ┌───────────────┼───────────────┐
-         │               │               │
-         ▼               ▼               ▼
-    ┌─────────┐    ┌─────────┐    ┌─────────┐
-    │ Granted │    │ Denied  │    │Prompting│
-    └────┬────┘    └────┬────┘    └────┬────┘
-         │              │              │
-         ▼              ▼              ▼
-    ┌─────────┐    ┌─────────┐    ┌─────────┐
-    │ Execute │    │  Error  │    │  User   │
-    │   API   │    │ Message │    │ Decision│
-    └─────────┘    └─────────┘    └─────────┘
-```
-
----
-
-## 🔗 RELATED CHAPTERS
-
-| Chapter | Topic | Why Related |
-|---------|-------|-------------|
-| **Chapter 6** | File System | Storage paths for API files |
-| **Chapter 7** | Environment Variables | API-related env vars |
-| **Chapter 11** | Termux Boot | API in boot scripts |
-| **Chapter 21** | Bash Scripting | API scripting integration |
-| **Chapter 30** | Cron Jobs | Schedule API automation |
-| **Chapter 45** | Python Development | JSON parsing APIs |
-| **Chapter 50** | Tasker Integration | Advanced automation |
-
-### Navigation Path:
-```
-Module 2: Environment
-├── Chapter 6: File System Structure
-├── Chapter 7: Environment Variables
-├── Chapter 8: Text Editors
-├── Chapter 9: Termux Styling
-└── Chapter 10: Termux API Setup ◄── YOU ARE HERE
-
-Next: Module 3 - Core Skills
-└── Chapter 11: Termux Boot & Automation
-```
-
----
-
-## 🎯 NEXT CHAPTER PREVIEW
-
-**Chapter 11: Termux Boot & Automation**
-
-- Termux:Boot setup and configuration
-- Creating boot scripts
-- Background execution with nohup
-- Cron jobs for scheduling
-- Tasker integration basics
-- Practical automation examples
 
 ---
 

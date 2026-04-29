@@ -1,9 +1,32 @@
-# Chapter 19: Termux API - Camera & Media
+# 📸 Chapter 19: Termux API - Camera & Media
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║   ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗               ║
+║   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║               ║
+║      ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║               ║
+║      ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║               ║
+║      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗          ║
+║      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝          ║
+║                                                                              ║
+║   ██████╗  █████╗ ██████╗ ██╗  ██╗███╗   ██╗███████╗                         ║
+║   ██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝████╗  ██║██╔════╝                         ║
+║   ██████╔╝███████║██████╔╝█████╔╝ ██╔██╗ ██║█████╗                           ║
+║   ██╔══██╗██╔══██║██╔══██╗██╔═██╗ ██║╚██╗██║██╔══╝                           ║
+║   ██║  ██║██║  ██║██║  ██║██║  ██╗██║ ╚████║███████╗                         ║
+║   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝                         ║
+║                                                                              ║
+║                     🎥 CAMERA & MEDIA CHAPTER 🎥                             ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
 
 > **Module:** 4 - APIs  
 > **Chapter:** 19 of 61  
 > **Duration:** 15-20 Minutes  
 > **Difficulty:** ⭐⭐ Intermediate  
+> **Prerequisites:** Chapters 1-18 (Basic Termux & Device APIs)  
 
 ---
 
@@ -2413,3 +2436,1825 @@ termux-media-player info | jq '.position'
 11. **B** - `-r 44100` sets sample rate to 44.1 kHz
 12. **C** - `--size` sets resolution (e.g., `--size 1920x1080`)
 
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Question 1: Camera API Security
+**Q:** What security considerations exist when using the camera API?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** Key security considerations:
+1. **Permission Management** - Camera permission must be explicitly granted
+2. **User Awareness** - Notify user when camera is active
+3. **Secure Storage** - Encrypt captured photos/videos
+4. **Memory Management** - Handle large image files properly
+5. **Privacy** - Don't capture without user consent
+
+```bash
+# Secure photo capture with notification
+capture_secure() {
+    termux-notification --title "Camera Active" --content "Capturing photo..."
+    termux-camera-photo ~/secure_photo.jpg
+    # Encrypt if needed
+    gpg -c ~/secure_photo.jpg
+    rm ~/secure_photo.jpg  # Remove unencrypted
+}
+```
+
+**Follow-up:** How would you implement a secure surveillance system?
+</details>
+
+### Question 2: Audio Recording Compliance
+**Q:** What legal and technical considerations apply to audio recording?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:**
+- **Legal**: Many jurisdictions require consent for recording
+- **Technical**: Quality settings, file size, battery impact
+
+```bash
+# Compliance-aware recording
+record_with_consent() {
+    # Get user consent via dialog
+    RESULT=$(termux-dialog --confirm "Start audio recording?")
+    if [ "$(echo $RESULT | jq -r '.text')" = "yes" ]; then
+        termux-microphone-record -f ~/recording.mp3 -l 60
+        termux-notification --title "Recording" --content "60s recording saved"
+    fi
+}
+```
+
+**Follow-up:** How would you implement automatic transcription of recordings?
+</details>
+
+### Question 3: Volume Management
+**Q:** Design a system that prevents accidental loud volume situations.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+```bash
+#!/bin/bash
+# safe_volume.sh
+
+MAX_SAFE=70
+
+check_volume() {
+    VOL=$(termux-volume stream_music | jq -r '.volume')
+    if [ "$VOL" -gt "$MAX_SAFE" ]; then
+        termux-volume stream_music $MAX_SAFE
+        termux-toast --bgcolor "#FFA500" "Volume reduced to safe level"
+    fi
+}
+
+# Monitor volume changes
+while true; do
+    check_volume
+    sleep 5
+done
+```
+
+**Follow-up:** How would you implement volume profiles for different scenarios?
+</details>
+
+### Question 4: Media Player Integration
+**Q:** Create a script that plays audio based on device conditions.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+```bash
+#!/bin/bash
+# smart_player.sh
+
+BATTERY=$(termux-battery-status | jq -r '.percentage')
+HOUR=$(date +%H)
+
+if [ "$BATTERY" -lt 20 ]; then
+    # Low battery - play notification only
+    termux-media-player play /sdcard/Notifications/low_battery.mp3
+elif [ $HOUR -ge 22 ] || [ $HOUR -lt 6 ]; then
+    # Night time - low volume
+    termux-volume stream_music 30
+    termux-media-player play /sdcard/Music/sleep.mp3
+else
+    termux-media-player play /sdcard/Music/wakeup.mp3
+fi
+```
+
+**Follow-up:** How would you implement a playlist manager?
+</details>
+
+### Question 5: Camera Resolution Optimization
+**Q:** How would you optimize photo quality vs file size?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+```bash
+# Resolution optimization based on purpose
+optimize_capture() {
+    local purpose=$1
+    case "$purpose" in
+        "profile")
+            # Small, square photo
+            termux-camera-photo -c 1 --size 800x800 ~/photo.jpg
+            ;;
+        "document")
+            # High resolution
+            termux-camera-photo -c 0 --size 1920x1080 ~/doc.jpg
+            ;;
+        "thumbnail")
+            # Very small
+            termux-camera-photo -c 0 --size 320x240 ~/thumb.jpg
+            ;;
+    esac
+}
+```
+
+**Follow-up:** How would you implement automatic image compression?
+</details>
+
+### Question 6-10: Additional Questions
+
+<details>
+<summary>📖 Show More Questions</summary>
+
+**Q6:** How would you implement a motion-triggered camera?
+```python
+import subprocess, json, math, time
+
+def detect_motion():
+    baseline = None
+    while True:
+        result = subprocess.run(['termux-sensor', '-s', 'accelerometer', '-n', '1'], capture_output=True)
+        data = json.loads(result.stdout)
+        mag = math.sqrt(sum(v**2 for v in data['accelerometer']['values']))
+        if baseline and abs(mag - baseline) > 5:
+            subprocess.run(['termux-camera-photo', '-c', '0', f'/sdcard/motion_{int(time.time())}.jpg'])
+        baseline = mag
+        time.sleep(0.5)
+```
+
+**Q7:** Design a video surveillance system with email alerts.
+
+**Q8:** Create a voice memo system with transcription.
+
+**Q9:** How to handle camera rotation and orientation?
+
+**Q10:** Implement a smart doorbell with face detection.
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Security Camera System
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      📹 SECURITY CAMERA SYSTEM                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Create motion-triggered surveillance system                      ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   #!/bin/bash                                                                ║
+║   while true; do                                                             ║
+║       TIMESTAMP=$(date +%Y%m%d_%H%M%S)                                       ║
+║       termux-camera-photo -c 0 ~/security_$TIMESTAMP.jpg                    ║
+║       termux-media-scan ~/security_$TIMESTAMP.jpg                           ║
+║       # Optional: Upload to cloud                                            ║
+║       sleep 30                                                               ║
+║   done                                                                       ║
+║                                                                              ║
+║ Result: Continuous photo capture every 30 seconds                            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: Voice Note Assistant
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                       🎙️ VOICE NOTE ASSISTANT                               ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Record, save, and share voice notes                             ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   #!/bin/bash                                                                ║
+║   NOTE_DIR=~/storage/music/VoiceNotes                                       ║
+║   mkdir -p $NOTE_DIR                                                         ║
+║   TIMESTAMP=$(date +%Y%m%d_%H%M%S)                                           ║
+║   termux-microphone-record -f $NOTE_DIR/note_$TIMESTAMP.mp3 -l 60          ║
+║   termux-notification --title "Voice Note Saved"                            ║
+║   # Share option                                                             ║
+║   read -p "Share? (y/n): " share                                            ║
+║   [ "$share" = "y" ] && termux-share $NOTE_DIR/note_$TIMESTAMP.mp3         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 3: Time-Lapse Photography
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      📷 TIME-LAPSE PHOTOGRAPHY                               ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Capture photos at intervals for time-lapse video                 ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   INTERVAL=${1:-10}  # Default 10 seconds                                    ║
+║   COUNT=${2:-100}    # Default 100 photos                                    ║
+║   DIR=~/storage/dcim/TimeLapse_$(date +%Y%m%d)                              ║
+║   mkdir -p $DIR                                                              ║
+║   for i in $(seq -w 1 $COUNT); do                                           ║
+║       termux-camera-photo -c 0 $DIR/frame_$i.jpg                            ║
+║       echo "Captured frame $i/$COUNT"                                        ║
+║       sleep $INTERVAL                                                        ║
+║   done                                                                       ║
+║   # Create video with ffmpeg                                                 ║
+║   ffmpeg -framerate 30 -i $DIR/frame_%04d.jpg -c:v libx264 $DIR/timelapse.mp4║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Camera API Flow
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        CAMERA API ARCHITECTURE                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   termux-camera-photo ──► Termux:API App ──► Android Camera2 API             │
+│         │                        │                   │                       │
+│         ▼                        ▼                   ▼                       │
+│   ┌──────────┐            ┌──────────┐         ┌──────────┐                 │
+│   │ Filename │            │ Permission│        │ Hardware │                 │
+│   │ Options  │            │  Check    │        │ Camera   │                 │
+│   │ -c ID    │            │           │        │ Capture  │                 │
+│   │ --size   │            │           │        │          │                 │
+│   └──────────┘            └──────────┘         └──────────┘                 │
+│                                                      │                       │
+│                                                      ▼                       │
+│                                               ┌──────────┐                  │
+│                                               │ JPEG File │                  │
+│                                               │ Saved     │                  │
+│                                               └──────────┘                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Topic | Relation |
+|---------|-------|----------|
+| Chapter 17 | File Operations | Save and share captured media |
+| Chapter 18 | Device Info | Use sensors for camera automation |
+| Chapter 20 | Network APIs | Stream media over network |
+| Chapter 21 | Notifications | Alert on capture completion |
+| Chapter 23 | Clipboard & Share | Share captured content |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Face Detection Integration
+```bash
+#!/bin/bash
+# Capture and detect faces using Python
+python3 << 'EOF'
+import subprocess, cv2, os
+
+# Capture photo
+subprocess.run(['termux-camera-photo', '-c', '0', '/tmp/face_check.jpg'])
+
+# Detect faces
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+img = cv2.imread('/tmp/face_check.jpg')
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+if len(faces) > 0:
+    print(f"Detected {len(faces)} face(s)")
+    subprocess.run(['termux-notification', '--title', 'Face Detected', '--content', f'{len(faces)} face(s) found'])
+else:
+    print("No faces detected")
+EOF
+```
+
+### Advanced Technique 2: Audio Level Monitoring
+```python
+#!/usr/bin/env python3
+import subprocess, json
+
+def monitor_audio_level():
+    while True:
+        result = subprocess.run(['termux-microphone-record', '-i'], capture_output=True)
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            print(f"Recording: {data.get('is_recording', False)}")
+
+### Advanced Technique 3: QR Code Scanner
+def scan_qr():
+    subprocess.run(['termux-camera-photo', '/tmp/qr.jpg'])
+    result = subprocess.run(['zbarimg', '/tmp/qr.jpg'], capture_output=True, text=True)
+    if result.returncode == 0:
+        return result.stdout.strip()
+    return None
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ What You Learned
+- [ ] **termux-camera-info** - List available cameras
+- [ ] **termux-camera-photo** - Capture photos with options
+- [ ] **termux-media-player** - Control audio playback
+- [ ] **termux-media-scan** - Register files in MediaStore
+- [ ] **termux-volume** - Control audio streams
+- [ ] **termux-microphone-record** - Record audio
+- [ ] **Camera selection** - Front/back camera control
+- [ ] **Resolution settings** - Quality vs size optimization
+
+### 📋 Quick Reference
+```bash
+termux-camera-info                    # List cameras
+termux-camera-photo photo.jpg         # Capture photo
+termux-camera-photo -c 1 selfie.jpg   # Front camera
+termux-media-player play song.mp3     # Play audio
+termux-volume stream_music 75         # Set volume
+termux-microphone-record -f a.mp3    # Record audio
+```
+
+---
+
+*Chapter 19 Complete! Ready for Chapter 20: Network APIs*
+
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>❓ Question 1: How do you list all available cameras on a device?</b></summary>
+
+**Answer:** Use `termux-camera-info`:
+
+```bash
+termux-camera-info
+termux-camera-info | jq '.[].facing'  # Show facing direction
+```
+
+Returns JSON array with camera IDs, facing (front/back), and capabilities.
+</details>
+
+<details>
+<summary><b>❓ Question 2: What flag selects the front camera for photo capture?</b></summary>
+
+**Answer:** Use `-c 1` for front camera:
+
+```bash
+termux-camera-photo -c 0 photo.jpg   # Back camera (default)
+termux-camera-photo -c 1 selfie.jpg   # Front camera
+```
+
+Camera ID 0 is typically back camera, ID 1 is front camera.
+</details>
+
+<details>
+<summary><b>❓ Question 3: How do you play an audio file from Termux?</b></summary>
+
+**Answer:** Use `termux-media-player play`:
+
+```bash
+termux-media-player play song.mp3
+termux-media-player play /sdcard/Music/track.mp3
+```
+
+Also supports: `pause`, `stop`, and `info` commands.
+</details>
+
+<details>
+<summary><b>❓ Question 4: What does termux-media-scan do?</b></summary>
+
+**Answer:** It registers files with Android's MediaStore:
+
+```bash
+termux-media-scan /sdcard/DCIM/photo.jpg
+```
+
+Makes files visible in Gallery, Music Player, and other media apps.
+</details>
+
+<details>
+<summary><b>❓ Question 5: How do you set the music volume to 75%?</b></summary>
+
+**Answer:** Use `termux-volume`:
+
+```bash
+termux-volume stream_music 75
+```
+
+Volume range is 0-100. Stream types: music, ring, notification, alarm, system.
+</details>
+
+<details>
+<summary><b>❓ Question 6: How do you start a 30-second audio recording?</b></summary>
+
+**Answer:** Use `termux-microphone-record` with `-l` flag:
+
+```bash
+termux-microphone-record -f recording.mp3 -l 30
+```
+
+Without `-l`, recording continues until manually stopped with `-q`.
+</details>
+
+<details>
+<summary><b>❓ Question 7: What's the difference between -c 0 and -c 1?</b></summary>
+
+**Answer:**
+
+| Flag | Camera | Description |
+|------|--------|-------------|
+| `-c 0` | Back camera | Main camera, usually higher resolution |
+| `-c 1` | Front camera | Selfie camera |
+
+Check available cameras with `termux-camera-info` to see all IDs.
+</details>
+
+<details>
+<summary><b>❓ Question 8: How do you check current media playback info?</b></summary>
+
+**Answer:** Use `termux-media-player info`:
+
+```bash
+termux-media-player info
+```
+
+Returns JSON with track name, duration, position, and playback state.
+</details>
+
+<details>
+<summary><b>❓ Question 9: What audio streams can termux-volume control?</b></summary>
+
+**Answer:** Available streams:
+
+| Stream | Description |
+|--------|-------------|
+| `stream_music` | Media/music playback |
+| `stream_ring` | Ringtone |
+| `stream_notification` | Notification sounds |
+| `stream_alarm` | Alarm sounds |
+| `stream_system` | System sounds |
+
+Example: `termux-volume stream_notification 50`
+</details>
+
+<details>
+<summary><b>❓ Question 10: How do you stop an ongoing recording?</b></summary>
+
+**Answer:** Use the `-q` flag:
+
+```bash
+termux-microphone-record -q
+```
+
+This stops any active recording session.
+</details>
+
+<details>
+<summary><b>❓ Question 11: What permissions are needed for camera API?</b></summary>
+
+**Answer:** Required permissions:
+
+1. **Camera permission** - For photo capture
+2. **Storage permission** - For saving photos
+
+Grant via: Settings → Apps → Termux → Permissions
+</details>
+
+<details>
+<summary><b>❓ Question 12: How do you specify recording quality?</b></summary>
+
+**Answer:** Use `-r` for sample rate and `-c` for channels:
+
+```bash
+# High quality (CD quality, stereo)
+termux-microphone-record -f hq.mp3 -r 44100 -c 2
+
+# Low quality (smaller file, mono)
+termux-microphone-record -f lq.mp3 -r 8000 -c 1
+```
+
+Sample rates: 8000, 16000, 22050, 44100 Hz
+</details>
+
+<details>
+<summary><b>❓ Question 13: Can termux-camera-photo set custom resolution?</b></summary>
+
+**Answer:** Yes, use `--size` flag:
+
+```bash
+termux-camera-photo --size 1920x1080 photo.jpg
+termux-camera-photo --size 1280x720 photo.jpg
+```
+
+Check available sizes with `termux-camera-info`.
+</details>
+
+<details>
+<summary><b>❓ Question 14: What file formats are supported for audio recording?</b></summary>
+
+**Answer:** Common supported formats:
+
+- MP3 (`.mp3`) - Most common
+- WAV (`.wav`) - Uncompressed, larger files
+- OGG (`.ogg`) - Good compression
+- AMR (`.amr`) - Voice recording optimized
+
+Example: `termux-microphone-record -f audio.wav`
+</details>
+
+<details>
+<summary><b>❓ Question 15: How do you make a captured photo visible in gallery?</b></summary>
+
+**Answer:** Move to shared storage and scan:
+
+```bash
+termux-camera-photo ~/photo.jpg
+mv ~/photo.jpg /sdcard/DCIM/
+termux-media-scan /sdcard/DCIM/photo.jpg
+```
+
+Or directly capture to gallery location:
+```bash
+termux-camera-photo /sdcard/DCIM/photo.jpg
+```
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Q1: Design a security camera system using Termux camera API.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Motion-triggered security camera system"""
+
+import subprocess
+import os
+import time
+from datetime import datetime
+import hashlib
+import json
+
+class SecurityCamera:
+    def __init__(self, output_dir="/sdcard/SecurityCam"):
+        self.output_dir = output_dir
+        os.makedirs(output_dir, exist_ok=True)
+        self.last_image_hash = None
+        self.motion_threshold = 0.1
+        
+    def capture_photo(self):
+        """Capture photo from camera"""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filepath = f"{self.output_dir}/security_{timestamp}.jpg"
+        
+        result = subprocess.run(
+            ['termux-camera-photo', '-c', '0', filepath],
+            capture_output=True
+        )
+        
+        if result.returncode == 0:
+            subprocess.run(['termux-media-scan', filepath])
+            return filepath
+        return None
+        
+    def get_image_hash(self, filepath):
+        """Calculate image hash for comparison"""
+        if not os.path.exists(filepath):
+            return None
+        with open(filepath, 'rb') as f:
+            return hashlib.md5(f.read()).hexdigest()
+            
+    def detect_motion(self, current_hash):
+        """Detect if image changed significantly"""
+        if self.last_image_hash is None:
+            self.last_image_hash = current_hash
+            return False
+            
+        # Simple hash comparison
+        similarity = sum(a == b for a, b in 
+                       zip(current_hash, self.last_image_hash)) / 32
+        return similarity < (1 - self.motion_threshold)
+        
+    def send_alert(self, filepath):
+        """Send security alert"""
+        subprocess.run([
+            'termux-notification',
+            '--title', '🚨 Motion Detected!',
+            '--content', f'Photo captured at {datetime.now().strftime("%H:%M:%S")}',
+            '--priority', 'high',
+            '--sound',
+            '--vibrate', '500,200,500'
+        ])
+        
+        # Optionally share photo
+        subprocess.run(['termux-share', '-a', 'send', filepath])
+        
+    def run(self, interval=5):
+        """Main security loop"""
+        print("🔒 Security Camera Active")
+        print(f"📁 Saving to: {self.output_dir}")
+        print(f"⏱️  Capture interval: {interval}s")
+        print("Press Ctrl+C to stop\n")
+        
+        while True:
+            filepath = self.capture_photo()
+            
+            if filepath:
+                current_hash = self.get_image_hash(filepath)
+                
+                if self.detect_motion(current_hash):
+                    print(f"[{datetime.now().strftime('%H:%M:%S')}] ⚠️ Motion detected!")
+                    self.send_alert(filepath)
+                else:
+                    print(f"[{datetime.now().strftime('%H:%M:%S')}] ✓ No motion")
+                    
+                self.last_image_hash = current_hash
+                
+            time.sleep(interval)
+
+# Usage
+cam = SecurityCamera()
+cam.run(interval=10)
+```
+
+Key features:
+- Periodic photo capture
+- Motion detection via image comparison
+- Alert notifications
+- MediaStore integration
+</details>
+
+### Q2: Implement a time-lapse photography system.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Time-lapse photography system"""
+
+import subprocess
+import os
+import time
+from datetime import datetime, timedelta
+import threading
+import json
+
+class TimelapseCamera:
+    def __init__(self, output_dir="/sdcard/Timelapse"):
+        self.output_dir = output_dir
+        os.makedirs(output_dir, exist_ok=True)
+        self.running = False
+        self.photos = []
+        
+    def capture_frame(self, camera_id=0, size=None):
+        """Capture single frame"""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        filename = f"frame_{timestamp}.jpg"
+        filepath = os.path.join(self.output_dir, filename)
+        
+        cmd = ['termux-camera-photo', '-c', str(camera_id)]
+        if size:
+            cmd.extend(['--size', size])
+        cmd.append(filepath)
+        
+        result = subprocess.run(cmd, capture_output=True)
+        
+        if result.returncode == 0:
+            self.photos.append(filepath)
+            return filepath
+        return None
+        
+    def get_progress(self, current, total):
+        """Calculate progress percentage"""
+        return int((current / total) * 100)
+        
+    def run_timelapse(self, duration_minutes, interval_seconds, camera_id=0):
+        """Run time-lapse capture"""
+        total_frames = (duration_minutes * 60) // interval_seconds
+        
+        print(f"🎬 Time-lapse Configuration:")
+        print(f"   Duration: {duration_minutes} minutes")
+        print(f"   Interval: {interval_seconds} seconds")
+        print(f"   Total frames: {total_frames}")
+        print(f"   Output: {self.output_dir}\n")
+        
+        frames_captured = 0
+        start_time = time.time()
+        
+        self.running = True
+        
+        while self.running and frames_captured < total_frames:
+            filepath = self.capture_frame(camera_id)
+            
+            if filepath:
+                frames_captured += 1
+                progress = self.get_progress(frames_captured, total_frames)
+                
+                elapsed = int(time.time() - start_time)
+                remaining = int((total_frames - frames_captured) * interval_seconds)
+                
+                print(f"\r[{progress:3d}%] Frame {frames_captured}/{total_frames} | "
+                      f"Elapsed: {elapsed}s | Remaining: {remaining}s", end="")
+                      
+                # Scan every 10 frames
+                if frames_captured % 10 == 0:
+                    subprocess.run(['termux-media-scan', filepath])
+                    
+            time.sleep(interval_seconds)
+            
+        print(f"\n\n✅ Time-lapse complete!")
+        print(f"   Frames captured: {frames_captured}")
+        print(f"   Output directory: {self.output_dir}")
+        
+        # Final scan
+        for photo in self.photos:
+            subprocess.run(['termux-media-scan', photo])
+            
+        return self.photos
+        
+    def create_video_info(self):
+        """Create video compilation info"""
+        info = {
+            'session': datetime.now().isoformat(),
+            'output_dir': self.output_dir,
+            'frame_count': len(self.photos),
+            'photos': self.photos,
+            'ffmpeg_command': f'ffmpeg -framerate 30 -i {self.output_dir}/frame_%*.jpg -c:v libx264 output.mp4'
+        }
+        
+        with open(os.path.join(self.output_dir, 'timelapse_info.json'), 'w') as f:
+            json.dump(info, f, indent=2)
+            
+        return info
+        
+    def stop(self):
+        """Stop time-lapse"""
+        self.running = False
+
+# Usage
+timelapse = TimelapseCamera("/sdcard/Timelapse/sunset")
+photos = timelapse.run_timelapse(
+    duration_minutes=30,    # 30 minutes
+    interval_seconds=5,     # Every 5 seconds
+    camera_id=0             # Back camera
+)
+```
+
+Features:
+- Configurable duration and interval
+- Progress tracking
+- MediaStore scanning
+- Video compilation info
+</details>
+
+### Q3: Create a voice note recording application.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Voice note recording application"""
+
+import subprocess
+import os
+import time
+from datetime import datetime
+import json
+import threading
+
+class VoiceNoteApp:
+    def __init__(self, notes_dir="/sdcard/VoiceNotes"):
+        self.notes_dir = notes_dir
+        os.makedirs(notes_dir, exist_ok=True)
+        self.recording = False
+        self.current_file = None
+        
+    def start_recording(self, duration=None, quality='high'):
+        """Start voice recording"""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.current_file = os.path.join(self.notes_dir, f"note_{timestamp}.mp3")
+        
+        quality_settings = {
+            'low': {'rate': 8000, 'channels': 1},
+            'medium': {'rate': 22050, 'channels': 1},
+            'high': {'rate': 44100, 'channels': 2}
+        }
+        
+        settings = quality_settings.get(quality, quality_settings['high'])
+        
+        cmd = [
+            'termux-microphone-record',
+            '-f', self.current_file,
+            '-r', str(settings['rate']),
+            '-c', str(settings['channels'])
+        ]
+        
+        if duration:
+            cmd.extend(['-l', str(duration)])
+            
+        self.recording = True
+        result = subprocess.run(cmd, capture_output=True)
+        
+        return result.returncode == 0
+        
+    def stop_recording(self):
+        """Stop current recording"""
+        subprocess.run(['termux-microphone-record', '-q'])
+        self.recording = False
+        
+        if self.current_file and os.path.exists(self.current_file):
+            subprocess.run(['termux-media-scan', self.current_file])
+            
+            # Get file info
+            size = os.path.getsize(self.current_file)
+            
+            return {
+                'file': self.current_file,
+                'size': size,
+                'timestamp': datetime.now().isoformat()
+            }
+        return None
+        
+    def get_recording_status(self):
+        """Get current recording status"""
+        result = subprocess.run(
+            ['termux-microphone-record', '-i'],
+            capture_output=True, text=True
+        )
+        
+        if result.returncode == 0:
+            return json.loads(result.stdout)
+        return None
+        
+    def list_notes(self):
+        """List all voice notes"""
+        notes = []
+        
+        for file in sorted(os.listdir(self.notes_dir), reverse=True):
+            if file.endswith(('.mp3', '.wav', '.ogg')):
+                filepath = os.path.join(self.notes_dir, file)
+                stat = os.stat(filepath)
+                
+                notes.append({
+                    'name': file,
+                    'path': filepath,
+                    'size': stat.st_size,
+                    'created': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d %H:%M:%S')
+                })
+                
+        return notes
+        
+    def play_note(self, filepath):
+        """Play a voice note"""
+        subprocess.run(['termux-media-player', 'play', filepath])
+        
+    def share_note(self, filepath):
+        """Share voice note"""
+        subprocess.run(['termux-share', '-c', 'audio/mpeg', filepath])
+        
+    def delete_note(self, filepath):
+        """Delete voice note"""
+        if os.path.exists(filepath):
+            os.remove(filepath)
+            return True
+        return False
+        
+    def quick_record(self, duration=30):
+        """Quick recording with automatic stop"""
+        print(f"🔴 Recording for {duration} seconds...")
+        
+        if self.start_recording(duration=duration):
+            # Show countdown
+            for i in range(duration, 0, -1):
+                print(f"\r⏱️  Time remaining: {i}s ", end="")
+                time.sleep(1)
+                
+            print("\n✅ Recording saved!")
+            
+            # Auto-scan
+            if self.current_file:
+                subprocess.run(['termux-media-scan', self.current_file])
+                
+            return self.current_file
+        return None
+
+# Usage
+app = VoiceNoteApp()
+
+# Quick 30-second recording
+note = app.quick_record(30)
+
+# List all notes
+for note in app.list_notes():
+    print(f"📝 {note['name']} - {note['size']} bytes")
+```
+
+Features:
+- Multiple quality settings
+- Recording status monitoring
+- Note management
+- Sharing integration
+</details>
+
+### Q4: Explain the camera capture flow in Termux API.
+
+**Answer:**
+
+**Camera Capture Flow:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CAMERA CAPTURE FLOW                                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   1. COMMAND ISSUED                                                      │
+│      └─► termux-camera-photo -c 0 photo.jpg                             │
+│                                                                          │
+│   2. TERMUX:API BRIDGE                                                   │
+│      ├─► Receives broadcast intent                                       │
+│      ├─► Validates parameters                                            │
+│      └─► Opens camera service                                            │
+│                                                                          │
+│   3. CAMERA2 API (Android 5.0+)                                          │
+│      ├─► Opens camera device (ID: 0)                                     │
+│      ├─► Configures capture request                                      │
+│      ├─► Sets JPEG output format                                         │
+│      └─► Applies size settings (if specified)                            │
+│                                                                          │
+│   4. CAPTURE PROCESS                                                     │
+│      ├─► Auto-focus (if available)                                       │
+│      ├─► Auto-exposure adjustment                                        │
+│      ├─► Image capture                                                   │
+│      └─► JPEG encoding                                                   │
+│                                                                          │
+│   5. FILE SAVE                                                           │
+│      ├─► Writes to specified path                                        │
+│      └─► Returns control to Termux                                       │
+│                                                                          │
+│   6. POST-PROCESSING (Optional)                                          │
+│      ├─► termux-media-scan                                               │
+│      └─► Gallery visibility                                              │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Key Technical Details:**
+
+```python
+# The actual API call structure
+def capture_photo_internal(camera_id, filepath, size=None):
+    """
+    Internal capture process:
+    
+    1. Intent: com.termux.api.CAMERA_PHOTO
+    2. Extras:
+       - camera: camera_id (0, 1, 2...)
+       - path: filepath (absolute path)
+       - size: WxH (optional)
+    3. Result:
+       - Returns 0 on success
+       - Returns non-zero on failure
+    """
+    pass
+```
+
+**Performance Considerations:**
+- Camera initialization takes 1-2 seconds
+- Focus can add 0.5-2 seconds
+- File write depends on storage speed
+- Total typical capture: 2-5 seconds
+</details>
+
+### Q5: Design a media player controller with playlist support.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Media player controller with playlist support"""
+
+import subprocess
+import os
+import json
+import time
+import threading
+from typing import List, Optional
+from dataclasses import dataclass
+
+@dataclass
+class Track:
+    filepath: str
+    title: str
+    duration: int = 0
+    
+class MediaPlayerController:
+    def __init__(self):
+        self.playlist: List[Track] = []
+        self.current_index = -1
+        self.playing = False
+        self.shuffle = False
+        self.repeat = False  # False, 'one', 'all'
+        
+    def add_track(self, filepath: str):
+        """Add track to playlist"""
+        if os.path.exists(filepath):
+            track = Track(
+                filepath=filepath,
+                title=os.path.basename(filepath)
+            )
+            self.playlist.append(track)
+            return True
+        return False
+        
+    def add_directory(self, directory: str, extensions=None):
+        """Add all tracks from directory"""
+        if extensions is None:
+            extensions = ['.mp3', '.wav', '.ogg', '.m4a', '.flac']
+            
+        count = 0
+        for file in os.listdir(directory):
+            if any(file.lower().endswith(ext) for ext in extensions):
+                if self.add_track(os.path.join(directory, file)):
+                    count += 1
+        return count
+        
+    def play(self, index: Optional[int] = None):
+        """Play track"""
+        if index is not None:
+            self.current_index = index
+            
+        if 0 <= self.current_index < len(self.playlist):
+            track = self.playlist[self.current_index]
+            subprocess.run(['termux-media-player', 'play', track.filepath])
+            self.playing = True
+            
+    def pause(self):
+        """Pause playback"""
+        subprocess.run(['termux-media-player', 'pause'])
+        self.playing = False
+        
+    def resume(self):
+        """Resume playback"""
+        subprocess.run(['termux-media-player', 'play'])
+        self.playing = True
+        
+    def stop(self):
+        """Stop playback"""
+        subprocess.run(['termux-media-player', 'stop'])
+        self.playing = False
+        
+    def next(self):
+        """Next track"""
+        if self.shuffle:
+            import random
+            self.current_index = random.randint(0, len(self.playlist) - 1)
+        else:
+            self.current_index += 1
+            
+        if self.current_index >= len(self.playlist):
+            if self.repeat == 'all':
+                self.current_index = 0
+            else:
+                self.stop()
+                return
+                
+        self.play()
+        
+    def previous(self):
+        """Previous track"""
+        self.current_index -= 1
+        if self.current_index < 0:
+            self.current_index = len(self.playlist) - 1
+        self.play()
+        
+    def get_current_track(self) -> Optional[Track]:
+        """Get currently playing track"""
+        if 0 <= self.current_index < len(self.playlist):
+            return self.playlist[self.current_index]
+        return None
+        
+    def get_status(self) -> dict:
+        """Get playback status"""
+        result = subprocess.run(
+            ['termux-media-player', 'info'],
+            capture_output=True, text=True
+        )
+        
+        if result.returncode == 0:
+            status = json.loads(result.stdout)
+            status['playlist_index'] = self.current_index
+            status['playlist_total'] = len(self.playlist)
+            return status
+        return {}
+        
+    def set_volume(self, level: int):
+        """Set volume (0-100)"""
+        subprocess.run(['termux-volume', 'stream_music', str(level)])
+        
+    def toggle_shuffle(self):
+        """Toggle shuffle mode"""
+        self.shuffle = not self.shuffle
+        
+    def toggle_repeat(self):
+        """Cycle repeat modes: off -> all -> one -> off"""
+        if self.repeat is False:
+            self.repeat = 'all'
+        elif self.repeat == 'all':
+            self.repeat = 'one'
+        else:
+            self.repeat = False
+            
+    def auto_play_next(self, check_interval=5):
+        """Auto-play next track when current ends"""
+        last_position = -1
+        
+        while self.playing:
+            status = self.get_status()
+            current_position = status.get('position', 0)
+            
+            # Check if track ended (position reset or same as duration)
+            if last_position > 0 and current_position < last_position:
+                # Track likely ended
+                if self.repeat == 'one':
+                    self.play()
+                else:
+                    self.next()
+                    
+            last_position = current_position
+            time.sleep(check_interval)
+            
+    def start_auto_play(self):
+        """Start auto-play thread"""
+        thread = threading.Thread(target=self.auto_play_next, daemon=True)
+        thread.start()
+        
+    def show_playlist(self):
+        """Display playlist"""
+        print("\n🎵 Playlist:")
+        print("─" * 50)
+        
+        for i, track in enumerate(self.playlist):
+            marker = "▶" if i == self.current_index else " "
+            print(f"{marker} {i+1:2d}. {track.title}")
+            
+        print("─" * 50)
+        print(f"Total tracks: {len(self.playlist)}")
+
+# Usage
+player = MediaPlayerController()
+
+# Add tracks
+player.add_directory("/sdcard/Music")
+
+# Play first track
+player.play(0)
+player.start_auto_play()
+
+# Show playlist
+player.show_playlist()
+```
+
+Features:
+- Playlist management
+- Shuffle and repeat modes
+- Auto-play next track
+- Volume control
+- Status monitoring
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Document Scanner
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  📄 SCENARIO: Mobile Document Scanner with OCR                        ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User needs to scan documents quickly and extract text using OCR.     ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```bash
+#!/bin/bash
+# document_scanner.sh
+
+SCAN_DIR="/sdcard/Documents/Scans"
+mkdir -p "$SCAN_DIR"
+
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+PHOTO="$SCAN_DIR/doc_$TIMESTAMP.jpg"
+TEXT="$SCAN_DIR/doc_$TIMESTAMP.txt"
+
+echo "📄 Document Scanner"
+echo "==================="
+echo ""
+echo "📸 Capturing document..."
+
+# Capture photo
+termux-camera-photo -c 0 --size 1920x1080 "$PHOTO"
+
+if [ -f "$PHOTO" ]; then
+    echo "✅ Photo captured: $PHOTO"
+    
+    # Check for OCR tool
+    if command -v tesseract &> /dev/null; then
+        echo "🔍 Running OCR..."
+        tesseract "$PHOTO" "${TEXT%.txt}" 2>/dev/null
+        
+        if [ -f "$TEXT" ]; then
+            echo "✅ Text extracted!"
+            
+            # Copy to clipboard
+            cat "$TEXT" | termux-clipboard-set
+            echo "📋 Text copied to clipboard"
+            
+            # Show preview
+            echo ""
+            echo "📝 Extracted text:"
+            echo "─────────────────"
+            head -10 "$TEXT"
+            echo "..."
+        fi
+    else
+        echo "⚠️  Tesseract not installed"
+        echo "Install: pkg install tesseract"
+    fi
+    
+    # Scan for gallery
+    termux-media-scan "$PHOTO"
+    
+    # Ask to share
+    read -p "Share document? (y/n): " share
+    [ "$share" = "y" ] && termux-share "$PHOTO"
+else
+    echo "❌ Capture failed"
+fi
+```
+
+---
+
+### Scenario 2: Surveillance Camera
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  📹 SCENARIO: Basic Surveillance Camera System                        ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User wants to monitor a room and capture photos at intervals.        ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import os
+import time
+from datetime import datetime
+
+class SurveillanceCamera:
+    def __init__(self, output_dir="/sdcard/Surveillance"):
+        self.output_dir = output_dir
+        os.makedirs(output_dir, exist_ok=True)
+        self.running = False
+        self.photos = []
+        
+    def capture(self):
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filepath = os.path.join(self.output_dir, f"cam_{timestamp}.jpg")
+        
+        result = subprocess.run(
+            ['termux-camera-photo', '-c', '0', filepath],
+            capture_output=True
+        )
+        
+        if result.returncode == 0:
+            subprocess.run(['termux-media-scan', filepath])
+            return filepath
+        return None
+        
+    def run(self, interval=30):
+        self.running = True
+        session_start = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        print(f"📹 Surveillance Started: {session_start}")
+        print(f"📁 Output: {self.output_dir}")
+        print(f"⏱️  Interval: {interval}s")
+        print("Press Ctrl+C to stop\n")
+        
+        count = 0
+        try:
+            while self.running:
+                filepath = self.capture()
+                count += 1
+                
+                if filepath:
+                    size = os.path.getsize(filepath) / 1024
+                    print(f"[{count:4d}] {datetime.now().strftime('%H:%M:%S')} - "
+                          f"{os.path.basename(filepath)} ({size:.0f}KB)")
+                    
+                time.sleep(interval)
+        except KeyboardInterrupt:
+            print(f"\n\n🛑 Stopped after {count} captures")
+            
+            # Send summary notification
+            subprocess.run([
+                'termux-notification',
+                '--title', '📹 Surveillance Complete',
+                '--content', f'{count} photos captured',
+                '--priority', 'low'
+            ])
+
+# Usage
+cam = SurveillanceCamera()
+cam.run(interval=30)
+```
+
+---
+
+### Scenario 3: Audio Recorder with Organization
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  🎤 SCENARIO: Organized Audio Recording System                        ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User records many audio notes and needs organization by category.   ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import os
+import time
+from datetime import datetime
+
+class OrganizedRecorder:
+    CATEGORIES = ['meetings', 'ideas', 'reminders', 'personal']
+    
+    def __init__(self, base_dir="/sdcard/AudioRecordings"):
+        self.base_dir = base_dir
+        for cat in self.CATEGORIES:
+            os.makedirs(os.path.join(base_dir, cat), exist_ok=True)
+            
+    def record(self, category, duration=60, quality='high'):
+        if category not in self.CATEGORIES:
+            print(f"Invalid category. Choose: {', '.join(self.CATEGORIES)}")
+            return None
+            
+        output_dir = os.path.join(self.base_dir, category)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{category}_{timestamp}.mp3"
+        filepath = os.path.join(output_dir, filename)
+        
+        quality_map = {
+            'low': (8000, 1),
+            'medium': (22050, 1),
+            'high': (44100, 2)
+        }
+        rate, channels = quality_map.get(quality, quality_map['high'])
+        
+        print(f"🔴 Recording to: {category}")
+        print(f"📁 File: {filename}")
+        print(f"⏱️  Duration: {duration}s")
+        
+        result = subprocess.run([
+            'termux-microphone-record',
+            '-f', filepath,
+            '-l', str(duration),
+            '-r', str(rate),
+            '-c', str(channels)
+        ])
+        
+        subprocess.run(['termux-media-scan', filepath])
+        return filepath
+        
+    def list_recordings(self, category=None):
+        if category:
+            dirs = [os.path.join(self.base_dir, category)]
+        else:
+            dirs = [os.path.join(self.base_dir, c) for c in self.CATEGORIES]
+            
+        for d in dirs:
+            cat = os.path.basename(d)
+            files = sorted(os.listdir(d), reverse=True)
+            
+            if files:
+                print(f"\n📂 {cat.upper()}:")
+                for f in files[:10]:
+                    path = os.path.join(d, f)
+                    size = os.path.getsize(path) / 1024
+                    print(f"   🎵 {f} ({size:.0f}KB)")
+                    
+    def show_menu(self):
+        while True:
+            print("\n🎤 Audio Recorder Menu")
+            print("═" * 30)
+            for i, cat in enumerate(self.CATEGORIES, 1):
+                print(f"{i}. Record {cat}")
+            print("5. List all recordings")
+            print("6. Exit")
+            
+            choice = input("\nSelect: ")
+            
+            if choice in '1234':
+                category = self.CATEGORIES[int(choice) - 1]
+                duration = int(input("Duration (seconds): ") or "60")
+                self.record(category, duration)
+            elif choice == '5':
+                self.list_recordings()
+            elif choice == '6':
+                break
+
+# Usage
+recorder = OrganizedRecorder()
+recorder.show_menu()
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Camera API Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CAMERA API ARCHITECTURE                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Termux Command                                │   │
+│   │   $ termux-camera-photo -c 0 --size 1920x1080 output.jpg        │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Termux:API Bridge                             │   │
+│   │                                                                  │   │
+│   │   Intent: com.termux.api.CAMERA_PHOTO                           │   │
+│   │   Extras:                                                        │   │
+│   │     - camera: "0" (camera ID)                                   │   │
+│   │     - path: "/path/to/output.jpg"                               │   │
+│   │     - size: "1920x1080" (optional)                              │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Android Camera2 API                           │   │
+│   │                                                                  │   │
+│   │   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐          │   │
+│   │   │ Camera      │   │ Capture     │   │ Image       │          │   │
+│   │   │ Manager     │──►│ Request     │──►│ Reader      │          │   │
+│   │   └─────────────┘   └─────────────┘   └─────────────┘          │   │
+│   │                                                                  │   │
+│   │   Features:                                                      │   │
+│   │   • Auto-focus                                                   │   │
+│   │   • Auto-exposure                                                │   │
+│   │   • Flash control                                                │   │
+│   │   • Resolution selection                                         │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Output                                        │   │
+│   │                                                                  │   │
+│   │   JPEG file saved to specified path                             │   │
+│   │   (optionally registered with MediaStore)                       │   │
+│   │                                                                  │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: Media Player Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    MEDIA PLAYER FLOW                                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   COMMANDS                        INTERNAL FLOW                          │
+│   ─────────                       ────────────                           │
+│                                                                          │
+│   termux-media-player            ┌─────────────────┐                    │
+│   ─────────────────────          │  Media Session  │                    │
+│                                  │    Manager      │                    │
+│   play <file>  ─────────────────►│                 │                    │
+│   pause       ──────────────────►│  ┌───────────┐  │                    │
+│   resume      ──────────────────►│  │  State    │  │                    │
+│   stop        ──────────────────►│  │  Machine  │  │                    │
+│   info        ──────────────────►│  └───────────┘  │                    │
+│                                  │        │        │                    │
+│                                  └────────┼────────┘                    │
+│                                           │                              │
+│                                           ▼                              │
+│                                  ┌─────────────────┐                    │
+│                                  │  Audio Track    │                    │
+│                                  │  Playback       │                    │
+│                                  │                 │                    │
+│                                  │  ┌───────────┐  │                    │
+│                                  │  │ Decode    │  │                    │
+│                                  │  │ Buffer    │  │                    │
+│                                  │  │ Output    │  │                    │
+│                                  │  └───────────┘  │                    │
+│                                  │                 │                    │
+│                                  └────────┬────────┘                    │
+│                                           │                              │
+│                                           ▼                              │
+│                                  ┌─────────────────┐                    │
+│                                  │  Audio Output   │                    │
+│                                  │  (Speaker/BT)   │                    │
+│                                  └─────────────────┘                    │
+│                                                                          │
+│   JSON OUTPUT FORMAT:                                                   │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │   {                                                              │   │
+│   │     "track": "song.mp3",                                        │   │
+│   │     "duration": 240,      // Total duration in seconds          │   │
+│   │     "position": 45,       // Current position in seconds        │   │
+│   │     "state": "playing"    // playing, paused, stopped           │   │
+│   │   }                                                              │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Relationship | Chapter | Topic |
+|--------------|---------|-------|
+| **Prerequisites** | Ch 1-16 | Termux Basics |
+| **Prerequisites** | Ch 17 | File Operations |
+| **Prerequisites** | Ch 18 | Device Information |
+| **Related** | Ch 20 | Network Operations |
+| **Related** | Ch 21 | Notifications |
+| **Related** | Ch 23 | Clipboard & Share |
+| **Next** | Ch 20 | Network APIs |
+| **Advanced** | Ch 45 | Automation Scripts |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Multi-Camera Capture System
+
+```python
+#!/usr/bin/env python3
+"""Multi-camera capture with synchronization"""
+
+import subprocess
+import os
+import threading
+import time
+from datetime import datetime
+
+class MultiCameraCapture:
+    def __init__(self, output_dir="/sdcard/MultiCam"):
+        self.output_dir = output_dir
+        os.makedirs(output_dir, exist_ok=True)
+        self.cameras = {}  # {camera_id: last_photo_path}
+        
+    def get_available_cameras(self):
+        """List available cameras"""
+        result = subprocess.run(
+            ['termux-camera-info'],
+            capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            import json
+            cameras = json.loads(result.stdout)
+            return [(c['id'], c['facing']) for c in cameras]
+        return []
+        
+    def capture_single(self, camera_id):
+        """Capture from single camera"""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        filename = f"cam{camera_id}_{timestamp}.jpg"
+        filepath = os.path.join(self.output_dir, filename)
+        
+        result = subprocess.run(
+            ['termux-camera-photo', '-c', str(camera_id), filepath],
+            capture_output=True
+        )
+        
+        if result.returncode == 0:
+            self.cameras[camera_id] = filepath
+            return filepath
+        return None
+        
+    def capture_all(self):
+        """Capture from all cameras sequentially"""
+        cameras = self.get_available_cameras()
+        photos = {}
+        
+        for cam_id, facing in cameras:
+            photo = self.capture_single(cam_id)
+            if photo:
+                photos[cam_id] = {
+                    'facing': facing,
+                    'path': photo
+                }
+                subprocess.run(['termux-media-scan', photo])
+                
+        return photos
+        
+    def capture_simultaneous(self):
+        """Attempt simultaneous capture (actually sequential but fast)"""
+        cameras = self.get_available_cameras()
+        threads = []
+        results = {}
+        
+        def capture_thread(cam_id):
+            photo = self.capture_single(cam_id)
+            results[cam_id] = photo
+            
+        for cam_id, _ in cameras:
+            t = threading.Thread(target=capture_thread, args=(cam_id,))
+            threads.append(t)
+            t.start()
+            
+        for t in threads:
+            t.join()
+            
+        # Scan all captured photos
+        for path in results.values():
+            if path:
+                subprocess.run(['termux-media-scan', path])
+                
+        return results
+```
+
+### Advanced Technique 2: Audio Analysis Pipeline
+
+```python
+#!/usr/bin/env python3
+"""Audio recording with analysis"""
+
+import subprocess
+import os
+import json
+import wave
+from datetime import datetime
+
+class AudioAnalyzer:
+    def __init__(self):
+        self.recordings = []
+        
+    def record_with_analysis(self, duration=10, output_path=None):
+        """Record and analyze audio"""
+        if output_path is None:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_path = f"/sdcard/AudioAnalysis/rec_{timestamp}.wav"
+            
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        
+        # Record in WAV format for analysis
+        subprocess.run([
+            'termux-microphone-record',
+            '-f', output_path,
+            '-l', str(duration),
+            '-r', '44100',
+            '-c', '1'
+        ])
+        
+        # Analyze the recording
+        analysis = self.analyze_wav(output_path)
+        return {'path': output_path, 'analysis': analysis}
+        
+    def analyze_wav(self, filepath):
+        """Basic WAV file analysis"""
+        try:
+            with wave.open(filepath, 'rb') as wav:
+                return {
+                    'channels': wav.getnchannels(),
+                    'sample_width': wav.getsampwidth(),
+                    'frame_rate': wav.getframerate(),
+                    'frames': wav.getnframes(),
+                    'duration_seconds': wav.getnframes() / wav.getframerate()
+                }
+        except:
+            return None
+```
+
+### Advanced Technique 3: Intelligent Photo Organizer
+
+```python
+#!/usr/bin/env python3
+"""Intelligent photo organizer using metadata"""
+
+import subprocess
+import os
+import json
+from datetime import datetime
+from PIL import Image
+from PIL.ExifTags import TAGS
+
+class PhotoOrganizer:
+    def __init__(self, source_dir, organized_dir):
+        self.source = source_dir
+        self.organized = organized_dir
+        
+    def get_exif_data(self, image_path):
+        """Extract EXIF data from image"""
+        try:
+            image = Image.open(image_path)
+            exif = image._getexif()
+            if exif:
+                return {TAGS.get(k, k): v for k, v in exif.items()}
+        except:
+            pass
+        return {}
+        
+    def organize_by_date(self):
+        """Organize photos by date"""
+        for file in os.listdir(self.source):
+            if file.lower().endswith(('.jpg', '.jpeg', '.png')):
+                filepath = os.path.join(self.source, file)
+                
+                # Get date from EXIF or file mtime
+                exif = self.get_exif_data(filepath)
+                date_taken = exif.get('DateTime')
+                
+                if date_taken:
+                    dt = datetime.strptime(date_taken, '%Y:%m:%d %H:%M:%S')
+                else:
+                    mtime = os.path.getmtime(filepath)
+                    dt = datetime.fromtimestamp(mtime)
+                    
+                # Create date folder
+                date_folder = dt.strftime('%Y/%m/%d')
+                dest = os.path.join(self.organized, date_folder)
+                os.makedirs(dest, exist_ok=True)
+                
+                # Move file
+                new_path = os.path.join(dest, file)
+                os.rename(filepath, new_path)
+                subprocess.run(['termux-media-scan', new_path])
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Commands Learned
+- [ ] `termux-camera-info` - List camera capabilities
+- [ ] `termux-camera-photo` - Capture photos
+- [ ] `termux-media-player` - Control audio playback
+- [ ] `termux-media-scan` - Register files in MediaStore
+- [ ] `termux-volume` - Control audio streams
+- [ ] `termux-microphone-record` - Record audio
+
+### ✅ Concepts Understood
+- [ ] Camera2 API integration
+- [ ] Media session management
+- [ ] Audio stream types
+- [ ] MediaStore registration
+- [ ] Recording quality settings
+
+### ✅ Skills Acquired
+- [ ] Camera selection and control
+- [ ] Audio playback management
+- [ ] Recording with quality settings
+- [ ] Media gallery integration
+- [ ] Building camera applications
+
+---
+
+*Chapter 19 Complete! Ready for Chapter 20: Network APIs*

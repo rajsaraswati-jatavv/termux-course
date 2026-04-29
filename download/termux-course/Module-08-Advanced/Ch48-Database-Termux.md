@@ -3866,3 +3866,1144 @@ KEYS *
 
 **🎉 Chapter 48 Upgraded Successfully!**
 
+
+---
+
+## 🎮 INTERACTIVE QUIZ (15 Questions)
+
+### Test Your Database Knowledge
+
+**Q1: Which command starts SQLite with a database file?**
+- A) `sqlite start mydb.db`
+- B) `sqlite3 mydb.db`
+- C) `sql mydb.db`
+- D) `sqlite open mydb.db`
+
+**Q2: What is the default port for MySQL/MariaDB?**
+- A) 1433
+- B) 3306
+- C) 5432
+- D) 27017
+
+**Q3: Which SQL command creates a new table?**
+- A) `MAKE TABLE`
+- B) `NEW TABLE`
+- C) `CREATE TABLE`
+- D) `ADD TABLE`
+
+**Q4: What type of database is Redis?**
+- A) Relational
+- B) Key-Value
+- C) Document
+- D) Graph
+
+**Q5: Which command starts MariaDB server in Termux?**
+- A) `mysql start`
+- B) `mariadb start`
+- C) `mysqld_safe &`
+- D) `service mysql start`
+
+**Q6: What is PostgreSQL's default port?**
+- A) 3306
+- B) 5432
+- C) 6379
+- D) 27017
+
+**Q7: Which SQLite command lists all tables?**
+- A) `SHOW TABLES`
+- B) `.tables`
+- C) `LIST TABLES`
+- D) `.list`
+
+**Q8: What does CRUD stand for?**
+- A) Create, Read, Update, Delete
+- B) Copy, Read, Update, Delete
+- C) Create, Read, Upload, Delete
+- D) Create, Run, Update, Delete
+
+**Q9: Which is NOT a NoSQL database?**
+- A) MongoDB
+- B) Redis
+- C) PostgreSQL
+- D) CouchDB
+
+**Q10: How do you exit SQLite prompt?**
+- A) `quit`
+- B) `exit`
+- C) `.exit`
+- D) Both B and C
+
+**Q11: Which command backs up a MySQL database?**
+- A) `mysql-backup`
+- B) `mysqldump`
+- C) `mysql copy`
+- D) `db-backup`
+
+**Q12: What is Redis primarily used for?**
+- A) Long-term storage
+- B) Caching and sessions
+- C) File storage
+- D) Image processing
+
+**Q13: Which command creates a new MySQL user?**
+- A) `ADD USER`
+- B) `CREATE USER`
+- C) `NEW USER`
+- D) `INSERT USER`
+
+**Q14: What is MongoDB's default port?**
+- A) 3306
+- B) 5432
+- C) 27017
+- D) 6379
+
+**Q15: Which SQL clause filters results?**
+- A) `FILTER BY`
+- B) `WHERE`
+- C) `HAVING`
+- D) Both B and C
+
+### Answers
+<details>
+<summary>Show Answers</summary>
+
+| Q | A | Q | A | Q | A | Q | A | Q | A |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | B | 4 | B | 7 | B | 10 | D | 13 | B |
+| 2 | B | 5 | C | 8 | A | 11 | B | 14 | C |
+| 3 | C | 6 | B | 9 | C | 12 | B | 15 | D |
+
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS (With Detailed Answers)
+
+### Database Interview Questions
+
+**Q1: Compare SQL and NoSQL databases.**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:**
+
+| Feature | SQL (Relational) | NoSQL |
+|---------|------------------|-------|
+| Structure | Tables with rows/columns | Documents, Key-Value, etc. |
+| Schema | Fixed, predefined | Flexible, dynamic |
+| Scaling | Vertical (scale up) | Horizontal (scale out) |
+| ACID | Full ACID compliance | Varies (often eventual) |
+| Examples | MySQL, PostgreSQL | MongoDB, Redis |
+| Best For | Structured data, transactions | Unstructured, big data |
+
+**When to use:**
+- **SQL:** Financial systems, e-commerce, complex queries
+- **NoSQL:** Real-time apps, IoT, social media, caching
+
+</details>
+
+**Q2: Explain database normalization.**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:** Normalization organizes data to reduce redundancy:
+
+**Normal Forms:**
+- **1NF:** No repeating groups, atomic values
+- **2NF:** 1NF + no partial dependencies
+- **3NF:** 2NF + no transitive dependencies
+
+**Example:**
+```sql
+-- Unnormalized (bad)
+orders: id, customer_name, customer_address, items
+
+-- Normalized (good)
+customers: id, name, address
+orders: id, customer_id
+order_items: id, order_id, product_id, quantity
+```
+
+**Benefits:**
+- Reduced redundancy
+- Data integrity
+- Efficient storage
+
+</details>
+
+**Q3: What are database indexes and when should you use them?**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:** Indexes speed up data retrieval:
+
+```sql
+-- Create index
+CREATE INDEX idx_email ON users(email);
+CREATE INDEX idx_name_email ON users(name, email);  -- Composite
+
+-- Unique index
+CREATE UNIQUE INDEX idx_username ON users(username);
+
+-- Drop index
+DROP INDEX idx_email;
+```
+
+**When to use:**
+- Columns in WHERE clauses
+- Columns in JOIN conditions
+- Frequently sorted columns
+
+**When NOT to use:**
+- Small tables
+- Columns with low cardinality
+- Tables with frequent INSERT/UPDATE
+
+**Trade-off:** Faster reads, slower writes
+
+</details>
+
+**Q4: Explain ACID properties in databases.**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          ACID PROPERTIES                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  A - ATOMICITY                                                          │
+│      All or nothing - transaction completes fully or not at all         │
+│      Example: Bank transfer - both debit and credit must succeed        │
+│                                                                          │
+│  C - CONSISTENCY                                                        │
+│      Database remains in valid state before and after transaction       │
+│      Example: Account balance cannot go negative if rule exists         │
+│                                                                          │
+│  I - ISOLATION                                                          │
+│      Concurrent transactions don't interfere with each other            │
+│      Example: Two users booking same seat - only one succeeds           │
+│                                                                          │
+│  D - DURABILITY                                                         │
+│      Committed transactions survive system failures                     │
+│      Example: After "payment successful", data is permanent             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+</details>
+
+**Q5: What is the difference between INNER JOIN and LEFT JOIN?**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:**
+
+```sql
+-- INNER JOIN: Only matching rows from both tables
+SELECT users.name, orders.product
+FROM users
+INNER JOIN orders ON users.id = orders.user_id;
+-- Result: Only users who have placed orders
+
+-- LEFT JOIN: All rows from left table, matching from right
+SELECT users.name, orders.product
+FROM users
+LEFT JOIN orders ON users.id = orders.user_id;
+-- Result: All users, NULL for orders if no match
+
+-- RIGHT JOIN: All rows from right table
+-- FULL JOIN: All rows from both tables
+```
+
+**Visual:**
+```
+INNER JOIN: A ∩ B (intersection only)
+LEFT JOIN:  A (all from left)
+RIGHT JOIN: B (all from right)
+FULL JOIN:  A ∪ B (all from both)
+```
+
+</details>
+
+**Q6: What is a database transaction?**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:** A transaction is a unit of work that succeeds or fails together:
+
+```sql
+-- MySQL/MariaDB
+START TRANSACTION;
+
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+
+-- If all successful
+COMMIT;
+
+-- If error occurred
+ROLLBACK;
+```
+
+**Example - Bank Transfer:**
+```python
+import sqlite3
+
+def transfer_money(from_id, to_id, amount):
+    conn = sqlite3.connect('bank.db')
+    try:
+        cursor = conn.cursor()
+        cursor.execute("UPDATE accounts SET balance = balance - ? WHERE id = ?", 
+                      (amount, from_id))
+        cursor.execute("UPDATE accounts SET balance = balance + ? WHERE id = ?", 
+                      (amount, to_id))
+        conn.commit()
+    except:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+```
+
+</details>
+
+**Q7: Explain Redis data types.**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:** Redis supports multiple data types:
+
+```bash
+# 1. Strings
+SET user:1:name "John"
+GET user:1:name
+INCR page_views
+
+# 2. Hashes (like objects)
+HSET user:1 name "John" email "john@example.com" age 25
+HGET user:1 name
+HGETALL user:1
+
+# 3. Lists
+LPUSH notifications "New message"
+RPUSH notifications "Update available"
+LRANGE notifications 0 -1
+
+# 4. Sets
+SADD tags "python" "redis" "database"
+SMEMBERS tags
+SISMEMBER tags "python"
+
+# 5. Sorted Sets
+ZADD leaderboard 100 "player1"
+ZADD leaderboard 200 "player2"
+ZREVRANGE leaderboard 0 -1 WITHSCORES
+
+# 6. Special types
+SETEX session:abc 3600 "user_data"  # With expiry
+```
+
+</details>
+
+**Q8: What is database replication?**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:** Replication copies data across multiple servers:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    MASTER-SLAVE REPLICATION                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│        ┌─────────────┐                                                  │
+│        │   MASTER    │  ← Writes                                        │
+│        │  (Primary)  │                                                  │
+│        └──────┬──────┘                                                  │
+│               │                                                          │
+│      ┌────────┴────────┐                                                │
+│      ▼                 ▼                                                 │
+│ ┌─────────┐       ┌─────────┐                                           │
+│ │ SLAVE 1 │       │ SLAVE 2 │  ← Reads                                  │
+│ │(Replica)│       │(Replica)│                                           │
+│ └─────────┘       └─────────┘                                           │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Benefits:**
+- Read scaling
+- High availability
+- Data backup
+- Geographic distribution
+
+**Types:**
+- **Master-Slave:** One write, many read
+- **Master-Master:** Multiple write nodes
+- **Circular:** A→B→C→A
+
+</details>
+
+**Q9: How do you optimize database queries?**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:** Query optimization techniques:
+
+```sql
+-- 1. Use EXPLAIN to analyze
+EXPLAIN SELECT * FROM users WHERE email = 'test@example.com';
+
+-- 2. Create proper indexes
+CREATE INDEX idx_email ON users(email);
+
+-- 3. Select only needed columns
+SELECT name, email FROM users;  -- Good
+SELECT * FROM users;             -- Avoid
+
+-- 4. Use LIMIT
+SELECT * FROM logs LIMIT 100;
+
+-- 5. Avoid functions in WHERE
+-- Bad:
+SELECT * FROM users WHERE YEAR(created_at) = 2024;
+-- Good:
+SELECT * FROM users WHERE created_at >= '2024-01-01';
+
+-- 6. Use JOIN instead of subqueries
+-- Bad:
+SELECT * FROM users WHERE id IN (SELECT user_id FROM orders);
+-- Good:
+SELECT DISTINCT users.* FROM users JOIN orders ON users.id = orders.user_id;
+
+-- 7. Use prepared statements
+PREPARE stmt FROM 'SELECT * FROM users WHERE id = ?';
+EXECUTE stmt USING @user_id;
+```
+
+</details>
+
+**Q10: Compare SQLite, MySQL, and PostgreSQL.**
+<details>
+<summary>Show Answer</summary>
+
+**Answer:**
+
+| Feature | SQLite | MySQL | PostgreSQL |
+|---------|--------|-------|------------|
+| Type | Embedded | Server-based | Server-based |
+| Setup | None | Required | Required |
+| Concurrent writes | Limited | Yes | Yes (better) |
+| Data types | Basic | Standard | Rich (JSON, Arrays) |
+| Full-text search | Basic | Yes | Advanced |
+| ACID | Yes | Yes | Yes |
+| Best for | Mobile, embed | Web apps | Complex apps |
+
+**When to use:**
+- **SQLite:** Mobile apps, small projects, prototyping
+- **MySQL:** Web applications, WordPress, e-commerce
+- **PostgreSQL:** Complex data, GIS, analytics, JSON APIs
+
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: User Authentication System
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              SCENARIO: BUILD USER AUTH SYSTEM                               ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                             ║
+║  SITUATION: Implement secure user registration and login                    ║
+║  DATABASE: SQLite for simplicity                                            ║
+║                                                                             ║
+║  DATABASE SCHEMA:                                                           ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ CREATE TABLE users (                                                 │   ║
+║  │     id INTEGER PRIMARY KEY AUTOINCREMENT,                            │   ║
+║  │     username TEXT UNIQUE NOT NULL,                                   │   ║
+║  │     email TEXT UNIQUE NOT NULL,                                      │   ║
+║  │     password_hash TEXT NOT NULL,  -- Never store plain passwords!   │   ║
+║  │     salt TEXT NOT NULL,                                          │   ║
+║  │     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,                   │   ║
+║  │     last_login DATETIME,                                             │   ║
+║  │     is_active INTEGER DEFAULT 1                                     │   ║
+║  │ );                                                                   │   ║
+║  │                                                                      │   ║
+║  │ CREATE TABLE sessions (                                              │   ║
+║  │     id TEXT PRIMARY KEY,  -- Session token                          │   ║
+║  │     user_id INTEGER,                                                 │   ║
+║  │     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,                   │   ║
+║  │     expires_at DATETIME,                                             │   ║
+║  │     FOREIGN KEY (user_id) REFERENCES users(id)                       │   ║
+║  │ );                                                                   │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+║  PYTHON IMPLEMENTATION:                                                      ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ import sqlite3, hashlib, secrets, bcrypt                            │   ║
+║  │                                                                      │   ║
+║  │ def register_user(username, email, password):                        │   ║
+║  │     # Hash password with bcrypt                                      │   ║
+║  │     password_hash = bcrypt.hashpw(password.encode(),                │   ║
+║  │                                  bcrypt.gensalt())                   │   ║
+║  │                                                                      │   ║
+║  │     conn = sqlite3.connect('app.db')                                 │   ║
+║  │     try:                                                             │   ║
+║  │         conn.execute('''INSERT INTO users                            │   ║
+║  │                         (username, email, password_hash)             │   ║
+║  │                         VALUES (?, ?, ?)''',                         │   ║
+║  │                         (username, email, password_hash))            │   ║
+║  │         conn.commit()                                                │   ║
+║  │         return True                                                  │   ║
+║  │     except sqlite3.IntegrityError:                                   │   ║
+║  │         return False  # Username/email exists                        │   ║
+║  │     finally:                                                         │   ║
+║  │         conn.close()                                                 │   ║
+║  │                                                                      │   ║
+║  │ def login_user(username, password):                                  │   ║
+║  │     conn = sqlite3.connect('app.db')                                 │   ║
+║  │     cursor = conn.execute('SELECT id, password_hash FROM users      │   ║
+║  │                           WHERE username = ? AND is_active = 1',     │   ║
+║  │                           (username,))                               │   ║
+║  │     row = cursor.fetchone()                                          │   ║
+║  │     conn.close()                                                     │   ║
+║  │                                                                      │   ║
+║  │     if row and bcrypt.checkpw(password.encode(), row[1]):           │   ║
+║  │         return create_session(row[0])  # Return session token        │   ║
+║  │     return None                                                      │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: Caching Layer with Redis
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              SCENARIO: IMPLEMENT CACHING WITH REDIS                         ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                             ║
+║  SITUATION: Speed up API responses with caching                             ║
+║  PROBLEM: Database queries are slow for frequently accessed data            ║
+║                                                                             ║
+║  ARCHITECTURE:                                                              ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │                                                                      │   ║
+║  │   Client Request                                                    │   ║
+║  │         │                                                            │   ║
+║  │         ▼                                                            │   ║
+║  │   ┌─────────────┐                                                    │   ║
+║  │   │ Application │                                                    │   ║
+║  │   │   Server    │                                                    │   ║
+║  │   └──────┬──────┘                                                    │   ║
+║  │          │                                                            │   ║
+║  │          ▼                                                            │   ║
+║  │   ┌─────────────┐     Cache Miss     ┌─────────────┐                 │   ║
+║  │   │    Redis    │ ─────────────────► │   MySQL     │                 │   ║
+║  │   │   (Cache)   │                     │  (Database) │                 │   ║
+║  │   └─────────────┘ ◄───────────────── └─────────────┘                 │   ║
+║  │          │                Cache Hit                                   │   ║
+║  │          │                                                            │   ║
+║  │          ▼                                                            │   ║
+║  │   Fast Response (< 1ms)                                              │   ║
+║  │                                                                      │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+║  IMPLEMENTATION:                                                            ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ import redis, json, mysql.connector                                 │   ║
+║  │                                                                      │   ║
+║  │ redis_client = redis.Redis(host='localhost', port=6379, db=0)       │   ║
+║  │ CACHE_EXPIRY = 3600  # 1 hour                                       │   ║
+║  │                                                                      │   ║
+║  │ def get_user(user_id):                                               │   ║
+║  │     # Try cache first                                                │   ║
+║  │     cache_key = f"user:{user_id}"                                    │   ║
+║  │     cached = redis_client.get(cache_key)                             │   ║
+║  │                                                                      │   ║
+║  │     if cached:                                                       │   ║
+║  │         return json.loads(cached)  # Cache hit!                      │   ║
+║  │                                                                      │   ║
+║  │     # Cache miss - query database                                    │   ║
+║  │     user = query_database(user_id)                                   │   ║
+║  │                                                                      │   ║
+║  │     # Store in cache                                                 │   ║
+║  │     redis_client.setex(cache_key, CACHE_EXPIRY,                     │   ║
+║  │                        json.dumps(user))                             │   ║
+║  │                                                                      │   ║
+║  │     return user                                                      │   ║
+║  │                                                                      │   ║
+║  │ # Invalidate cache on update                                         │   ║
+║  │ def update_user(user_id, data):                                      │   ║
+║  │     update_database(user_id, data)                                   │   ║
+║  │     redis_client.delete(f"user:{user_id}")  # Clear cache            │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+║  PERFORMANCE:                                                               ║
+║  - Database query: ~50-100ms                                                ║
+║  - Redis cache hit: ~0.5-1ms                                                ║
+║  - 50-100x improvement!                                                     ║
+║                                                                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 3: Database Backup Strategy
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              SCENARIO: AUTOMATED DATABASE BACKUPS                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                             ║
+║  SITUATION: Prevent data loss with regular backups                          ║
+║  REQUIREMENT: Daily backups, 7-day retention                               ║
+║                                                                             ║
+║  BACKUP STRATEGY:                                                           ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │                                                                      │   ║
+║  │   ┌──────────────┐      Daily       ┌──────────────┐                │   ║
+║  │   │   Database   │ ────────────────► │   Backup     │                │   ║
+║  │   │   (Live)     │      Backup       │   Storage    │                │   ║
+║  │   └──────────────┘                   └──────────────┘                │   ║
+║  │                                            │                         │   ║
+║  │                    ┌───────────────────────┼───────────────────┐     │   ║
+║  │                    ▼                       ▼                   ▼     │   ║
+║  │              ┌──────────┐           ┌──────────┐         ┌──────────┐ │   ║
+║  │              │  Day 1   │           │  Day 2   │   ...   │  Day 7   │ │   ║
+║  │              │ backup   │           │ backup   │         │ backup   │ │   ║
+║  │              └──────────┘           └──────────┘         └──────────┘ │   ║
+║  │                    │                                            │     │   ║
+║  │                    ▼                                            ▼     │   ║
+║  │              Delete after 7 days                         Latest backup│   ║
+║  │                                                                      │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+║  BACKUP SCRIPT:                                                             ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ #!/bin/bash                                                          │   ║
+║  │ # backup.sh - Automated database backup                              │   ║
+║  │                                                                      │   ║
+║  │ DATE=$(date +%Y%m%d)                                                  │   ║
+║  │ BACKUP_DIR="$HOME/db-backups"                                        │   ║
+║  │ RETENTION_DAYS=7                                                      │   ║
+║  │                                                                      │   ║
+║  │ mkdir -p "$BACKUP_DIR"                                                │   ║
+║  │                                                                      │   ║
+║  │ # SQLite backup                                                       │   ║
+║  │ sqlite3 ~/app.db ".backup '$BACKUP_DIR/app_$DATE.db'"                 │   ║
+║  │                                                                      │   ║
+║  │ # MySQL backup                                                        │   ║
+║  │ mysqldump -u root myapp > "$BACKUP_DIR/myapp_$DATE.sql"              │   ║
+║  │                                                                      │   ║
+║  │ # Compress                                                            │   ║
+║  │ gzip "$BACKUP_DIR/myapp_$DATE.sql"                                   │   ║
+║  │                                                                      │   ║
+║  │ # Delete old backups                                                  │   ║
+║  │ find "$BACKUP_DIR" -type f -mtime +$RETENTION_DAYS -delete           │   ║
+║  │                                                                      │   ║
+║  │ echo "Backup completed: $(date)"                                      │   ║
+║  │                                                                      │   ║
+║  │ # Schedule with cron:                                                 │   ║
+║  │ # 0 2 * * * ~/scripts/backup.sh >> ~/backup.log 2>&1                 │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+║  RESTORE COMMANDS:                                                          ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ # SQLite restore                                                      │   ║
+║  │ cp $BACKUP_DIR/app_20240101.db ~/app.db                              │   ║
+║  │                                                                      │   ║
+║  │ # MySQL restore                                                       │   ║
+║  │ gunzip -c $BACKUP_DIR/myapp_20240101.sql.gz | mysql -u root myapp    │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 4: E-commerce Product Database
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              SCENARIO: E-COMMERCE DATABASE DESIGN                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                             ║
+║  SITUATION: Design database for online store                                ║
+║  ENTITIES: Products, Users, Orders, Categories                             ║
+║                                                                             ║
+║  ENTITY RELATIONSHIP DIAGRAM:                                               ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │                                                                      │   ║
+║  │  ┌─────────────┐         ┌─────────────┐         ┌─────────────┐   │   ║
+║  │  │   USERS     │         │   ORDERS    │         │ ORDER_ITEMS │   │   ║
+║  │  ├─────────────┤         ├─────────────┤         ├─────────────┤   │   ║
+║  │  │ id (PK)     │───┐     │ id (PK)     │───┐     │ id (PK)     │   │   ║
+║  │  │ name        │   │     │ user_id(FK) │   │     │ order_id(FK)│   │   ║
+║  │  │ email       │   │     │ total       │   │     │ product_id  │   │   ║
+║  │  │ password    │   │     │ status      │   │     │ quantity    │   │   ║
+║  │  │ created_at  │   │     │ created_at  │   │     │ price       │   │   ║
+║  │  └─────────────┘   │     └─────────────┘   │     └──────┬──────┘   │   ║
+║  │                    │                       │            │          │   ║
+║  │                    └───────────────────────┘            │          │   ║
+║  │                                                         │          │   ║
+║  │  ┌─────────────┐         ┌─────────────┐               │          │   ║
+║  │  │ CATEGORIES  │         │  PRODUCTS   │◄──────────────┘          │   ║
+║  │  ├─────────────┤         ├─────────────┤                          │   ║
+║  │  │ id (PK)     │───┐     │ id (PK)     │                          │   ║
+║  │  │ name        │   │     │ name        │                          │   ║
+║  │  │ description │   └────►│ category_id │                          │   ║
+║  │  └─────────────┘         │ price       │                          │   ║
+║  │                          │ stock       │                          │   ║
+║  │                          │ image_url   │                          │   ║
+║  │                          └─────────────┘                          │   ║
+║  │                                                                   │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+║  SQL SCHEMA:                                                                ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ CREATE TABLE categories (                                            │   ║
+║  │     id INT AUTO_INCREMENT PRIMARY KEY,                               │   ║
+║  │     name VARCHAR(100) NOT NULL,                                      │   ║
+║  │     slug VARCHAR(100) UNIQUE                                         │   ║
+║  │ );                                                                   │   ║
+║  │                                                                      │   ║
+║  │ CREATE TABLE products (                                              │   ║
+║  │     id INT AUTO_INCREMENT PRIMARY KEY,                               │   ║
+║  │     name VARCHAR(200) NOT NULL,                                      │   ║
+║  │     category_id INT,                                                 │   ║
+║  │     price DECIMAL(10,2) NOT NULL,                                    │   ║
+║  │     stock INT DEFAULT 0,                                             │   ║
+║  │     FOREIGN KEY (category_id) REFERENCES categories(id)              │   ║
+║  │ );                                                                   │   ║
+║  │                                                                      │   ║
+║  │ CREATE TABLE orders (                                                │   ║
+║  │     id INT AUTO_INCREMENT PRIMARY KEY,                               │   ║
+║  │     user_id INT,                                                     │   ║
+║  │     total DECIMAL(10,2),                                             │   ║
+║  │     status ENUM('pending','paid','shipped','delivered'),             │   ║
+║  │     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                  │   ║
+║  │     FOREIGN KEY (user_id) REFERENCES users(id)                       │   ║
+║  │ );                                                                   │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 5: Session Management with Redis
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              SCENARIO: SESSION MANAGEMENT WITH REDIS                        ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                             ║
+║  SITUATION: Manage user sessions efficiently                                ║
+║  REQUIREMENT: Fast session lookup, auto-expiry                             ║
+║                                                                             ║
+║  WHY REDIS FOR SESSIONS:                                                    ║
+║  - In-memory (fast)                                                        ║
+║  - Built-in expiry (TTL)                                                   ║
+║  - Atomic operations                                                       ║
+║  - Scalable                                                                ║
+║                                                                             ║
+║  SESSION FLOW:                                                              ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │                                                                      │   ║
+║  │  1. LOGIN                                                            │   ║
+║  │     User credentials ────► Validate ────► Create session ────►      │   ║
+║  │                                                         Store in    │   ║
+║  │                                                         Redis       │   ║
+║  │                                                                      │   ║
+║  │  2. REQUEST                                                          │   ║
+║  │     Request with token ────► Lookup Redis ────► Valid? ────► Yes   │   ║
+║  │                                               │                │     │   ║
+║  │                                               No                ▼     │   ║
+║  │                                               │            Allow     │   ║
+║  │                                               ▼                     │   ║
+║  │                                           Redirect login            │   ║
+║  │                                                                      │   ║
+║  │  3. LOGOUT                                                           │   ║
+║  │     Logout request ────► Delete from Redis ────► Done               │   ║
+║  │                                                                      │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+║  IMPLEMENTATION:                                                            ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ import redis, json, secrets                                         │   ║
+║  │                                                                      │   ║
+║  │ r = redis.Redis(host='localhost', port=6379, db=0)                  │   ║
+║  │ SESSION_TTL = 86400  # 24 hours                                     │   ║
+║  │                                                                      │   ║
+║  │ def create_session(user_id, user_data):                              │   ║
+║  │     # Generate secure session token                                  │   ║
+║  │     session_token = secrets.token_urlsafe(32)                        │   ║
+║  │                                                                      │   ║
+║  │     # Store session data                                             │   ║
+║  │     session_data = {                                                 │   ║
+║  │         'user_id': user_id,                                         │   ║
+║  │         'username': user_data['username'],                          │   ║
+║  │         'role': user_data['role'],                                  │   ║
+║  │         'created_at': time.time()                                   │   ║
+║  │     }                                                                │   ║
+║  │                                                                      │   ║
+║  │     r.setex(f"session:{session_token}", SESSION_TTL,                │   ║
+║  │              json.dumps(session_data))                               │   ║
+║  │                                                                      │   ║
+║  │     return session_token                                             │   ║
+║  │                                                                      │   ║
+║  │ def get_session(token):                                              │   ║
+║  │     data = r.get(f"session:{token}")                                 │   ║
+║  │     return json.loads(data) if data else None                        │   ║
+║  │                                                                      │   ║
+║  │ def destroy_session(token):                                          │   ║
+║  │     r.delete(f"session:{token}")                                     │   ║
+║  │                                                                      │   ║
+║  │ def refresh_session(token):                                          │   ║
+║  │     r.expire(f"session:{token}", SESSION_TTL)                        │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Database Type Comparison
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    DATABASE TYPES COMPARISON                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  RELATIONAL (SQL)                                                           │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │  ┌───────────┐  ┌───────────┐  ┌───────────┐                       │    │
+│  │  │  Table 1  │  │  Table 2  │  │  Table 3  │                       │    │
+│  │  │ ┌───────┐ │  │ ┌───────┐ │  │ ┌───────┐ │                       │    │
+│  │  │ │ Row   │ │  │ │ Row   │ │  │ │ Row   │ │                       │    │
+│  │  │ │ Row   │ │  │ │ Row   │ │  │ │ Row   │ │                       │    │
+│  │  │ └───────┘ │  │ └───────┘ │  │ └───────┘ │                       │    │
+│  │  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘                       │    │
+│  │        │              │              │                              │    │
+│  │        └──────────────┴──────────────┘                              │    │
+│  │                    Relationships                                     │    │
+│  │  Examples: MySQL, PostgreSQL, SQLite                                │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  KEY-VALUE (NoSQL)                                                          │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │  ┌───────┐  ┌───────┐  ┌───────┐  ┌───────┐                        │    │
+│  │  │ Key A │  │ Key B │  │ Key C │  │ Key D │                        │    │
+│  │  │   ↓   │  │   ↓   │  │   ↓   │  │   ↓   │                        │    │
+│  │  │ Value │  │ Value │  │ Value │  │ Value │                        │    │
+│  │  └───────┘  └───────┘  └───────┘  └───────┘                        │    │
+│  │  Simple, fast lookups                                               │    │
+│  │  Examples: Redis, Memcached                                         │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  DOCUMENT (NoSQL)                                                           │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │  ┌─────────────────┐  ┌─────────────────┐                          │    │
+│  │  │ {               │  │ {               │                          │    │
+│  │  │   "id": 1,      │  │   "id": 2,      │                          │    │
+│  │  │   "name": "A",  │  │   "name": "B",  │                          │    │
+│  │  │   "tags": [...] │  │   "tags": [...] │                          │    │
+│  │  │ }               │  │ }               │                          │    │
+│  │  └─────────────────┘  └─────────────────┘                          │    │
+│  │  Flexible schema, JSON-like documents                               │    │
+│  │  Examples: MongoDB, CouchDB                                         │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Database Connection Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    DATABASE CONNECTION FLOW                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  APPLICATION                                                                 │
+│  ┌────────────────────────────────────────────────────────────────────┐     │
+│  │                                                                    │     │
+│  │  1. Import database driver/library                                │     │
+│  │  2. Create connection with credentials                            │     │
+│  │  3. Execute queries                                               │     │
+│  │  4. Process results                                               │     │
+│  │  5. Close connection                                              │     │
+│  │                                                                    │     │
+│  └───────────────────────────┬────────────────────────────────────────┘     │
+│                              │                                               │
+│                              ▼                                               │
+│  ┌────────────────────────────────────────────────────────────────────┐     │
+│  │                    CONNECTION STRING                               │     │
+│  │                                                                    │     │
+│  │  SQLite:  sqlite:///path/to/database.db                           │     │
+│  │  MySQL:   mysql://user:pass@host:3306/dbname                      │     │
+│  │  Redis:   redis://host:6379/0                                     │     │
+│  │  MongoDB: mongodb://user:pass@host:27017/dbname                   │     │
+│  │                                                                    │     │
+│  └───────────────────────────┬────────────────────────────────────────┘     │
+│                              │                                               │
+│                              ▼                                               │
+│  ┌────────────────────────────────────────────────────────────────────┐     │
+│  │                      DATABASE SERVER                               │     │
+│  │                                                                    │     │
+│  │   ┌──────────┐    ┌──────────┐    ┌──────────┐                    │     │
+│  │   │ Connection│    │  Query   │    │  Result  │                    │     │
+│  │   │  Pool    │───►│ Processor│───►│  Set     │                    │     │
+│  │   └──────────┘    └──────────┘    └──────────┘                    │     │
+│  │                                                                    │     │
+│  └────────────────────────────────────────────────────────────────────┘     │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Chapter | Title | Relevance |
+|---------|-------|-----------|
+| **Chapter 47** | Web Server | Connect databases to web apps |
+| **Chapter 45** | SSH Server | Remote database access via tunnel |
+| **Chapter 46** | SSH Client | Port forward database connections |
+| **Chapter 24** | Package Management | Install database packages |
+| **Chapter 38** | Network Tools | Test database connectivity |
+| **Chapter 49** | Proot Distros | Full database server in Linux |
+| **Chapter 50** | Metasploit | Database for penetration testing |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Bonus 1: Database Connection Pooling
+
+Efficient connection management:
+
+```python
+# connection_pool.py
+import sqlite3
+from queue import Queue
+
+class ConnectionPool:
+    def __init__(self, db_path, max_connections=5):
+        self.db_path = db_path
+        self.max_connections = max_connections
+        self.pool = Queue(max_connections)
+        
+        # Pre-create connections
+        for _ in range(max_connections):
+            self.pool.put(sqlite3.connect(db_path))
+    
+    def get_connection(self):
+        return self.pool.get()
+    
+    def return_connection(self, conn):
+        self.pool.put(conn)
+    
+    def execute(self, query, params=()):
+        conn = self.get_connection()
+        try:
+            cursor = conn.cursor()
+            cursor.execute(query, params)
+            result = cursor.fetchall()
+            conn.commit()
+            return result
+        finally:
+            self.return_connection(conn)
+
+# Usage
+pool = ConnectionPool('app.db')
+users = pool.execute('SELECT * FROM users')
+```
+
+### Bonus 2: Database Migration System
+
+Version-controlled schema changes:
+
+```python
+# migrations.py
+import sqlite3
+import os
+
+MIGRATIONS_DIR = 'migrations'
+
+def get_current_version(db):
+    cursor = db.execute('''
+        CREATE TABLE IF NOT EXISTS schema_version (
+            version INTEGER PRIMARY KEY,
+            applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    result = db.execute('SELECT MAX(version) FROM schema_version').fetchone()
+    return result[0] if result[0] else 0
+
+def apply_migrations(db_path):
+    db = sqlite3.connect(db_path)
+    current_version = get_current_version(db)
+    
+    migrations = sorted([f for f in os.listdir(MIGRATIONS_DIR) 
+                        if f.endswith('.sql')])
+    
+    for migration in migrations:
+        version = int(migration.split('_')[0])
+        if version > current_version:
+            with open(f'{MIGRATIONS_DIR}/{migration}') as f:
+                db.executescript(f.read())
+            db.execute('INSERT INTO schema_version (version) VALUES (?)', 
+                      (version,))
+            db.commit()
+            print(f'Applied migration: {migration}')
+    
+    db.close()
+
+# Example migration file: 001_create_users.sql
+# CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT);
+```
+
+### Bonus 3: Database Monitoring Script
+
+Track database health:
+
+```bash
+#!/bin/bash
+# db-monitor.sh
+
+DB_PATH="$HOME/app.db"
+LOG_FILE="$HOME/db-monitor.log"
+ALERT_THRESHOLD=90  # Percentage
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
+}
+
+# SQLite monitoring
+check_sqlite() {
+    # Database size
+    SIZE=$(du -m "$DB_PATH" | cut -f1)
+    log "Database size: ${SIZE}MB"
+    
+    # Table count
+    TABLES=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM sqlite_master WHERE type='table'")
+    log "Tables: $TABLES"
+    
+    # Row counts
+    for table in $(sqlite3 "$DB_PATH" "SELECT name FROM sqlite_master WHERE type='table'"); do
+        COUNT=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM $table")
+        log "Table $table: $COUNT rows"
+    done
+    
+    # Integrity check
+    RESULT=$(sqlite3 "$DB_PATH" "PRAGMA integrity_check")
+    if [ "$RESULT" = "ok" ]; then
+        log "Integrity check: PASSED"
+    else
+        log "Integrity check: FAILED - $RESULT"
+    fi
+}
+
+# Redis monitoring
+check_redis() {
+    # Memory usage
+    MEMORY=$(redis-cli INFO memory | grep used_memory_human)
+    log "Redis memory: $MEMORY"
+    
+    # Connected clients
+    CLIENTS=$(redis-cli INFO clients | grep connected_clients)
+    log "Redis clients: $CLIENTS"
+    
+    # Keys count
+    KEYS=$(redis-cli DBSIZE)
+    log "Redis keys: $KEYS"
+}
+
+# MySQL monitoring
+check_mysql() {
+    # Connection count
+    CONNECTIONS=$(mysql -u root -e "SHOW STATUS LIKE 'Threads_connected'" -s)
+    log "MySQL connections: $CONNECTIONS"
+    
+    # Database sizes
+    SIZES=$(mysql -u root -e "SELECT table_schema, SUM(data_length) / 1024 / 1024 
+                             FROM information_schema.tables 
+                             GROUP BY table_schema" -s)
+    log "MySQL DB sizes: $SIZES"
+    
+    # Slow queries
+    SLOW=$(mysql -u root -e "SHOW GLOBAL STATUS LIKE 'Slow_queries'" -s)
+    log "MySQL slow queries: $SLOW"
+}
+
+log "=== Database Monitor Start ==="
+check_sqlite
+check_redis
+check_mysql
+log "=== Database Monitor End ==="
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Database Mastery Checklist
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CHAPTER 48 COMPLETION CHECKLIST                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  SQLITE:                                                                    │
+│  ☐ Install and create database file                                        │
+│  ☐ Create tables with proper data types                                    │
+│  ☐ Perform CRUD operations                                                 │
+│  ☐ Use SQLite dot commands                                                 │
+│  ☐ Backup and restore databases                                            │
+│                                                                              │
+│  MYSQL/MARIADB:                                                             │
+│  ☐ Install and start MariaDB server                                        │
+│  ☐ Connect to MySQL shell                                                  │
+│  ☐ Create databases and tables                                             │
+│  ☐ Create users and grant permissions                                      │
+│  ☐ Import/export databases                                                 │
+│  ☐ Stop and restart server                                                 │
+│                                                                              │
+│  POSTGRESQL:                                                                │
+│  ☐ Install and initialize database                                         │
+│  ☐ Start PostgreSQL server                                                 │
+│  ☐ Use psql client                                                         │
+│  ☐ Create databases with advanced types                                    │
+│  ☐ Use JSON and other advanced features                                    │
+│                                                                              │
+│  REDIS:                                                                     │
+│  ☐ Install and start Redis server                                          │
+│  ☐ Use basic string operations                                             │
+│  ☐ Work with hashes, lists, sets                                           │
+│  ☐ Set key expiration                                                      │
+│  ☐ Use Redis for caching                                                   │
+│                                                                              │
+│  PYTHON INTEGRATION:                                                        │
+│  ☐ Connect to SQLite from Python                                           │
+│  ☐ Connect to MySQL from Python                                            │
+│  ☐ Use Redis with Python                                                   │
+│  ☐ Execute parameterized queries                                           │
+│  ☐ Handle database errors                                                  │
+│                                                                              │
+│  BEST PRACTICES:                                                            │
+│  ☐ Use proper indexing                                                     │
+│  ☐ Write parameterized queries (prevent SQL injection)                      │
+│  ☐ Implement backup strategy                                               │
+│  ☐ Use transactions for data integrity                                     │
+│  ☐ Monitor database performance                                            │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+**🗄️ Chapter 48: Database in Termux - UPGRADED SUCCESSFULLY! 🗄️**

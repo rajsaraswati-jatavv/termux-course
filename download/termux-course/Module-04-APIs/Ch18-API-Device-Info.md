@@ -1,9 +1,32 @@
-# Chapter 18: Termux API - Device Information
+# 📱 Chapter 18: Termux API - Device Information
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║   ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗               ║
+║   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║               ║
+║      ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║               ║
+║      ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║               ║
+║      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗          ║
+║      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝          ║
+║                                                                              ║
+║   ███████╗██╗███╗   ██╗ ██████╗ ██╗     ███████╗██████╗ ███╗   ███╗         ║
+║   ██╔════╝██║████╗  ██║██╔════╝ ██║     ██╔════╝██╔══██╗████╗ ████║         ║
+║   █████╗  ██║██╔██╗ ██║██║  ███╗██║     █████╗  ██████╔╝██╔████╔██║         ║
+║   ██╔══╝  ██║██║╚██╗██║██║   ██║██║     ██╔══╝  ██╔══██╗██║╚██╔╝██║         ║
+║   ██║     ██║██║ ╚████║╚██████╔╝██║     ███████╗██║  ██║██║ ╚═╝ ██║         ║
+║   ╚═╝     ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝         ║
+║                                                                              ║
+║                   📊 DEVICE INFORMATION CHAPTER 📊                           ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
 
 > **Module:** 4 - APIs  
 > **Chapter:** 18 of 61  
 > **Duration:** 15-20 Minutes  
 > **Difficulty:** ⭐⭐ Intermediate  
+> **Prerequisites:** Chapters 1-17 (Basic Termux & File APIs)
 
 ---
 
@@ -3533,3 +3556,3191 @@ print(f"Battery: {battery['percentage']}% at {battery['temperature']}°C")
 11. **B** - `-d` flag sets delay between sensor updates in milliseconds
 12. **B** - `sim_operator_name` contains the SIM carrier name
 
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Question 1: Battery Health Monitoring
+**Q:** Design a system to monitor battery health and alert users about potential issues.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** A comprehensive battery monitoring system should track:
+1. **Temperature thresholds** - Alert if > 45°C
+2. **Charging cycles** - Track charge count
+3. **Health degradation** - Monitor over time
+4. **Unusual drain** - Detect abnormal patterns
+
+```bash
+#!/bin/bash
+# battery_health_monitor.sh
+
+check_battery_health() {
+    local data=$(termux-battery-status)
+    local temp=$(echo "$data" | jq -r '.temperature')
+    local health=$(echo "$data" | jq -r '.health')
+    local pct=$(echo "$data" | jq -r '.percentage')
+    
+    # Temperature alert
+    if (( $(echo "$temp > 45" | bc -l) )); then
+        termux-notification --title "⚠️ Battery Overheating!" \
+            --content "Temperature: ${temp}°C" --priority high
+    fi
+    
+    # Health status alert
+    if [[ "$health" != "GOOD" ]]; then
+        termux-notification --title "🔋 Battery Health Issue" \
+            --content "Status: $health"
+    fi
+}
+
+# Run every 5 minutes
+while true; do
+    check_battery_health
+    sleep 300
+done
+```
+
+**Follow-up:** How would you implement charging cycle tracking?
+</details>
+
+### Question 2: Sensor Data Processing
+**Q:** How would you process accelerometer data to detect device shake?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** Shake detection requires:
+1. **Continuous sampling** - Read sensor at intervals
+2. **Magnitude calculation** - √(x² + y² + z²)
+3. **Threshold comparison** - Detect sudden changes
+4. **Debouncing** - Prevent multiple triggers
+
+```python
+import subprocess
+import json
+import math
+import time
+
+def detect_shake(threshold=15.0, samples=10):
+    """Detect device shake using accelerometer"""
+    baseline = None
+    
+    for _ in range(samples):
+        result = subprocess.run(
+            ['termux-sensor', '-s', 'accelerometer', '-n', '1'],
+            capture_output=True, text=True
+        )
+        data = json.loads(result.stdout)
+        values = data['accelerometer']['values']
+        magnitude = math.sqrt(sum(v**2 for v in values))
+        
+        if baseline is None:
+            baseline = magnitude
+        else:
+            if abs(magnitude - baseline) > threshold:
+                return True
+        
+        time.sleep(0.1)
+    
+    return False
+
+# Usage
+if detect_shake():
+    print("Device shaken!")
+    subprocess.run(['termux-toast', 'Shake detected!'])
+```
+
+**Follow-up:** How would you implement gesture recognition using multiple sensors?
+</details>
+
+### Question 3: Location Privacy
+**Q:** What are the privacy considerations when handling location data in Termux?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** Key privacy considerations:
+
+1. **Permission Transparency**
+   - Clear user consent before accessing location
+   - Explain why location is needed
+
+2. **Data Minimization**
+   - Only collect necessary precision
+   - Use network provider when GPS precision isn't needed
+
+3. **Secure Storage**
+   - Encrypt location logs
+   - Don't store precise coordinates permanently
+
+4. **User Control**
+   - Allow users to delete location history
+   - Provide opt-out mechanisms
+
+```bash
+# Privacy-aware location handler
+get_location_safe() {
+    # Use less accurate network provider for basic needs
+    termux-location -p network | jq '{
+        approximate_lat: (.latitude | . * 100 | floor / 100),
+        approximate_lon: (.longitude | . * 100 | floor / 100),
+        # Remove precise altitude and bearing
+        accuracy: .accuracy
+    }'
+}
+```
+
+**Follow-up:** How would you implement location data anonymization?
+</details>
+
+### Question 4: Multi-Sensor Fusion
+**Q:** Explain how to combine data from multiple sensors for accurate orientation.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** Sensor fusion combines:
+- **Accelerometer** - Provides tilt (gravity direction)
+- **Magnetometer** - Provides heading (magnetic north)
+- **Gyroscope** - Provides rate of rotation
+
+```python
+import subprocess
+import json
+import math
+
+class OrientationCalculator:
+    def __init__(self):
+        self.pitch = 0
+        self.roll = 0
+        self.heading = 0
+    
+    def get_sensor_data(self, sensor):
+        result = subprocess.run(
+            ['termux-sensor', '-s', sensor, '-n', '1'],
+            capture_output=True, text=True
+        )
+        return json.loads(result.stdout)[sensor]['values']
+    
+    def calculate_orientation(self):
+        # Get accelerometer (tilt)
+        acc = self.get_sensor_data('accelerometer')
+        
+        # Get magnetometer (heading)
+        mag = self.get_sensor_data('magnetometer')
+        
+        # Calculate pitch and roll from accelerometer
+        self.pitch = math.atan2(acc[0], math.sqrt(acc[1]**2 + acc[2]**2))
+        self.roll = math.atan2(acc[1], acc[2])
+        
+        # Calculate heading using magnetometer with tilt compensation
+        # Simplified - actual implementation needs matrix transformation
+        self.heading = math.atan2(mag[1], mag[0])
+        
+        return {
+            'pitch': math.degrees(self.pitch),
+            'roll': math.degrees(self.roll),
+            'heading': math.degrees(self.heading)
+        }
+```
+
+**Follow-up:** How would you handle sensor noise and drift?
+</details>
+
+### Question 5: Telephony Security
+**Q:** What security risks exist with telephony data and how to mitigate them?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** Security risks include:
+
+| Risk | Description | Mitigation |
+|------|-------------|------------|
+| IMEI exposure | Device tracking | Don't log/store IMEI |
+| SIM data leak | Identity theft | Encrypt sensitive data |
+| Call log access | Privacy violation | User consent required |
+| Cell tower data | Location tracking | Anonymize data |
+
+```bash
+# Secure telephony data handling
+get_safe_telephony() {
+    termux-telephony-deviceinfo | jq '{
+        # Remove sensitive identifiers
+        network_type: .network_type,
+        sim_state: .sim_state,
+        roaming: .network_roaming
+        # Exclude: imei, sim_serial_number, sim_subscriber_id
+    }'
+}
+
+# Log without sensitive data
+log_telephony_safe() {
+    local data=$(get_safe_telephony)
+    echo "$(date): $data" >> telephony_log.json
+}
+```
+
+**Follow-up:** How would you implement secure device fingerprinting?
+</details>
+
+### Question 6: Brightness Automation
+**Q:** Design an intelligent brightness control system based on ambient conditions.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** Smart brightness requires:
+1. **Light sensor reading** - Get ambient light
+2. **Time-based adjustment** - Consider time of day
+3. **User preferences** - Learn from manual adjustments
+4. **Battery awareness** - Reduce brightness when low
+
+```bash
+#!/bin/bash
+# smart_brightness.sh
+
+CONFIG_FILE="$HOME/.brightness_config"
+touch "$CONFIG_FILE"
+
+get_light_level() {
+    termux-sensor -s light -n 1 | jq -r '.light.values[0]'
+}
+
+calculate_brightness() {
+    local light=$1
+    local hour=$(date +%H)
+    local battery=$(termux-battery-status | jq -r '.percentage')
+    
+    local brightness=128  # Default medium
+    
+    # Adjust for ambient light
+    if (( light < 100 )); then
+        brightness=$((brightness - 50))  # Dim environment
+    elif (( light > 1000 )); then
+        brightness=$((brightness + 70))  # Bright environment
+    fi
+    
+    # Night time adjustment
+    if (( hour >= 20 || hour < 6 )); then
+        brightness=$((brightness / 2))
+    fi
+    
+    # Low battery adjustment
+    if (( battery < 20 )); then
+        brightness=$((brightness / 2))
+    fi
+    
+    # Clamp to valid range
+    brightness=$((brightness > 255 ? 255 : brightness))
+    brightness=$((brightness < 10 ? 10 : brightness))
+    
+    echo $brightness
+}
+
+# Main loop
+while true; do
+    light=$(get_light_level)
+    brightness=$(calculate_brightness "$light")
+    termux-brightness "$brightness"
+    sleep 30
+done
+```
+
+**Follow-up:** How would you implement machine learning for personalized brightness?
+</details>
+
+### Question 7: Fingerprint Authentication Flow
+**Q:** Describe a secure authentication system using fingerprint API.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:** Secure fingerprint authentication:
+
+```bash
+#!/bin/bash
+# secure_auth.sh - Fingerprint-based authentication
+
+authenticate() {
+    local result=$(termux-fingerprint)
+    local auth_status=$(echo "$result" | jq -r '.auth_result')
+    
+    if [[ "$auth_status" == "AUTH_RESULT_SUCCESS" ]]; then
+        return 0
+    else
+        local reason=$(echo "$result" | jq -r '.auth_result_reason')
+        echo "Authentication failed: $reason"
+        return 1
+    fi
+}
+
+# Protected function
+protected_operation() {
+    echo "🔒 Authenticating..."
+    
+    if authenticate; then
+        echo "✅ Access granted"
+        # Execute protected operations
+        termux-toast "Welcome!"
+        return 0
+    else
+        echo "❌ Access denied"
+        termux-toast --bgcolor "#FF0000" "Authentication failed"
+        return 1
+    fi
+}
+
+# Use with timeout
+with_timeout() {
+    local timeout=30
+    local start=$(date +%s)
+    
+    while true; do
+        if authenticate; then
+            return 0
+        fi
+        
+        local now=$(date +%s)
+        if (( now - start > timeout )); then
+            echo "Timeout"
+            return 1
+        fi
+        
+        sleep 2
+    done
+}
+```
+
+**Follow-up:** How would you implement fallback authentication methods?
+</details>
+
+### Question 8: Volume Stream Management
+**Q:** Create a meeting mode automation that manages all audio streams appropriately.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:**
+
+```bash
+#!/bin/bash
+# meeting_mode.sh - Complete meeting mode automation
+
+MEETING_STATE_FILE="/tmp/meeting_state"
+
+save_volumes() {
+    # Save all current volume levels
+    declare -A streams=(
+        ["ring"]="stream_ring"
+        ["notification"]="stream_notification"
+        ["music"]="stream_music"
+        ["alarm"]="stream_alarm"
+        ["system"]="stream_system"
+    )
+    
+    rm -f "$MEETING_STATE_FILE"
+    
+    for name in "${!streams[@]}"; do
+        stream="${streams[$name]}"
+        vol=$(termux-volume "$stream" | jq -r '.volume')
+        echo "$name=$vol" >> "$MEETING_STATE_FILE"
+    done
+}
+
+restore_volumes() {
+    if [[ -f "$MEETING_STATE_FILE" ]]; then
+        declare -A streams=(
+            ["ring"]="stream_ring"
+            ["notification"]="stream_notification"
+            ["music"]="stream_music"
+            ["alarm"]="stream_alarm"
+            ["system"]="stream_system"
+        )
+        
+        while IFS='=' read -r name vol; do
+            stream="${streams[$name]}"
+            termux-volume "$stream" "$vol"
+        done < "$MEETING_STATE_FILE"
+        
+        termux-toast "Volumes restored"
+    fi
+}
+
+enter_meeting() {
+    save_volumes
+    
+    # Set appropriate meeting volumes
+    termux-volume stream_ring 0           # Mute ring
+    termux-volume stream_notification 0   # Mute notifications
+    termux-volume stream_music 0          # Mute music
+    termux-volume stream_system 0         # Mute system
+    
+    # Optional: Enable vibration
+    termux-notification --title "Meeting Mode" \
+        --content "All sounds muted" --priority low
+    
+    echo "meeting" > "$MEETING_STATE_FILE.status"
+}
+
+exit_meeting() {
+    restore_volumes
+    rm -f "$MEETING_STATE_FILE" "$MEETING_STATE_FILE.status"
+    echo "Normal mode restored"
+}
+
+# Main
+case "$1" in
+    start) enter_meeting ;;
+    stop) exit_meeting ;;
+    status) cat "$MEETING_STATE_FILE.status" 2>/dev/null || echo "normal" ;;
+    *) echo "Usage: $0 {start|stop|status}" ;;
+esac
+```
+
+**Follow-up:** How would you integrate this with calendar events?
+</details>
+
+### Question 9: GPS vs Network Location
+**Q:** When would you use GPS vs network location provider?
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:**
+
+| Factor | GPS | Network |
+|--------|-----|---------|
+| Accuracy | 5-10m | 50-500m |
+| Battery | High drain | Low drain |
+| Speed | Slow (cold start) | Fast |
+| Indoor | Poor | Good |
+| Privacy | More private | Less private |
+
+```bash
+# Smart location provider selection
+get_smart_location() {
+    local purpose=$1
+    local battery=$(termux-battery-status | jq -r '.percentage')
+    
+    case "$purpose" in
+        "navigation")
+            # High accuracy needed, use GPS
+            termux-location -p gps
+            ;;
+        "weather")
+            # City-level accuracy sufficient
+            termux-location -p network
+            ;;
+        "tracking")
+            # Balance accuracy and battery
+            if (( battery > 50 )); then
+                termux-location -p gps
+            else
+                termux-location -p network
+            fi
+            ;;
+        "emergency")
+            # Best available, try GPS first
+            local gps_result=$(termux-location -p gps -r 10 2>/dev/null)
+            if [[ -n "$gps_result" ]]; then
+                echo "$gps_result"
+            else
+                termux-location -p network
+            fi
+            ;;
+        *)
+            termux-location -p network
+            ;;
+    esac
+}
+```
+
+**Follow-up:** How would you implement location caching to reduce API calls?
+</details>
+
+### Question 10: Device Fingerprinting
+**Q:** Create a unique device identifier without exposing sensitive data.
+
+<details>
+<summary>📖 Show Answer</summary>
+
+**Answer:**
+
+```bash
+#!/bin/bash
+# device_fingerprint.sh - Create anonymous device fingerprint
+
+generate_fingerprint() {
+    # Collect non-sensitive identifiers
+    local phone_type=$(termux-telephony-deviceinfo | jq -r '.phone_type')
+    local network_type=$(termux-telephony-deviceinfo | jq -r '.network_type')
+    
+    # Get sensor availability (not values)
+    local sensors=$(termux-sensor -l 2>/dev/null | jq -r '.[] | .name' | sort | md5sum | cut -d' ' -f1)
+    
+    # Get screen characteristics (anonymized)
+    local screen_info="android"
+    
+    # Combine and hash
+    local combined="${phone_type}:${network_type}:${sensors}:${screen_info}"
+    local fingerprint=$(echo -n "$combined" | sha256sum | cut -d' ' -f1)
+    
+    echo "$fingerprint"
+}
+
+# Use for session identification
+get_session_id() {
+    local fp=$(generate_fingerprint)
+    local timestamp=$(date +%s)
+    echo "session_${fp:0:16}_${timestamp}"
+}
+
+# Store fingerprint securely
+store_fingerprint() {
+    local fp=$(generate_fingerprint)
+    echo "$fp" > "$HOME/.device_fingerprint"
+    chmod 600 "$HOME/.device_fingerprint"
+}
+
+# Verify device identity
+verify_device() {
+    local stored=$(cat "$HOME/.device_fingerprint" 2>/dev/null)
+    local current=$(generate_fingerprint)
+    
+    if [[ "$stored" == "$current" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+```
+
+**Follow-up:** How would you handle fingerprint changes due to system updates?
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Battery-Smart Automation
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      🔋 BATTERY-SMART AUTOMATION                            ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Automatically adjust device behavior based on battery level      ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   #!/bin/bash                                                                ║
+║   BATTERY=$(termux-battery-status | jq -r '.percentage')                    ║
+║   STATUS=$(termux-battery-status | jq -r '.status')                         ║
+║                                                                              ║
+║   if [ "$BATTERY" -lt 20 ] && [ "$STATUS" = "DISCHARGING" ]; then           ║
+║       # Low battery mode                                                     ║
+║       termux-brightness 50                                                   ║
+║       termux-volume stream_music 5                                           ║
+║       termux-notification --title "Low Battery" --content "${BATTERY}%"     ║
+║   elif [ "$BATTERY" -gt 80 ] && [ "$STATUS" = "CHARGING" ]; then            ║
+║       # Charging complete                                                    ║
+║       termux-notification --title "Battery Full" --content "Unplug now"     ║
+║       termux-vibrate 500                                                     ║
+║   fi                                                                         ║
+║                                                                              ║
+║ Automation: Add to crontab for every 5 minutes                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 2: Security Alert System
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                       🚨 SECURITY ALERT SYSTEM                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Alert if device is moved while locked                            ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   #!/bin/bash                                                                ║
+║   THRESHOLD=2.0  # Movement threshold                                        ║
+║                                                                              ║
+║   while true; do                                                             ║
+║       MAGNITUDE=$(termux-sensor -s accelerometer -n 1 | jq \                ║
+║           '.accelerometer.values | .[0] as $x | .[1] as $y | .[2] as $z | \ ║
+║           ($x*$x + $y*$y + $z*$z) | sqrt')                                   ║
+║                                                                              ║
+║       if (( $(echo "$MAGNITUDE > 10.5" | bc -l) )); then                    ║
+║           termux-notification --title "⚠️ Movement Detected!" \              ║
+║               --priority high --vibrate 1000                                 ║
+║           termux-vibrate 500,200,500                                         ║
+║       fi                                                                     ║
+║       sleep 1                                                                ║
+║   done                                                                       ║
+║                                                                              ║
+║ Result: Alerts on significant device movement                                ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 3: Location Logger
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         📍 LOCATION LOGGER                                  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Log location history for personal tracking                       ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   #!/bin/bash                                                                ║
+║   LOG_FILE="$HOME/location_history.json"                                     ║
+║   touch "$LOG_FILE"                                                          ║
+║                                                                              ║
+║   while true; do                                                             ║
+║       LOC=$(termux-location -p network 2>/dev/null)                         ║
+║       if [ $? -eq 0 ]; then                                                  ║
+║           ENTRY=$(echo "$LOC" | jq '{                                        ║
+║               timestamp: (now | tostring),                                   ║
+║               lat: .latitude,                                                ║
+║               lon: .longitude,                                               ║
+║               accuracy: .accuracy                                            ║
+║           }')                                                                ║
+║           echo "$ENTRY" >> "$LOG_FILE"                                       ║
+║       fi                                                                     ║
+║       sleep 300  # Every 5 minutes                                           ║
+║   done                                                                       ║
+║                                                                              ║
+║ Result: JSON log of location history                                         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 4: Adaptive Brightness
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      💡 ADAPTIVE BRIGHTNESS                                 ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Auto-adjust brightness based on time and battery                 ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   #!/bin/bash                                                                ║
+║   HOUR=$(date +%H)                                                           ║
+║   BATTERY=$(termux-battery-status | jq -r '.percentage')                    ║
+║                                                                              ║
+║   # Time-based adjustment                                                    ║
+║   if [ $HOUR -ge 22 ] || [ $HOUR -lt 6 ]; then                              ║
+║       BRIGHTNESS=30  # Night                                                 ║
+║   elif [ $HOUR -ge 6 ] && [ $HOUR -lt 9 ]; then                             ║
+║       BRIGHTNESS=100  # Morning                                              ║
+║   else                                                                       ║
+║       BRIGHTNESS=180  # Day                                                  ║
+║   fi                                                                         ║
+║                                                                              ║
+║   # Battery-based adjustment                                                 ║
+║   if [ $BATTERY -lt 20 ]; then                                               ║
+║       BRIGHTNESS=$((BRIGHTNESS / 2))                                         ║
+║   fi                                                                         ║
+║                                                                              ║
+║   termux-brightness $BRIGHTNESS                                              ║
+║   echo "Brightness set to $BRIGHTNESS"                                       ║
+║                                                                              ║
+║ Automation: Run via cron every hour                                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Scenario 5: Device Info Report
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      📊 DEVICE INFO REPORT                                  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ Situation: Generate comprehensive device report                             ║
+║                                                                              ║
+║ Commands:                                                                    ║
+║   #!/bin/bash                                                                ║
+║   REPORT="device_report_$(date +%Y%m%d_%H%M%S).txt"                         ║
+║                                                                              ║
+║   echo "=== DEVICE REPORT ===" > $REPORT                                     ║
+║   echo "Generated: $(date)" >> $REPORT                                       ║
+║   echo "" >> $REPORT                                                         ║
+║                                                                              ║
+║   echo "Battery:" >> $REPORT                                                 ║
+║   termux-battery-status | jq -r '"  Level: \(.percentage)%", "  Status: \   ║
+║     (.status)", "  Health: \(.health)", "  Temp: \(.temperature)°C"' \      ║
+║     >> $REPORT                                                               ║
+║                                                                              ║
+║   echo "" >> $REPORT                                                         ║
+║   echo "Network:" >> $REPORT                                                 ║
+║   termux-wifi-connectioninfo | jq -r '"  SSID: \(.ssid // "N/A")", \        ║
+║     "  IP: \(.ip // "N/A")", "  Signal: \(.rssi) dBm"' >> $REPORT           ║
+║                                                                              ║
+║   echo "" >> $REPORT                                                         ║
+║   echo "Location:" >> $REPORT                                                ║
+║   termux-location -p network 2>/dev/null | jq -r '"  Lat: \(.latitude)", \  ║
+║     "  Lon: \(.longitude)", "  Accuracy: \(.accuracy)m"' >> $REPORT         ║
+║                                                                              ║
+║   termux-share $REPORT  # Share report                                       ║
+║                                                                              ║
+║ Result: Complete device report saved and shared                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Device Info API Architecture
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                   DEVICE INFO API ARCHITECTURE                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐     │
+│  │                        TERMUX SHELL                                 │     │
+│  │                                                                     │     │
+│  │  termux-battery-status  termux-brightness  termux-volume           │     │
+│  │  termux-telephony-*     termux-wifi-*      termux-sensor           │     │
+│  │  termux-fingerprint     termux-location                             │     │
+│  └────────────────────────────┬───────────────────────────────────────┘     │
+│                               │                                              │
+│                               ▼                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐     │
+│  │                      TERMUX:API BRIDGE                              │     │
+│  │              (Android Service with Permissions)                     │     │
+│  │                                                                     │     │
+│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐       │     │
+│  │  │Broadcast   │ │Permission  │ │JSON        │ │Intent      │       │     │
+│  │  │Receiver    │ │Handler     │ │Builder     │ │Dispatcher  │       │     │
+│  │  └────────────┘ └────────────┘ └────────────┘ └────────────┘       │     │
+│  └────────────────────────────┬───────────────────────────────────────┘     │
+│                               │                                              │
+│                               ▼                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐     │
+│  │                    ANDROID SYSTEM MANAGERS                          │     │
+│  │                                                                     │     │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐                │     │
+│  │  │BatteryManager│ │AudioManager  │ │WifiManager   │                │     │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘                │     │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐                │     │
+│  │  │TelephonyMgr  │ │SensorManager │ │LocationMgr   │                │     │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘                │     │
+│  │  ┌──────────────┐                                                   │     │
+│  │  │FingerprintMgr│                                                   │     │
+│  │  └──────────────┘                                                   │     │
+│  └────────────────────────────────────────────────────────────────────┘     │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: Sensor Data Flow
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        SENSOR DATA FLOW                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────┐                                                            │
+│  │   Hardware  │                                                            │
+│  │   Sensors   │                                                            │
+│  │             │                                                            │
+│  │ ┌─────────┐ │   ┌─────────┐   ┌─────────┐   ┌─────────┐                │
+│  │ │Accel    │ │   │Gyro     │   │Mag      │   │Light    │                │
+│  │ │x,y,z    │ │   │x,y,z    │   │x,y,z    │   │lux      │                │
+│  │ └────┬────┘ │   └────┬────┘   └────┬────┘   └────┬────┘                │
+│  └──────┼──────┘        │             │             │                      │
+│         │               │             │             │                      │
+│         └───────────────┴─────────────┴─────────────┘                      │
+│                               │                                              │
+│                               ▼                                              │
+│                    ┌─────────────────────┐                                  │
+│                    │   Android Sensor    │                                  │
+│                    │      Framework      │                                  │
+│                    └──────────┬──────────┘                                  │
+│                               │                                              │
+│                               ▼                                              │
+│                    ┌─────────────────────┐                                  │
+│                    │  termux-sensor -s   │                                  │
+│                    │  <name> -n <count>  │                                  │
+│                    └──────────┬──────────┘                                  │
+│                               │                                              │
+│                               ▼                                              │
+│              ┌─────────────────────────────────┐                            │
+│              │ {                               │                            │
+│              │   "sensor_name": {              │                            │
+│              │     "values": [x, y, z],        │                            │
+│              │     "timestamp": 1234567890     │                            │
+│              │   }                             │                            │
+│              │ }                               │                            │
+│              └─────────────────────────────────┘                            │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: Location Provider Selection
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    LOCATION PROVIDER SELECTION                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│                    ┌─────────────────────┐                                  │
+│                    │  termux-location    │                                  │
+│                    └──────────┬──────────┘                                  │
+│                               │                                              │
+│                               ▼                                              │
+│                    ┌─────────────────────┐                                  │
+│                    │  Provider Selection │                                  │
+│                    │  (-p option)        │                                  │
+│                    └──────────┬──────────┘                                  │
+│                               │                                              │
+│           ┌───────────────────┼───────────────────┐                         │
+│           │                   │                   │                         │
+│           ▼                   ▼                   ▼                         │
+│    ┌─────────────┐     ┌─────────────┐     ┌─────────────┐                 │
+│    │    GPS      │     │   Network   │     │   Passive   │                 │
+│    │  Provider   │     │  Provider   │     │  Provider   │                 │
+│    ├─────────────┤     ├─────────────┤     ├─────────────┤                 │
+│    │Accuracy:    │     │Accuracy:    │     │Accuracy:    │                 │
+│    │  5-10m      │     │  50-500m    │     │  Varies     │                 │
+│    │             │     │             │     │             │                 │
+│    │Battery:     │     │Battery:     │     │Battery:     │                 │
+│    │  High drain │     │  Low drain  │     │  Minimal    │                 │
+│    │             │     │             │     │             │                 │
+│    │Speed:       │     │Speed:       │     │Speed:       │                 │
+│    │  Slow start │     │  Fast       │     │  Instant    │                 │
+│    └─────────────┘     └─────────────┘     └─────────────┘                 │
+│           │                   │                   │                         │
+│           └───────────────────┴───────────────────┘                         │
+│                               │                                              │
+│                               ▼                                              │
+│                    ┌─────────────────────┐                                  │
+│              {     │  Location Result    │                                  │
+│  "latitude": 28.61,│                     │                                  │
+│  "longitude": 77.2,│  With accuracy,     │                                  │
+│  "altitude": 216,  │  bearing, speed     │                                  │
+│  "accuracy": 15    │                     │                                  │
+│              }     │                     │                                  │
+│                    └─────────────────────┘                                  │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Multi-Sensor Fusion
+```bash
+#!/bin/bash
+# sensor_fusion.sh - Combine multiple sensors for device orientation
+
+get_device_orientation() {
+    # Get all sensors at once
+    local data=$(termux-sensor -s "accelerometer,magnetometer,gyroscope" -n 1)
+    
+    # Extract values
+    local acc=$(echo "$data" | jq '.accelerometer.values')
+    local mag=$(echo "$data" | jq '.magnetometer.values')
+    local gyro=$(echo "$data" | jq '.gyroscope.values')
+    
+    # Calculate tilt from accelerometer
+    local ax=$(echo "$acc" | jq '.[0]')
+    local ay=$(echo "$acc" | jq '.[1]')
+    local az=$(echo "$acc" | jq '.[2]')
+    
+    local pitch=$(echo "scale=2; a($ax / sqrt($ay*$ay + $az*$az)) * 180 / 3.14159" | bc -l)
+    local roll=$(echo "scale=2; a($ay / $az) * 180 / 3.14159" | bc -l)
+    
+    echo "Pitch: ${pitch}°, Roll: ${roll}°"
+}
+```
+
+### Advanced Technique 2: Adaptive Location Polling
+```python
+#!/usr/bin/env python3
+# adaptive_location.py - Smart location polling based on movement
+
+import subprocess
+import json
+import time
+import math
+
+class AdaptiveLocationTracker:
+    def __init__(self):
+        self.last_location = None
+        self.poll_interval = 60  # Start with 1 minute
+        
+    def get_location(self, provider='network'):
+        result = subprocess.run(
+            ['termux-location', '-p', provider],
+            capture_output=True, text=True, timeout=30
+        )
+        if result.returncode == 0:
+            return json.loads(result.stdout)
+        return None
+    
+    def calculate_distance(self, loc1, loc2):
+        """Calculate distance between two points in meters"""
+        if not loc1 or not loc2:
+            return 0
+        
+        # Haversine formula
+        R = 6371000  # Earth radius in meters
+        lat1, lon1 = math.radians(loc1['latitude']), math.radians(loc1['longitude'])
+        lat2, lon2 = math.radians(loc2['latitude']), math.radians(loc2['longitude'])
+        
+        dlat = lat2 - lat1
+        dlon = lon2 - lon1
+        
+        a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+        
+        return R * c
+    
+    def adjust_interval(self, distance_moved):
+        """Adjust polling interval based on movement"""
+        if distance_moved > 100:  # Moving fast
+            self.poll_interval = max(10, self.poll_interval - 10)
+        elif distance_moved < 10:  # Stationary
+            self.poll_interval = min(300, self.poll_interval + 10)
+    
+    def track(self):
+        while True:
+            current = self.get_location()
+            if current:
+                if self.last_location:
+                    distance = self.calculate_distance(self.last_location, current)
+                    self.adjust_interval(distance)
+                    print(f"Moved: {distance:.1f}m, Interval: {self.poll_interval}s")
+                
+                self.last_location = current
+            time.sleep(self.poll_interval)
+
+# Run
+tracker = AdaptiveLocationTracker()
+tracker.track()
+```
+
+### Advanced Technique 3: Fingerprint-Based Encryption
+```bash
+#!/bin/bash
+# fingerprint_encrypt.sh - Use fingerprint to protect file encryption
+
+encrypt_with_fingerprint() {
+    local file="$1"
+    
+    # Request fingerprint
+    echo "🔐 Authenticate with fingerprint to encrypt..."
+    local auth=$(termux-fingerprint)
+    local result=$(echo "$auth" | jq -r '.auth_result')
+    
+    if [[ "$result" != "AUTH_RESULT_SUCCESS" ]]; then
+        echo "Authentication failed!"
+        return 1
+    fi
+    
+    # Use timestamp as unique key (fingerprint just verifies identity)
+    local key=$(date +%s | sha256sum | cut -d' ' -f1)
+    
+    # Encrypt file
+    echo "$key" | gpg --batch --yes --passphrase-fd 0 -c "$file"
+    
+    if [[ -f "${file}.gpg" ]]; then
+        # Store key hint (not the actual key)
+        echo "encrypted:$(date +%s)" > "${file}.hint"
+        rm "$file"  # Remove original
+        echo "✅ File encrypted: ${file}.gpg"
+    fi
+}
+
+decrypt_with_fingerprint() {
+    local file="$1"
+    
+    # Request fingerprint
+    echo "🔐 Authenticate with fingerprint to decrypt..."
+    local auth=$(termux-fingerprint)
+    local result=$(echo "$auth" | jq -r '.auth_result')
+    
+    if [[ "$result" != "AUTH_RESULT_SUCCESS" ]]; then
+        echo "Authentication failed!"
+        return 1
+    fi
+    
+    # For demo: prompt for key (in production, use secure key storage)
+    read -s -p "Enter encryption key: " key
+    echo
+    
+    echo "$key" | gpg --batch --yes --passphrase-fd 0 -d "$file" > "${file%.gpg}"
+    
+    if [[ -f "${file%.gpg}" ]]; then
+        echo "✅ File decrypted: ${file%.gpg}"
+    fi
+}
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ What You Learned
+
+- [ ] **termux-battery-status** - Get battery health, percentage, temperature
+- [ ] **termux-brightness** - Control screen brightness levels
+- [ ] **termux-volume** - Manage all audio stream volumes
+- [ ] **termux-telephony-deviceinfo** - Access IMEI, SIM, network details
+- [ ] **termux-telephony-cellinfo** - Get cell tower information
+- [ ] **termux-wifi-connectioninfo** - WiFi connection details and signal
+- [ ] **termux-sensor** - Read accelerometer, gyroscope, magnetometer
+- [ ] **termux-fingerprint** - Biometric authentication
+- [ ] **termux-location** - GPS and network-based positioning
+- [ ] **JSON parsing** - Using jq and Python for API responses
+- [ ] **Automation** - Creating intelligent device-aware scripts
+
+### 📋 Quick Reference Commands
+```bash
+# Battery
+termux-battery-status | jq '.percentage'
+
+# Brightness
+termux-brightness 150
+
+# Volume
+termux-volume stream_music 10
+
+# Telephony
+termux-telephony-deviceinfo | jq '.imei'
+
+# WiFi
+termux-wifi-connectioninfo | jq '.ssid'
+
+# Sensors
+termux-sensor -s accelerometer -n 1
+
+# Fingerprint
+termux-fingerprint | jq '.auth_result'
+
+# Location
+termux-location -p gps | jq '.latitude,.longitude'
+```
+
+### 🎯 Next Steps
+1. Create battery-aware automation scripts
+2. Build location-aware applications
+3. Implement sensor-based gesture detection
+4. Develop security-focused tools using fingerprint API
+
+### 📚 Recommended Practice
+- Build a device monitoring dashboard
+- Create an automated meeting mode
+- Implement location-based reminders
+- Design a security alert system
+
+---
+
+*Chapter 18 Complete! Ready for Chapter 19: Camera & Media APIs*
+
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+<details>
+<summary><b>❓ Question 1: Which command returns battery status information?</b></summary>
+
+**Answer:** `termux-battery-status`
+
+Returns JSON with fields: health, percentage, plugged, status, temperature, current.
+
+Example:
+```bash
+termux-battery-status | jq '.percentage'
+# Output: 85
+```
+</details>
+
+<details>
+<summary><b>❓ Question 2: How do you set screen brightness from Termux?</b></summary>
+
+**Answer:** Use `termux-brightness` with a value:
+
+```bash
+termux-brightness 150   # Set brightness to 150
+termux-brightness       # Get current brightness
+```
+
+Note: On some devices, the range is 0-255; on others, it's 0-100.
+</details>
+
+<details>
+<summary><b>❓ Question 3: What are the different audio stream types for termux-volume?</b></summary>
+
+**Answer:** The available stream types are:
+
+| Stream | Purpose |
+|--------|---------|
+| `stream_notification` | Notification sounds |
+| `stream_ring` | Ringtone volume |
+| `stream_music` | Media/music volume |
+| `stream_alarm` | Alarm volume |
+| `stream_system` | System sounds |
+| `stream_voice_call` | Call volume |
+
+Example: `termux-volume stream_music 75`
+</details>
+
+<details>
+<summary><b>❓ Question 4: How do you get the device's IMEI number?</b></summary>
+
+**Answer:** Use `termux-telephony-deviceinfo`:
+
+```bash
+termux-telephony-deviceinfo | jq '.imei'
+```
+
+Returns the 15-digit IMEI number. Note: Android 10+ may restrict access to IMEI.
+</details>
+
+<details>
+<summary><b>❓ Question 5: What does RSSI indicate in WiFi information?</b></summary>
+
+**Answer:** RSSI (Received Signal Strength Indicator) measures WiFi signal strength in dBm:
+
+| RSSI Range | Quality |
+|------------|---------|
+| -30 to -50 | Excellent |
+| -50 to -60 | Good |
+| -60 to -70 | Fair |
+| -70 to -80 | Weak |
+| Below -80 | Very Poor |
+
+Example: `termux-wifi-connectioninfo | jq '.rssi'`
+</details>
+
+<details>
+<summary><b>❓ Question 6: How do you read accelerometer data?</b></summary>
+
+**Answer:** Use `termux-sensor` with sensor name:
+
+```bash
+# Single reading
+termux-sensor -s accelerometer -n 1
+
+# Continuous monitoring (every 1000ms)
+termux-sensor -s accelerometer -d 1000
+```
+
+Output shows x, y, z values in m/s².
+</details>
+
+<details>
+<summary><b>❓ Question 7: How does fingerprint authentication work in Termux?</b></summary>
+
+**Answer:** The `termux-fingerprint` command triggers the device's fingerprint scanner:
+
+```bash
+result=$(termux-fingerprint | jq -r '.auth_result')
+
+if [ "$result" = "AUTH_RESULT_SUCCESS" ]; then
+    echo "Authentication successful"
+else
+    echo "Authentication failed"
+fi
+```
+
+Returns `AUTH_RESULT_SUCCESS` or `AUTH_RESULT_FAILURE`.
+</details>
+
+<details>
+<summary><b>❓ Question 8: What's the difference between GPS and network location providers?</b></summary>
+
+**Answer:**
+
+| Provider | Accuracy | Battery | Speed |
+|----------|----------|---------|-------|
+| `gps` | High (5-10m) | High drain | Slow |
+| `network` | Medium (50-500m) | Low drain | Fast |
+
+```bash
+# GPS location
+termux-location -p gps
+
+# Network location (faster)
+termux-location -p network
+```
+</details>
+
+<details>
+<summary><b>❓ Question 9: How do you check if SIM is ready?</b></summary>
+
+**Answer:** Use `termux-telephony-deviceinfo` and check sim_state:
+
+```bash
+termux-telephony-deviceinfo | jq '.sim_state'
+```
+
+Possible values: `READY`, `ABSENT`, `LOCKED`, `NETWORK_LOCKED`, `NOT_READY`, `UNKNOWN`
+</details>
+
+<details>
+<summary><b>❓ Question 10: How do you get cell tower information?</b></summary>
+
+**Answer:** Use `termux-telephony-cellinfo`:
+
+```bash
+termux-telephony-cellinfo
+```
+
+Returns: type, mcc, mnc, lac, cid, dbm, asu, level. Useful for location triangulation.
+</details>
+
+<details>
+<summary><b>❓ Question 11: What sensor types are available?</b></summary>
+
+**Answer:** Common sensors include:
+
+- `accelerometer` - Motion/orientation
+- `gyroscope` - Rotation
+- `magnetometer` - Compass (magnetic field)
+- `light` - Ambient light
+- `proximity` - Near/far detection
+- `pressure` - Barometer
+- `gravity` - Gravity vector
+- `linear_acceleration` - Linear motion
+
+List all: `termux-sensor -l`
+</details>
+
+<details>
+<summary><b>❓ Question 12: How do you check WiFi network name?</b></summary>
+
+**Answer:**
+
+```bash
+termux-wifi-connectioninfo | jq -r '.ssid'
+```
+
+Returns the SSID (network name) of the currently connected WiFi network.
+</details>
+
+<details>
+<summary><b>❓ Question 13: What information does termux-telephony-deviceinfo provide?</b></summary>
+
+**Answer:** It provides:
+
+- IMEI/MEID (device identifiers)
+- SIM country, operator, serial number
+- Network type (LTE, HSPA, etc.)
+- Roaming status
+- Phone type (GSM, CDMA)
+
+```bash
+termux-telephony-deviceinfo | jq 'keys'
+```
+</details>
+
+<details>
+<summary><b>❓ Question 14: How do you monitor sensor data continuously?</b></summary>
+
+**Answer:** Use the `-d` flag with delay in milliseconds:
+
+```bash
+# Monitor accelerometer every 500ms
+termux-sensor -s accelerometer -d 500
+
+# Monitor multiple sensors
+termux-sensor -s "accelerometer,gyroscope" -d 1000
+```
+
+Press Ctrl+C to stop.
+</details>
+
+<details>
+<summary><b>❓ Question 15: How do you get the device's public IP?</b></summary>
+
+**Answer:** Use external service with curl:
+
+```bash
+curl -s ifconfig.me
+```
+
+Or with more info: `curl -s ipinfo.io`
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+### Q1: Design a power-efficient background monitoring system using device APIs.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Power-efficient device monitoring system"""
+
+import subprocess
+import json
+import time
+from datetime import datetime
+import threading
+
+class PowerAwareMonitor:
+    def __init__(self):
+        self.running = False
+        self.poll_interval = 60  # Default 60 seconds
+        self.callbacks = []
+        
+    def get_battery_state(self):
+        """Get current battery state"""
+        result = subprocess.run(
+            ['termux-battery-status'],
+            capture_output=True, text=True
+        )
+        return json.loads(result.stdout) if result.returncode == 0 else None
+        
+    def adjust_poll_interval(self):
+        """Dynamically adjust polling based on battery"""
+        battery = self.get_battery_state()
+        if not battery:
+            return
+            
+        percentage = battery['percentage']
+        plugged = battery['plugged']
+        
+        if plugged in ['PLUGGED_AC', 'PLUGGED_USB']:
+            # Charging - poll more frequently
+            self.poll_interval = 30
+        elif percentage > 50:
+            # Good battery - normal polling
+            self.poll_interval = 60
+        elif percentage > 20:
+            # Medium battery - reduce polling
+            self.poll_interval = 120
+        else:
+            # Low battery - minimal polling
+            self.poll_interval = 300
+            
+    def check_network(self):
+        """Check network connectivity"""
+        wifi = subprocess.run(
+            ['termux-wifi-connectioninfo'],
+            capture_output=True, text=True
+        )
+        if wifi.returncode == 0:
+            data = json.loads(wifi.stdout)
+            return {
+                'connected': True,
+                'ssid': data.get('ssid'),
+                'signal': data.get('rssi')
+            }
+        return {'connected': False}
+        
+    def run_monitor(self):
+        """Main monitoring loop"""
+        while self.running:
+            self.adjust_poll_interval()
+            
+            # Collect data
+            state = {
+                'timestamp': datetime.now().isoformat(),
+                'battery': self.get_battery_state(),
+                'network': self.check_network()
+            }
+            
+            # Notify callbacks
+            for callback in self.callbacks:
+                callback(state)
+                
+            time.sleep(self.poll_interval)
+            
+    def start(self):
+        """Start monitoring"""
+        self.running = True
+        thread = threading.Thread(target=self.run_monitor, daemon=True)
+        thread.start()
+        
+    def stop(self):
+        """Stop monitoring"""
+        self.running = False
+        
+    def register_callback(self, callback):
+        """Register callback for state changes"""
+        self.callbacks.append(callback)
+
+# Usage
+def alert_low_battery(state):
+    if state['battery'] and state['battery']['percentage'] < 20:
+        subprocess.run([
+            'termux-notification',
+            '--title', 'Low Battery',
+            '--content', f"Battery at {state['battery']['percentage']}%",
+            '--priority', 'high'
+        ])
+
+monitor = PowerAwareMonitor()
+monitor.register_callback(alert_low_battery)
+monitor.start()
+```
+
+Key features:
+- Dynamic polling intervals based on battery
+- Charging detection for frequent updates
+- Network state monitoring
+- Callback system for alerts
+</details>
+
+### Q2: Implement a location-aware automation system.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Location-aware automation system"""
+
+import subprocess
+import json
+import math
+from dataclasses import dataclass
+from typing import List, Callable, Optional
+import time
+
+@dataclass
+class Location:
+    latitude: float
+    longitude: float
+    accuracy: float
+    
+    def distance_to(self, other: 'Location') -> float:
+        """Calculate distance in meters using Haversine formula"""
+        R = 6371000  # Earth radius in meters
+        
+        lat1, lon1 = math.radians(self.latitude), math.radians(self.longitude)
+        lat2, lon2 = math.radians(other.latitude), math.radians(other.longitude)
+        
+        dlat = lat2 - lat1
+        dlon = lon2 - lon1
+        
+        a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+        
+        return R * c
+
+@dataclass
+class GeoFence:
+    name: str
+    center: Location
+    radius: float  # meters
+    on_enter: Optional[Callable] = None
+    on_exit: Optional[Callable] = None
+    
+    def contains(self, location: Location) -> bool:
+        return self.center.distance_to(location) <= self.radius
+
+class LocationAwareAutomation:
+    def __init__(self):
+        self.geofences: List[GeoFence] = []
+        self.last_location: Optional[Location] = None
+        self.inside_fences: set = set()
+        
+    def get_location(self) -> Optional[Location]:
+        """Get current location"""
+        result = subprocess.run(
+            ['termux-location', '-p', 'network'],
+            capture_output=True, text=True, timeout=30
+        )
+        
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            return Location(
+                latitude=data['latitude'],
+                longitude=data['longitude'],
+                accuracy=data['accuracy']
+            )
+        return None
+        
+    def add_geofence(self, fence: GeoFence):
+        """Add a geofence"""
+        self.geofences.append(fence)
+        
+    def check_geofences(self, location: Location):
+        """Check all geofences"""
+        current_inside = set()
+        
+        for fence in self.geofences:
+            if fence.contains(location):
+                current_inside.add(fence.name)
+                
+                # Just entered
+                if fence.name not in self.inside_fences and fence.on_enter:
+                    fence.on_enter(location)
+            else:
+                # Just exited
+                if fence.name in self.inside_fences and fence.on_exit:
+                    fence.on_exit(location)
+                    
+        self.inside_fences = current_inside
+        
+    def run(self, interval: int = 60):
+        """Run automation loop"""
+        while True:
+            location = self.get_location()
+            if location:
+                self.check_geofences(location)
+                self.last_location = location
+            time.sleep(interval)
+
+# Usage
+def on_home_enter(loc):
+    subprocess.run([
+        'termux-notification',
+        '--title', '🏠 Home',
+        '--content', 'Welcome home! WiFi turning on...'
+    ])
+    subprocess.run(['termux-wifi-enable', 'true'])
+    
+def on_home_exit(loc):
+    subprocess.run([
+        'termux-notification',
+        '--title', '👋 Leaving Home',
+        '--content', 'Goodbye! Saving battery...'
+    ])
+    subprocess.run(['termux-wifi-enable', 'false'])
+
+automation = LocationAwareAutomation()
+
+# Add geofence for home (example coordinates)
+home_fence = GeoFence(
+    name="home",
+    center=Location(28.6139, 77.2090, 10),
+    radius=100,  # 100 meters
+    on_enter=on_home_enter,
+    on_exit=on_home_exit
+)
+automation.add_geofence(home_fence)
+
+# automation.run()
+```
+
+Features:
+- Geofencing with custom radius
+- Enter/exit callbacks
+- Haversine distance calculation
+- Battery-efficient network location
+</details>
+
+### Q3: Create a security monitoring system using device sensors.
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Security monitoring using device sensors"""
+
+import subprocess
+import json
+import time
+from datetime import datetime
+import threading
+
+class SecurityMonitor:
+    def __init__(self):
+        self.running = False
+        self.alerts = []
+        self.thresholds = {
+            'movement': 2.0,      # m/s²
+            'noise': 70,          # dB equivalent
+            'light_change': 50    # lux
+        }
+        
+    def get_acceleration(self):
+        """Get accelerometer data"""
+        result = subprocess.run(
+            ['termux-sensor', '-s', 'accelerometer', '-n', '1'],
+            capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            values = data.get('accelerometer', {}).get('values', [0, 0, 0])
+            return values
+        return [0, 0, 0]
+        
+    def get_light(self):
+        """Get ambient light level"""
+        result = subprocess.run(
+            ['termux-sensor', '-s', 'light', '-n', '1'],
+            capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            return data.get('light', {}).get('values', [0])[0]
+        return 0
+        
+    def calculate_magnitude(self, values):
+        """Calculate acceleration magnitude"""
+        return (values[0]**2 + values[1]**2 + values[2]**2) ** 0.5
+        
+    def detect_movement(self, baseline=None):
+        """Detect significant movement"""
+        current = self.get_acceleration()
+        magnitude = self.calculate_magnitude(current)
+        
+        if baseline:
+            diff = abs(magnitude - baseline)
+            return diff > self.thresholds['movement'], magnitude
+        return False, magnitude
+        
+    def detect_light_change(self, baseline=None):
+        """Detect significant light change"""
+        current = self.get_light()
+        
+        if baseline:
+            diff = abs(current - baseline)
+            return diff > self.thresholds['light_change'], current
+        return False, current
+        
+    def send_alert(self, alert_type, details):
+        """Send security alert"""
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        
+        # Log alert
+        alert = {
+            'time': timestamp,
+            'type': alert_type,
+            'details': details
+        }
+        self.alerts.append(alert)
+        
+        # Send notification
+        subprocess.run([
+            'termux-notification',
+            '--title', f'⚠️ Security Alert: {alert_type}',
+            '--content', details,
+            '--priority', 'high',
+            '--sound',
+            '--vibrate', '500,200,500'
+        ])
+        
+        # Speak alert (optional)
+        subprocess.run([
+            'termux-tts-speak',
+            f'Security alert: {alert_type}'
+        ])
+        
+    def run_monitoring(self):
+        """Main monitoring loop"""
+        # Establish baseline
+        baseline_acc = self.calculate_magnitude(self.get_acceleration())
+        baseline_light = self.get_light()
+        
+        while self.running:
+            # Check movement
+            moved, current_acc = self.detect_movement(baseline_acc)
+            if moved:
+                self.send_alert('Movement', 
+                    f'Acceleration: {current_acc:.2f} m/s²')
+                    
+            # Check light
+            changed, current_light = self.detect_light_change(baseline_light)
+            if changed:
+                self.send_alert('Light Change',
+                    f'Light level: {current_light} lux')
+                    
+            # Update baseline slowly
+            baseline_acc = baseline_acc * 0.9 + current_acc * 0.1
+            baseline_light = baseline_light * 0.9 + current_light * 0.1
+            
+            time.sleep(1)  # Check every second
+            
+    def start(self):
+        """Start monitoring"""
+        self.running = True
+        thread = threading.Thread(target=self.run_monitoring, daemon=True)
+        thread.start()
+        
+        # Require fingerprint to start
+        result = subprocess.run(
+            ['termux-fingerprint'],
+            capture_output=True, text=True
+        )
+        auth = json.loads(result.stdout)
+        
+        if auth.get('auth_result') == 'AUTH_RESULT_SUCCESS':
+            subprocess.run([
+                'termux-notification',
+                '--title', '🔒 Security Monitor',
+                '--content', 'Monitoring started'
+            ])
+            return True
+        else:
+            self.running = False
+            return False
+            
+    def stop(self):
+        """Stop monitoring"""
+        self.running = False
+        
+    def get_alerts(self):
+        """Get all alerts"""
+        return self.alerts
+
+# Usage
+monitor = SecurityMonitor()
+if monitor.start():
+    time.sleep(60)  # Run for 60 seconds
+    monitor.stop()
+```
+
+Features:
+- Accelerometer-based movement detection
+- Light sensor monitoring
+- Fingerprint authentication
+- Alert notification system
+- Adaptive baseline
+</details>
+
+### Q4: Explain the difference between various location providers in Android.
+
+**Answer:**
+
+**Location Provider Comparison:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    LOCATION PROVIDERS COMPARISON                         │
+├─────────────────┬───────────────┬───────────────┬───────────────────────┤
+│ Provider        │ Accuracy      │ Battery Drain │ Best Use Case         │
+├─────────────────┼───────────────┼───────────────┼───────────────────────┤
+│ GPS             │ 5-10 meters   │ High          │ Navigation, outdoors  │
+│ Network         │ 50-500 meters │ Low           │ City tracking         │
+│ Passive         │ Varies        │ Minimal       │ Piggyback other apps  │
+│ Fused           │ Adaptive      │ Optimized     │ Balanced accuracy     │
+└─────────────────┴───────────────┴───────────────┴───────────────────────┘
+```
+
+**Implementation Example:**
+
+```python
+def get_best_location(purpose='balanced'):
+    """Get location with appropriate provider"""
+    
+    if purpose == 'precise':
+        # GPS for navigation
+        provider = 'gps'
+        timeout = 30
+    elif purpose == 'quick':
+        # Network for quick fix
+        provider = 'network'
+        timeout = 10
+    else:
+        # Try network first, fallback to GPS
+        provider = 'network'
+        timeout = 15
+        
+    result = subprocess.run(
+        ['termux-location', '-p', provider, '-r', str(timeout)],
+        capture_output=True, text=True
+    )
+    
+    if result.returncode == 0:
+        return json.loads(result.stdout)
+    
+    # Fallback to GPS if network fails
+    if provider == 'network' and purpose != 'quick':
+        result = subprocess.run(
+            ['termux-location', '-p', 'gps', '-r', '30'],
+            capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            return json.loads(result.stdout)
+            
+    return None
+```
+
+**Provider Selection Logic:**
+1. **GPS**: Use when high accuracy is critical (navigation, geocaching)
+2. **Network**: Use for quick fixes, city use, battery-conscious apps
+3. **Passive**: Use when another app is already tracking location
+</details>
+
+### Q5: How would you implement a battery-aware task scheduler?
+
+**Answer:**
+
+```python
+#!/usr/bin/env python3
+"""Battery-aware task scheduler"""
+
+import subprocess
+import json
+import time
+from datetime import datetime, timedelta
+from typing import Callable, List, Dict
+from dataclasses import dataclass
+import threading
+import queue
+
+@dataclass
+class Task:
+    name: str
+    function: Callable
+    priority: int  # 1=critical, 2=high, 3=normal, 4=low
+    min_battery: int
+    requires_charging: bool
+    requires_wifi: bool
+    interval: int  # seconds, 0 = one-time
+    
+class BatteryAwareScheduler:
+    def __init__(self):
+        self.tasks: List[Task] = []
+        self.running = False
+        self.last_run: Dict[str, datetime] = {}
+        self.task_queue = queue.PriorityQueue()
+        
+    def get_battery_status(self):
+        """Get battery information"""
+        result = subprocess.run(
+            ['termux-battery-status'],
+            capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            return json.loads(result.stdout)
+        return None
+        
+    def get_wifi_status(self):
+        """Check if WiFi is connected"""
+        result = subprocess.run(
+            ['termux-wifi-connectioninfo'],
+            capture_output=True, text=True
+        )
+        return result.returncode == 0
+        
+    def is_charging(self):
+        """Check if device is charging"""
+        battery = self.get_battery_status()
+        if battery:
+            return battery.get('plugged') in ['PLUGGED_AC', 'PLUGGED_USB']
+        return False
+        
+    def can_run_task(self, task: Task) -> bool:
+        """Check if task can run based on conditions"""
+        battery = self.get_battery_status()
+        if not battery:
+            return False
+            
+        # Check battery level
+        if battery['percentage'] < task.min_battery:
+            return False
+            
+        # Check charging requirement
+        if task.requires_charging and not self.is_charging():
+            return False
+            
+        # Check WiFi requirement
+        if task.requires_wifi and not self.get_wifi_status():
+            return False
+            
+        return True
+        
+    def add_task(self, task: Task):
+        """Add a task to the scheduler"""
+        self.tasks.append(task)
+        
+    def schedule_next(self):
+        """Schedule next runnable task"""
+        now = datetime.now()
+        
+        # Sort by priority and last run time
+        runnable = []
+        for task in self.tasks:
+            if self.can_run_task(task):
+                last = self.last_run.get(task.name, datetime.min)
+                if task.interval == 0 or (now - last).total_seconds() >= task.interval:
+                    runnable.append((task.priority, task))
+                    
+        if runnable:
+            runnable.sort(key=lambda x: x[0])
+            return runnable[0][1]
+        return None
+        
+    def run_task(self, task: Task):
+        """Execute a task"""
+        try:
+            task.function()
+            self.last_run[task.name] = datetime.now()
+        except Exception as e:
+            print(f"Task {task.name} failed: {e}")
+            
+    def run(self):
+        """Main scheduler loop"""
+        while self.running:
+            task = self.schedule_next()
+            
+            if task:
+                self.run_task(task)
+            else:
+                # Adjust sleep based on battery
+                battery = self.get_battery_status()
+                if battery:
+                    percentage = battery['percentage']
+                    if percentage < 20:
+                        sleep_time = 300  # 5 minutes
+                    elif percentage < 50:
+                        sleep_time = 120  # 2 minutes
+                    else:
+                        sleep_time = 60   # 1 minute
+                else:
+                    sleep_time = 60
+                    
+                time.sleep(sleep_time)
+                
+    def start(self):
+        """Start scheduler"""
+        self.running = True
+        thread = threading.Thread(target=self.run, daemon=True)
+        thread.start()
+        
+    def stop(self):
+        """Stop scheduler"""
+        self.running = False
+
+# Usage
+def backup_data():
+    """Backup critical data"""
+    subprocess.run(['termux-notification', '--title', 'Backup', '--content', 'Starting backup'])
+    # Backup logic here
+    
+def sync_cloud():
+    """Sync with cloud storage"""
+    subprocess.run(['termux-notification', '--title', 'Sync', '--content', 'Syncing with cloud'])
+    # Sync logic here
+
+scheduler = BatteryAwareScheduler()
+
+# Add tasks with different requirements
+scheduler.add_task(Task(
+    name='backup',
+    function=backup_data,
+    priority=2,
+    min_battery=30,
+    requires_charging=True,
+    requires_wifi=True,
+    interval=3600  # Every hour
+))
+
+scheduler.add_task(Task(
+    name='sync',
+    function=sync_cloud,
+    priority=3,
+    min_battery=50,
+    requires_charging=False,
+    requires_wifi=True,
+    interval=1800  # Every 30 minutes
+))
+
+scheduler.start()
+```
+
+Features:
+- Priority-based task scheduling
+- Battery level requirements
+- Charging state checks
+- WiFi requirements
+- Adaptive sleep intervals
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Smart Meeting Mode
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  📅 SCENARIO: Automatic Meeting Mode Based on Location/Time           ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User wants phone to automatically enter meeting mode when at work   ║
+║  during business hours.                                               ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```bash
+#!/bin/bash
+# meeting_mode.sh
+
+WORK_LAT="28.6139"
+WORK_LON="77.2090"
+WORK_RADIUS=100
+WORK_START=9
+WORK_END=18
+
+# Get current location
+get_location() {
+    termux-location -p network 2>/dev/null | jq -r '.latitude,.longitude'
+}
+
+# Calculate distance (simplified)
+distance_from_work() {
+    local loc=$(get_location)
+    local lat=$(echo "$loc" | head -1)
+    local lon=$(echo "$loc" | tail -1)
+    
+    # Simple distance approximation
+    echo "scale=0; sqrt(($lat - $WORK_LAT)^2 + ($lon - $WORK_LON)^2) * 111000" | bc
+}
+
+# Check if at work
+at_work() {
+    local dist=$(distance_from_work)
+    [ "$dist" -lt "$WORK_RADIUS" ]
+}
+
+# Check if work hours
+work_hours() {
+    local hour=$(date +%H)
+    [ "$hour" -ge "$WORK_START" ] && [ "$hour" -lt "$WORK_END" ]
+}
+
+# Enter meeting mode
+enter_meeting_mode() {
+    # Save current volumes
+    termux-volume stream_ring > ~/.saved_ring_vol.json
+    termux-volume stream_notification > ~/.saved_notif_vol.json
+    
+    # Mute
+    termux-volume stream_ring 0
+    termux-volume stream_notification 0
+    
+    # Dim brightness
+    termux-brightness 30
+    
+    # Notification
+    termux-notification \
+        --title "📅 Meeting Mode" \
+        --content "Phone muted for work" \
+        --priority low
+}
+
+# Exit meeting mode
+exit_meeting_mode() {
+    # Restore volumes
+    local ring=$(jq -r '.volume' ~/.saved_ring_vol.json 2>/dev/null || echo "7")
+    local notif=$(jq -r '.volume' ~/.saved_notif_vol.json 2>/dev/null || echo "5")
+    
+    termux-volume stream_ring "$ring"
+    termux-volume stream_notification "$notif"
+    
+    # Restore brightness
+    termux-brightness 150
+    
+    termux-notification \
+        --title "📅 Meeting Mode Off" \
+        --content "Phone restored" \
+        --priority low
+}
+
+# Main logic
+if at_work && work_hours; then
+    if [ ! -f ~/.in_meeting_mode ]; then
+        enter_meeting_mode
+        touch ~/.in_meeting_mode
+    fi
+else
+    if [ -f ~/.in_meeting_mode ]; then
+        exit_meeting_mode
+        rm ~/.in_meeting_mode
+    fi
+fi
+```
+
+---
+
+### Scenario 2: Battery Guardian
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  🔋 SCENARIO: Intelligent Battery Protection System                   ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User's phone battery drains quickly. Need automatic power saving    ║
+║  when battery is low.                                                 ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import time
+
+class BatteryGuardian:
+    THRESHOLDS = {
+        'critical': 10,
+        'low': 20,
+        'medium': 40
+    }
+    
+    def get_battery(self):
+        result = subprocess.run(['termux-battery-status'], capture_output=True, text=True)
+        return json.loads(result.stdout)
+        
+    def critical_mode(self):
+        """Ultra power saving"""
+        subprocess.run(['termux-brightness', '10'])
+        subprocess.run(['termux-volume', 'stream_music', '0'])
+        subprocess.run(['termux-wifi-enable', 'false'])
+        
+        subprocess.run([
+            'termux-notification',
+            '--title', '🔴 Critical Battery',
+            '--content', 'Ultra power saving enabled',
+            '--priority', 'high',
+            '--sound'
+        ])
+        
+    def low_mode(self):
+        """Power saving"""
+        subprocess.run(['termux-brightness', '50'])
+        subprocess.run(['termux-volume', 'stream_music', '30'])
+        
+        subprocess.run([
+            'termux-notification',
+            '--title', '🟡 Low Battery',
+            '--content', 'Power saving enabled',
+            '--priority', 'high'
+        ])
+        
+    def normal_mode(self):
+        """Restore normal settings"""
+        subprocess.run(['termux-brightness', '150'])
+        subprocess.run(['termux-volume', 'stream_music', '70'])
+        subprocess.run(['termux-wifi-enable', 'true'])
+        
+    def monitor(self):
+        current_mode = 'normal'
+        
+        while True:
+            battery = self.get_battery()
+            level = battery['percentage']
+            charging = battery['plugged'] in ['PLUGGED_AC', 'PLUGGED_USB']
+            
+            if charging:
+                if current_mode != 'normal':
+                    self.normal_mode()
+                    current_mode = 'normal'
+            else:
+                if level <= self.THRESHOLDS['critical']:
+                    if current_mode != 'critical':
+                        self.critical_mode()
+                        current_mode = 'critical'
+                elif level <= self.THRESHOLDS['low']:
+                    if current_mode not in ['critical', 'low']:
+                        self.low_mode()
+                        current_mode = 'low'
+                else:
+                    if current_mode != 'normal':
+                        self.normal_mode()
+                        current_mode = 'normal'
+                        
+            time.sleep(60)  # Check every minute
+
+guardian = BatteryGuardian()
+guardian.monitor()
+```
+
+---
+
+### Scenario 3: Motion Detector Alarm
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  🚨 SCENARIO: Phone Motion Detection Security Alarm                   ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User wants to use phone as a motion detector alarm when phone is   ║
+║  placed on a stable surface.                                          ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import time
+import math
+
+class MotionDetector:
+    def __init__(self, sensitivity=1.5):
+        self.sensitivity = sensitivity
+        self.baseline = None
+        
+    def get_acceleration(self):
+        result = subprocess.run(
+            ['termux-sensor', '-s', 'accelerometer', '-n', '1'],
+            capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            values = data.get('accelerometer', {}).get('values', [0, 9.8, 0])
+            return math.sqrt(sum(v**2 for v in values))
+        return 9.8
+        
+    def calibrate(self, samples=10):
+        """Establish baseline with multiple samples"""
+        readings = []
+        for _ in range(samples):
+            readings.append(self.get_acceleration())
+            time.sleep(0.1)
+        self.baseline = sum(readings) / len(readings)
+        return self.baseline
+        
+    def detect_motion(self):
+        current = self.get_acceleration()
+        if self.baseline:
+            return abs(current - self.baseline) > self.sensitivity
+        return False
+        
+    def trigger_alarm(self):
+        # Sound alarm
+        subprocess.run([
+            'termux-notification',
+            '--title', '🚨 MOTION DETECTED!',
+            '--content', 'Phone has been moved!',
+            '--priority', 'max',
+            '--sound',
+            '--vibrate', '1000,500,1000,500,1000'
+        ])
+        
+        # Speak alert
+        subprocess.run(['termux-tts-speak', 'Warning! Motion detected!'])
+        
+    def run(self):
+        print("Calibrating... Place phone on stable surface...")
+        time.sleep(3)
+        baseline = self.calibrate()
+        print(f"Calibrated. Baseline: {baseline:.2f}")
+        
+        print("Monitoring for motion... Press Ctrl+C to stop")
+        while True:
+            if self.detect_motion():
+                self.trigger_alarm()
+                self.calibrate()  # Recalibrate after trigger
+            time.sleep(0.5)
+
+# Usage
+detector = MotionDetector(sensitivity=1.0)
+detector.run()
+```
+
+---
+
+### Scenario 4: Fitness Tracker
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  🏃 SCENARIO: Basic Fitness Tracking Using Sensors                    ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User wants to track steps and activity using phone sensors without ║
+║  a dedicated app.                                                     ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import time
+import math
+from datetime import datetime
+
+class FitnessTracker:
+    def __init__(self):
+        self.steps = 0
+        self.last_accel = None
+        self.step_threshold = 12.0
+        self.min_step_interval = 0.3  # seconds
+        self.last_step_time = 0
+        self.activity_log = []
+        
+    def get_acceleration(self):
+        result = subprocess.run(
+            ['termux-sensor', '-s', 'accelerometer', '-n', '1'],
+            capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            return data.get('accelerometer', {}).get('values', [0, 0, 0])
+        return [0, 0, 0]
+        
+    def get_magnitude(self, values):
+        return math.sqrt(sum(v**2 for v in values))
+        
+    def detect_step(self, current_mag):
+        current_time = time.time()
+        
+        if self.last_accel is not None:
+            # Check for significant change
+            change = abs(current_mag - self.last_accel)
+            
+            # Step detected if change exceeds threshold and enough time passed
+            if (change > self.step_threshold and 
+                current_time - self.last_step_time > self.min_step_interval):
+                self.steps += 1
+                self.last_step_time = current_time
+                return True
+        return False
+        
+    def get_activity_type(self, magnitude):
+        if magnitude > 15:
+            return 'running'
+        elif magnitude > 12:
+            return 'walking'
+        else:
+            return 'stationary'
+            
+    def log_activity(self, activity, steps):
+        self.activity_log.append({
+            'time': datetime.now().isoformat(),
+            'activity': activity,
+            'total_steps': steps
+        })
+        
+    def get_calories(self, steps):
+        # Rough estimate: ~0.04 calories per step
+        return round(steps * 0.04, 1)
+        
+    def show_stats(self):
+        print(f"\rSteps: {self.steps} | "
+              f"Calories: {self.get_calories(self.steps)} | "
+              f"Activity: {self.get_activity_type(self.get_magnitude(self.get_acceleration()))}",
+              end="", flush=True)
+              
+    def run(self):
+        print("🏃 Fitness Tracker Started")
+        print("Move around to count steps. Press Ctrl+C to stop.\n")
+        
+        try:
+            while True:
+                accel = self.get_acceleration()
+                mag = self.get_magnitude(accel)
+                
+                if self.detect_step(mag):
+                    activity = self.get_activity_type(mag)
+                    self.log_activity(activity, self.steps)
+                    
+                self.last_accel = mag
+                self.show_stats()
+                time.sleep(0.1)
+        except KeyboardInterrupt:
+            print(f"\n\n📊 Session Summary:")
+            print(f"   Total Steps: {self.steps}")
+            print(f"   Calories Burned: ~{self.get_calories(self.steps)} kcal")
+            
+            # Save log
+            with open('fitness_log.json', 'w') as f:
+                json.dump(self.activity_log, f, indent=2)
+            print(f"   Log saved to: fitness_log.json")
+
+# Usage
+tracker = FitnessTracker()
+tracker.run()
+```
+
+---
+
+### Scenario 5: Smart Home Controller
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  🏠 SCENARIO: Location-Based Smart Home Controller                    ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User wants automatic home control based on proximity and time.      ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import time
+from datetime import datetime
+
+class SmartHomeController:
+    def __init__(self, home_lat, home_lon, radius=100):
+        self.home_lat = home_lat
+        self.home_lon = home_lon
+        self.radius = radius
+        self.was_home = False
+        self.sunrise_time = 6
+        self.sunset_time = 19
+        
+    def get_location(self):
+        result = subprocess.run(
+            ['termux-location', '-p', 'network'],
+            capture_output=True, text=True, timeout=30
+        )
+        if result.returncode == 0:
+            return json.loads(result.stdout)
+        return None
+        
+    def is_home(self):
+        loc = self.get_location()
+        if loc:
+            dist = self.calculate_distance(
+                loc['latitude'], loc['longitude'],
+                self.home_lat, self.home_lon
+            )
+            return dist < self.radius
+        return False
+        
+    def calculate_distance(self, lat1, lon1, lat2, lon2):
+        # Simplified distance calculation
+        import math
+        lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+        dlat = lat2 - lat1
+        dlon = lon2 - lon1
+        a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+        return 6371000 * 2 * math.asin(math.sqrt(a))
+        
+    def get_time_of_day(self):
+        hour = datetime.now().hour
+        if self.sunrise_time <= hour < 12:
+            return 'morning'
+        elif 12 <= hour < 17:
+            return 'afternoon'
+        elif 17 <= hour < self.sunset_time:
+            return 'evening'
+        else:
+            return 'night'
+            
+    def arrive_home(self):
+        time_of_day = self.get_time_of_day()
+        
+        subprocess.run(['termux-wifi-enable', 'true'])
+        
+        if time_of_day == 'night':
+            subprocess.run(['termux-brightness', '50'])
+            subprocess.run([
+                'termux-notification',
+                '--title', '🏠 Welcome Home',
+                '--content', 'Good evening! Lights turned on.'
+            ])
+        else:
+            subprocess.run(['termux-brightness', '150'])
+            subprocess.run([
+                'termux-notification',
+                '--title', '🏠 Welcome Home',
+                '--content', f'Good {time_of_day}!'
+            ])
+            
+    def leave_home(self):
+        subprocess.run(['termux-brightness', '30'])
+        subprocess.run([
+            'termux-notification',
+            '--title', '👋 Leaving Home',
+            '--content', 'Have a great day!'
+        ])
+        # Optionally turn off WiFi
+        # subprocess.run(['termux-wifi-enable', 'false'])
+        
+    def run(self):
+        print("🏠 Smart Home Controller running...")
+        
+        while True:
+            is_home = self.is_home()
+            
+            if is_home and not self.was_home:
+                self.arrive_home()
+            elif not is_home and self.was_home:
+                self.leave_home()
+                
+            self.was_home = is_home
+            time.sleep(60)  # Check every minute
+
+# Usage
+controller = SmartHomeController(
+    home_lat=28.6139,  # Replace with your home coordinates
+    home_lon=77.2090,
+    radius=100  # meters
+)
+controller.run()
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Device Information API Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    DEVICE INFORMATION API ARCHITECTURE                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Termux Terminal                               │   │
+│   │                                                                  │   │
+│   │   $ termux-battery-status     → Battery info                    │   │
+│   │   $ termux-brightness [val]   → Screen brightness               │   │
+│   │   $ termux-volume [s] [v]     → Volume control                  │   │
+│   │   $ termux-telephony-*        → Phone/SIM info                  │   │
+│   │   $ termux-wifi-*             → WiFi operations                 │   │
+│   │   $ termux-sensor             → Sensor data                     │   │
+│   │   $ termux-fingerprint        → Biometric auth                  │   │
+│   │   $ termux-location           → GPS coordinates                 │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Termux:API Bridge                             │   │
+│   │                                                                  │   │
+│   │   Broadcast Receiver → System Service Calls → JSON Response    │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Android System Managers                       │   │
+│   │                                                                  │   │
+│   │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │   │
+│   │   │ Battery     │  │ Wifi        │  │ Sensor      │            │   │
+│   │   │ Manager     │  │ Manager     │  │ Manager     │            │   │
+│   │   └─────────────┘  └─────────────┘  └─────────────┘            │   │
+│   │                                                                  │   │
+│   │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │   │
+│   │   │ Telephony   │  │ Location    │  │ Fingerprint │            │   │
+│   │   │ Manager     │  │ Manager     │  │ Manager     │            │   │
+│   │   └─────────────┘  └─────────────┘  └─────────────┘            │   │
+│   │                                                                  │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 2: Sensor Data Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    SENSOR DATA FLOW                                      │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   HARDWARE SENSORS                     APPLICATION                      │
+│   ────────────────                     ──────────                       │
+│                                                                          │
+│   ┌─────────────┐                                                        │
+│   │ Accelerometer├────┐                                                  │
+│   └─────────────┘    │                                                   │
+│                      │                                                   │
+│   ┌─────────────┐    │    ┌────────────────────────────────────┐        │
+│   │ Gyroscope   ├────┼───►│         Android Sensor Framework    │        │
+│   └─────────────┘    │    │                                    │        │
+│                      │    │   ┌──────────────────────────────┐ │        │
+│   ┌─────────────┐    │    │   │ Sensor Event Queue          │ │        │
+│   │ Magnetometer├────┤    │   │                              │ │        │
+│   └─────────────┘    │    │   │  Event 1: [x,y,z,timestamp] │ │        │
+│                      │    │   │  Event 2: [x,y,z,timestamp] │ │        │
+│   ┌─────────────┐    │    │   │  Event 3: [x,y,z,timestamp] │ │        │
+│   │ Light       ├────┤    │   └──────────────────────────────┘ │        │
+│   └─────────────┘    │    │                                    │        │
+│                      │    └──────────────┬─────────────────────┘        │
+│   ┌─────────────┐    │                   │                              │
+│   │ Proximity   ├────┘                   ▼                              │
+│   └─────────────┘            ┌────────────────────────────────────┐     │
+│                               │         termux-sensor              │     │
+│                               │                                    │     │
+│                               │   -s sensor_name   Select sensor   │     │
+│                               │   -n count         Number of reads │     │
+│                               │   -d delay         Delay in ms    │     │
+│                               │                                    │     │
+│                               └──────────────┬─────────────────────┘     │
+│                                              │                            │
+│                                              ▼                            │
+│                               ┌────────────────────────────────────┐     │
+│                               │         JSON Output                │     │
+│                               │                                    │     │
+│                               │   {                                │     │
+│                               │     "accelerometer": {            │     │
+│                               │       "values": [0.1, 9.8, 0.2], │     │
+│                               │       "timestamp": 1234567890    │     │
+│                               │     }                              │     │
+│                               │   }                                │     │
+│                               │                                    │     │
+│                               └────────────────────────────────────┘     │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Diagram 3: Location Provider Selection
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    LOCATION PROVIDER SELECTION                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    termux-location                               │   │
+│   │                                                                  │   │
+│   │   termux-location -p [provider] -r [request_time]               │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                ┌───────────────┼───────────────┐                        │
+│                │               │               │                         │
+│                ▼               ▼               ▼                         │
+│   ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐          │
+│   │     GPS         │ │    Network      │ │    Passive      │          │
+│   │    Provider     │ │    Provider     │ │    Provider     │          │
+│   ├─────────────────┤ ├─────────────────┤ ├─────────────────┤          │
+│   │                 │ │                 │ │                 │          │
+│   │ • High accuracy │ │ • Fast fix      │ │ • No battery    │          │
+│   │ • High battery  │ │ • Low accuracy  │ │ • Uses cached   │          │
+│   │ • Works indoors │ │ • Uses WiFi/cell│ │ • Piggybacks    │          │
+│   │   poorly        │ │   towers        │ │   other apps    │          │
+│   │                 │ │                 │ │                 │          │
+│   │ Accuracy: 5-10m │ │ Accuracy:       │ │ Accuracy:       │          │
+│   │                 │ │   50-500m       │ │   Varies        │          │
+│   │                 │ │                 │ │                 │          │
+│   └────────┬────────┘ └────────┬────────┘ └────────┬────────┘          │
+│            │                   │                   │                     │
+│            └───────────────────┼───────────────────┘                     │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    LOCATION RESULT                               │   │
+│   │                                                                  │   │
+│   │   {                                                             │   │
+│   │     "latitude": 28.6139,                                        │   │
+│   │     "longitude": 77.2090,                                        │   │
+│   │     "altitude": 216.0,                                           │   │
+│   │     "accuracy": 15.0,                                            │   │
+│   │     "bearing": 0.0,                                              │   │
+│   │     "speed": 0.0,                                                │   │
+│   │     "elapsedMs": 1523,                                           │   │
+│   │     "provider": "gps"                                            │   │
+│   │   }                                                              │   │
+│   │                                                                  │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+│   RECOMMENDATION:                                                       │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │   • Use GPS for navigation and precise tracking                │   │
+│   │   • Use Network for quick location and battery saving          │   │
+│   │   • Use Passive for background tracking without battery drain  │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Relationship | Chapter | Topic |
+|--------------|---------|-------|
+| **Prerequisites** | Ch 1-10 | Termux Basics & API Setup |
+| **Prerequisites** | Ch 17 | File Operations API |
+| **Related** | Ch 19 | Camera & Media APIs |
+| **Related** | Ch 20 | Network Operations |
+| **Related** | Ch 22 | Contacts & SMS |
+| **Next** | Ch 19 | Camera & Media APIs |
+| **Advanced** | Ch 45 | Automation Scripts |
+| **Advanced** | Ch 55 | Sensor Projects |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: Multi-Sensor Fusion
+
+```python
+#!/usr/bin/env python3
+"""Multi-sensor fusion for improved activity detection"""
+
+import subprocess
+import json
+import time
+import math
+from collections import deque
+from dataclasses import dataclass
+from typing import List, Tuple
+import threading
+
+@dataclass
+class SensorReading:
+    timestamp: float
+    accelerometer: List[float]
+    gyroscope: List[float]
+    light: float
+    
+class SensorFusion:
+    def __init__(self, window_size=10):
+        self.window_size = window_size
+        self.readings = deque(maxlen=window_size)
+        self.running = False
+        
+    def get_sensor_data(self) -> SensorReading:
+        """Collect data from multiple sensors"""
+        # Get accelerometer
+        acc_result = subprocess.run(
+            ['termux-sensor', '-s', 'accelerometer', '-n', '1'],
+            capture_output=True, text=True
+        )
+        acc_data = json.loads(acc_result.stdout) if acc_result.returncode == 0 else {}
+        acc = acc_data.get('accelerometer', {}).get('values', [0, 0, 0])
+        
+        # Get gyroscope
+        gyro_result = subprocess.run(
+            ['termux-sensor', '-s', 'gyroscope', '-n', '1'],
+            capture_output=True, text=True
+        )
+        gyro_data = json.loads(gyro_result.stdout) if gyro_result.returncode == 0 else {}
+        gyro = gyro_data.get('gyroscope', {}).get('values', [0, 0, 0])
+        
+        # Get light
+        light_result = subprocess.run(
+            ['termux-sensor', '-s', 'light', '-n', '1'],
+            capture_output=True, text=True
+        )
+        light_data = json.loads(light_result.stdout) if light_result.returncode == 0 else {}
+        light = light_data.get('light', {}).get('values', [0])[0]
+        
+        return SensorReading(
+            timestamp=time.time(),
+            accelerometer=acc,
+            gyroscope=gyro,
+            light=light
+        )
+        
+    def calculate_features(self) -> dict:
+        """Calculate features from sensor window"""
+        if len(self.readings) < 3:
+            return {}
+            
+        # Accelerometer features
+        acc_mags = [math.sqrt(sum(r**2 for r in rd.accelerometer)) 
+                   for rd in self.readings]
+        acc_mean = sum(acc_mags) / len(acc_mags)
+        acc_std = math.sqrt(sum((m - acc_mean)**2 for m in acc_mags) / len(acc_mags))
+        
+        # Gyroscope features
+        gyro_mags = [math.sqrt(sum(r**2 for r in rd.gyroscope)) 
+                    for rd in self.readings]
+        gyro_mean = sum(gyro_mags) / len(gyro_mags)
+        
+        # Light features
+        light_values = [r.light for r in self.readings]
+        light_mean = sum(light_values) / len(light_values)
+        
+        return {
+            'acc_mean': acc_mean,
+            'acc_std': acc_std,
+            'gyro_mean': gyro_mean,
+            'light_mean': light_mean
+        }
+        
+    def classify_activity(self, features: dict) -> str:
+        """Classify activity based on features"""
+        if not features:
+            return 'unknown'
+            
+        acc_std = features.get('acc_std', 0)
+        gyro_mean = features.get('gyro_mean', 0)
+        
+        # Decision tree for activity classification
+        if acc_std < 0.5 and gyro_mean < 0.1:
+            return 'stationary'
+        elif acc_std < 2.0 and gyro_mean < 0.5:
+            return 'walking'
+        elif acc_std < 4.0 and gyro_mean < 1.0:
+            return 'running'
+        else:
+            return 'high_activity'
+            
+    def run(self):
+        """Main fusion loop"""
+        self.running = True
+        
+        while self.running:
+            reading = self.get_sensor_data()
+            self.readings.append(reading)
+            
+            features = self.calculate_features()
+            activity = self.classify_activity(features)
+            
+            print(f"\rActivity: {activity:15} | "
+                  f"Acc std: {features.get('acc_std', 0):.2f}  | "
+                  f"Light: {features.get('light_mean', 0):.0f} lux", end="")
+            
+            time.sleep(0.2)
+
+# Usage
+fusion = SensorFusion(window_size=10)
+fusion.run()
+```
+
+### Advanced Technique 2: Predictive Battery Management
+
+```python
+#!/usr/bin/env python3
+"""Predictive battery management using historical patterns"""
+
+import subprocess
+import json
+import time
+from datetime import datetime, timedelta
+from collections import defaultdict
+import pickle
+import os
+
+class PredictiveBatteryManager:
+    def __init__(self, history_file='~/.battery_history.pkl'):
+        self.history_file = os.path.expanduser(history_file)
+        self.history = self.load_history()
+        
+    def load_history(self):
+        """Load battery history"""
+        try:
+            with open(self.history_file, 'rb') as f:
+                return pickle.load(f)
+        except:
+            return defaultdict(list)
+            
+    def save_history(self):
+        """Save battery history"""
+        with open(self.history_file, 'wb') as f:
+            pickle.dump(dict(self.history), f)
+            
+    def record_state(self):
+        """Record current battery state"""
+        result = subprocess.run(
+            ['termux-battery-status'],
+            capture_output=True, text=True
+        )
+        
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            hour = datetime.now().hour
+            
+            self.history[hour].append({
+                'percentage': data['percentage'],
+                'plugged': data['plugged'],
+                'temperature': data['temperature']
+            })
+            
+            self.save_history()
+            
+    def predict_drain(self, hours_ahead=4):
+        """Predict battery drain based on historical patterns"""
+        current = subprocess.run(
+            ['termux-battery-status'],
+            capture_output=True, text=True
+        )
+        
+        if current.returncode != 0:
+            return None
+            
+        current_data = json.loads(current.stdout)
+        current_level = current_data['percentage']
+        
+        # Calculate average drain rate per hour
+        total_drain = 0
+        samples = 0
+        
+        for hour, readings in self.history.items():
+            if len(readings) > 1:
+                for i in range(1, len(readings)):
+                    if readings[i]['plugged'] == 'UNPLUGGED':
+                        drain = readings[i-1]['percentage'] - readings[i]['percentage']
+                        total_drain += drain
+                        samples += 1
+                        
+        if samples == 0:
+            avg_drain_per_hour = 2  # Default estimate
+        else:
+            avg_drain_per_hour = total_drain / samples
+            
+        # Predict future level
+        predicted_level = current_level - (avg_drain_per_hour * hours_ahead)
+        
+        return {
+            'current_level': current_level,
+            'predicted_level': max(0, predicted_level),
+            'hours_ahead': hours_ahead,
+            'drain_rate': avg_drain_per_hour,
+            'will_die': predicted_level <= 0
+        }
+        
+    def get_recommendations(self, prediction):
+        """Get recommendations based on prediction"""
+        recommendations = []
+        
+        if prediction['will_die']:
+            recommendations.append({
+                'priority': 'critical',
+                'action': 'Charge immediately',
+                'reason': f"Battery will die in {prediction['hours_ahead']} hours"
+            })
+        elif prediction['predicted_level'] < 20:
+            recommendations.append({
+                'priority': 'high',
+                'action': 'Enable power saving',
+                'reason': f"Battery will be at {prediction['predicted_level']:.0f}%"
+            })
+            
+        return recommendations
+        
+    def run_monitoring(self, interval=300):
+        """Run continuous monitoring"""
+        while True:
+            self.record_state()
+            prediction = self.predict_drain()
+            
+            if prediction:
+                print(f"Current: {prediction['current_level']}% | "
+                      f"Predicted: {prediction['predicted_level']:.0f}% in {prediction['hours_ahead']}h")
+                      
+                for rec in self.get_recommendations(prediction):
+                    if rec['priority'] == 'critical':
+                        subprocess.run([
+                            'termux-notification',
+                            '--title', '🔋 Battery Alert',
+                            '--content', rec['action'],
+                            '--priority', 'high'
+                        ])
+                        
+            time.sleep(interval)
+
+# Usage
+manager = PredictiveBatteryManager()
+manager.run_monitoring()
+```
+
+### Advanced Technique 3: Geospatial Tracking System
+
+```python
+#!/usr/bin/env python3
+"""Advanced geospatial tracking with analysis"""
+
+import subprocess
+import json
+import time
+import math
+from datetime import datetime
+from dataclasses import dataclass
+from typing import List, Optional
+import threading
+
+@dataclass
+class GeoPoint:
+    latitude: float
+    longitude: float
+    altitude: float
+    accuracy: float
+    timestamp: float
+    speed: float
+    bearing: float
+    
+class GeospatialTracker:
+    EARTH_RADIUS = 6371000  # meters
+    
+    def __init__(self):
+        self.points: List[GeoPoint] = []
+        self.running = False
+        self.callbacks = []
+        
+    def get_location(self) -> Optional[GeoPoint]:
+        """Get current location"""
+        result = subprocess.run(
+            ['termux-location', '-p', 'gps'],
+            capture_output=True, text=True, timeout=30
+        )
+        
+        if result.returncode == 0:
+            data = json.loads(result.stdout)
+            return GeoPoint(
+                latitude=data['latitude'],
+                longitude=data['longitude'],
+                altitude=data.get('altitude', 0),
+                accuracy=data['accuracy'],
+                timestamp=time.time(),
+                speed=data.get('speed', 0),
+                bearing=data.get('bearing', 0)
+            )
+        return None
+        
+    def haversine_distance(self, p1: GeoPoint, p2: GeoPoint) -> float:
+        """Calculate distance between two points in meters"""
+        lat1, lon1 = math.radians(p1.latitude), math.radians(p1.longitude)
+        lat2, lon2 = math.radians(p2.latitude), math.radians(p2.longitude)
+        
+        dlat = lat2 - lat1
+        dlon = lon2 - lon1
+        
+        a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+        
+        return self.EARTH_RADIUS * c
+        
+    def bearing_to(self, p1: GeoPoint, p2: GeoPoint) -> float:
+        """Calculate bearing from p1 to p2 in degrees"""
+        lat1, lon1 = math.radians(p1.latitude), math.radians(p1.longitude)
+        lat2, lon2 = math.radians(p2.latitude), math.radians(p2.longitude)
+        
+        dlon = lon2 - lon1
+        x = math.sin(dlon) * math.cos(lat2)
+        y = math.cos(lat1) * math.sin(lat2) - math.sin(lat1) * math.cos(lat2) * math.cos(dlon)
+        
+        bearing = math.atan2(x, y)
+        return math.degrees(bearing) % 360
+        
+    def calculate_speed(self, p1: GeoPoint, p2: GeoPoint) -> float:
+        """Calculate speed between two points in m/s"""
+        distance = self.haversine_distance(p1, p2)
+        time_diff = p2.timestamp - p1.timestamp
+        
+        if time_diff > 0:
+            return distance / time_diff
+        return 0
+        
+    def get_statistics(self) -> dict:
+        """Calculate tracking statistics"""
+        if len(self.points) < 2:
+            return {}
+            
+        total_distance = 0
+        max_speed = 0
+        avg_speed = 0
+        
+        for i in range(1, len(self.points)):
+            dist = self.haversine_distance(self.points[i-1], self.points[i])
+            total_distance += dist
+            
+            speed = self.calculate_speed(self.points[i-1], self.points[i])
+            max_speed = max(max_speed, speed)
+            avg_speed += speed
+            
+        avg_speed /= (len(self.points) - 1)
+        
+        return {
+            'total_distance': total_distance,
+            'total_distance_km': total_distance / 1000,
+            'max_speed_ms': max_speed,
+            'max_speed_kmh': max_speed * 3.6,
+            'avg_speed_ms': avg_speed,
+            'avg_speed_kmh': avg_speed * 3.6,
+            'points_recorded': len(self.points),
+            'duration_seconds': self.points[-1].timestamp - self.points[0].timestamp
+        }
+        
+    def export_gpx(self, filename='track.gpx'):
+        """Export track as GPX file"""
+        gpx = '''<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Termux Geospatial Tracker">
+<trk>
+<trkseg>
+'''
+        
+        for point in self.points:
+            dt = datetime.fromtimestamp(point.timestamp).isoformat()
+            gpx += f'''<trkpt lat="{point.latitude}" lon="{point.longitude}">
+<ele>{point.altitude}</ele>
+<time>{dt}</time>
+<speed>{point.speed}</speed>
+</trkpt>
+'''
+            
+        gpx += '''</trkseg>
+</trk>
+</gpx>'''
+        
+        with open(filename, 'w') as f:
+            f.write(gpx)
+            
+        return filename
+        
+    def run(self, interval=5):
+        """Run continuous tracking"""
+        self.running = True
+        
+        while self.running:
+            point = self.get_location()
+            
+            if point:
+                self.points.append(point)
+                
+                # Notify callbacks
+                for callback in self.callbacks:
+                    callback(point)
+                    
+            time.sleep(interval)
+            
+    def start(self):
+        """Start tracking thread"""
+        thread = threading.Thread(target=self.run, daemon=True)
+        thread.start()
+        
+    def stop(self):
+        """Stop tracking"""
+        self.running = False
+
+# Usage
+tracker = GeospatialTracker()
+
+def on_new_point(point):
+    print(f"\rLat: {point.latitude:.6f} | Lon: {point.longitude:.6f} | "
+          f"Speed: {point.speed*3.6:.1f} km/h", end="")
+
+tracker.callbacks.append(on_new_point)
+tracker.start()
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Commands Learned
+- [ ] `termux-battery-status` - Get battery information
+- [ ] `termux-brightness` - Control screen brightness
+- [ ] `termux-volume` - Control audio volumes
+- [ ] `termux-telephony-deviceinfo` - Get device/SIM info
+- [ ] `termux-telephony-cellinfo` - Get cell tower info
+- [ ] `termux-wifi-connectioninfo` - Get WiFi details
+- [ ] `termux-sensor` - Access device sensors
+- [ ] `termux-fingerprint` - Biometric authentication
+- [ ] `termux-location` - GPS coordinates
+
+### ✅ Concepts Understood
+- [ ] Android system manager integration
+- [ ] JSON output parsing
+- [ ] Sensor types and capabilities
+- [ ] Location provider differences
+- [ ] Battery management strategies
+- [ ] Telephony data structure
+
+### ✅ Skills Acquired
+- [ ] Parsing API JSON output with jq
+- [ ] Python integration for device APIs
+- [ ] Building automation scripts
+- [ ] Creating monitoring systems
+- [ ] Implementing security features
+
+### ✅ Practical Applications
+- [ ] Battery-aware applications
+- [ ] Location-based automation
+- [ ] Motion detection systems
+- [ ] Fitness tracking
+- [ ] Smart home integration
+
+---
+
+*Chapter 18 Complete! Ready for Chapter 19: Camera & Media APIs*

@@ -2133,3 +2133,304 @@ termux-sms-list | jq ".[] | select(.received > $(($(date +%s) * 1000 - 3600000))
 11. **B** - `null` means contact name not saved (unknown number)
 12. **B** - Android 10+ restricts background SMS operations
 
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: Emergency Contact System
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  🆘 SCENARIO: Emergency Contact System                                ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User needs quick access to emergency contacts with one-tap SMS.      ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```bash
+#!/bin/bash
+# emergency_contacts.sh
+
+CONFIG_FILE="$HOME/.emergency_contacts"
+
+show_menu() {
+    echo "🆘 Emergency Contacts"
+    echo "====================="
+    echo "1. Send Emergency Alert"
+    echo "2. Add Emergency Contact"
+    echo "3. List Contacts"
+    echo "4. Exit"
+}
+
+send_alert() {
+    local message="EMERGENCY! I need help. My location: $(termux-location -p network 2>/dev/null | jq -r '.latitude,.longitude' | tr '\n' ',')"
+    
+    for contact in $(jq -r '.[].number' "$CONFIG_FILE" 2>/dev/null); do
+        termux-sms-send -n "$contact" "$message"
+        echo "Alert sent to: $contact"
+    done
+    
+    termux-notification --title "Alert Sent" --content "Emergency contacts notified" --sound
+}
+
+add_contact() {
+    read -p "Name: " name
+    read -p "Number: " number
+    
+    jq ". += [{\"name\": \"$name\", \"number\": \"$number\"}]" "$CONFIG_FILE" > tmp && mv tmp "$CONFIG_FILE"
+    echo "Added $name to emergency contacts"
+}
+
+# Main
+mkdir -p "$(dirname "$CONFIG_FILE")"
+[ ! -f "$CONFIG_FILE" ] && echo "[]" > "$CONFIG_FILE"
+
+while true; do
+    show_menu
+    read -p "Choice: " choice
+    case $choice in
+        1) send_alert ;;
+        2) add_contact ;;
+        3) jq '.' "$CONFIG_FILE" ;;
+        4) exit 0 ;;
+    esac
+done
+```
+
+---
+
+### Scenario 2: Contact Backup System
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  💾 SCENARIO: Automated Contact Backup                                ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║  SITUATION:                                                            ║
+║  User wants regular backups of contacts to prevent data loss.         ║
+║                                                                        ║
+║  SOLUTION:                                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import os
+from datetime import datetime
+
+class ContactBackup:
+    def __init__(self, backup_dir="~/contact_backups"):
+        self.backup_dir = os.path.expanduser(backup_dir)
+        os.makedirs(self.backup_dir, exist_ok=True)
+        
+    def get_contacts(self):
+        result = subprocess.run(['termux-contact-list'], capture_output=True, text=True)
+        return json.loads(result.stdout) if result.returncode == 0 else []
+        
+    def backup(self):
+        contacts = self.get_contacts()
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        # JSON backup
+        json_file = os.path.join(self.backup_dir, f"contacts_{timestamp}.json")
+        with open(json_file, 'w') as f:
+            json.dump(contacts, f, indent=2)
+            
+        # CSV backup
+        csv_file = os.path.join(self.backup_dir, f"contacts_{timestamp}.csv")
+        with open(csv_file, 'w') as f:
+            f.write("Name,Number\n")
+            for c in contacts:
+                f.write(f"{c['name']},{c['number']}\n")
+                
+        return json_file, csv_file
+        
+    def restore(self, json_file):
+        with open(json_file) as f:
+            contacts = json.load(f)
+        # Note: Termux API doesn't support adding contacts
+        # This would require direct Android database access
+        return contacts
+
+# Usage
+backup = ContactBackup()
+json_file, csv_file = backup.backup()
+print(f"Backup saved: {json_file}")
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+### Diagram 1: Contacts/SMS API Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CONTACTS & SMS API ARCHITECTURE                      │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Termux Commands                               │   │
+│   │                                                                  │   │
+│   │   termux-contact-list     → Get all contacts                    │   │
+│   │   termux-sms-list         → Read SMS messages                   │   │
+│   │   termux-sms-send         → Send SMS                            │   │
+│   │   termux-call-log         → View call history                   │   │
+│   │   termux-telephony-call   → Initiate call                       │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    Android Content Providers                     │   │
+│   │                                                                  │   │
+│   │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │   │
+│   │   │ Contacts    │  │ SMS/MMS     │  │ CallLog     │            │   │
+│   │   │ Provider    │  │ Provider    │  │ Provider    │            │   │
+│   │   └─────────────┘  └─────────────┘  └─────────────┘            │   │
+│   │                                                                  │   │
+│   └────────────────────────────┬────────────────────────────────────┘   │
+│                                │                                         │
+│                                ▼                                         │
+│   ┌─────────────────────────────────────────────────────────────────┐   │
+│   │                    SQLite Databases                             │   │
+│   │                                                                  │   │
+│   │   contacts.db    │ mmssms.db    │ calllog.db                   │   │
+│   │                                                                  │   │
+│   └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Relationship | Chapter | Topic |
+|--------------|---------|-------|
+| **Prerequisites** | Ch 1-21 | All previous APIs |
+| **Related** | Ch 18 | Device Information |
+| **Related** | Ch 20 | Network APIs |
+| **Next** | Ch 23 | Clipboard & Share |
+| **Advanced** | Ch 45 | Automation Scripts |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced Technique 1: SMS Keyword Responder
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import time
+
+class SMSResponder:
+    def __init__(self):
+        self.keywords = {}
+        self.processed = set()
+        
+    def add_keyword(self, keyword, response):
+        self.keywords[keyword.lower()] = response
+        
+    def check_messages(self):
+        result = subprocess.run(['termux-sms-list', '-l', '10'], capture_output=True, text=True)
+        messages = json.loads(result.stdout) if result.returncode == 0 else []
+        
+        for msg in messages:
+            msg_id = msg.get('threadid', '') + str(msg.get('received', ''))
+            if msg_id in self.processed:
+                continue
+                
+            body = msg.get('body', '').lower()
+            sender = msg.get('sender') or msg.get('number')
+            
+            for keyword, response in self.keywords.items():
+                if keyword in body:
+                    subprocess.run(['termux-sms-send', '-n', sender, response])
+                    self.processed.add(msg_id)
+                    print(f"Replied to {sender} for keyword: {keyword}")
+                    
+    def run(self, interval=30):
+        while True:
+            self.check_messages()
+            time.sleep(interval)
+
+# Usage
+responder = SMSResponder()
+responder.add_keyword("balance", "Your balance is Rs. 1000")
+responder.add_keyword("help", "Available commands: balance, help, status")
+responder.run()
+```
+
+### Advanced Technique 2: Contact Group Manager
+
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import os
+
+class ContactGroups:
+    def __init__(self, groups_file="~/.contact_groups.json"):
+        self.groups_file = os.path.expanduser(groups_file)
+        self.groups = self.load_groups()
+        
+    def load_groups(self):
+        try:
+            with open(self.groups_file) as f:
+                return json.load(f)
+        except:
+            return {}
+            
+    def save_groups(self):
+        with open(self.groups_file, 'w') as f:
+            json.dump(self.groups, f, indent=2)
+            
+    def create_group(self, name):
+        self.groups[name] = []
+        self.save_groups()
+        
+    def add_to_group(self, group, number):
+        if group in self.groups:
+            self.groups[group].append(number)
+            self.save_groups()
+            
+    def sms_group(self, group, message):
+        if group in self.groups:
+            for number in self.groups[group]:
+                subprocess.run(['termux-sms-send', '-n', number, message])
+                
+    def get_contacts(self):
+        result = subprocess.run(['termux-contact-list'], capture_output=True, text=True)
+        return json.loads(result.stdout) if result.returncode == 0 else []
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### ✅ Commands Learned
+- [ ] `termux-contact-list` - List all contacts
+- [ ] `termux-sms-list` - Read SMS messages
+- [ ] `termux-sms-send` - Send SMS
+- [ ] `termux-call-log` - View call history
+- [ ] `termux-telephony-call` - Initiate call
+
+### ✅ Concepts Understood
+- [ ] Android Content Providers
+- [ ] JSON parsing for contacts/SMS
+- [ ] Privacy considerations
+- [ ] Permission requirements
+
+---
+
+*Chapter 22 Complete! Ready for Chapter 23: Clipboard & Share APIs*

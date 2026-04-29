@@ -1,4 +1,16 @@
-# Chapter 58: Common Errors & Fixes
+# 🔧 Chapter 58: Common Errors & Fixes
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║  🔧 CHAPTER 58: COMMON ERRORS & FIXES - COMPLETE TROUBLESHOOTING GUIDE 🔧  ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║  📚 Module: 10 - Troubleshooting                                           ║
+║  📖 Chapter: 58 of 61                                                      ║
+║  ⏱️  Duration: 20-25 Minutes                                                ║
+║  ⭐ Difficulty: Intermediate                                               ║
+║  🎯 Focus: Error Diagnosis & Resolution                                    ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
 
 > **Module:** 10 - Troubleshooting  
 > **Chapter:** 58 of 61  
@@ -3159,6 +3171,1377 @@ ls ~/storage 2>/dev/null && echo "Storage: OK" || echo "Storage: Run termux-setu
 - [ ] Understand OOM killer and prevention
 - [ ] Have debugging workflow memorized
 - [ ] Can help others troubleshoot errors
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+Test your troubleshooting knowledge with these 15 questions!
+
+### Question 1
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**What does the error "E: Unable to locate package" typically indicate?**
+
+A) The package name is incorrect or repositories need updating  
+B) Your phone has no internet connection  
+C) Termux is corrupted  
+D) You need root access
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: A) The package name is incorrect or repositories need updating**
+
+**Explanation:** This is the most common package error. It means either:
+- The package name is misspelled
+- Repositories haven't been updated (`pkg update`)
+- The package doesn't exist in Termux repos
+- You're using an outdated Termux version from Play Store
+
+**Fix:** Run `pkg update && pkg search <package-name>` to diagnose.
+
+</details>
+</details>
+
+### Question 2
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**Which command fixes broken package dependencies?**
+
+A) `pkg repair`  
+B) `pkg install -f`  
+C) `pkg fix-deps`  
+D) `apt-get repair`
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: B) `pkg install -f`**
+
+**Explanation:** The `-f` flag stands for "fix-broken" and automatically resolves dependency issues. Full command:
+```bash
+pkg install -f
+# or
+apt --fix-broken install
+```
+
+</details>
+</details>
+
+### Question 3
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**What does "Permission denied" error when running a script indicate?**
+
+A) The script has syntax errors  
+B) The script is not executable  
+C) The script is corrupted  
+D) Termux needs reinstallation
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: B) The script is not executable**
+
+**Explanation:** Linux/Unix requires execute permission to run scripts. Fix with:
+```bash
+chmod +x script.sh
+./script.sh
+```
+
+</details>
+</details>
+
+### Question 4
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**How do you grant storage access to Termux?**
+
+A) `pkg install storage`  
+B) `termux-setup-storage`  
+C) `grant-storage`  
+D) Settings → Permissions manually
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: B) `termux-setup-storage`**
+
+**Explanation:** This command requests storage permission from Android. After running it, approve the permission popup. If it doesn't work, manually enable in Settings → Apps → Termux → Permissions.
+
+</details>
+</details>
+
+### Question 5
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**What causes "No space left on device" error?**
+
+A) Too many apps installed  
+B) Termux storage partition is full  
+C) Phone storage is corrupted  
+D) Android version incompatibility
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: B) Termux storage partition is full**
+
+**Explanation:** Termux has its own allocated space in `/data/data/com.termux`. Fix with:
+```bash
+pkg clean
+rm -rf ~/.cache/*
+du -sh ~/* | sort -rh | head -10  # Find large files
+```
+
+</details>
+</details>
+
+### Question 6
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**Which tool traces system calls for debugging?**
+
+A) `strace`  
+B) `ltrace`  
+C) `gdb`  
+D) `debugger`
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: A) `strace`**
+
+**Explanation:** `strace` traces all system calls a program makes. Useful for:
+```bash
+pkg install strace
+strace -e openat python script.py 2>&1 | grep "No such"
+```
+
+</details>
+</details>
+
+### Question 7
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**What does "Segmentation fault (core dumped)" indicate?**
+
+A) Memory corruption or program bug  
+B) Storage is full  
+C) Permission issue  
+D) Network problem
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: A) Memory corruption or program bug**
+
+**Explanation:** This indicates the program tried to access invalid memory. Solutions:
+- Reinstall the package: `pkg reinstall <package>`
+- Check memory: `free -h`
+- Report bug to package maintainer
+
+</details>
+</details>
+
+### Question 8
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**How do you fix "Temporary failure resolving" DNS error?**
+
+A) Restart Termux  
+B) Set DNS servers manually  
+C) Reinstall Termux  
+D) Clear cache
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: B) Set DNS servers manually**
+
+**Explanation:** DNS resolution failure can be fixed by setting Google DNS:
+```bash
+echo "nameserver 8.8.8.8" > $PREFIX/etc/resolv.conf
+echo "nameserver 8.8.4.4" >> $PREFIX/etc/resolv.conf
+```
+
+</details>
+</details>
+
+### Question 9
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**What does "Process completed (signal 9)" mean?**
+
+A) Normal process termination  
+B) OOM Killer terminated the process  
+C) User stopped the process  
+D) Process crashed
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: B) OOM Killer terminated the process**
+
+**Explanation:** Signal 9 (SIGKILL) from OOM (Out of Memory) Killer means Android killed the process due to low memory. Solutions:
+- Close other apps
+- Reduce memory usage
+- Set Termux battery to Unrestricted
+
+</details>
+</details>
+
+### Question 10
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**Which command shows detailed error logs in Termux?**
+
+A) `show-logs`  
+B) `cat $PREFIX/var/log/apt/history.log`  
+C) `termux-logs`  
+D) `debug-mode`
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: B) `cat $PREFIX/var/log/apt/history.log`**
+
+**Explanation:** Key log locations:
+- Package logs: `$PREFIX/var/log/apt/history.log`
+- Dpkg logs: `$PREFIX/var/log/dpkg.log`
+- User history: `~/.bash_history`
+
+</details>
+</details>
+
+### Question 11
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**How do you fix "Hash sum mismatch" error?**
+
+A) Update Termux  
+B) Clean cache and update  
+C) Restart phone  
+D) Reinstall package
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: B) Clean cache and update**
+
+**Explanation:** This error occurs when downloaded packages are corrupt:
+```bash
+pkg clean
+rm -rf $PREFIX/var/cache/apt/archives/*
+rm -rf $PREFIX/var/lib/apt/lists/*
+pkg update
+```
+
+</details>
+</details>
+
+### Question 12
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**What causes "command not found" for an installed package?**
+
+A) Package not installed properly  
+B) PATH environment issue  
+C) Permission problem  
+D) All of the above
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: B) PATH environment issue**
+
+**Explanation:** The PATH variable doesn't include the package location:
+```bash
+echo $PATH  # Check if $PREFIX/bin is included
+export PATH=$PREFIX/bin:$PREFIX/bin/applets:$PATH
+```
+
+</details>
+</details>
+
+### Question 13
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**How do you fix SSL certificate errors in pip?**
+
+A) Reinstall Python  
+B) Use --trusted-host flag  
+C) Update ca-certificates  
+D) Both B and C
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: D) Both B and C**
+
+**Explanation:** Fix SSL errors with:
+```bash
+pkg install ca-certificates
+pkg upgrade ca-certificates
+# Or bypass SSL
+pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org <package>
+```
+
+</details>
+</details>
+
+### Question 14
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**What does "Address already in use" error indicate?**
+
+A) Invalid IP address  
+B) Another process is using the port  
+C) Network is down  
+D) Firewall blocking
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: B) Another process is using the port**
+
+**Explanation:** Find and kill the process:
+```bash
+netstat -tulpn | grep :<port>
+kill -9 <PID>
+# Or
+kill $(lsof -t -i:<port>)
+```
+
+</details>
+</details>
+
+### Question 15
+<details>
+<summary>🔍 Click to see the question</summary>
+
+**Which flag enables verbose/debug mode in bash scripts?**
+
+A) `-v`  
+B) `-x`  
+C) `-d`  
+D) `--debug`
+
+</summary>
+<details>
+<summary>✅ Click to reveal the answer</summary>
+
+**Answer: B) `-x`**
+
+**Explanation:** The `-x` flag shows each command before execution:
+```bash
+bash -x script.sh
+# Or add to script
+set -x  # Enable
+set +x  # Disable
+```
+
+</details>
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+Prepare for technical interviews with these troubleshooting questions!
+
+### Question 1
+**Q: Describe your debugging methodology when encountering a "package installation failed" error in a Linux environment.**
+
+**Answer:**
+My systematic approach:
+1. **Identify** - Read the error message carefully
+2. **Isolate** - Determine if it's network, dependency, or permission issue
+3. **Investigate** - Check logs, run verbose mode
+4. **Resolve** - Apply appropriate fix
+5. **Verify** - Test the solution works
+
+**Example:** For "Unable to locate package":
+```bash
+# Step 1: Update repositories
+pkg update
+# Step 2: Search correct package name
+pkg search <keyword>
+# Step 3: Check internet connectivity
+ping -c 3 google.com
+# Step 4: Verify Termux source
+cat $PREFIX/etc/apt/sources.list
+```
+
+**Follow-up:** How would you handle this in a production environment?
+
+### Question 2
+**Q: How do you diagnose and fix memory-related issues in a constrained environment like Termux?**
+
+**Answer:**
+Memory troubleshooting approach:
+
+```bash
+# Check memory status
+free -h
+cat /proc/meminfo
+
+# Identify memory-heavy processes
+ps aux --sort=-%mem | head -10
+top -o %MEM
+
+# Check for memory leaks
+valgrind --leak-check=full ./program
+
+# Monitor in real-time
+watch -n 1 free -h
+```
+
+Prevention strategies:
+- Set process limits: `ulimit -v <max_kb>`
+- Use swap file (if rooted)
+- Configure OOM score for critical processes
+- Regular monitoring with htop
+
+**Follow-up:** What's the difference between OOM killer in Android vs standard Linux?
+
+### Question 3
+**Q: A Python script works on your machine but fails on another with "ModuleNotFoundError". How do you resolve this?**
+
+**Answer:**
+Systematic dependency resolution:
+
+```bash
+# Check Python version
+python --version
+
+# List installed packages
+pip list
+
+# Export requirements
+pip freeze > requirements.txt
+
+# Install missing dependencies
+pip install -r requirements.txt
+
+# Check for virtual environment issues
+which python
+pip show <module>
+```
+
+Common causes:
+1. Missing module: `pip install <module>`
+2. Wrong Python version: Use pyenv or specific version
+3. Virtual environment not activated
+4. PATH issues
+
+**Follow-up:** How would you prevent this in a team environment?
+
+### Question 4
+**Q: Explain the difference between "Permission denied" for file execution vs file reading.**
+
+**Answer:**
+
+| Permission Denied Type | Cause | Fix |
+|----------------------|-------|-----|
+| **File Execution** | No execute bit (`-x`) | `chmod +x file` |
+| **File Reading** | No read bit (`-r`) | `chmod +r file` |
+| **Directory Access** | No execute on directory | `chmod +x dir/` |
+| **Write Operation** | No write bit (`-w`) | `chmod +w file` |
+
+```bash
+# Check permissions
+ls -la filename
+# Output: -rw-r--r-- 1 user group
+#         [user][group][other]
+
+# Fix execution
+chmod +x script.sh
+
+# Fix all permissions
+chmod 755 script.sh  # rwxr-xr-x
+```
+
+**Follow-up:** What does "755" permission mean in octal notation?
+
+### Question 5
+**Q: How would you troubleshoot network connectivity issues in a terminal environment?**
+
+**Answer:**
+Layer-by-layer network troubleshooting:
+
+```bash
+# Layer 1: Physical/Interface
+ifconfig 2>/dev/null || ip addr
+
+# Layer 2: Local connectivity
+ping -c 3 8.8.8.8
+
+# Layer 3: DNS resolution
+nslookup google.com
+dig google.com
+
+# Layer 4: Port connectivity
+nc -zv google.com 80
+telnet google.com 80
+
+# Layer 5: Application layer
+curl -I https://google.com
+wget --spider https://google.com
+
+# Check routing
+ip route
+traceroute google.com
+```
+
+**Follow-up:** What tools would you use for deep packet analysis?
+
+### Question 6
+**Q: Describe how you would create a monitoring script to detect and alert on common Termux errors.**
+
+**Answer:**
+```bash
+#!/bin/bash
+# error_monitor.sh - Proactive error detection
+
+LOG_FILE="$PREFIX/var/log/apt/history.log"
+ALERT_FILE="~/alerts.log"
+
+# Check disk space
+disk_usage=$(df -h /data | tail -1 | awk '{print $5}' | tr -d '%')
+if [ "$disk_usage" -gt 80 ]; then
+    echo "[ALERT] Disk usage at ${disk_usage}%" >> "$ALERT_FILE"
+fi
+
+# Check memory
+mem_available=$(free -m | grep Mem | awk '{print $7}')
+if [ "$mem_available" -lt 100 ]; then
+    echo "[ALERT] Low memory: ${mem_available}MB available" >> "$ALERT_FILE"
+fi
+
+# Check for failed installs
+grep -i "failed\|error" "$LOG_FILE" | tail -5 >> "$ALERT_FILE"
+
+# Check zombie processes
+zombies=$(ps aux | grep -c 'Z')
+if [ "$zombies" -gt 0 ]; then
+    echo "[ALERT] $zombies zombie processes found" >> "$ALERT_FILE"
+fi
+
+# Network connectivity test
+if ! ping -c 1 -W 2 8.8.8.8 &>/dev/null; then
+    echo "[ALERT] No network connectivity" >> "$ALERT_FILE"
+fi
+```
+
+**Follow-up:** How would you implement automatic error recovery?
+
+### Question 7
+**Q: What's the significance of PATH environment variable and how do errors related to it manifest?**
+
+**Answer:**
+PATH determines where the shell looks for executables:
+
+```bash
+# Current PATH
+echo $PATH
+# Typical: /data/data/com.termux/files/usr/bin:...
+
+# Common PATH-related errors:
+# 1. "command not found" - Not in PATH
+# 2. Wrong version running - PATH order matters
+# 3. Script works in one terminal but not another
+
+# Debug PATH issues
+type <command>      # Shows which binary runs
+which <command>     # Path to command
+whereis <command>   # All locations
+
+# Fix PATH
+export PATH=$PREFIX/bin:$PREFIX/bin/applets:$PATH
+
+# Permanent fix in ~/.bashrc
+echo 'export PATH=$PREFIX/bin:$PATH' >> ~/.bashrc
+```
+
+**Follow-up:** What's the security implication of having '.' in PATH?
+
+### Question 8
+**Q: How do you approach troubleshooting a Segmentation Fault?**
+
+**Answer:**
+Segmentation fault analysis:
+
+```bash
+# 1. Check if reproducible
+./program
+# If consistent, likely code bug
+
+# 2. Run with strace
+strace -o trace.log ./program
+grep -i "SIGSEGV\|EFAULT" trace.log
+
+# 3. Check for memory issues
+free -h
+dmesg | grep -i "segfault\|oom"
+
+# 4. Use gdb if debug symbols available
+gdb ./program
+(gdb) run
+(gdb) bt  # Backtrace when crashes
+
+# 5. Check limits
+ulimit -a
+
+# 6. Verify dependencies
+ldd ./program
+```
+
+Common causes:
+- Null pointer dereference
+- Buffer overflow
+- Stack overflow
+- Invalid memory access
+
+**Follow-up:** How would you debug a segfault in production?
+
+### Question 9
+**Q: Explain your approach to fixing broken package dependencies.**
+
+**Answer:**
+Dependency resolution workflow:
+
+```bash
+# Step 1: Identify broken packages
+pkg check
+dpkg --audit
+
+# Step 2: View dependency tree
+apt-cache depends <package>
+apt-cache rdepends <package>  # Reverse deps
+
+# Step 3: Fix automatically
+pkg install -f
+apt --fix-broken install
+
+# Step 4: Manual intervention if needed
+dpkg --configure -a
+dpkg --remove --force-remove-reinstreq <package>
+
+# Step 5: Clean reinstall
+pkg uninstall <package>
+pkg install <package>
+
+# Step 6: Nuclear option (last resort)
+rm -rf $PREFIX/var/lib/dpkg/lock*
+rm -rf $PREFIX/var/cache/apt/archives/*.deb
+pkg update && pkg upgrade
+```
+
+**Follow-up:** What precautions would you take before force-removing packages?
+
+### Question 10
+**Q: How would you implement a logging system for debugging intermittent issues?**
+
+**Answer:**
+Comprehensive logging solution:
+
+```bash
+#!/bin/bash
+# debug_logger.sh - Enhanced logging
+
+LOG_DIR="$HOME/debug_logs"
+mkdir -p "$LOG_DIR"
+
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+LOG_FILE="$LOG_DIR/debug_$TIMESTAMP.log"
+
+# Logging function
+log() {
+    local level="$1"
+    local message="$2"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [$level] $message" | tee -a "$LOG_FILE"
+}
+
+# Capture all output
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+# System state logging
+log "INFO" "=== System State ==="
+log "INFO" "Memory: $(free -h | grep Mem)"
+log "INFO" "Disk: $(df -h /data | tail -1)"
+log "INFO" "PATH: $PATH"
+
+# Command execution with logging
+run_cmd() {
+    log "EXEC" "$*"
+    if "$@"; then
+        log "SUCCESS" "$1 completed"
+    else
+        log "ERROR" "$1 failed with exit code $?"
+    fi
+}
+
+# Usage
+run_cmd pkg update
+run_cmd pip install requests
+```
+
+**Follow-up:** How would you implement log rotation and archival?
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+### Scenario 1: The Midnight Production Error
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    🔥 SCENARIO: CRITICAL ERROR AT 2 AM                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  SITUATION: You're running a security scan script overnight and it      │
+│  crashes with "Permission denied" error at 2 AM. No one else is awake.  │
+│                                                                          │
+│  ERROR MESSAGE:                                                         │
+│  ./security_scan.sh: line 45: /sdcard/logs/scan.log: Permission denied  │
+│                                                                          │
+│  TROUBLESHOOTING STEPS:                                                 │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │ 1. Check storage permission                                        │ │
+│  │    $ termux-setup-storage                                         │ │
+│  │                                                                    │ │
+│  │ 2. Verify directory exists                                         │ │
+│  │    $ ls -la /sdcard/logs/                                         │ │
+│  │    ls: cannot access: No such file or directory                   │ │
+│  │                                                                    │ │
+│  │ 3. Create missing directory                                        │ │
+│  │    $ mkdir -p /sdcard/logs                                        │ │
+│  │    $ ls -la /sdcard/logs                                          │ │
+│  │    drwxrwx--- 2 termux ext_data_rw 4096 Jan 15 02:15 .            │ │
+│  │                                                                    │ │
+│  │ 4. Test write permission                                          │ │
+│  │    $ touch /sdcard/logs/test.log                                  │ │
+│  │    $ echo "test" > /sdcard/logs/test.log                          │ │
+│  │                                                                    │ │
+│  │ 5. Rerun script                                                    │ │
+│  │    $ ./security_scan.sh                                            │ │
+│  │    [SUCCESS] Scan completed at 02:17                               │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+│                                                                          │
+│  ROOT CAUSE: Log directory didn't exist and script didn't create it     │
+│  LESSON: Always add directory creation with -p flag in scripts          │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 2: The "It Works on My Machine" Problem
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│              🔥 SCENARIO: CROSS-DEVICE COMPATIBILITY ISSUE              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  SITUATION: Your Python script works perfectly on your phone but fails  │
+│  on your friend's phone with the same Termux version.                   │
+│                                                                          │
+│  ERROR: ModuleNotFoundError: No module named 'requests'                 │
+│                                                                          │
+│  TROUBLESHOOTING STEPS:                                                 │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │ # Compare environments                                             │ │
+│  │ $ python --version                                                 │ │
+│  │ Python 3.11.0 (same on both)                                       │ │
+│  │                                                                    │ │
+│  │ # Check installed packages                                         │ │
+│  │ $ pip list | grep requests                                         │ │
+│  │ (empty on friend's phone)                                          │ │
+│  │                                                                    │ │
+│  │ # Install missing module                                           │ │
+│  │ $ pip install requests                                             │ │
+│  │ ERROR: Could not find a version...                                 │ │
+│  │                                                                    │ │
+│  │ # Check internet                                                   │ │
+│  │ $ ping -c 3 pypi.org                                               │
+│  │ ping: bad address 'pypi.org'                                       │ │
+│  │                                                                    │ │
+│  │ # DNS issue detected! Fix:                                         │ │
+│  │ $ echo "nameserver 8.8.8.8" > $PREFIX/etc/resolv.conf              │ │
+│  │                                                                    │ │
+│  │ # Retry installation                                               │ │
+│  │ $ pip install requests                                             │ │
+│  │ Successfully installed requests-2.31.0                              │ │
+│  │                                                                    │ │
+│  │ # Verify                                                           │ │
+│  │ $ python -c "import requests; print('OK')"                          │ │
+│  │ OK                                                                  │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+│                                                                          │
+│  ROOT CAUSE: DNS misconfiguration on friend's network                   │
+│  LESSON: Always check network layer when packages fail to download     │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 3: The Silent Killer - OOM
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    🔥 SCENARIO: MYSTERIOUS CRASHES                      │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  SITUATION: Your long-running compilation keeps dying after ~10 minutes │
+│  with no error message - just exits silently.                           │
+│                                                                          │
+│  TROUBLESHOOTING STEPS:                                                 │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │ # Check for OOM killer signature                                   │ │
+│  │ $ dmesg | grep -i "killed process"                                 │ │
+│  │ Killed process 12345 (clang++) total-vm:1500000kB...               │ │
+│  │                                                                    │ │
+│  │ # Confirmed! OOM killer strikes                                    │ │
+│  │ # Check memory situation                                           │ │
+│  │ $ free -h                                                          │ │
+│  │               total    used    free    shared  buff/cache          │ │
+│  │ Mem:          1.8Gi    1.6Gi   58Mi    120Mi   150Mi               │ │
+│  │ Swap:         512Mi    480Mi   32Mi                                │ │
+│  │                                                                    │ │
+│  │ # Solutions applied:                                               │ │
+│  │                                                                    │ │
+│  │ 1. Close other apps                                                │ │
+│  │ 2. Increase swap (if rooted)                                       │ │
+│  │    $ su -c "swapon /sdcard/swapfile"                               │ │
+│  │                                                                    │ │
+│  │ 3. Reduce parallel jobs                                            │ │
+│  │    $ make -j2  # Instead of -j8                                    │ │
+│  │                                                                    │ │
+│  │ 4. Set Android battery optimization OFF                            │ │
+│  │    Settings → Apps → Termux → Battery → Unrestricted               │ │
+│  │                                                                    │ │
+│  │ 5. Use nice to lower priority                                      │ │
+│  │    $ nice -n 19 make -j2                                           │ │
+│  │                                                                    │ │
+│  │ # Result: Compilation completed after 25 mins                       │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+│                                                                          │
+│  ROOT CAUSE: Memory exhaustion triggering Android OOM killer            │
+│  LESSON: Monitor memory during long operations, use swap wisely        │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 4: The Broken Update
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                🔥 SCENARIO: FAILED SYSTEM UPDATE                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  SITUATION: After running `pkg upgrade`, Termux behaves strangely -     │
+│  commands fail, packages are broken.                                    │
+│                                                                          │
+│  ERROR: dpkg: error: parsing file '/var/lib/dpkg/status' near line 0:   │
+│  field name `junk'                                                      │
+│                                                                          │
+│  TROUBLESHOOTING STEPS:                                                 │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │ # Check dpkg status file                                           │ │
+│  │ $ head -20 $PREFIX/var/lib/dpkg/status                              │ │
+│  │ [garbage characters]                                                │ │
+│  │                                                                    │ │
+│  │ # File corrupted! Check backup                                     │ │
+│  │ $ ls $PREFIX/var/lib/dpkg/                                          │ │
+│  │ status  status-old                                                 │ │
+│  │                                                                    │ │
+│  │ # Restore from backup                                               │ │
+│  │ $ cp $PREFIX/var/lib/dpkg/status-old $PREFIX/var/lib/dpkg/status    │ │
+│  │                                                                    │ │
+│  │ # Fix any remaining issues                                          │ │
+│  │ $ dpkg --configure -a                                               │ │
+│  │                                                                    │ │
+│  │ # Clean and reinstall broken packages                              │ │
+│  │ $ pkg install -f                                                   │ │
+│  │                                                                    │ │
+│  │ # Verify all packages                                               │ │
+│  │ $ pkg check                                                        │ │
+│  │ Checking all packages... OK                                         │ │
+│  │                                                                    │ │
+│  │ # Full update retry                                                 │ │
+│  │ $ pkg update && pkg upgrade -y                                      │ │
+│  │ All packages upgraded successfully                                  │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+│                                                                          │
+│  ROOT CAUSE: Power loss during update corrupted dpkg database           │
+│  LESSON: Always ensure stable power/backup before major updates        │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Scenario 5: The SSL Nightmare
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│              🔥 SCENARIO: ALL HTTPS CONNECTIONS FAILING                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  SITUATION: After some system changes, ALL pip installs and package     │
+│  downloads fail with SSL errors.                                        │
+│                                                                          │
+│  ERROR: SSL: CERTIFICATE_VERIFY_FAILED                                  │
+│                                                                          │
+│  TROUBLESHOOTING STEPS:                                                 │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │ # Test SSL connectivity                                            │ │
+│  │ $ curl -v https://pypi.org                                         │ │
+│  │ * SSL certificate problem: unable to get local issuer certificate  │ │
+│  │                                                                    │ │
+│  │ # Check certificate store                                          │ │
+│  │ $ ls $PREFIX/etc/ssl/certs/                                        │ │
+│  │ [empty or missing]                                                  │ │
+│  │                                                                    │ │
+│  │ # Reinstall certificates                                           │ │
+│  │ $ pkg install ca-certificates                                       │ │
+│  │ $ pkg upgrade ca-certificates                                       │ │
+│  │                                                                    │ │
+│  │ # Verify certificates installed                                     │ │
+│  │ $ ls $PREFIX/etc/ssl/certs/ | wc -l                                 │ │
+│  │ 157  # Good, certificates are back                                 │ │
+│  │                                                                    │ │
+│  │ # Test SSL now                                                     │ │
+│  │ $ curl -I https://google.com                                        │ │
+│  │ HTTP/2 200                                                         │ │
+│  │                                                                    │ │
+│  │ # If still failing, bypass temporarily                             │ │
+│  │ $ pip install --trusted-host pypi.org \                            │ │
+│  │              --trusted-host files.pythonhosted.org \               │ │
+│  │              package-name                                          │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+│                                                                          │
+│  ROOT CAUSE: CA certificates package was accidentally removed           │
+│  LESSON: Never remove ca-certificates, keep backup of SSL certs        │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 TROUBLESHOOTING FLOWCHARTS
+
+### Flowchart 1: Package Installation Error Resolution
+
+```
+                    ┌─────────────────────────────────┐
+                    │   PACKAGE INSTALL ERROR         │
+                    │   "Unable to locate package"    │
+                    └────────────────┬────────────────┘
+                                     │
+                                     ▼
+                    ┌─────────────────────────────────┐
+                    │   Run: pkg update               │
+                    └────────────────┬────────────────┘
+                                     │
+                     ┌───────────────┴───────────────┐
+                     │                               │
+                     ▼                               ▼
+            ┌────────────────┐              ┌────────────────┐
+            │    SUCCESS     │              │    FAILED      │
+            │  Retry install │              │ Check internet │
+            └───────┬────────┘              └───────┬────────┘
+                    │                               │
+                    ▼                               ▼
+            ┌────────────────┐              ┌────────────────┐
+            │   Works now?   │──NO──┐       │ ping 8.8.8.8   │
+            └───────┬────────┘      │       └───────┬────────┘
+                    │               │               │
+           YES      │               │    ┌──────────┴──────────┐
+                    │               │    │                     │
+                    ▼               │    ▼                     ▼
+            ┌────────────────┐      │  ┌────────────┐    ┌────────────┐
+            │    DONE! ✓     │      │  │  Internet  │    │ No Internet│
+            └────────────────┘      │  │   Works    │    │  Check:    │
+                                    │  └─────┬──────┘    │ • WiFi ON? │
+                                    │        │           │ • Airplane │
+                                    │        ▼           │   Mode OFF?│
+                                    │  ┌────────────┐    └─────┬──────┘
+                                    │  │Search pkg  │          │
+                                    │  │pkg search  │          │
+                                    │  └─────┬──────┘          │
+                                    │        │                 │
+                                    │        ▼                 │
+                                    │  ┌────────────┐          │
+                                    │  │ Found?     │          │
+                                    │  └─────┬──────┘          │
+                                    │   YES  │   NO            │
+                                    │        │    │            │
+                                    │        │    ▼            │
+                                    │        │  ┌────────────┐ │
+                                    │        │  │Add repos:  │ │
+                                    │        │  │root-repo   │ │
+                                    │        │  │x11-repo    │ │
+                                    │        │  └────────────┘ │
+                                    │        │                 │
+                                    └────────┴─────────────────┘
+                                              │
+                                              ▼
+                                    ┌────────────────────┐
+                                    │ Check Termux ver:  │
+                                    │ echo $TERMUX_VERSION│
+                                    │ If <0.118 reinstall │
+                                    │ from F-Droid!      │
+                                    └────────────────────┘
+```
+
+### Flowchart 2: Permission Denied Debugging
+
+```
+                    ┌─────────────────────────────────┐
+                    │   PERMISSION DENIED ERROR       │
+                    └────────────────┬────────────────┘
+                                     │
+                                     ▼
+                    ┌─────────────────────────────────┐
+                    │   What operation failed?        │
+                    └────────────────┬────────────────┘
+                                     │
+          ┌──────────────────────────┼──────────────────────────┐
+          │                          │                          │
+          ▼                          ▼                          ▼
+   ┌──────────────┐          ┌──────────────┐          ┌──────────────┐
+   │Running script│          │Accessing file│          │Access sdcard │
+   └──────┬───────┘          └──────┬───────┘          └──────┬───────┘
+          │                         │                         │
+          ▼                         ▼                         ▼
+   ┌──────────────┐          ┌──────────────┐          ┌──────────────┐
+   │Check execute │          │Check read/   │          │Run:          │
+   │permission:   │          │write perms:  │          │termux-setup- │
+   │ls -la script │          │ls -la file   │          │storage       │
+   └──────┬───────┘          └──────┬───────┘          └──────┬───────┘
+          │                         │                         │
+          ▼                         ▼                         ▼
+   ┌──────────────┐          ┌──────────────┐          ┌──────────────┐
+   │ chmod +x     │          │chmod 644 for │          │Grant popup   │
+   │ script.sh    │          │files         │          │permission    │
+   └──────┬───────┘          │chmod 755 for │          └──────┬───────┘
+          │                  │directories   │                 │
+          │                  └──────┬───────┘                 │
+          │                         │                         │
+          └─────────────────────────┴─────────────────────────┘
+                                     │
+                                     ▼
+                    ┌─────────────────────────────────┐
+                    │   Still failing?                │
+                    │   Check SELinux: getenforce     │
+                    │   Check ownership: ls -la       │
+                    │   Fix: chown $(whoami) file     │
+                    └─────────────────────────────────┘
+```
+
+### Flowchart 3: Network Error Resolution
+
+```
+                    ┌─────────────────────────────────┐
+                    │      NETWORK ERROR DETECTED     │
+                    └────────────────┬────────────────┘
+                                     │
+                                     ▼
+                    ┌─────────────────────────────────┐
+                    │   Test basic connectivity       │
+                    │   ping -c 3 8.8.8.8             │
+                    └────────────────┬────────────────┘
+                                     │
+                     ┌───────────────┴───────────────┐
+                     │                               │
+                     ▼                               ▼
+            ┌────────────────┐              ┌────────────────┐
+            │   PING WORKS   │              │ PING FAILS     │
+            │   DNS Issue    │              │ No Network     │
+            └───────┬────────┘              └───────┬────────┘
+                    │                               │
+                    ▼                               ▼
+            ┌────────────────┐              ┌────────────────┐
+            │ Test DNS:      │              │ Check:         │
+            │ nslookup       │              │ • WiFi ON      │
+            │ google.com     │              │ • Airplane OFF │
+            └───────┬────────┘              │ • Data enabled │
+                    │                       └───────┬────────┘
+            ┌───────┴───────┐                      │
+            │               │                      │
+            ▼               ▼                      ▼
+     ┌──────────┐    ┌──────────┐          ┌──────────────┐
+     │DNS Works │    │DNS Fails │          │Restart WiFi │
+     │Check SSL │    │Set manual│          │or reconnect │
+     └────┬─────┘    │DNS:      │          └──────────────┘
+          │          │8.8.8.8   │
+          │          └──────────┘
+          ▼
+   ┌────────────────┐
+   │ SSL error?     │
+   │ pkg install    │
+   │ ca-certificates│
+   └────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+| Relationship | Chapter | Title | Relevance |
+|-------------|---------|-------|-----------|
+| **Prerequisites** | Ch 1-5 | Termux Foundation | Basic setup & installation |
+| **Prerequisites** | Ch 6-10 | Environment Setup | Package management basics |
+| **Prerequisites** | Ch 57 | Projects Integration | Practical error scenarios |
+| **Current** | Ch 58 | Common Errors & Fixes | **THIS CHAPTER** |
+| **Next** | Ch 59 | Performance Tips | Optimize after fixing errors |
+| **Next** | Ch 60 | Backup & Restore | Protect against data loss |
+| **Next** | Ch 61 | Useful Resources | Additional troubleshooting help |
+| **Related** | Ch 11-16 | Programming | Python/pip errors context |
+| **Related** | Ch 30-38 | Security Tools | Tool-specific errors |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+### Advanced 1: Strace Deep Dive for System Call Analysis
+
+```bash
+# Advanced strace techniques for error diagnosis
+
+# Trace all file operations causing errors
+strace -e trace=file -f -o trace.log <command>
+grep -i "no such file\|permission denied\|eacces" trace.log
+
+# Trace memory operations (for segfaults)
+strace -e trace=memory ./program
+
+# Trace network operations
+strace -e trace=network curl https://google.com
+
+# Count syscalls to find bottlenecks
+strace -c ./program
+# Output shows syscall counts and timing
+
+# Trace specific process by PID
+strace -p <PID> -o live_trace.log
+
+# Filter by error code
+strace -e trace=all -e fault=read:error=ENOENT ./program
+
+# Save only error lines
+strace <command> 2>&1 | grep -E "=-1 E"
+
+# Example: Debug Python import error
+strace -f -e trace=openat python -c "import missing_module" 2>&1 | \
+    grep "No such file"
+```
+
+### Advanced 2: Advanced DPKG/APT Recovery Techniques
+
+```bash
+# Advanced package system recovery
+
+# 1. Complete dpkg database rebuild
+cd $PREFIX/var/lib/dpkg
+cp status status.backup
+# Remove all but essential info
+awk '/^Package:/ {pkg=$2} /^Status:/ {print pkg, $0}' status > status.new
+# This creates minimal database
+
+# 2. Force package removal even with scripts failing
+dpkg --remove --force-remove-reinstreq <package>
+dpkg --purge --force-all <package>
+
+# 3. Reinstall all packages
+pkg list-installed | cut -d'/' -f1 > packages.txt
+pkg uninstall $(cat packages.txt)
+pkg install $(cat packages.txt)
+
+# 4. Fix architecture issues
+dpkg --print-architecture
+dpkg --add-architecture aarch64
+
+# 5. Manual package extraction for inspection
+ar x package.deb
+tar -xf data.tar.xz -C $PREFIX
+
+# 6. Create local package repository
+mkdir -p ~/local-repo
+cp *.deb ~/local-repo/
+cd ~/local-repo
+dpkg-scanpackages . /dev/null > Packages
+# Add to sources.list: deb [trusted=yes] file:///path/to/local-repo ./
+```
+
+### Advanced 3: Custom Error Monitoring System
+
+```bash
+#!/bin/bash
+# error_monitor_daemon.sh - Background error monitoring
+
+ERROR_LOG="$HOME/error_monitor.log"
+ALERT_THRESHOLD=5
+CHECK_INTERVAL=60
+
+# Create named pipe for real-time monitoring
+PIPE="$HOME/.error_pipe"
+[ -p "$PIPE" ] || mkfifo "$PIPE"
+
+log_error() {
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[$timestamp] ERROR: $1" >> "$ERROR_LOG"
+}
+
+check_system() {
+    # Memory check
+    local mem_free=$(free -m | grep Mem | awk '{print $7}')
+    [ "$mem_free" -lt 50 ] && log_error "Low memory: ${mem_free}MB"
+    
+    # Disk check
+    local disk_use=$(df /data | tail -1 | awk '{print $5}' | tr -d '%')
+    [ "$disk_use" -gt 90 ] && log_error "Disk critical: ${disk_use}%"
+    
+    # Zombie processes
+    local zombies=$(ps aux | grep -c ' Z ')
+    [ "$zombies" -gt 3 ] && log_error "Zombie processes: $zombies"
+    
+    # Failed services
+    pgrep -c sshd > /dev/null || log_error "SSH daemon not running"
+    
+    # Network connectivity
+    ping -c 1 -W 2 8.8.8.8 > /dev/null || log_error "No network"
+}
+
+# Monitor apt logs for errors
+monitor_apt() {
+    tail -F $PREFIX/var/log/apt/term.log 2>/dev/null | \
+    while read line; do
+        echo "$line" | grep -qi "error\|fail\|fatal" && \
+        log_error "APT: $line"
+    done
+}
+
+# Main daemon loop
+echo "Error monitor started at $(date)" >> "$ERROR_LOG"
+while true; do
+    check_system
+    sleep $CHECK_INTERVAL
+done &
+
+# Start apt monitor
+monitor_apt &
+
+echo "Error monitoring daemon running. Check $ERROR_LOG for alerts."
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+### Core Knowledge Checklist
+- [ ] Understand 10 error categories in Termux
+- [ ] Know how to fix "Unable to locate package" error
+- [ ] Can resolve permission denied errors (files & storage)
+- [ ] Know network troubleshooting steps
+- [ ] Can use strace for debugging
+- [ ] Know log file locations
+- [ ] Understand PATH and environment issues
+- [ ] Can fix Python/pip installation errors
+- [ ] Know how to repair broken packages
+- [ ] Understand OOM killer and prevention
+
+### Practical Skills Checklist
+- [ ] Successfully ran `pkg update` after error
+- [ ] Fixed a permission denied error
+- [ ] Used strace to debug an issue
+- [ ] Read and understood a log file
+- [ ] Fixed a Python module import error
+- [ ] Resolved a network connectivity issue
+- [ ] Created a troubleshooting script
+
+### Commands Memorized
+- [ ] `pkg update` - Update repositories
+- [ ] `pkg install -f` - Fix broken packages
+- [ ] `termux-setup-storage` - Grant storage permission
+- [ ] `chmod +x file` - Make executable
+- [ ] `strace command` - Trace system calls
+- [ ] `df -h` - Check disk usage
+- [ ] `free -h` - Check memory usage
+- [ ] `cat $PREFIX/var/log/apt/history.log` - View package logs
+
+---
+
+## 🔧 QUICK FIX REFERENCE CARD
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                    🚨 QUICK FIX REFERENCE CARD                                │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                               │
+│  ERROR                              │  INSTANT FIX                            │
+│ ────────────────────────────────────┼──────────────────────────────────────── │
+│ Unable to locate package           │ pkg update && pkg search <name>         │
+│ Permission denied (script)         │ chmod +x script.sh                       │
+│ Permission denied (storage)        │ termux-setup-storage                     │
+│ No space left on device            │ pkg clean && rm -rf ~/.cache/*          │
+│ Connection refused                 │ Check if service running: pgrep <name>  │
+│ Connection timed out               │ Check network / try different mirror    │
+│ SSL certificate error              │ pkg install ca-certificates              │
+│ Command not found                  │ pkg install <package>                    │
+│ Module not found (Python)          │ pip install <module>                     │
+│ Dependency problems                │ pkg install -f                           │
+│ Hash sum mismatch                  │ pkg clean && pkg update                  │
+│ Segmentation fault                 │ pkg reinstall <package>                  │
+│ Process killed (signal 9)          │ Reduce memory / battery unrestricted    │
+│ Address already in use             │ kill $(lsof -t -i:<port>)               │
+│ locale error                       │ pkg install locales                      │
+│ PATH issue                         │ export PATH=$PREFIX/bin:$PATH            │
+│ DNS not resolving                  │ echo "nameserver 8.8.8.8" > resolv.conf │
+│ Read-only file system              │ Restart phone / reinstall Termux         │
+│ Python wheel failed                │ pkg install build-essential libffi openssl│
+│ pip SSL error                      │ pip install --trusted-host pypi.org ...  │
+│ Zombie processes                   │ ps aux | grep Z; kill -9 <PPID>          │
+│ Broken pipe                        │ Usually harmless, check pipe commands    │
+│ Text file busy                     │ pkill <process> then retry               │
+│ Too many open files                │ ulimit -n 8192                           │
+│ Input/output error                 │ Restart phone, backup data ASAP          │
+│                                                                               │
+├──────────────────────────────────────────────────────────────────────────────┤
+│  📌 ALWAYS RUN FIRST: pkg update && pkg upgrade -y                          │
+│  📌 CHECK LOGS: cat $PREFIX/var/log/apt/history.log                         │
+│  📌 DEBUG MODE: strace -o debug.log <command>                               │
+│  📌 VERBOSE: apt install -v <package>                                        │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
 
 ### Next Steps After This Chapter
 

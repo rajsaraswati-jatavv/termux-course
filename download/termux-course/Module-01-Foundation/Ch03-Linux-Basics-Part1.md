@@ -1,9 +1,32 @@
 # Chapter 3: Linux Basics - Part 1
 
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                                                               ║
+║   ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ ██████╗ ██████╗ ███████╗  ║
+║   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔════╝██╔═══██╗██╔════╝  ║
+║       ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║██║     ██║   ██║███████╗  ║
+║       ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██║     ██║   ██║╚════██║  ║
+║       ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║╚██████╗╚██████╔╝███████║  ║
+║       ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝  ║
+║                                                                               ║
+║   ██╗      ██████╗ ██╗  ██╗██╗███╗   ██╗ ██████╗                              ║
+║   ██║     ██╔═══██╗██║ ██╔╝██║████╗  ██║██╔════╝                              ║
+║   ██║     ██║   ██║█████╔╝ ██║██╔██╗ ██║██║  ███╗                             ║
+║   ██║     ██║   ██║██╔═██╗ ██║██║╚██╗██║██║   ██║                             ║
+║   ███████╗╚██████╔╝██║  ██╗██║██║ ╚████║╚██████╔╝                             ║
+║   ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝                              ║
+║                                                                               ║
+║                    📁 ESSENTIAL COMMANDS 📁                                   ║
+║                         By T3rmuxk1ng                                         ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
 > **Module:** 1 - Foundation  
 > **Chapter:** 3 of 61  
 > **Duration:** 15-20 Minutes  
 > **Difficulty:** ⭐ Beginner  
+> **Prerequisites:** Chapters 1-2 (Termux Installation & Setup)  
 
 ---
 
@@ -2162,6 +2185,1628 @@ Before moving to Chapter 4, verify:
 - File editing basics (nano introduction)
 - Wildcards and glob patterns
 - Standard I/O and pipes introduction
+
+---
+
+## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
+
+Test your understanding of Linux basic commands with these 15 questions!
+
+---
+
+### Question 1: What does the `pwd` command do?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Prints working directory  
+B) Changes directory  
+C) Lists files  
+D) Creates directory  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: A) Prints working directory**
+
+**Explanation:** `pwd` stands for "Print Working Directory". It displays the full path of your current location in the file system. In Termux, running `pwd` typically shows `/data/data/com.termux/files/home` when you're in your home directory.
+
+</details>
+
+---
+
+### Question 2: What is the difference between `cd ..` and `cd .`?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) No difference  
+B) `..` goes up one level, `.` stays in current directory  
+C) `..` goes to home, `.` goes to root  
+D) Both go to parent directory  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `..` goes up one level, `.` stays in current directory**
+
+**Explanation:** 
+- `.` (single dot) represents the current directory
+- `..` (double dot) represents the parent directory
+- `cd ..` navigates up one level in the directory tree
+- `cd .` would keep you in the same directory (rarely useful with cd)
+
+</details>
+
+---
+
+### Question 3: Which command shows hidden files?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `ls -h`  
+B) `ls -a`  
+C) `ls -l`  
+D) `ls hidden`  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `ls -a`**
+
+**Explanation:** The `-a` flag means "all" and shows all files including hidden ones (files starting with a dot). Hidden files like `.bashrc` and `.profile` won't show with regular `ls` but will appear with `ls -a` or `ls -la`.
+
+</details>
+
+---
+
+### Question 4: What does `mkdir -p path/to/folder` do?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Creates only the final folder  
+B) Creates parent directories if they don't exist  
+C) Prints directory info  
+D) Password protects the folder  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) Creates parent directories if they don't exist**
+
+**Explanation:** The `-p` (parents) flag creates all necessary parent directories in the path. If `path` and `to` don't exist, they will be created automatically. Without `-p`, the command would fail if parent directories are missing.
+
+</details>
+
+---
+
+### Question 5: Which command removes an empty directory?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `rm directory`  
+B) `rmdir directory`  
+C) `del directory`  
+D) `erase directory`  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `rmdir directory`**
+
+**Explanation:** `rmdir` (remove directory) only works on empty directories. For non-empty directories, use `rm -r directory` which recursively removes the directory and all its contents.
+
+</details>
+
+---
+
+### Question 6: What does `rm -rf folder` do?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Renames folder  
+B) Moves folder to trash  
+C) Force deletes folder and all contents recursively  
+D) Reads folder contents  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: C) Force deletes folder and all contents recursively**
+
+**Explanation:**
+- `-r` = recursive (delete folder and all contents)
+- `-f` = force (no confirmation prompts)
+- **WARNING:** This is dangerous! It permanently deletes everything without asking. Use with extreme caution.
+
+</details>
+
+---
+
+### Question 7: How do you copy a directory and all its contents?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `cp dir1 dir2`  
+B) `cp -r dir1 dir2`  
+C) `copy dir1 dir2`  
+D) `mv dir1 dir2`  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `cp -r dir1 dir2`**
+
+**Explanation:** The `-r` (recursive) flag is required to copy directories. Without it, `cp` will skip directories. Use `cp -rv dir1 dir2` for verbose output showing each file being copied.
+
+</details>
+
+---
+
+### Question 8: What is the result of `mv file.txt /sdcard/Download/`?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Copies file.txt to Downloads  
+B) Moves file.txt to Downloads folder  
+C) Creates a backup  
+D) Renames the folder  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) Moves file.txt to Downloads folder**
+
+**Explanation:** `mv` moves files from one location to another. If the destination is a directory, the file is moved into that directory. If destination is a filename, the file is renamed. The original file no longer exists at the source location.
+
+</details>
+
+---
+
+### Question 9: Which command lists files sorted by size (largest first)?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `ls -s`  
+B) `ls -S`  
+C) `ls -z`  
+D) `ls size`  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `ls -S`**
+
+**Explanation:** Capital `-S` sorts files by size, largest first. Combine with `-l` for details: `ls -lS`. Use `ls -lSr` to reverse the order (smallest first).
+
+</details>
+
+---
+
+### Question 10: What does `ls -la` show?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Only directories  
+B) All files with detailed information  
+C) Only hidden files  
+D) File sizes only  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) All files with detailed information**
+
+**Explanation:**
+- `-l` = long format (permissions, owner, size, date)
+- `-a` = all files including hidden ones
+- Combined `-la` shows all files with full details, including hidden files starting with `.`
+
+</details>
+
+---
+
+### Question 11: How do you rename `old.txt` to `new.txt`?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `ren old.txt new.txt`  
+B) `mv old.txt new.txt`  
+C) `cp old.txt new.txt`  
+D) `rename old.txt new.txt`  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `mv old.txt new.txt`**
+
+**Explanation:** The `mv` command is used for both moving and renaming. When both source and destination are in the same directory, it effectively renames the file. `mv old.txt new.txt` renames the file in place.
+
+</details>
+
+---
+
+### Question 12: What does `cd ~` do?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Goes to root directory  
+B) Goes to previous directory  
+C) Goes to home directory  
+D) Goes up one level  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: C) Goes to home directory**
+
+**Explanation:** The tilde `~` is a shell shortcut representing your home directory. In Termux, `~` equals `/data/data/com.termux/files/home`. `cd ~` or simply `cd` takes you directly to your home directory from anywhere.
+
+</details>
+
+---
+
+### Question 13: Which command shows files sorted by modification time (newest first)?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) `ls -time`  
+B) `ls -t`  
+C) `ls -m`  
+D) `ls -date`  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) `ls -t`**
+
+**Explanation:** The `-t` flag sorts by modification time, newest files first. Combine with `-l` for details: `ls -lt`. Use `ls -ltr` to show oldest files first (reversed order).
+
+</details>
+
+---
+
+### Question 14: What happens if you run `rm -i important.txt`?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) File is deleted immediately  
+B) You're asked to confirm before deletion  
+C) File is moved to trash  
+D) File is encrypted  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: B) You're asked to confirm before deletion**
+
+**Explanation:** The `-i` (interactive) flag makes `rm` ask for confirmation before deleting each file. It shows: `rm: remove regular file 'important.txt'?` Type `y` and Enter to confirm, or `n` to cancel. This is a safety feature.
+
+</details>
+
+---
+
+### Question 15: What does `cd -` do?
+
+<details>
+<summary>🔍 Click to see options</summary>
+
+A) Goes to root directory  
+B) Goes to home directory  
+C) Goes to previous directory  
+D) Goes up one level  
+
+</details>
+
+<details>
+<summary>✅ Click to see answer</summary>
+
+**Answer: C) Goes to previous directory**
+
+**Explanation:** `cd -` takes you to the directory you were in before the last `cd` command. It's useful for toggling between two directories. For example, if you're in `~/projects` and run `cd /sdcard`, then `cd -` takes you back to `~/projects`.
+
+</details>
+
+---
+
+## 🎯 INTERVIEW QUESTIONS - Job Preparation
+
+Prepare for technical interviews with these Linux basics questions!
+
+---
+
+### Q1: Explain the Linux file system hierarchy and how it differs from Windows.
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Linux File System:**
+- Single unified tree starting at root `/`
+- No drive letters (C:, D:, etc.)
+- Everything is a file (including devices)
+
+```
+/ (root)
+├── bin/      # Essential binaries
+├── etc/      # Configuration files  
+├── home/     # User directories
+├── var/      # Variable data
+├── usr/      # User programs
+└── tmp/      # Temporary files
+```
+
+**Windows File System:**
+- Multiple drive letters (C:, D:, etc.)
+- Backslash `\` for paths
+- Different system folders (Program Files, Users, etc.)
+
+**Key Differences:**
+| Linux | Windows |
+|-------|---------|
+| Case-sensitive | Case-insensitive |
+| Forward slash `/` | Backslash `\` |
+| No extensions needed | Extensions matter |
+| Everything is a file | Different file types |
+
+**In Termux:**
+- Root is `/data/data/com.termux/files/`
+- Home is `~` = `/data/data/com.termux/files/home`
+- System prefix is `$PREFIX` = `/data/data/com.termux/files/usr`
+
+</details>
+
+---
+
+### Q2: What is the difference between absolute and relative paths? Give examples.
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Absolute Path:**
+- Starts from root (`/`)
+- Complete path to a file/directory
+- Works from anywhere in the system
+- Example: `/data/data/com.termux/files/home/projects`
+
+**Relative Path:**
+- Starts from current directory
+- Path relative to where you are
+- Meaning changes based on current location
+- Example: `projects/python` or `../documents`
+
+**Examples:**
+```bash
+# Assuming current directory is /home/user
+
+# Absolute paths (always work the same)
+cd /sdcard/Download
+ls /data/data/com.termux/files/usr/bin
+
+# Relative paths (depend on current location)
+cd projects          # Go into projects folder in current directory
+cd ../documents      # Up one level, then into documents
+cd ./scripts         # Explicit current directory (same as cd scripts)
+```
+
+**Special Symbols:**
+| Symbol | Meaning |
+|--------|---------|
+| `.` | Current directory |
+| `..` | Parent directory |
+| `~` | Home directory |
+| `/` | Root directory (at start of path) |
+
+</details>
+
+---
+
+### Q3: How would you recover from accidentally deleting important files with rm?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Prevention Strategies (Better than recovery!):**
+
+1. **Use `rm -i` for confirmation:**
+```bash
+alias rm='rm -i'  # Add to .bashrc
+```
+
+2. **Use trash-cli instead of rm:**
+```bash
+pkg install trash-cli
+alias rm='trash'  # Moves to trash instead of deleting
+```
+
+3. **Regular backups:**
+```bash
+tar -czf backup_$(date +%Y%m%d).tar.gz ~/important/
+```
+
+**Recovery Methods:**
+
+1. **Check if file is open by a process:**
+```bash
+lsof | grep deleted
+```
+
+2. **Look in /proc (if process still running):**
+```bash
+ls -la /proc/<pid>/fd/
+# Copy from file descriptor
+cp /proc/<pid>/fd/<fd> /recovered/file
+```
+
+3. **Use file recovery tools (need root):**
+```bash
+pkg install testdisk
+photorec  # Recovers deleted files
+```
+
+4. **Restore from backup:**
+```bash
+tar -xzf backup_20240115.tar.gz
+```
+
+**Important:** Linux doesn't have a "recycle bin" for command-line deletions. Once deleted with `rm`, files are gone unless you have backups or can recover them immediately.
+
+</details>
+
+---
+
+### Q4: Explain file permissions in Linux. How do you interpret `drwxr-xr-x`?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Permission String Breakdown:**
+
+```
+drwxr-xr-x
+│└──┬──┘
+│   │
+│   └── Permission triplets (owner, group, others)
+│
+└── File type (d=directory, -=file, l=link)
+```
+
+**Full Breakdown:**
+
+| Position | Meaning | Value |
+|----------|---------|-------|
+| 1 | File type | `d` = directory |
+| 2-4 | Owner permissions | `rwx` = read, write, execute |
+| 5-7 | Group permissions | `r-x` = read, execute only |
+| 8-10 | Others permissions | `r-x` = read, execute only |
+
+**Permission Meanings:**
+
+| Permission | On File | On Directory |
+|------------|---------|--------------|
+| r (read) | View contents | List files (`ls`) |
+| w (write) | Modify contents | Create/delete files inside |
+| x (execute) | Run as program | Enter directory (`cd`) |
+
+**Numeric (Octal) Values:**
+- r = 4, w = 2, x = 1
+- `rwx` = 7, `r-x` = 5, `r--` = 4
+- So `drwxr-xr-x` = directory with permissions 755
+
+**Changing Permissions:**
+```bash
+chmod 755 script.sh      # Octal notation
+chmod +x script.sh       # Add execute for all
+chmod u+x script.sh      # Add execute for owner only
+chmod go-w file.txt      # Remove write for group and others
+```
+
+</details>
+
+---
+
+### Q5: What are inodes in Linux? How do they relate to files?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Inodes (Index Nodes):**
+- Data structures that store file metadata
+- Each file has a unique inode number
+- Inode contains: permissions, owner, size, timestamps, block pointers
+- Does NOT contain: filename or actual data
+
+**Viewing Inodes:**
+```bash
+ls -i file.txt           # Show inode number
+ls -li                   # Show inodes with details
+stat file.txt            # Complete inode info
+df -i                    # Inode usage for filesystem
+```
+
+**Understanding Inodes:**
+
+```
+Filename: file.txt  ───┐
+                       │    Inode Table
+                       ▼    ┌──────────────────┐
+                   Inode #12345               │
+                   ├── Permissions: rw-r--r-- │
+                   ├── Owner: user            │
+                   ├── Size: 1024 bytes       │
+                   ├── Modified: 2024-01-15   │
+                   └── Block pointers ────────┼──▶ Data blocks on disk
+```
+
+**Key Concepts:**
+
+1. **Multiple names for same file (hard links):**
+```bash
+ln file.txt hardlink.txt   # Same inode, different name
+ls -li file.txt hardlink.txt  # Same inode number!
+```
+
+2. **Deleting file:**
+- Removes directory entry (filename)
+- Inode deleted when all links removed
+- Data blocks freed
+
+3. **Inode exhaustion:**
+- Even with free disk space, can run out of inodes
+- Common with many small files
+- Check with `df -i`
+
+</details>
+
+---
+
+### Q6: How would you find a file you created last week but forgot where?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Using `find` command:**
+
+```bash
+# Find files modified in last 7 days
+find ~ -type f -mtime -7
+
+# Find files modified between 7-14 days ago
+find ~ -type f -mtime -14 -mtime +7
+
+# Find by name pattern
+find ~ -name "*.py" -mtime -7
+
+# Find with detailed output
+find ~ -type f -mtime -7 -ls
+
+# Find files you own modified recently
+find ~ -type f -user $(whoami) -mtime -7
+```
+
+**Using `locate` (faster, uses database):**
+```bash
+pkg install mlocate
+updatedb  # Update database
+locate -i "filename"
+```
+
+**Combining with other commands:**
+```bash
+# Find recent Python files and show sizes
+find ~ -name "*.py" -mtime -7 -exec ls -lh {} \;
+
+# Find and sort by time
+find ~ -type f -mtime -7 -printf '%T@ %p\n' | sort -n
+
+# Find recent files containing specific text
+find ~ -type f -mtime -7 -exec grep -l "searchterm" {} \;
+```
+
+**Timeline options:**
+| Option | Meaning |
+|--------|---------|
+| `-mtime -n` | Modified less than n days ago |
+| `-mtime +n` | Modified more than n days ago |
+| `-mmin -n` | Modified less than n minutes ago |
+| `-atime -n` | Accessed less than n days ago |
+| `-ctime -n` | Status changed less than n days ago |
+
+</details>
+
+---
+
+### Q7: Explain wildcards (glob patterns) in Linux with examples.
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Common Wildcards:**
+
+| Pattern | Meaning | Example |
+|---------|---------|---------|
+| `*` | Any characters (0 or more) | `*.txt` |
+| `?` | Single character | `file?.txt` |
+| `[abc]` | Any one of a,b,c | `file[123].txt` |
+| `[a-z]` | Range of characters | `file[a-z].txt` |
+| `[!abc]` | NOT a, b, or c | `file[!0-9].txt` |
+
+**Examples:**
+```bash
+# * matches anything
+ls *.txt          # All .txt files
+ls file*          # Files starting with "file"
+ls *backup*       # Files containing "backup"
+
+# ? matches single character
+ls file?.txt      # file1.txt, file2.txt, fileA.txt
+ls photo??.jpg    # photo01.jpg, photo02.jpg
+
+# [] matches character sets
+ls file[123].txt  # file1.txt, file2.txt, file3.txt
+ls photo[0-9].jpg # photo0.jpg through photo9.jpg
+ls [A-Z]*.txt     # .txt files starting with capital
+
+# [!] negates
+ls *[!0-9]*       # Files not containing numbers
+ls file[!0-9].txt # fileA.txt but not file1.txt
+
+# Brace expansion (generates patterns)
+mkdir dir{1,2,3}       # Creates dir1, dir2, dir3
+mkdir project/{src,docs,tests}  # Multiple subdirectories
+cp file.txt{,.bak}     # Creates file.txt.bak
+```
+
+**Advanced Patterns:**
+```bash
+# Combined patterns
+ls [A-Z]*[0-9].txt     # Starts with capital, ends with number
+
+# Multiple extensions
+ls *.{txt,md,py}       # All txt, md, and py files
+
+# Recursive (with shopt)
+shopt -s globstar
+ls **/*.py             # Python files in all subdirectories
+```
+
+</details>
+
+---
+
+### Q8: What is the difference between hard links and soft (symbolic) links?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Hard Links:**
+- Multiple names for same file
+- Same inode number
+- Data exists until ALL links deleted
+- Cannot span filesystems
+- Cannot link to directories
+
+**Soft/Symbolic Links:**
+- Special file pointing to another path
+- Different inode number
+- Breaks if target deleted
+- Can span filesystems
+- Can link to directories
+
+**Creating Links:**
+```bash
+# Hard link
+ln original.txt hardlink.txt
+
+# Soft/symbolic link
+ln -s original.txt softlink.txt
+```
+
+**Comparison:**
+```
+$ ls -li original.txt hardlink.txt softlink.txt
+12345 -rw-r--r-- 2 user user 100 Jan 15 original.txt
+12345 -rw-r--r-- 2 user user 100 Jan 15 hardlink.txt
+12346 lrwxrwxrwx 1 user user  12 Jan 15 softlink.txt -> original.txt
+     ↑                                                  ↑
+  Same inode                                      Different inode
+  (hard link)                                     (symbolic link)
+```
+
+**When to Use:**
+
+| Hard Links | Symbolic Links |
+|------------|----------------|
+| Backup within same filesystem | Cross-filesystem links |
+| Space-efficient file copies | Linking to directories |
+| When target might move | When target name changes |
+
+**Practical Example:**
+```bash
+# Create original
+echo "Hello" > original.txt
+
+# Create hard link
+ln original.txt hardlink.txt
+
+# Create soft link
+ln -s original.txt softlink.txt
+
+# Delete original
+rm original.txt
+
+# Results:
+cat hardlink.txt  # Still works! (same inode)
+cat softlink.txt  # Broken! (points to nothing)
+```
+
+</details>
+
+---
+
+### Q9: How would you create a directory structure like `project/{src,docs,tests}` in one command?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Using Brace Expansion:**
+```bash
+# Create multiple directories at once
+mkdir -p project/{src,docs,tests}
+
+# Creates:
+# project/
+# ├── src/
+# ├── docs/
+# └── tests/
+
+# Nested structure
+mkdir -p project/{src/{main,utils},docs/{api,user},tests}
+
+# Creates:
+# project/
+# ├── src/
+# │   ├── main/
+# │   └── utils/
+# ├── docs/
+# │   ├── api/
+# │   └── user/
+# └── tests/
+```
+
+**More Examples:**
+```bash
+# Numbered directories
+mkdir dir{1..5}           # dir1, dir2, dir3, dir4, dir5
+
+# With leading zeros
+mkdir file{01..10}        # file01 through file10
+
+# Multiple patterns
+mkdir {project,test}_{alpha,beta}  
+# project_alpha, project_beta, test_alpha, test_beta
+
+# File creation with brace expansion
+touch file{1..3}.txt      # file1.txt, file2.txt, file3.txt
+touch {a,b,c}.py          # a.py, b.py, c.py
+```
+
+**With Variables:**
+```bash
+PROJECT="myapp"
+mkdir -p "$PROJECT"/{src,lib,docs,config}
+```
+
+**Complex Structure in One Command:**
+```bash
+mkdir -p myproject/{bin,lib,docs/{html,pdf},src/{main,include},tests/{unit,integration}}
+```
+
+</details>
+
+---
+
+### Q10: What happens when you press Ctrl+C, Ctrl+D, and Ctrl+Z in terminal?
+
+<details>
+<summary>📖 View Answer</summary>
+
+**Answer:**
+
+**Ctrl+C (SIGINT - Interrupt):**
+- Sends interrupt signal to running process
+- Typically terminates the current command
+- Safe way to stop a running program
+```bash
+$ sleep 100
+^C                      # Ctrl+C pressed
+$                       # Process terminated
+```
+
+**Ctrl+D (EOF - End of File):**
+- Sends End-Of-File signal
+- Closes standard input
+- In shell, logs out or exits
+- In programs like `cat`, stops input
+```bash
+$ cat > file.txt
+Hello World
+[Ctrl+D]               # Signals end of input
+$
+```
+
+**Ctrl+Z (SIGTSTP - Suspend):**
+- Suspends (pauses) current process
+- Process is NOT terminated, just paused
+- Can be resumed with `fg` or `bg`
+```bash
+$ sleep 100
+^Z                      # Ctrl+Z pressed
+[1]+  Stopped  sleep 100
+$ jobs                  # View suspended jobs
+[1]+  Stopped  sleep 100
+$ fg                    # Resume in foreground
+$ bg                    # Resume in background
+```
+
+**Summary Table:**
+| Shortcut | Signal | Effect |
+|----------|--------|--------|
+| Ctrl+C | SIGINT | Terminate process |
+| Ctrl+D | EOF | Close input/logout |
+| Ctrl+Z | SIGTSTP | Suspend process |
+| Ctrl+L | - | Clear screen |
+| Ctrl+A | - | Go to line start |
+| Ctrl+E | - | Go to line end |
+
+**Job Control:**
+```bash
+$ sleep 100
+^Z
+[1]+ Stopped  sleep 100
+$ jobs
+[1]+ Stopped  sleep 100
+$ bg %1         # Resume in background
+$ fg %1         # Resume in foreground
+$ kill %1       # Kill job 1
+```
+
+</details>
+
+---
+
+## 🔥 REAL-WORLD SCENARIOS
+
+Practical scenarios you'll encounter when using Linux commands!
+
+---
+
+### Scenario 1: Cleaning Up a Messy Downloads Folder
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     🧹 SCENARIO: DOWNLOADS CLEANUP                           │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  SITUATION: Downloads folder has 500+ mixed files, needs organization        │
+│  Goal: Sort files by type into subfolders, delete old files                  │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🛠️ STEP-BY-STEP SOLUTION:                                                   │
+│                                                                              │
+│  $ cd ~/storage/downloads                                                    │
+│                                                                              │
+│  # Step 1: Analyze the mess                                                  │
+│  $ ls -la | wc -l                     # Count files                          │
+│  $ ls -lhS | head -20                 # Show 20 largest files                │
+│                                                                              │
+│  # Step 2: Create organization folders                                       │
+│  $ mkdir -p {Images,Documents,Videos,Music,Archives,Scripts,Others}          │
+│                                                                              │
+│  # Step 3: Sort by extension                                                 │
+│  $ mv *.jpg *.png *.gif Images/ 2>/dev/null                                  │
+│  $ mv *.pdf *.doc *.docx *.txt Documents/ 2>/dev/null                        │
+│  $ mv *.mp4 *.mkv *.avi Videos/ 2>/dev/null                                  │
+│  $ mv *.mp3 *.wav *.flac Music/ 2>/dev/null                                  │
+│  $ mv *.zip *.tar *.gz Archives/ 2>/dev/null                                 │
+│  $ mv *.py *.sh *.js Scripts/ 2>/dev/null                                    │
+│                                                                              │
+│  # Step 4: Find and delete old files (older than 30 days)                    │
+│  $ find . -maxdepth 1 -type f -mtime +30                                     │
+│  # Review the list first!                                                    │
+│  $ find . -maxdepth 1 -type f -mtime +30 -delete                             │
+│                                                                              │
+│  # Step 5: Find and remove duplicates                                        │
+│  $ pkg install fdupes                                                        │
+│  $ fdupes -r .                      # Find duplicates                        │
+│  $ fdupes -rd .                     # Delete (asks for each)                 │
+│                                                                              │
+│  # Step 6: View results                                                      │
+│  $ ls -la                                                            │
+│  $ du -sh */                                                         │
+│                                                                              │
+│  ✅ RESULT: Clean, organized Downloads folder!                               │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Scenario 2: Accidentally Deleted Important File
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     😱 SCENARIO: ACCIDENTAL DELETION                          │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  SITUATION: Just ran `rm important_script.py` - need it back!                │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🛠️ RECOVERY ATTEMPTS:                                                       │
+│                                                                              │
+│  # Option 1: Check if still in editor buffer                                 │
+│  # If you had it open in nano/vim, the swap file might exist                 │
+│  $ ls -la .*.swp *.swp                                                       │
+│                                                                              │
+│  # Option 2: Check git history (if in repo)                                  │
+│  $ git status                                                                │
+│  $ git checkout HEAD -- important_script.py                                  │
+│                                                                              │
+│  # Option 3: Look in backup (if you made one)                                │
+│  $ ls -la ~/storage/downloads/*.tar.gz                                       │
+│  $ tar -tzf backup.tar.gz | grep important_script.py                         │
+│                                                                              │
+│  # Option 4: Check if process still has file open                            │
+│  $ lsof | grep important_script.py                                           │
+│                                                                              │
+│  # Option 5: Use recovery tool (requires root)                               │
+│  $ pkg install testdisk                                                      │
+│  $ sudo photorec (won't work without root on Termux)                         │
+│                                                                              │
+│  ⚠️ PREVENTION FOR NEXT TIME:                                                │
+│                                                                              │
+│  # Add safety alias                                                          │
+│  $ echo "alias rm='rm -i'" >> ~/.bashrc                                      │
+│  $ source ~/.bashrc                                                          │
+│                                                                              │
+│  # Or better, use trash                                                      │
+│  $ pkg install trash-cli                                                     │
+│  $ echo "alias rm='trash'" >> ~/.bashrc                                       │
+│                                                                              │
+│  # Create automatic backups                                                  │
+│  $ mkdir -p ~/backups                                                        │
+│  $ echo "alias backup='tar -czf ~/backups/backup_\$(date +%Y%m%d).tar.gz ~'" │
+│                                                                              │
+│  💡 KEY LESSON: Linux doesn't have a recycle bin for rm!                     │
+│                Always backup important files!                                │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Scenario 3: Setting Up a Project Structure
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     🏗️ SCENARIO: PROJECT SETUP                               │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  SITUATION: Starting a new Python project, need proper structure             │
+│  Goal: Create standard Python project layout with git                        │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🛠️ COMPLETE SETUP:                                                          │
+│                                                                              │
+│  # Create project structure                                                  │
+│  $ mkdir -p myproject/{src/{main,utils},tests/{unit,integration},docs,config}│
+│  $ cd myproject                                                              │
+│                                                                              │
+│  # Create essential files                                                    │
+│  $ touch src/__init__.py src/main/__init__.py src/utils/__init__.py          │
+│  $ touch tests/__init__.py tests/unit/__init__.py                            │
+│  $ touch requirements.txt README.md .gitignore                               │
+│                                                                              │
+│  # Add content to key files                                                  │
+│  $ cat > README.md << 'EOF'                                                  │
+│  # MyProject                                                                 │
+│                                                                              │
+│  Description of project.                                                     │
+│                                                                              │
+│  ## Installation                                                             │
+│  ```bash                                                                     │
+│  pip install -r requirements.txt                                             │
+│  ```                                                                         │
+│  EOF                                                                         │
+│                                                                              │
+│  $ cat > .gitignore << 'EOF'                                                 │
+│  __pycache__/                                                                │
+│  *.pyc                                                                       │
+│  .venv/                                                                      │
+│  *.egg-info/                                                                 │
+│  .env                                                                        │
+│  EOF                                                                         │
+│                                                                              │
+│  $ cat > requirements.txt << 'EOF'                                           │
+│  requests>=2.28.0                                                            │
+│  pytest>=7.0.0                                                               │
+│  EOF                                                                         │
+│                                                                              │
+│  # Initialize git                                                            │
+│  $ git init                                                                  │
+│  $ git add .                                                                 │
+│  $ git commit -m "Initial project structure"                                 │
+│                                                                              │
+│  # Verify structure                                                          │
+│  $ tree . 2>/dev/null || find . -type f | head -20                           │
+│                                                                              │
+│  # Create virtual environment                                                │
+│  $ python -m venv .venv                                                      │
+│  $ source .venv/bin/activate                                                 │
+│  $ pip install -r requirements.txt                                           │
+│                                                                              │
+│  ✅ RESULT: Professional Python project structure ready!                     │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Scenario 4: Finding Large Files to Free Space
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     💾 SCENARIO: DISK SPACE RECOVERY                         │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  SITUATION: Termux running out of space, need to find and clean              │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🛠️ SPACE RECOVERY PROCESS:                                                  │
+│                                                                              │
+│  # Check current disk usage                                                  │
+│  $ df -h ~                                                                   │
+│  $ du -sh ~/* 2>/dev/null | sort -h                                          │
+│                                                                              │
+│  # Find top 10 largest files                                                 │
+│  $ find ~ -type f -exec du -h {} + 2>/dev/null | sort -rh | head -10         │
+│                                                                              │
+│  # Find directories over 100MB                                               │
+│  $ du -h ~ 2>/dev/null | grep -E '^[0-9.]+G|[0-9]{3,}M' | sort -rh           │
+│                                                                              │
+│  # Common cleanup targets:                                                   │
+│                                                                              │
+│  # 1. Package cache                                                          │
+│  $ du -sh $PREFIX/var/cache/apt/archives/                                    │
+│  $ pkg clean                                                                 │
+│                                                                              │
+│  # 2. Old backups                                                            │
+│  $ ls -lh ~/storage/downloads/*.tar.gz                                       │
+│  $ rm ~/storage/downloads/old_backup.tar.gz                                  │
+│                                                                              │
+│  # 3. Python cache                                                           │
+│  $ find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null            │
+│  $ find ~ -name "*.pyc" -delete                                              │
+│                                                                              │
+│  # 4. npm/yarn cache                                                         │
+│  $ rm -rf ~/.npm/_cacache                                                    │
+│  $ rm -rf ~/.cache/yarn                                                      │
+│                                                                              │
+│  # 5. Old logs                                                               │
+│  $ find ~ -name "*.log" -mtime +30 -delete                                   │
+│                                                                              │
+│  # 6. Temporary files                                                        │
+│  $ rm -rf /tmp/* 2>/dev/null                                                 │
+│  $ rm -rf ~/.cache/* 2>/dev/null                                             │
+│                                                                              │
+│  # Check results                                                             │
+│  $ df -h ~                                                                   │
+│                                                                              │
+│  ✅ RESULT: Space recovered!                                                 │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Scenario 5: Batch File Operations
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     📦 SCENARIO: BATCH RENAMING                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  SITUATION: 100 photo files named "IMG_0001.jpg" need to be renamed          │
+│  Goal: Rename to "vacation_2024_001.jpg" format                              │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🛠️ BATCH RENAMING METHODS:                                                  │
+│                                                                              │
+│  # Method 1: Using mv with loop                                              │
+│  $ for f in IMG_*.jpg; do                                                    │
+│        mv "$f" "vacation_2024_${f#IMG_}"                                     │
+│    done                                                                      │
+│                                                                              │
+│  # Method 2: Using rename command                                            │
+│  $ pkg install renameutils                                                   │
+│  $ rename 's/^IMG_/vacation_2024_/' *.jpg                                    │
+│                                                                              │
+│  # Method 3: Numbered files with padding                                     │
+│  $ count=1                                                                   │
+│  $ for f in *.jpg; do                                                        │
+│        mv "$f" "photo_$(printf '%04d' $count).jpg"                           │
+│        ((count++))                                                           │
+│    done                                                                      │
+│                                                                              │
+│  # Method 4: Lowercase all filenames                                         │
+│  $ for f in *; do                                                            │
+│        mv "$f" "$(echo "$f" | tr '[:upper:]' '[:lower:]')"                   │
+│    done                                                                      │
+│                                                                              │
+│  # Method 5: Add date prefix                                                  │
+│  $ for f in *.jpg; do                                                        │
+│        mv "$f" "$(date +%Y%m%d)_$f"                                          │
+│    done                                                                      │
+│                                                                              │
+│  # Preview changes before executing (dry run)                                 │
+│  $ for f in IMG_*.jpg; do                                                    │
+│        echo "mv '$f' 'vacation_2024_${f#IMG_}'"                              │
+│    done                                                                      │
+│  # Review output, then run without echo                                      │
+│                                                                              │
+│  # Verify results                                                            │
+│  $ ls -la *.jpg | head -10                                                   │
+│                                                                              │
+│  ✅ RESULT: All files renamed according to pattern!                          │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 ARCHITECTURE DIAGRAMS
+
+Visual understanding of Linux commands!
+
+---
+
+### Diagram 1: Directory Navigation Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    DIRECTORY NAVIGATION CONCEPTS                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   Directory Tree Example                                                    │
+│   ════════════════════                                                      │
+│                                                                              │
+│   / (root)                                                                  │
+│   │                                                                         │
+│   ├── home/                                                                 │
+│   │   └── user/                                                             │
+│   │       ├── documents/     ←── pwd shows: /home/user                     │
+│   │       │   ├── work/      ←── cd documents/work                          │
+│   │       │   └── personal/                                                 │
+│   │       ├── downloads/                                                    │
+│   │       └── projects/                                                     │
+│   │                                                                         │
+│   └── sdcard/                                                               │
+│       ├── DCIM/                                                             │
+│       ├── Download/                                                         │
+│       └── Music/                                                            │
+│                                                                              │
+│   Navigation Commands                                                       │
+│   ═══════════════════                                                       │
+│                                                                              │
+│   ┌──────────────────┐         ┌────────────────────────────────┐          │
+│   │    cd /home      │────────▶│ Go to absolute path            │          │
+│   └──────────────────┘         │ (from anywhere)                │          │
+│                                └────────────────────────────────┘          │
+│   ┌──────────────────┐         ┌────────────────────────────────┐          │
+│   │    cd documents  │────────▶│ Go to relative path            │          │
+│   └──────────────────┘         │ (from current directory)       │          │
+│                                └────────────────────────────────┘          │
+│   ┌──────────────────┐         ┌────────────────────────────────┐          │
+│   │    cd ..         │────────▶│ Go up one level                │          │
+│   └──────────────────┘         │ (to parent directory)          │          │
+│                                └────────────────────────────────┘          │
+│   ┌──────────────────┐         ┌────────────────────────────────┐          │
+│   │    cd ~          │────────▶│ Go to home directory           │          │
+│   └──────────────────┘         │ (shortcut)                     │          │
+│                                └────────────────────────────────┘          │
+│   ┌──────────────────┐         ┌────────────────────────────────┐          │
+│   │    cd -          │────────▶│ Go to previous directory       │          │
+│   └──────────────────┘         │ (toggle between two)           │          │
+│                                └────────────────────────────────┘          │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Diagram 2: File Operations Comparison
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    FILE OPERATIONS COMPARISON                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   COPY (cp)                                                                 │
+│   ═════════                                                                 │
+│   Original: file.txt ───────────────▶ Copy: file.txt                        │
+│              └── /source/                   └── /destination/               │
+│                                                                              │
+│   Original file REMAINS                                                      │
+│                                                                              │
+│   ┌────────────────────────────────────────────────────────────┐            │
+│   │  cp source.txt dest.txt          # Copy and rename         │            │
+│   │  cp file.txt /destination/       # Copy to directory       │            │
+│   │  cp -r folder/ dest/             # Copy directory          │            │
+│   │  cp *.txt /destination/          # Copy multiple files     │            │
+│   └────────────────────────────────────────────────────────────┘            │
+│                                                                              │
+│   ─────────────────────────────────────────────────────────────────────     │
+│                                                                              │
+│   MOVE (mv)                                                                 │
+│   ═════════                                                                 │
+│   Original: file.txt ───────────────▶ Moved: file.txt                       │
+│              └── /source/                   └── /destination/               │
+│                                                                              │
+│   Original file is REMOVED from source                                       │
+│                                                                              │
+│   ┌────────────────────────────────────────────────────────────┐            │
+│   │  mv old.txt new.txt             # Rename file             │            │
+│   │  mv file.txt /destination/      # Move to directory       │            │
+│   │  mv folder/ dest/               # Move/rename directory   │            │
+│   │  mv *.txt /destination/         # Move multiple files     │            │
+│   └────────────────────────────────────────────────────────────┘            │
+│                                                                              │
+│   ─────────────────────────────────────────────────────────────────────     │
+│                                                                              │
+│   REMOVE (rm)                                                               │
+│   ═══════════                                                               │
+│   File: file.txt ───────────▶ DELETED (gone forever!)                       │
+│          └── /source/                                                        │
+│                                                                              │
+│   No recycle bin - BE CAREFUL!                                               │
+│                                                                              │
+│   ┌────────────────────────────────────────────────────────────┐            │
+│   │  rm file.txt                     # Delete file             │            │
+│   │  rm -i file.txt                  # Delete with confirm     │            │
+│   │  rm -r folder/                   # Delete directory        │            │
+│   │  rm -rf folder/                  # Force delete (CAREFUL!) │            │
+│   └────────────────────────────────────────────────────────────┘            │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Diagram 3: ls Command Options Decision Tree
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    LS COMMAND OPTIONS                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   What do you want to see?                                                  │
+│   ════════════════════════                                                   │
+│                                                                              │
+│                           ┌─────────────────┐                               │
+│                           │  ls [options]   │                               │
+│                           └────────┬────────┘                               │
+│                                    │                                         │
+│          ┌─────────────────────────┼─────────────────────────┐              │
+│          │                         │                         │              │
+│          ▼                         ▼                         ▼              │
+│   ┌─────────────┐          ┌─────────────┐          ┌─────────────┐         │
+│   │   DETAILS   │          │    FILES    │          │    SORT     │         │
+│   └──────┬──────┘          └──────┬──────┘          └──────┬──────┘         │
+│          │                        │                        │                │
+│          ▼                        ▼                        ▼                │
+│   ┌─────────────┐          ┌─────────────┐          ┌─────────────┐         │
+│   │ -l  : long  │          │ -a  : all   │          │ -t  : time  │         │
+│   │ -h  : human │          │    (hidden) │          │ -S  : size  │         │
+│   │ -i  : inode │          │ -A  : almost│          │ -r  : reverse│        │
+│   └─────────────┘          │    (no .,..)│          │ -X  : extension│       │
+│                            └─────────────┘          └─────────────┘         │
+│                                                                              │
+│   COMMON COMBINATIONS:                                                      │
+│   ═══════════════════                                                       │
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────┐          │
+│   │ ls -la          → All files with details                    │          │
+│   │ ls -lh          → Details with human-readable sizes         │          │
+│   │ ls -lt          → Details sorted by time (newest first)     │          │
+│   │ ls -lS          → Details sorted by size (largest first)    │          │
+│   │ ls -laSh        → Everything: all, details, size, human     │          │
+│   │ ls -d */        → List only directories                    │          │
+│   │ ls -R           → Recursive (show subdirectories)          │          │
+│   └─────────────────────────────────────────────────────────────┘          │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔗 RELATED CHAPTERS
+
+Navigate the course efficiently!
+
+| Previous Chapter | Current Chapter | Next Chapter |
+|-----------------|-----------------|--------------|
+| [Ch 2: First Setup & Configuration](./Ch02-First-Setup-Configuration.md) | **Ch 3: Linux Basics Part 1** | [Ch 4: Linux Basics Part 2](./Ch04-Linux-Basics-Part2.md) |
+
+### Learning Path
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         MODULE 1: FOUNDATION                                 │
+│                                                                              │
+│  ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐              │
+│  │  Ch 1   │────▶│  Ch 2   │────▶│  Ch 3   │────▶│  Ch 4   │              │
+│  │Intro &  │     │ Setup & │     │ Linux   │     │ Linux   │              │
+│  │Install  │     │ Config  │     │Basic 1  │     │Basic 2  │              │
+│  └─────────┘     └─────────┘     └─────────┘     └─────────┘              │
+│                                        │                                    │
+│                                        │                                    │
+│                                   🎯 YOU ARE HERE                            │
+│                                   Ch 3: Linux Basics Part 1                 │
+│                                        │                                    │
+│                                        ▼                                    │
+│                                 ┌─────────┐                                 │
+│                                 │  Ch 5   │                                 │
+│                                 │ Package │                                 │
+│                                 │  Mgmt   │                                 │
+│                                 └─────────┘                                 │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+| Chapter | Title | Topics Covered | Difficulty |
+|---------|-------|---------------|------------|
+| Ch 1 | Termux Introduction & Installation | What is Termux, F-Droid install, First setup | ⭐ Beginner |
+| Ch 2 | First Setup & Configuration | .bashrc, aliases, environment variables | ⭐ Beginner |
+| Ch 3 | Linux Basics Part 1 | pwd, ls, cd, mkdir, rm, cp, mv | ⭐ Beginner |
+| Ch 4 | Linux Basics Part 2 | cat, touch, grep, find, chmod, pipes | ⭐⭐ Intermediate |
+| Ch 5 | Package Management | pkg, apt, dpkg, repositories | ⭐ Beginner |
+
+---
+
+## 🏆 BONUS ADVANCED CONTENT
+
+Advanced Linux command techniques beyond the basics!
+
+---
+
+### Advanced 1: Advanced File Searching with find
+
+```bash
+# Complex find operations
+
+# Find files larger than 100MB
+find ~ -type f -size +100M
+
+# Find empty directories
+find ~ -type d -empty
+
+# Find files modified in last hour
+find ~ -type f -mmin -60
+
+# Find files by multiple criteria
+find ~ -type f \( -name "*.py" -o -name "*.sh" \) -mtime -7
+
+# Find files with specific permissions
+find ~ -type f -perm 755
+
+# Find files NOT matching pattern
+find ~ -type f ! -name "*.txt"
+
+# Execute command on found files
+find ~ -name "*.log" -exec gzip {} \;
+
+# Delete files older than 30 days
+find ~/tmp -type f -mtime +30 -delete
+
+# Find and count by extension
+find ~ -type f -name "*.py" | wc -l
+
+# Find with interactive prompt
+find ~ -name "*.tmp" -ok rm {} \;
+
+# Find files containing specific text
+find ~ -type f -name "*.py" -exec grep -l "import" {} \;
+```
+
+---
+
+### Advanced 2: Extended Globbing and Brace Expansion
+
+```bash
+# Enable extended globbing
+shopt -s extglob
+shopt -s globstar
+
+# Extended patterns (with extglob)
+ls !(*.txt)           # Everything except .txt files
+ls @(file1|file2)     # Only file1 or file2
+ls *.!(jpg|png)       # All files except images
+ls +(*.py|*.sh)       # Files ending in .py or .sh
+
+# Double-star globbing (with globstar)
+ls **/*.py            # All .py files recursively
+ls **/test_*.py       # All test files in any subdirectory
+
+# Brace expansion for creating structures
+mkdir -p project/{src,lib,docs}/{main,test}
+
+# Brace expansion with ranges
+touch file{001..100}.txt     # Create 100 files
+touch day{1..7}_{am,pm}.log  # 14 files (7 days × 2)
+
+# Combined patterns
+cp file{,.bak}               # Backup: file.txt → file.txt.bak
+mv {old,new}_name.txt        # Rename old_name.txt to new_name.txt
+
+# Multiple braces
+echo {a,b}{1,2}              # a1 a2 b1 b2
+mkdir {project,test}_{alpha,beta}  # 4 directories
+```
+
+---
+
+### Advanced 3: Directory Stack and Quick Navigation
+
+```bash
+# Directory stack commands
+dirs                  # Show directory stack
+dirs -v               # Show with numbers
+dirs -c               # Clear stack
+
+# pushd and popd
+pushd /sdcard         # Push current dir, go to /sdcard
+pushd ~/projects      # Push /sdcard, go to projects
+popd                  # Go back to /sdcard
+popd                  # Go back to original
+
+# Quick navigation with stack numbers
+pushd /sdcard
+pushd ~/downloads
+pushd ~/projects
+
+dirs -v
+# 0  ~/projects
+# 1  ~/downloads
+# 2  /sdcard
+# 3  ~
+
+cd ~2                 # Go to /sdcard (entry 2)
+cd ~3                 # Go to ~ (entry 3)
+
+# Useful aliases for navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+alias -- -='cd -'
+alias d='dirs -v'
+
+# Create function for quick bookmarks
+mark() {
+    export "DIR_$1=$(pwd)"
+}
+go() {
+    cd "$(eval echo \$DIR_$1)"
+}
+
+# Usage:
+# mark proj     # Save current directory as 'proj'
+# cd /somewhere/else
+# go proj       # Jump back to saved location
+```
+
+---
+
+## 📝 CHAPTER SUMMARY CHECKLIST
+
+Complete this checklist to verify your learning!
+
+### ✅ Commands Mastered
+
+- [ ] `pwd` - Print current directory
+- [ ] `ls` with options: `-l`, `-a`, `-h`, `-t`, `-S`
+- [ ] `cd` with special paths: `..`, `~`, `-`
+- [ ] `mkdir` with `-p` for nested directories
+- [ ] `rm` with `-r`, `-f`, `-i`
+- [ ] `cp` with `-r` for directories
+- [ ] `mv` for moving and renaming
+
+### ✅ Concepts Understood
+
+- [ ] Absolute vs relative paths
+- [ ] File system hierarchy
+- [ ] Hidden files (dot files)
+- [ ] Wildcards and glob patterns
+- [ ] Tab completion
+- [ ] File permissions basics
+
+### ✅ Practical Skills
+
+- [ ] Navigate directory tree confidently
+- [ ] Create directory structures
+- [ ] Copy and move files safely
+- [ ] Delete files and directories
+- [ ] Find files using `find`
+- [ ] Use wildcards for batch operations
+
+### ✅ Safety Practices
+
+- [ ] Use `rm -i` for important files
+- [ ] Check paths before delete
+- [ ] Back up before major operations
+- [ ] Use tab completion to avoid typos
 
 ---
 
