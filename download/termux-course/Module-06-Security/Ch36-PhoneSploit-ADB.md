@@ -2410,6 +2410,94 @@ adb pull /sdcard/ ./backup/
 
 ---
 
+## 📊 MERMAID DIAGRAMS - ADB Attack Flow
+
+```mermaid
+graph TD
+    A[ADB Enabled Device] --> B[Connect via USB/WiFi]
+    B --> C[ADB Shell Access]
+    C --> D{Root Access?}
+    D -->|Yes| E[Full Access]
+    D -->|No| F[Limited Access]
+    
+    E --> G[Extract Data]
+    E --> H[Install Apps]
+    E --> I[System Control]
+    
+    F --> J[File Access]
+    F --> K[App Management]
+```
+
+---
+
+## ⚡ TOOL CHEATSHEET
+
+| Command | Purpose |
+|---------|---------|
+| `adb devices` | List devices |
+| `adb shell` | Get shell |
+| `adb connect IP:5555` | WiFi connect |
+| `adb push/pull` | File transfer |
+| `adb install app.apk` | Install app |
+| `adb shell screencap` | Screenshot |
+
+---
+
+## 🔧 TOOL COMPARISON
+
+| Tool | Purpose |
+|------|---------|
+| ADB | Official tool |
+| PhoneSploit | Automated exploitation |
+| Scrcpy | Screen control |
+
+---
+
+## 🚀 CHALLENGES
+
+1. Connect device over WiFi
+2. Extract files from device
+3. Install custom APK
+
+⚠️ **LEGAL:** Only test YOUR devices!
+
+---
+
+## 📖 GLOSSARY
+
+| Term | Definition |
+|------|------------|
+| ADB | Android Debug Bridge |
+| USB Debugging | Developer mode |
+| Shell | Command interface |
+| APK | Android Package |
+| Root | Superuser access |
+
+---
+
+## 💼 CAREER: Mobile Security
+
+**Salary:** $90K-$160K
+**Certs:** MOIS, GREM
+
+---
+
+## ⚠️ LEGAL DISCLAIMER
+
+**ADB access requires permission!**
+Unauthorized device access is illegal.
+
+---
+
+## 🛡️ DEFENSIVE MEASURES
+
+- Disable USB Debugging
+- Revoke ADB authorizations
+- Use strong screen lock
+- Disable wireless ADB
+
+---
+
 ## ⚠️ SECURITY BEST PRACTICES
 
 ### ✅ DO's

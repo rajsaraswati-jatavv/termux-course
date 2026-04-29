@@ -2333,6 +2333,91 @@ john --wordlist=rockyou.txt hashes.txt
 
 ---
 
+## 📊 MERMAID DIAGRAMS - SQLMap Attack Flow
+
+```mermaid
+graph TD
+    A[Target URL] --> B[SQLMap Scan]
+    B --> C{Vulnerability?}
+    C -->|Yes| D[Database Enumeration]
+    C -->|No| E[Try Different Parameters]
+    E --> B
+    
+    D --> F[List Databases]
+    F --> G[Select Database]
+    G --> H[List Tables]
+    H --> I[Select Table]
+    I --> J[Dump Data]
+```
+
+---
+
+## ⚡ TOOL CHEATSHEET
+
+| Command | Purpose |
+|---------|---------|
+| `sqlmap -u "URL" --dbs` | List databases |
+| `sqlmap -u "URL" --tables -D db` | List tables |
+| `sqlmap -u "URL" --dump -T table` | Dump data |
+| `sqlmap -u "URL" --batch` | Auto mode |
+| `sqlmap -r request.txt` | From file |
+
+---
+
+## 🔧 TOOL COMPARISON
+
+| Tool | Type |
+|------|------|
+| SQLMap | Automated SQLi |
+| Burp Suite | Manual testing |
+| sqlninja | SQL Server focused |
+
+---
+
+## 🚀 CHALLENGES
+
+1. Test DVWA SQL injection
+2. Enumerate database
+3. Extract credentials
+
+⚠️ **LEGAL:** Test only authorized targets!
+
+---
+
+## 📖 GLOSSARY
+
+| Term | Definition |
+|------|------------|
+| SQL Injection | Database attack via input |
+| Payload | Malicious SQL code |
+| Union-based | Using UNION SELECT |
+| Blind SQLi | Inference-based attack |
+
+---
+
+## 💼 CAREER: Web Security
+
+**Salary:** $80K-$150K
+**Certs:** OSCP, GWAPT
+
+---
+
+## ⚠️ LEGAL DISCLAIMER
+
+**Authorized testing only!**
+SQL injection without permission is illegal.
+
+---
+
+## 🛡️ DEFENSIVE MEASURES
+
+- Parameterized queries
+- Input validation
+- WAF deployment
+- Least privilege
+
+---
+
 ## ⚠️ SECURITY BEST PRACTICES
 
 ### ✅ DO's

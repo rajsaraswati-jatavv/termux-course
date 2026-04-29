@@ -1074,6 +1074,730 @@ Thank you for watching! See you in Chapter 15!
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Error Handling Flow with trap
+
+```mermaid
+flowchart TD
+    A[Script Start] --> B[Set trap handlers]
+    B --> C[trap cleanup EXIT]
+    C --> D[trap handler INT TERM]
+    D --> E[Main Script Logic]
+    
+    E --> F{Error Occurs?}
+    F -->|Yes| G{trap ERR set?}
+    G -->|Yes| H[Execute ERR trap]
+    G -->|No| I[Continue/Error Exit]
+    H --> J[EXIT trap fires]
+    
+    F -->|No| K{Signal Received?}
+    K -->|INT/TERM| L[Signal Handler]
+    K -->|No| M[Continue Execution]
+    
+    L --> N[Graceful Cleanup]
+    N --> J
+    J --> O[Script Exit]
+    
+    E --> P[Normal Completion]
+    P --> J
+```
+
+### Process Substitution Architecture
+
+```mermaid
+flowchart LR
+    subgraph Input["Input Substitution <()"]
+        A[Command 1] --> B[/dev/fd/63]
+        C[Command 2] --> D[/dev/fd/64]
+        B --> E[diff]
+        D --> E
+    end
+    
+    subgraph Output["Output Substitution >()"]
+        F[Command] --> G[tee]
+        G --> H[/dev/fd/65]
+        G --> I[/dev/fd/66]
+        H --> J[Process 1]
+        I --> K[Process 2]
+    end
+```
+
+### Regex Match and Capture Groups
+
+```mermaid
+flowchart TD
+    A[String Input] --> B{[[ string =~ regex ]]}
+    B -->|Match| C[BASH_REMATCH Array]
+    B -->|No Match| D[Return 1]
+    
+    C --> E["BASH_REMATCH[0] = Full Match"]
+    C --> F["BASH_REMATCH[1] = Group 1"]
+    C --> G["BASH_REMATCH[2] = Group 2"]
+    C --> H["BASH_REMATCH[n] = Group n"]
+    
+    E --> I[Use Captured Groups]
+    F --> I
+    G --> I
+    H --> I
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+### Advanced Bash Constructs
+
+| Construct | Syntax | Example | Purpose |
+|-----------|--------|---------|---------|
+| Process sub in | `<(cmd)` | `diff <(ls a) <(ls b)` | Compare command outputs |
+| Process sub out | `>(cmd)` | `tee >(grep x) > file` | Split output |
+| Here document | `<< EOF...EOF` | Multi-line input to command |
+| Here string | `<<< "str"` | `grep x <<< "text"` | Single line input |
+| Regex match | `[[ $s =~ r ]]` | `[[ $ip =~ ^[0-9] ]]` | Pattern matching |
+| Capture groups | `${BASH_REMATCH[n]}` | Extract matched parts |
+| Coproc | `coproc NAME { cmd; }` | Run coprocess |
+
+### Signal Handling Commands
+
+| Signal | Number | Default | Common Use |
+|--------|--------|---------|------------|
+| SIGINT | 2 | Terminate | Ctrl+C handler |
+| SIGTERM | 15 | Terminate | Graceful shutdown |
+| SIGKILL | 9 | Kill | Cannot be caught |
+| SIGHUP | 1 | Terminate | Reload config |
+| SIGSTOP | 19 | Stop | Pause process |
+| SIGCONT | 18 | Continue | Resume process |
+| EXIT | - | - | Always runs on exit |
+| ERR | - | - | On error with set -e |
+
+### set Options Reference
+
+| Option | Purpose | Example |
+|--------|---------|---------|
+| `set -e` | Exit on error | `set -e` |
+| `set -u` | Error on undefined var | `set -u` |
+| `set -x` | Debug mode (print commands) | `set -x` |
+| `set -o pipefail` | Pipeline fails on any error | `set -o pipefail` |
+| `set -v` | Verbose (print input lines) | `set -v` |
+| `set -n` | No execution (syntax check) | `set -n` |
+| Combined strict | Full strict mode | `set -euo pipefail` |
+
+### Advanced Text Processing
+
+| Tool | Purpose | Example |
+|------|---------|---------|
+| `sed -i` | In-place edit | `sed -i 's/old/new/g' file` |
+| `sed -E` | Extended regex | `sed -E 's/[0-9]+/NUM/g'` |
+| `awk -F` | Field separator | `awk -F',' '{print $1}'` |
+| `awk NR` | Record number | `awk 'NR==1' file` |
+| `awk NF` | Number of fields | `awk '{print NF}'` |
+| `grep -P` | Perl regex | `grep -P '\d{3}'` |
+| `grep -o` | Only matching | `grep -o '[0-9]+'` |
+| `cut -d` | Delimiter cut | `cut -d':' -f1` |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║             ADVANCED BASH SCRIPTING MASTERY PATH - T3RMUXK1NG                ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                                ║
+║  🎯 GOAL: Professional-Level Bash Developer                                  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 1: ERROR HANDLING                               │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │ set -e  │──►│ set -u  │──►│ pipefail│──►│  trap   │                  │  ║
+║  │  │         │   │         │   │         │   │  ERR    │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐        ⭐⭐⭐          ⭐⭐⭐⭐        ⭐⭐⭐⭐⭐                       │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 2: SIGNALS & PROCESSES                          │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │ SIGINT  │──►│ SIGTERM │──►│ coproc  │──►│  jobs   │                  │  ║
+║  │  │ Ctrl+C  │   │  kill   │   │         │   │  wait   │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐        ⭐⭐⭐          ⭐⭐⭐⭐        ⭐⭐⭐⭐                        │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 3: REGEX & TEXT PROCESSING                      │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │  =~     │──►│ BASH_   │──►│ sed -E  │──►│ awk     │                  │  ║
+║  │  │  regex  │   │ REMATCH │   │         │   │ scripts │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐⭐       ⭐⭐⭐⭐         ⭐⭐⭐⭐        ⭐⭐⭐⭐⭐                       │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 4: ADVANCED FEATURES                            │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │ Process │──►│  Here   │──►│ getopts │──►│ CLI     │                  │  ║
+║  │  │ Subst.  │   │  Docs   │   │ parsing │   │  Tools  │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐⭐⭐      ⭐⭐⭐⭐         ⭐⭐⭐⭐        ⭐⭐⭐⭐⭐                       │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║                         🏆 BASH EXPERT 🏆                                     ║
+║                                                                                ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL/FEATURE COMPARISON TABLE
+
+### Text Processing Tools Comparison
+
+| Feature | sed | awk | grep | perl |
+|---------|-----|-----|------|------|
+| **Speed** | ⭐⭐⭐⭐⭐ Fast | ⭐⭐⭐⭐ Fast | ⭐⭐⭐⭐⭐ Very Fast | ⭐⭐⭐ Medium |
+| **Complexity** | ⭐⭐⭐ Medium | ⭐⭐⭐⭐ Complex | ⭐⭐ Simple | ⭐⭐⭐⭐⭐ Complex |
+| **Field Processing** | ⭐⭐ Limited | ⭐⭐⭐⭐⭐ Excellent | ❌ None | ⭐⭐⭐⭐⭐ Excellent |
+| **Regex Support** | ⭐⭐⭐⭐ Good | ⭐⭐⭐⭐ Good | ⭐⭐⭐⭐⭐ Excellent | ⭐⭐⭐⭐⭐ Full PCRE |
+| **In-place Edit** | ✅ Yes | ⚠️ With temp | ❌ No | ✅ Yes |
+| **Arithmetic** | ❌ No | ✅ Yes | ❌ No | ✅ Yes |
+| **Scripting** | ❌ Limited | ✅ Full | ❌ None | ✅ Full Language |
+| **Best For** | Substitutions | Reports, Data | Pattern search | Complex tasks |
+
+### Error Handling Strategies
+
+| Strategy | Code | Use Case |
+|----------|------|----------|
+| **Fail Fast** | `set -e` | Production scripts |
+| **Check Each** | `if cmd; then...fi` | Critical operations |
+| **Trap Cleanup** | `trap cleanup EXIT` | Resource cleanup |
+| **Log and Continue** | `cmd || log_error` | Non-critical tasks |
+| **Retry Logic** | Loop with counter | Network operations |
+| **Graceful Degradation** | Fallback functions | Feature detection |
+
+---
+
+## 🚀 PRACTICAL CODING CHALLENGES
+
+### Challenge 1: Robust File Processor 🛡️
+
+**Difficulty:** ⭐⭐ Intermediate  
+**Time:** 15 minutes
+
+**Problem:** Create a script that processes files with:
+- Error handling (set -euo pipefail)
+- Cleanup on exit/interrupt
+- Logging to file
+- Proper error messages
+
+**Sample Output:**
+```
+[2025-01-15 10:30:45] Starting file processor...
+[2025-01-15 10:30:45] Processing: file1.txt
+[2025-01-15 10:30:46] Processed 100 lines
+[2025-01-15 10:30:46] Processing: file2.txt
+[2025-01-15 10:30:47] ERROR: file2.txt: Permission denied
+[2025-01-15 10:30:47] Cleanup: Removing temp files...
+[2025-01-15 10:30:47] Cleanup complete
+Script exited with code 1
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Configuration
+LOG_FILE="processor.log"
+TEMP_DIR="/tmp/processor_$$"
+
+# Logging function
+log() {
+    local timestamp
+    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[$timestamp] $*" | tee -a "$LOG_FILE"
+}
+
+# Error handler
+error() {
+    log "ERROR: $*"
+    exit 1
+}
+
+# Cleanup function
+cleanup() {
+    log "Cleanup: Removing temp files..."
+    rm -rf "$TEMP_DIR"
+    log "Cleanup complete"
+}
+
+# Set up traps
+trap cleanup EXIT
+trap 'log "Interrupted!"; exit 130' INT TERM
+
+# Create temp directory
+mkdir -p "$TEMP_DIR" || error "Cannot create temp directory"
+
+# Main processing
+process_file() {
+    local file="$1"
+    log "Processing: $file"
+    
+    # Check file exists and readable
+    [[ -f "$file" ]] || error "$file: Not a file"
+    [[ -r "$file" ]] || error "$file: Permission denied"
+    
+    # Process file
+    local lines
+    lines=$(wc -l < "$file")
+    log "Processed $lines lines"
+}
+
+# Main
+log "Starting file processor..."
+
+# Process arguments
+for file in "$@"; do
+    process_file "$file"
+done
+
+log "All files processed successfully"
+```
+</details>
+
+---
+
+### Challenge 2: Configuration Parser ⚙️
+
+**Difficulty:** ⭐⭐⭐ Advanced  
+**Time:** 20 minutes
+
+**Problem:** Create a script that parses a config file (INI-style) and supports:
+- Key=value parsing
+- Section headers [section]
+- Comments (# or ;)
+- Variable expansion ${var}
+- Default values
+
+**Sample Config:**
+```
+# Main configuration
+[database]
+host = localhost
+port = 5432
+name = mydb
+
+[server]
+host = 0.0.0.0
+port = ${db_port:-8080}
+```
+
+**Sample Output:**
+```
+=== Parsed Configuration ===
+[database]
+  host = localhost
+  port = 5432
+  name = mydb
+
+[server]
+  host = 0.0.0.0
+  port = 8080
+
+Config loaded: 5 variables, 2 sections
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```bash
+#!/bin/bash
+# Configuration File Parser
+
+declare -A CONFIG
+declare -A SECTIONS
+CURRENT_SECTION=""
+
+parse_config() {
+    local file="$1"
+    local line_num=0
+    
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        ((line_num++))
+        
+        # Skip empty lines and comments
+        [[ -z "$line" || "$line" =~ ^[[:space:]]*[#;] ]] && continue
+        
+        # Remove leading/trailing whitespace
+        line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        
+        # Check for section header
+        if [[ "$line" =~ ^\[([^]]+)\]$ ]]; then
+            CURRENT_SECTION="${BASH_REMATCH[1]}"
+            SECTIONS["$CURRENT_SECTION"]=1
+            continue
+        fi
+        
+        # Parse key=value
+        if [[ "$line" =~ ^([^=]+)=(.*)$ ]]; then
+            local key="${BASH_REMATCH[1]}"
+            local value="${BASH_REMATCH[2]}"
+            
+            # Trim whitespace
+            key=$(echo "$key" | tr -d ' ')
+            value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            
+            # Handle variable expansion ${var:-default}
+            while [[ "$value" =~ \$\{([^}:]+):-([^}]*)\} ]]; do
+                local var_name="${BASH_REMATCH[1]}"
+                local default="${BASH_REMATCH[2]}"
+                local var_value="${CONFIG[$var_name]:-$default}"
+                value="${value//\$\{${var_name}:-${default}\}/$var_value}"
+            done
+            
+            # Store with section prefix
+            if [[ -n "$CURRENT_SECTION" ]]; then
+                CONFIG["${CURRENT_SECTION}.${key}"]="$value"
+            else
+                CONFIG["$key"]="$value"
+            fi
+        fi
+    done < "$file"
+}
+
+# Display configuration
+show_config() {
+    echo "=== Parsed Configuration ==="
+    
+    for section in "${!SECTIONS[@]}"; do
+        echo "[$section]"
+        for key in "${!CONFIG[@]}"; do
+            if [[ "$key" == "${section}."* ]]; then
+                local display_key="${key#${section}.}"
+                echo "  $display_key = ${CONFIG[$key]}"
+            fi
+        done
+        echo ""
+    done
+    
+    # Non-section variables
+    for key in "${!CONFIG[@]}"; do
+        if [[ "$key" != *"."* ]]; then
+            echo "$key = ${CONFIG[$key]}"
+        fi
+    done
+    
+    echo ""
+    echo "Config loaded: ${#CONFIG[@]} variables, ${#SECTIONS[@]} sections"
+}
+
+# Usage
+if [[ $# -eq 0 ]]; then
+    echo "Usage: $0 <config_file>"
+    exit 1
+fi
+
+parse_config "$1"
+show_config
+```
+</details>
+
+---
+
+### Challenge 3: Process Monitor 🔍
+
+**Difficulty:** ⭐⭐⭐⭐ Expert  
+**Time:** 25 minutes
+
+**Problem:** Create a process monitoring script that:
+- Monitors specified processes
+- Restarts them if they crash
+- Logs all events
+- Handles signals gracefully
+- Has configurable check intervals
+
+**Sample Output:**
+```
+=== Process Monitor Started ===
+Monitoring: server.py, worker.sh
+Check interval: 5s
+PID file: /tmp/monitor.pid
+
+[10:30:45] ✓ server.py running (PID: 12345)
+[10:30:45] ✓ worker.sh running (PID: 12346)
+[10:30:50] ✓ server.py running (PID: 12345)
+[10:30:50] ✗ worker.sh not running, restarting...
+[10:30:51] ✓ worker.sh restarted (PID: 12350)
+[10:30:55] Received SIGTERM, shutting down...
+[10:30:55] Stopping monitored processes...
+=== Process Monitor Stopped ===
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```bash
+#!/usr/bin/env bash
+# Process Monitor with Auto-Restart
+
+set -euo pipefail
+
+# Configuration
+CHECK_INTERVAL=5
+LOG_FILE="monitor.log"
+PID_FILE="/tmp/monitor.pid"
+declare -a PROCESSES=()
+declare -A PIDS
+RUNNING=true
+
+# Logging
+log() {
+    local timestamp
+    timestamp=$(date '+%H:%M:%S')
+    echo "[$timestamp] $*" | tee -a "$LOG_FILE"
+}
+
+# Signal handlers
+shutdown() {
+    log "Received SIGTERM, shutting down..."
+    RUNNING=false
+}
+
+interrupt() {
+    log "Received SIGINT, shutting down..."
+    RUNNING=false
+}
+
+cleanup() {
+    log "Stopping monitored processes..."
+    for proc in "${!PIDS[@]}"; do
+        if kill -0 "${PIDS[$proc]}" 2>/dev/null; then
+            kill "${PIDS[$proc]}" 2>/dev/null || true
+            log "Stopped: $proc"
+        fi
+    done
+    rm -f "$PID_FILE"
+    log "=== Process Monitor Stopped ==="
+}
+
+# Start a process
+start_process() {
+    local proc="$1"
+    local cmd="$2"
+    
+    if [[ -x "$cmd" ]]; then
+        "$cmd" &
+        PIDS["$proc"]=$!
+        log "✓ $proc started (PID: ${PIDS[$proc]})"
+    else
+        # Try as command
+        nohup bash -c "$cmd" >/dev/null 2>&1 &
+        PIDS["$proc"]=$!
+        log "✓ $proc started (PID: ${PIDS[$proc]})"
+    fi
+}
+
+# Check and restart if needed
+check_process() {
+    local proc="$1"
+    local cmd="$2"
+    
+    if [[ -n "${PIDS[$proc]:-}" ]] && kill -0 "${PIDS[$proc]}" 2>/dev/null; then
+        log "✓ $proc running (PID: ${PIDS[$proc]})"
+        return 0
+    else
+        log "✗ $proc not running, restarting..."
+        start_process "$proc" "$cmd"
+        return 1
+    fi
+}
+
+# Main function
+main() {
+    # Set up traps
+    trap shutdown TERM
+    trap interrupt INT
+    trap cleanup EXIT
+    
+    # Save PID
+    echo $$ > "$PID_FILE"
+    
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -i|--interval)
+                CHECK_INTERVAL="$2"
+                shift 2
+                ;;
+            *)
+                PROCESSES+=("$1")
+                shift
+                ;;
+        esac
+    done
+    
+    if [[ ${#PROCESSES[@]} -eq 0 ]]; then
+        echo "Usage: $0 [-i interval] process1 process2 ..."
+        exit 1
+    fi
+    
+    log "=== Process Monitor Started ==="
+    log "Monitoring: ${PROCESSES[*]}"
+    log "Check interval: ${CHECK_INTERVAL}s"
+    log "PID file: $PID_FILE"
+    
+    # Initial start
+    for proc in "${PROCESSES[@]}"; do
+        start_process "$proc" "$proc"
+    done
+    
+    # Monitoring loop
+    while $RUNNING; do
+        sleep "$CHECK_INTERVAL"
+        
+        for proc in "${PROCESSES[@]}"; do
+            check_process "$proc" "$proc"
+        done
+    done
+}
+
+main "$@"
+```
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+### Advanced Bash Terms
+
+| Term | Definition |
+|------|------------|
+| **Signal** | Software interrupt sent to a process to notify of events |
+| **trap** | Bash builtin to catch and handle signals |
+| **Exit Code** | Numeric status (0-255) returned by commands |
+| **Process Substitution** | Treating command output as a file |
+| **Here Document** | Multi-line string input redirection |
+| **Here String** | Single-line string input redirection |
+| **Regex** | Regular expression for pattern matching |
+| **BASH_REMATCH** | Array containing regex match results |
+| **coproc** | Built-in to run commands as coprocesses |
+| **Pipeline** | Series of commands connected by pipes |
+| **File Descriptor** | Integer handle for open files (0=stdin, 1=stdout, 2=stderr) |
+| **Subshell** | Child process that runs commands |
+| **Environment** | Variables passed to child processes |
+| **getopts** | Built-in for parsing command options |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Advanced Scripting Career Applications
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              ADVANCED BASH IN INDUSTRY - USE CASES                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │ DEVOPS & INFRASTRUCTURE                                            │    │
+│  │ • CI/CD Pipeline Scripts    • Infrastructure as Code (Ansible)    │    │
+│  │ • Deployment Automation     • Log Processing & Monitoring         │    │
+│  │ Salary Impact: +30% over basic scripting                           │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │ SECURITY & PENTESTING                                              │    │
+│  │ • Exploit Development       • Network Scanning Scripts            │    │
+│  │ • Log Analysis              • Automated Testing Frameworks        │    │
+│  │ Salary Impact: +40% for security specialization                    │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │ DATA ENGINEERING                                                   │    │
+│  │ • ETL Pipeline Scripts      • Data Processing Workflows           │    │
+│  │ • Database Maintenance      • Report Generation                   │    │
+│  │ Salary Impact: +25% in data roles                                  │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills Progression Value
+
+| Skill Level | Years | Salary Premium | Roles |
+|-------------|-------|----------------|-------|
+| Basic | 0-1 | Baseline | Help Desk, Junior Admin |
+| Intermediate | 1-3 | +15-25% | SysAdmin, DevOps Jr |
+| Advanced | 3-5 | +30-50% | Senior DevOps, SRE |
+| Expert | 5+ | +50-80% | Lead, Architect |
+
+---
+
+## 🏆 CODE OPTIMIZATION TIPS
+
+### Advanced Bash Optimization
+
+| Tip | Description | Impact |
+|-----|-------------|--------|
+| **Use [[ ]] over [ ]** | More features, safer | ⭐⭐⭐⭐ |
+| **Avoid pipelines** | Each pipe creates subshell | ⭐⭐⭐⭐⭐ |
+| **Use process substitution** | Avoid temp files | ⭐⭐⭐⭐ |
+| **Cache expensive operations** | Store results in variables | ⭐⭐⭐⭐ |
+| **Use local variables** | Faster lookup, safer scope | ⭐⭐⭐ |
+| **Prefer builtins** | Faster than external commands | ⭐⭐⭐⭐ |
+| **Minimize subshells** | $(()) over expr, $() carefully | ⭐⭐⭐⭐⭐ |
+| **Use arrays** | Efficient data handling | ⭐⭐⭐⭐ |
+
+### Advanced Anti-Patterns
+
+```bash
+# ❌ BAD: Multiple subshells in loop
+while read line; do
+    var=$(echo "$line" | cut -d',' -f1)
+    val=$(echo "$line" | cut -d',' -f2)
+done < file
+
+# ✅ GOOD: Single read with IFS
+while IFS=',' read -r var val rest; do
+    # Direct variable assignment
+done < file
+
+# ❌ BAD: grep | wc
+count=$(grep "pattern" file | wc -l)
+
+# ✅ GOOD: grep -c
+count=$(grep -c "pattern" file)
+
+# ❌ BAD: Multiple file reads
+for file in *.txt; do
+    lines=$(wc -l < "$file")
+    words=$(wc -w < "$file")
+    chars=$(wc -c < "$file")
+done
+
+# ✅ GOOD: Single read with awk
+for file in *.txt; do
+    read lines words chars < <(wc "$file")
+done
+
+# ❌ BAD: Test command in []
+[ "$var" = "test" ] && [ -f "$file" ]
+
+# ✅ GOOD: Use [[ ]] with &&
+[[ "$var" == "test" && -f "$file" ]]
+```
+
+---
+
 ## 📖 TECHNICAL GUIDE
 
 ### Advanced Bash Patterns Reference

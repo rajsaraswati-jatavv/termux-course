@@ -1217,6 +1217,560 @@ EOF
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Diagram 1: PDF Processing Pipeline
+
+```mermaid
+flowchart TD
+    A[PDF Input] --> B{Operation Needed?}
+    B -->|Merge| C[pdftk cat]
+    B -->|Split| D[pdftk burst]
+    B -->|Extract Text| E[pdftotext]
+    B -->|Convert| F[pdftoppm/convert]
+    B -->|Compress| G[gs/qpdf]
+    B -->|Encrypt| H[pdftk/qpdf]
+    
+    C --> I[Merged PDF]
+    D --> J[Multiple PDFs]
+    E --> K[Text File]
+    F --> L[Images]
+    G --> M[Smaller PDF]
+    H --> N[Protected PDF]
+```
+
+### Diagram 2: PDF Tool Ecosystem
+
+```mermaid
+mindmap
+  root((PDF Tools))
+    Manipulation
+      pdftk - Swiss Army Knife
+      qpdf - Structure Preserving
+      PyPDF2 - Python Library
+    Conversion
+      pdftotext - Text Extraction
+      pdftohtml - HTML Export
+      pdftoppm - Image Conversion
+    Creation
+      reportlab - Python PDF
+      convert - Image to PDF
+      wkhtmltopdf - HTML to PDF
+    Processing
+      Ghostscript - PS/PDF Engine
+      ImageMagick - Image Handling
+      poppler-utils - Utilities
+```
+
+### Diagram 3: PDF Security Levels
+
+```mermaid
+flowchart LR
+    A[PDF Security] --> B[Encryption]
+    A --> C[Permissions]
+    A --> D[Digital Signatures]
+    
+    B --> B1[40-bit RC4 - Weak]
+    B --> B2[128-bit RC4 - Medium]
+    B --> B3[128-bit AES - Good]
+    B --> B4[256-bit AES - Strong]
+    
+    C --> C1[Print Allowed]
+    C --> C2[Copy Allowed]
+    C --> C3[Modify Allowed]
+    C --> C4[No Permissions]
+    
+    D --> D1[Certificate Based]
+    D --> D2[Document Timestamp]
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+| Command | Purpose | Syntax | Example |
+|---------|---------|--------|---------|
+| `pdftk cat` | Merge PDFs | `pdftk f1.pdf f2.pdf cat output merged.pdf` | Combine multiple PDFs |
+| `pdftk burst` | Split pages | `pdftk input.pdf burst output page_%d.pdf` | Create individual pages |
+| `pdftk cat 1-5` | Extract pages | `pdftk in.pdf cat 1-5 output out.pdf` | Pages 1-5 only |
+| `qpdf --encrypt` | Encrypt PDF | `qpdf --encrypt user owner 256 -- in.pdf out.pdf` | 256-bit encryption |
+| `pdftotext` | Extract text | `pdftotext input.pdf output.txt` | Text from PDF |
+| `pdftoppm -png` | PDF to images | `pdftoppm input.pdf output -png` | PNG images |
+| `convert *.jpg` | Images to PDF | `convert *.jpg output.pdf` | Combine images |
+| `gs -sDEVICE` | Compress PDF | `gs -sDEVICE=pdfwrite ... -sOutputFile=out.pdf in.pdf` | Reduce size |
+| `pdftk user_pw` | Add password | `pdftk in.pdf output out.pdf user_pw pass` | User password |
+| `pdftk input_pw` | Remove password | `pdftk in.pdf input_pw pass output out.pdf` | Decrypt PDF |
+| `pdftk cat 1-endright` | Rotate pages | `pdftk in.pdf cat 1-endright output out.pdf` | Rotate all 90° |
+| `pdfinfo` | PDF info | `pdfinfo document.pdf` | Get PDF metadata |
+| `pdfimages` | Extract images | `pdfimages -all input.pdf prefix` | All images from PDF |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    PDF TOOLS MASTERY PATH                                    ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  LEVEL 1: BEGINNER (Week 1)                                                 ║
+║  ┌─────────────────────────────────────────────────────────────────────┐    ║
+║  │ ⬜ Install PDF tools (pdftk, qpdf, poppler)                         │    ║
+║  │ ⬜ Merge multiple PDFs into one                                      │    ║
+║  │ ⬜ Split PDF into individual pages                                   │    ║
+║  │ ⬜ Extract text from PDF                                             │    ║
+║  │ ⬜ Convert PDF to images                                             │    ║
+║  └─────────────────────────────────────────────────────────────────────┘    ║
+║                              │                                               ║
+║                              ▼                                               ║
+║  LEVEL 2: INTERMEDIATE (Week 2)                                             ║
+║  ┌─────────────────────────────────────────────────────────────────────┐    ║
+║  │ ⬜ Extract specific page ranges                                      │    ║
+║  │ ⬜ Add password protection to PDFs                                   │    ║
+║  │ ⬜ Remove passwords (with known password)                            │    ║
+║  │ ⬜ Compress PDF files                                                │    ║
+║  │ ⬜ Convert images to PDF                                             │    ║
+║  └─────────────────────────────────────────────────────────────────────┘    ║
+║                              │                                               ║
+║                              ▼                                               ║
+║  LEVEL 3: ADVANCED (Week 3+)                                                ║
+║  ┌─────────────────────────────────────────────────────────────────────┐    ║
+║  │ ⬜ Python PDF manipulation with PyPDF2                               │    ║
+║  │ ⬜ Add watermarks to PDFs                                            │    ║
+║  │ ⬜ Rotate pages selectively                                          │    ║
+║  │ ⬅️ Repair corrupted PDFs                                            │    ║
+║  │ ⬜ Batch PDF processing scripts                                      │    ║
+║  └─────────────────────────────────────────────────────────────────────┘    ║
+║                              │                                               ║
+║                              ▼                                               ║
+║  LEVEL 4: EXPERT (Ongoing)                                                  ║
+║  ┌─────────────────────────────────────────────────────────────────────┐    ║
+║  │ ⭐ PDF form creation and filling                                     │    ║
+║  │ ⭐ Digital signatures                                                │    ║
+║  │ ⭐ OCR integration                                                   │    ║
+║  │ ⭐ PDF/A compliance                                                  │    ║
+║  └─────────────────────────────────────────────────────────────────────┘    ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+| Feature | pdftk | qpdf | PyPDF2 | poppler-utils | Ghostscript |
+|---------|-------|------|--------|---------------|-------------|
+| **Merge PDFs** | ✅ | ✅ | ✅ | ❌ | ✅ |
+| **Split PDFs** | ✅ | ✅ | ✅ | ❌ | ✅ |
+| **Encrypt** | ✅ | ✅ | ✅ | ❌ | ✅ |
+| **Decrypt** | ✅ | ✅ | ✅ | ❌ | ⚠️ |
+| **Text Extract** | ❌ | ❌ | ✅ | ✅ | ❌ |
+| **PDF to Image** | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Image to PDF** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Compress** | ⚠️ | ✅ | ❌ | ❌ | ✅ |
+| **Rotate** | ✅ | ✅ | ✅ | ❌ | ✅ |
+| **Watermark** | ✅ | ❌ | ✅ | ❌ | ✅ |
+| **Repair** | ⚠️ | ✅ | ❌ | ❌ | ✅ |
+| **Termux Support** | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+### PDF Compression Quality Comparison
+
+| Method | Quality | Size Reduction | Speed |
+|--------|---------|----------------|-------|
+| /screen (72dpi) | Low | 70-90% smaller | ⭐⭐⭐⭐⭐ |
+| /ebook (150dpi) | Medium | 50-70% smaller | ⭐⭐⭐⭐ |
+| /printer (300dpi) | High | 20-40% smaller | ⭐⭐⭐ |
+| /prepress (300dpi) | Best | 10-20% smaller | ⭐⭐ |
+| pdftk compress | Original | 10-30% smaller | ⭐⭐⭐⭐⭐ |
+
+---
+
+## 🚀 PRACTICAL CHALLENGES
+
+### Challenge 1: Build a PDF Report Generator
+
+**Objective:** Create a script that generates PDF reports from text files.
+
+```bash
+#!/bin/bash
+# PDF Report Generator
+
+INPUT_FILE="$1"
+OUTPUT_PDF="${INPUT_FILE%.*}.pdf"
+
+if [ -z "$INPUT_FILE" ]; then
+    echo "Usage: $0 <text_file>"
+    exit 1
+fi
+
+# Create PDF using Python reportlab
+python << EOF
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.units import inch
+
+# Read input file
+with open("$INPUT_FILE", 'r') as f:
+    content = f.read()
+
+# Create PDF
+doc = SimpleDocTemplate("$OUTPUT_PDF", pagesize=letter,
+                        rightMargin=72, leftMargin=72,
+                        topMargin=72, bottomMargin=72)
+
+styles = getSampleStyleSheet()
+styles.add(ParagraphStyle(name='Custom',
+                         fontSize=12,
+                         leading=16))
+
+story = []
+for line in content.split('\n'):
+    story.append(Paragraph(line or ' ', styles['Custom']))
+    story.append(Spacer(1, 6))
+
+doc.build(story)
+print("✅ PDF created: $OUTPUT_PDF")
+EOF
+```
+
+**Success Criteria:**
+- [ ] Text file is converted to PDF
+- [ ] Formatting is preserved
+- [ ] PDF is readable
+
+---
+
+### Challenge 2: Create a PDF Batch Processor
+
+**Objective:** Build a script that processes multiple PDFs at once.
+
+```bash
+#!/bin/bash
+# PDF Batch Processor
+
+INPUT_DIR="$1"
+OPERATION="$2"
+OUTPUT_DIR="$HOME/storage/downloads/processed_pdfs"
+
+mkdir -p "$OUTPUT_DIR"
+
+if [ -z "$INPUT_DIR" ] || [ -z "$OPERATION" ]; then
+    echo "Usage: $0 <input_dir> <operation>"
+    echo "Operations: compress, merge, images, text"
+    exit 1
+fi
+
+case "$OPERATION" in
+    compress)
+        echo "Compressing all PDFs..."
+        for pdf in "$INPUT_DIR"/*.pdf; do
+            [ -f "$pdf" ] || continue
+            name=$(basename "$pdf")
+            gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 \
+               -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH \
+               -sOutputFile="$OUTPUT_DIR/$name" "$pdf"
+            echo "Compressed: $name"
+        done
+        ;;
+    images)
+        echo "Converting PDFs to images..."
+        for pdf in "$INPUT_DIR"/*.pdf; do
+            [ -f "$pdf" ] || continue
+            name=$(basename "$pdf" .pdf)
+            mkdir -p "$OUTPUT_DIR/$name"
+            pdftoppm -png "$pdf" "$OUTPUT_DIR/$name/page"
+            echo "Converted: $name"
+        done
+        ;;
+    text)
+        echo "Extracting text from PDFs..."
+        for pdf in "$INPUT_DIR"/*.pdf; do
+            [ -f "$pdf" ] || continue
+            name=$(basename "$pdf" .pdf)
+            pdftotext "$pdf" "$OUTPUT_DIR/${name}.txt"
+            echo "Extracted: $name"
+        done
+        ;;
+    merge)
+        echo "Merging all PDFs..."
+        pdftk "$INPUT_DIR"/*.pdf cat output "$OUTPUT_DIR/merged.pdf"
+        echo "Merged to: merged.pdf"
+        ;;
+    *)
+        echo "Unknown operation: $OPERATION"
+        ;;
+esac
+```
+
+**Success Criteria:**
+- [ ] All operations work correctly
+- [ ] Output is organized properly
+- [ ] Error handling is implemented
+
+---
+
+### Challenge 3: Build a PDF Security Tool
+
+**Objective:** Create a script for PDF encryption and decryption.
+
+```bash
+#!/bin/bash
+# PDF Security Tool
+
+OPERATION="$1"
+INPUT="$2"
+PASSWORD="$3"
+OUTPUT="${INPUT%.*}_secured.pdf"
+
+show_usage() {
+    echo "PDF Security Tool"
+    echo ""
+    echo "Usage:"
+    echo "  $0 encrypt <pdf> <password>"
+    echo "  $0 decrypt <pdf> <password>"
+    echo "  $0 info <pdf>"
+    exit 1
+}
+
+[ -z "$OPERATION" ] && show_usage
+
+case "$OPERATION" in
+    encrypt)
+        [ -z "$INPUT" ] || [ -z "$PASSWORD" ] && show_usage
+        
+        echo "Encrypting PDF..."
+        qpdf --encrypt "$PASSWORD" "$PASSWORD" 256 -- "$INPUT" "$OUTPUT"
+        echo "✅ Encrypted: $OUTPUT"
+        ;;
+    decrypt)
+        [ -z "$INPUT" ] || [ -z "$PASSWORD" ] && show_usage
+        
+        echo "Decrypting PDF..."
+        qpdf --password="$PASSWORD" --decrypt "$INPUT" "${INPUT%.*}_decrypted.pdf"
+        echo "✅ Decrypted"
+        ;;
+    info)
+        [ -z "$INPUT" ] && show_usage
+        
+        echo "PDF Security Info:"
+        pdfinfo "$INPUT" | grep -E "(Encrypted|Page size|Pages)"
+        ;;
+    *)
+        show_usage
+        ;;
+esac
+```
+
+**Success Criteria:**
+- [ ] Encryption works with strong 256-bit AES
+- [ ] Decryption works with correct password
+- [ ] Info command shows security status
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **PDF** | Portable Document Format - document exchange format |
+| **pdftk** | PDF Toolkit - command-line PDF manipulation tool |
+| **qpdf** | PDF transformation library and CLI |
+| **poppler** | PDF rendering library with utilities |
+| **Ghostscript** | PostScript and PDF interpreter |
+| **PyPDF2** | Python library for PDF manipulation |
+| **Encryption** | Securing PDF with password protection |
+| **User Password** | Password to open/view the PDF |
+| **Owner Password** | Password to change permissions |
+| **Linearization** | Optimizing PDF for web viewing |
+| **PDF/A** | Archival PDF standard for long-term preservation |
+| **OCR** | Optical Character Recognition - making scanned PDFs searchable |
+| **Watermark** | Semi-transparent text/image overlay on pages |
+| **Page Range** | Syntax for selecting pages (1-5, odd, even) |
+| **Merge/Concatenate** | Combining multiple PDFs into one |
+| **Split/Burst** | Separating PDF into individual pages |
+| **Extract** | Pulling specific content from PDF |
+| **Compression** | Reducing PDF file size |
+| **DPI** | Dots Per Inch - resolution for PDF to image |
+| **Metadata** | Information about the document (author, title) |
+| **Bookmarks/Outlines** | Navigation structure in PDF |
+| **Form Fields** | Fillable areas in PDF forms |
+| **Digital Signature** | Cryptographic verification of authenticity |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Document Management & Publishing Career Path
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        CAREER PROGRESSION                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ENTRY LEVEL                                                               │
+│  ├── Document Specialist    ──▶ $40,000 - $55,000/year                    │
+│  ├── Junior Developer       ──▶ $50,000 - $70,000/year                    │
+│  └── Data Entry Analyst     ──▶ $35,000 - $45,000/year                    │
+│                                                                             │
+│  MID LEVEL                                                                 │
+│  ├── Document Engineer      ──▶ $70,000 - $100,000/year                   │
+│  ├── PDF Developer          ──▶ $75,000 - $110,000/year                   │
+│  ├── Automation Engineer    ──▶ $80,000 - $120,000/year                   │
+│  └── Forms Developer        ──▶ $65,000 - $95,000/year                    │
+│                                                                             │
+│  SENIOR LEVEL                                                              │
+│  ├── Senior Doc Engineer    ──▶ $100,000 - $150,000/year                  │
+│  ├── Solutions Architect    ──▶ $120,000 - $180,000/year                  │
+│  └── Platform Engineer      ──▶ $130,000 - $190,000/year                  │
+│                                                                             │
+│  SPECIALIZED                                                               │
+│  ├── PDF/A Compliance       ──▶ $90,000 - $140,000/year                   │
+│  ├── Publishing Engineer    ──▶ $100,000 - $160,000/year                  │
+│  └── Document AI Engineer   ──▶ $120,000 - $180,000/year                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Key Skills Developed in This Chapter
+
+| Skill | Industry Application | Job Relevance |
+|-------|---------------------|---------------|
+| PDF manipulation | Document management | ⭐⭐⭐⭐⭐ |
+| Automation scripting | All technical roles | ⭐⭐⭐⭐⭐ |
+| Python scripting | Development | ⭐⭐⭐⭐⭐ |
+| Batch processing | Operations | ⭐⭐⭐⭐ |
+| Security/Encryption | Compliance | ⭐⭐⭐⭐ |
+| Format conversion | Publishing | ⭐⭐⭐⭐ |
+| Data extraction | Data engineering | ⭐⭐⭐⭐ |
+
+### Companies Hiring These Skills
+- **Publishing:** Adobe, Ingram, Springer Nature
+- **Legal:** Legal tech, Court systems
+- **Finance:** Banks, Insurance companies
+- **Government:** Document processing agencies
+- **Enterprise:** SAP, Oracle, Salesforce
+
+---
+
+## 📋 AUTOMATION SCRIPT TEMPLATES
+
+### Template 1: PDF Backup with Compression
+
+```bash
+#!/bin/bash
+#===============================================
+# PDF Backup with Compression
+# Compresses and archives PDF files
+#===============================================
+
+SOURCE_DIR="$1"
+BACKUP_DIR="$HOME/storage/backups/pdf"
+DATE=$(date +%Y%m%d)
+
+mkdir -p "$BACKUP_DIR"
+
+if [ -z "$SOURCE_DIR" ]; then
+    echo "Usage: $0 <source_directory>"
+    exit 1
+fi
+
+echo "Creating compressed PDF backup..."
+
+# Create compressed archive
+OUTPUT="$BACKUP_DIR/pdf_backup_$DATE.tar.gz"
+tar -czvf "$OUTPUT" -C "$(dirname "$SOURCE_DIR")" "$(basename "$SOURCE_DIR")"
+
+# Also create compressed individual PDFs
+for pdf in "$SOURCE_DIR"/*.pdf; do
+    [ -f "$pdf" ] || continue
+    name=$(basename "$pdf")
+    gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook \
+       -dNOPAUSE -dQUIET -dBATCH \
+       -sOutputFile="$BACKUP_DIR/compressed_$name" "$pdf"
+done
+
+echo "✅ Backup complete!"
+echo "Archive: $OUTPUT"
+```
+
+### Template 2: PDF Text Extractor
+
+```bash
+#!/bin/bash
+#===============================================
+# PDF Text Extractor
+# Extracts and consolidates text from PDFs
+#===============================================
+
+INPUT_DIR="$1"
+OUTPUT_FILE="$HOME/storage/downloads/extracted_text.txt"
+
+if [ -z "$INPUT_DIR" ]; then
+    echo "Usage: $0 <input_directory>"
+    exit 1
+fi
+
+echo "=== PDF Text Extraction ===" > "$OUTPUT_FILE"
+echo "Date: $(date)" >> "$OUTPUT_FILE"
+echo "" >> "$OUTPUT_FILE"
+
+for pdf in "$INPUT_DIR"/*.pdf; do
+    [ -f "$pdf" ] || continue
+    
+    name=$(basename "$pdf")
+    echo "Extracting: $name"
+    
+    echo "--- $name ---" >> "$OUTPUT_FILE"
+    pdftotext -layout "$pdf" - >> "$OUTPUT_FILE"
+    echo "" >> "$OUTPUT_FILE"
+    echo "" >> "$OUTPUT_FILE"
+done
+
+echo "✅ Extraction complete!"
+echo "Output: $OUTPUT_FILE"
+```
+
+### Template 3: PDF to Image Batch Converter
+
+```bash
+#!/bin/bash
+#===============================================
+# PDF to Image Batch Converter
+# Converts PDFs to high-quality images
+#===============================================
+
+INPUT_DIR="$1"
+OUTPUT_DIR="$HOME/storage/downloads/pdf_images"
+DPI="${2:-150}"
+
+mkdir -p "$OUTPUT_DIR"
+
+if [ -z "$INPUT_DIR" ]; then
+    echo "Usage: $0 <input_directory> [dpi]"
+    exit 1
+fi
+
+echo "Converting PDFs to images (${DPI}dpi)..."
+
+for pdf in "$INPUT_DIR"/*.pdf; do
+    [ -f "$pdf" ] || continue
+    
+    name=$(basename "$pdf" .pdf)
+    output_path="$OUTPUT_DIR/$name"
+    
+    mkdir -p "$output_path"
+    
+    echo "Converting: $name"
+    pdftoppm -png -r "$DPI" "$pdf" "$output_path/page"
+done
+
+echo "✅ Conversion complete!"
+echo "Output: $OUTPUT_DIR"
+```
+
+---
+
 ## 💻 PRACTICE EXERCISES
 
 ### Exercise 1: Basic PDF Merge
@@ -3631,6 +4185,568 @@ done
 - [ ] Combine with cron for automation
 - [ ] Integrate with Termux widgets
 - [ ] Python PDF scripting
+
+---
+
+## 📊 MERMAID DIAGRAMS
+
+### PDF Processing Workflow
+
+```mermaid
+graph TD
+    A[PDF Input] --> B{Operation Type?}
+    B -->|Merge| C[Combine PDFs]
+    B -->|Split| D[Extract Pages]
+    B -->|Convert| E[Format Change]
+    B -->|Protect| F[Add Security]
+    
+    C --> G[pdftk cat]
+    D --> H[pdftk burst/range]
+    E --> I{Target Format}
+    F --> J{Security Type}
+    
+    I -->|Images| K[pdftoppm]
+    I -->|Text| L[pdftotext]
+    I -->|HTML| M[pdftohtml]
+    
+    J -->|Password| N[pdftk user_pw]
+    J -->|Encryption| O[qpdf --encrypt]
+    
+    G --> P[Output PDF]
+    H --> P
+    K --> Q[Output Images]
+    L --> R[Output Text]
+    M --> S[Output HTML]
+    N --> P
+    O --> P
+```
+
+### PDF Tool Selection Guide
+
+```mermaid
+graph LR
+    A[PDF Task] --> B{Need?}
+    B -->|Merge/Split| C[pdftk]
+    B -->|Optimize| D[qpdf]
+    B -->|Extract Text| E[pdftotext]
+    B -->|Convert| F[poppler-utils]
+    B -->|Images to PDF| G[ImageMagick]
+    B -->|Compress| H[Ghostscript]
+    B -->|Scripting| I[PyPDF2]
+    
+    C --> J[✓ Done]
+    D --> J
+    E --> J
+    F --> J
+    G --> J
+    H --> J
+    I --> J
+```
+
+---
+
+## ⚡ UTILITY COMMAND CHEATSHEET
+
+### PDF Operations Quick Reference
+
+| Task | Command | Notes |
+|------|---------|-------|
+| **Merge PDFs** | `pdftk file1.pdf file2.pdf cat output merged.pdf` | Combine multiple files |
+| **Split all pages** | `pdftk input.pdf burst output page_%d.pdf` | One file per page |
+| **Extract pages** | `pdftk input.pdf cat 5-10 output pages.pdf` | Pages 5-10 |
+| **Extract single page** | `pdftk input.pdf cat 3 output page3.pdf` | Page 3 only |
+| **Rotate PDF** | `pdftk input.pdf cat 1-endright output rotated.pdf` | Rotate 90° right |
+| **Add password** | `pdftk input.pdf output out.pdf user_pw pass` | User password |
+| **Remove password** | `pdftk input.pdf input_pw pass output out.pdf` | Decrypt PDF |
+| **Compress PDF** | `gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook -o out.pdf in.pdf` | Reduce size |
+
+### Text Extraction Commands
+
+| Task | Command |
+|------|---------|
+| Basic extraction | `pdftotext input.pdf output.txt` |
+| Preserve layout | `pdftotext -layout input.pdf output.txt` |
+| Page range | `pdftotext -f 1 -l 5 input.pdf output.txt` |
+| To stdout | `pdftotext input.pdf -` |
+| From encrypted | `pdftotext -upw password input.pdf output.txt` |
+
+### PDF to Image Commands
+
+| Task | Command |
+|------|---------|
+| To PNG | `pdftoppm input.pdf output -png` |
+| To JPEG | `pdftoppm input.pdf output -jpeg` |
+| High res (300 DPI) | `pdftoppm -r 300 input.pdf output -png` |
+| Single page | `pdftoppm -f 5 -l 5 input.pdf output -png` |
+
+### Image to PDF Commands
+
+| Task | Command |
+|------|---------|
+| Single image | `convert image.jpg output.pdf` |
+| Multiple images | `convert *.jpg output.pdf` |
+| With quality | `convert -quality 90 image.jpg output.pdf` |
+| Custom size | `convert -page A4 image.jpg output.pdf` |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+### PDF Tools Mastery Journey
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PDF TOOLS MASTERY PATH                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  LEVEL 1: BEGINNER (Days 1-3)                                               │
+│  ════════════════════════════                                                │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                       │
+│  │Install Tools │─▶│ Basic Merge  │─▶│ Basic Split  │                       │
+│  │ pdftk/qpdf   │  │ pdftk cat    │  │ pdftk burst  │                       │
+│  └──────────────┘  └──────────────┘  └──────────────┘                       │
+│         │                                                                      │
+│         ▼                                                                      │
+│  LEVEL 2: INTERMEDIATE (Days 4-7)                                            │
+│  ════════════════════════════════                                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
+│  │Text Extract  │─▶│ PDF to Image │─▶│ Image to PDF │─▶│ Compression  │    │
+│  │ pdftotext    │  │ pdftoppm     │  │ convert      │  │ Ghostscript  │    │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘    │
+│         │                                                                      │
+│         ▼                                                                      │
+│  LEVEL 3: ADVANCED (Week 2)                                                  │
+│  ══════════════════════════                                                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
+│  │Password Prot │─▶│ Page Ranges │─▶│ Optimization│─▶│ Batch Process │    │
+│  │ Encryption   │  │ Selective   │  │ qpdf linear │  │ Scripts      │    │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘    │
+│         │                                                                      │
+│         ▼                                                                      │
+│  LEVEL 4: EXPERT (Week 3+)                                                   │
+│  ══════════════════════════                                                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
+│  │Python PyPDF2 │─▶│ Advanced Merge│─▶│ PDF Pipelines│─▶│ Enterprise  │    │
+│  │ Programmatic │  │ Watermarks   │  │ Automation  │  │ Solutions   │    │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills Progression Matrix
+
+| Skill Area | Beginner | Intermediate | Advanced | Expert |
+|------------|----------|--------------|----------|--------|
+| Merge/Split | Basic merge | Page ranges | Selective merge | Complex workflows |
+| Text Extraction | Basic | Layout preserved | Batch extraction | Parsed data |
+| Conversion | PDF to image | Both directions | Quality control | Automated pipelines |
+| Security | Add password | Remove password | Permission control | Enterprise security |
+| Automation | Manual | Simple scripts | Cron jobs | Full automation |
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+### PDF Tools Comparison
+
+| Feature | pdftk | qpdf | poppler-utils | Ghostscript | PyPDF2 |
+|---------|-------|------|---------------|-------------|--------|
+| **Merge PDFs** | ✅ | ✅ | ❌ | ❌ | ✅ |
+| **Split PDFs** | ✅ | ✅ | ❌ | ❌ | ✅ |
+| **Encrypt/Decrypt** | ✅ | ✅ | ❌ | ✅ | ✅ |
+| **Text Extract** | ❌ | ❌ | ✅ pdftotext | ❌ | ✅ |
+| **PDF to Image** | ❌ | ❌ | ✅ pdftoppm | ✅ | ❌ |
+| **Image to PDF** | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **Compress** | Basic | ✅ | ❌ | ✅ Best | ❌ |
+| **Linearize** | ❌ | ✅ | ❌ | ✅ | ❌ |
+| **Termux Support** | ✅ | ✅ | ✅ | ✅ | ✅ Python |
+| **Best For** | All-in-one | Optimization | Conversion | Compression | Scripting |
+
+### Compression Quality Settings
+
+| Setting | Quality | Size Reduction | Use Case |
+|---------|---------|----------------|----------|
+| `/screen` | Low (72 DPI) | 70-90% | Web sharing |
+| `/ebook` | Medium (150 DPI) | 50-70% | E-books |
+| `/printer` | High (300 DPI) | 20-40% | Printing |
+| `/prepress` | Best (300 DPI) | 10-20% | Professional |
+
+---
+
+## 🚀 PRACTICAL AUTOMATION CHALLENGES
+
+### Challenge 1: PDF Report Generator
+**Objective:** Create a script that generates a PDF report from multiple images.
+
+```bash
+#!/bin/bash
+# pdf-report-generator.sh
+
+IMAGE_DIR="$1"
+OUTPUT="${2:-report.pdf}"
+TITLE="${3:-Monthly Report}"
+
+[ -z "$IMAGE_DIR" ] && { echo "Usage: $0 <image_dir> [output] [title]"; exit 1; }
+
+mkdir -p temp_report
+count=0
+
+# Sort and rename images
+for img in "$IMAGE_DIR"/*.{jpg,jpeg,png}; do
+    [ -f "$img" ] || continue
+    ((count++))
+    cp "$img" "temp_report/$(printf '%03d' $count).jpg"
+done
+
+# Create PDF with title page
+convert -size 800x1000 xc:white \
+    -gravity center -pointsize 48 -fill black \
+    -annotate 0 "$TITLE\n\n$(date '+%B %Y')" \
+    temp_report/000_cover.jpg
+
+convert temp_report/*.jpg "$OUTPUT"
+
+rm -rf temp_report
+echo "Created: $OUTPUT with $count pages"
+```
+
+### Challenge 2: PDF Batch Processor
+**Objective:** Process all PDFs in a folder - compress, extract text, generate thumbnails.
+
+```bash
+#!/bin/bash
+# pdf-batch-processor.sh
+
+INPUT_DIR="$1"
+OUTPUT_DIR="${2:-processed}"
+
+[ -z "$INPUT_DIR" ] && { echo "Usage: $0 <input_dir> [output_dir]"; exit 1; }
+
+mkdir -p "$OUTPUT_DIR"/{compressed,text,thumbnails}
+
+for pdf in "$INPUT_DIR"/*.pdf; do
+    [ -f "$pdf" ] || continue
+    name=$(basename "$pdf" .pdf)
+    
+    echo "Processing: $name"
+    
+    # Compress
+    gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook \
+        -dNOPAUSE -dQUIET -dBATCH \
+        -sOutputFile="$OUTPUT_DIR/compressed/$name.pdf" "$pdf"
+    
+    # Extract text
+    pdftotext -layout "$pdf" "$OUTPUT_DIR/text/$name.txt"
+    
+    # Generate thumbnail
+    pdftoppm -f 1 -l 1 -png -r 100 "$pdf" "$OUTPUT_DIR/thumbnails/$name"
+done
+
+echo "Batch processing complete!"
+```
+
+### Challenge 3: Secure PDF Archiver
+**Objective:** Create encrypted, timestamped PDF archives.
+
+```bash
+#!/bin/bash
+# secure-pdf-archive.sh
+
+SOURCE="$1"
+ARCHIVE_DIR="${2:-secure_archives}"
+PASSWORD="${3:-}"
+
+[ -z "$SOURCE" ] && { echo "Usage: $0 <source> [archive_dir] [password]"; exit 1; }
+
+mkdir -p "$ARCHIVE_DIR"
+DATE=$(date +%Y%m%d_%H%M%S)
+OUTPUT="$ARCHIVE_DIR/secure_$DATE.pdf"
+
+# Create archive
+if [ -d "$SOURCE" ]; then
+    # Directory - merge first
+    TEMP="/tmp/pdf_merge_$DATE"
+    mkdir -p "$TEMP"
+    pdftk "$SOURCE"/*.pdf cat output "$TEMP/merged.pdf"
+    SOURCE="$TEMP/merged.pdf"
+fi
+
+# Encrypt
+if [ -n "$PASSWORD" ]; then
+    qpdf --encrypt "$PASSWORD" "$PASSWORD" 256 -- "$SOURCE" "$OUTPUT"
+else
+    echo -n "Enter password: "
+    read -s PASSWORD
+    qpdf --encrypt "$PASSWORD" "$PASSWORD" 256 -- "$SOURCE" "$OUTPUT"
+fi
+
+rm -rf "/tmp/pdf_merge_$DATE"
+echo "Secure archive created: $OUTPUT"
+```
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+### PDF Document Terms
+
+| Term | Definition |
+|------|------------|
+| **PDF** | Portable Document Format - universal document format |
+| **Page Tree** | Internal structure organizing PDF pages |
+| **Metadata** | Document info (title, author, dates) |
+| **Bookmarks** | Navigation links within PDF |
+| **Annotations** | Comments, highlights, stamps |
+| **Forms** | Fillable fields in PDF |
+| **Layers (OCGs)** | Optional Content Groups |
+| **Linearized PDF** | Optimized for fast web viewing |
+| **PDF/A** | Archival PDF standard |
+| **PDF/X** | Print-ready PDF standard |
+
+### PDF Security Terms
+
+| Term | Definition |
+|------|------------|
+| **User Password** | Password to open/view PDF |
+| **Owner Password** | Password to change permissions |
+| **Encryption** | Algorithm to secure content |
+| **Permissions** | Control print, copy, modify rights |
+| **40-bit RC4** | Legacy weak encryption |
+| **128-bit AES** | Standard strong encryption |
+| **256-bit AES** | Maximum security encryption |
+
+### Tool-Specific Terms
+
+| Term | Tool | Definition |
+|------|------|------------|
+| **cat** | pdftk | Concatenate/combine operation |
+| **burst** | pdftk | Split into individual pages |
+| **linearize** | qpdf | Optimize for web streaming |
+| **DPI** | pdftoppm | Dots per inch for images |
+| **CRF** | Various | Constant Rate Factor |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Skills Learned & Industry Applications
+
+| Skill | Industry Application | Job Role |
+|-------|---------------------|----------|
+| **Document Processing** | Invoice/report automation | Document Engineer |
+| **PDF Automation** | Batch document workflows | Automation Engineer |
+| **Security Implementation** | Document protection systems | Security Analyst |
+| **Data Extraction** | Information parsing | Data Engineer |
+| **Scripting** | Process automation | DevOps Engineer |
+
+### Career Paths Utilizing These Skills
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CAREER PATH OPPORTUNITIES                             │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  DOCUMENT ENGINEER                                                      │
+│  ├── PDF processing systems                                             │
+│  ├── Document workflows                                                 │
+│  ├── Archive solutions                                                  │
+│  └── Average Salary: $75,000 - $110,000                                │
+│                                                                          │
+│  AUTOMATION ENGINEER                                                    │
+│  ├── Document automation                                                │
+│  ├── Batch processing pipelines                                         │
+│  ├── Integration systems                                                │
+│  └── Average Salary: $90,000 - $135,000                                │
+│                                                                          │
+│  DATA ENGINEER                                                          │
+│  ├── PDF data extraction                                                │
+│  ├── Information parsing                                                │
+│  ├── ETL pipelines                                                      │
+│  └── Average Salary: $90,000 - $140,000                                │
+│                                                                          │
+│  SECURITY ANALYST                                                       │
+│  ├── Document security                                                  │
+│  ├── Encryption implementation                                          │
+│  ├── Compliance systems                                                 │
+│  └── Average Salary: $85,000 - $130,000                                │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Interview Questions Related to This Topic
+
+1. **How would you implement a document workflow system?**
+   - Input validation and parsing
+   - Multiple processing stages
+   - Error handling and logging
+   - Output generation and delivery
+
+2. **Compare different PDF encryption methods.**
+   - 40-bit RC4: Legacy, weak
+   - 128-bit AES: Standard, secure
+   - 256-bit AES: Maximum security, recommended
+
+3. **How would you handle large-scale PDF processing?**
+   - Queue-based processing
+   - Parallel execution
+   - Resource management
+   - Progress tracking
+
+---
+
+## 📋 AUTOMATION SCRIPT TEMPLATES
+
+### Template 1: PDF Merger Script
+
+```bash
+#!/bin/bash
+#===========================================
+# PDF Merger Script
+# Usage: ./merge-pdfs.sh <output> <file1> [file2] ...
+#===========================================
+
+set -e
+
+OUTPUT="$1"
+shift
+
+[ -z "$OUTPUT" ] && { echo "Usage: $0 <output.pdf> <file1> [file2] ..."; exit 1; }
+[ $# -eq 0 ] && { echo "No input files provided"; exit 1; }
+
+echo "Merging $# PDF files..."
+
+pdftk "$@" cat output "$OUTPUT"
+
+echo "Created: $OUTPUT"
+```
+
+### Template 2: PDF Page Extractor
+
+```bash
+#!/bin/bash
+#===========================================
+# PDF Page Extractor
+# Usage: ./extract-pages.sh <pdf> <range>
+#===========================================
+
+set -e
+
+PDF="$1"
+RANGE="$2"
+
+[ -z "$PDF" ] && { echo "Usage: $0 <pdf> [range]"; exit 1; }
+[ ! -f "$PDF" ] && { echo "File not found: $PDF"; exit 1; }
+
+RANGE="${RANGE:-1-end}"
+NAME=$(basename "$PDF" .pdf)
+OUTPUT="${NAME}_pages_${RANGE}.pdf"
+
+echo "Extracting pages $RANGE from $PDF..."
+
+pdftk "$PDF" cat "$RANGE" output "$OUTPUT"
+
+echo "Created: $OUTPUT"
+```
+
+### Template 3: PDF to Image Batch
+
+```bash
+#!/bin/bash
+#===========================================
+# PDF to Image Converter
+# Usage: ./pdf-to-images.sh <pdf_dir> [format] [dpi]
+#===========================================
+
+set -e
+
+DIR="$1"
+FORMAT="${2:-png}"
+DPI="${3:-150}"
+
+[ -z "$DIR" ] && { echo "Usage: $0 <pdf_dir> [format] [dpi]"; exit 1; }
+
+mkdir -p images
+
+for pdf in "$DIR"/*.pdf; do
+    [ -f "$pdf" ] || continue
+    
+    name=$(basename "$pdf" .pdf)
+    
+    echo "Converting: $name"
+    
+    pdftoppm "-$FORMAT" -r "$DPI" "$pdf" "images/$name"
+done
+
+echo "Images saved to: images/"
+```
+
+### Template 4: PDF Compressor
+
+```bash
+#!/bin/bash
+#===========================================
+# PDF Compressor
+# Usage: ./compress-pdf.sh <pdf> [quality]
+#===========================================
+
+set -e
+
+PDF="$1"
+QUALITY="${2:-ebook}"  # screen, ebook, printer, prepress
+
+[ -z "$PDF" ] && { echo "Usage: $0 <pdf> [quality]"; exit 1; }
+[ ! -f "$PDF" ] && { echo "File not found: $PDF"; exit 1; }
+
+NAME=$(basename "$PDF" .pdf)
+OUTPUT="${NAME}_compressed.pdf"
+
+ORIGINAL=$(stat -c%s "$PDF" 2>/dev/null || stat -f%z "$PDF")
+
+echo "Compressing with quality: $QUALITY"
+
+gs -sDEVICE=pdfwrite \
+    -dPDFSETTINGS="/$QUALITY" \
+    -dNOPAUSE -dQUIET -dBATCH \
+    -sOutputFile="$OUTPUT" "$PDF"
+
+COMPRESSED=$(stat -c%s "$OUTPUT" 2>/dev/null || stat -f%z "$OUTPUT")
+SAVED=$((100 - (COMPRESSED * 100 / ORIGINAL)))
+
+echo "Original: $ORIGINAL bytes"
+echo "Compressed: $COMPRESSED bytes"
+echo "Saved: ${SAVED}%"
+echo "Output: $OUTPUT"
+```
+
+### Template 5: PDF Text Extractor
+
+```bash
+#!/bin/bash
+#===========================================
+# PDF Text Extractor
+# Usage: ./extract-text.sh <pdf_dir>
+#===========================================
+
+set -e
+
+DIR="$1"
+
+[ -z "$DIR" ] && { echo "Usage: $0 <pdf_dir>"; exit 1; }
+
+mkdir -p extracted_text
+
+for pdf in "$DIR"/*.pdf; do
+    [ -f "$pdf" ] || continue
+    
+    name=$(basename "$pdf" .pdf)
+    
+    echo "Extracting text from: $name"
+    
+    pdftotext -layout "$pdf" "extracted_text/$name.txt"
+done
+
+echo "Text files saved to: extracted_text/"
+```
 
 ---
 

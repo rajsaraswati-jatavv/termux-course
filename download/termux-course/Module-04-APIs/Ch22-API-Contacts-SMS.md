@@ -1588,6 +1588,417 @@ Before moving to Chapter 23, verify:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### 1. Contacts & SMS API Architecture
+
+```mermaid
+flowchart TB
+    subgraph Termux Commands
+        A[termux-contact-list]
+        B[termux-sms-list]
+        C[termux-sms-send]
+        D[termux-call-log]
+        E[termux-telephony-call]
+    end
+    
+    subgraph Android Content Providers
+        F[Contacts Provider]
+        G[SMS Provider]
+        H[CallLog Provider]
+    end
+    
+    subgraph Data Storage
+        I[Contacts DB]
+        J[SMS/MMS DB]
+        K[Call History]
+    end
+    
+    A --> F --> I
+    B --> G --> J
+    C --> G
+    D --> H --> K
+    E --> L[Phone Dialer]
+    
+    style A fill:#4CAF50,color:#fff
+    style C fill:#2196F3,color:#fff
+    style D fill:#FF5722,color:#fff
+```
+
+### 2. SMS Flow Diagram
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant T as Termux
+    participant SM as SmsManager
+    participant P as Phone Network
+    
+    U->>T: termux-sms-send -n "+91..." "Hello"
+    T->>SM: sendTextMessage()
+    SM->>P: Transmit SMS
+    P-->>SM: Delivery Report
+    SM-->>T: SMS Sent
+    T-->>U: Command complete
+    
+    Note over SM,P: SMS delivery depends on network connectivity
+    Note over T,U: Background SMS may be restricted on Android 10+
+```
+
+### 3. Contact Data Flow
+
+```mermaid
+flowchart LR
+    A[termux-contact-list] --> B[JSON Array]
+    B --> C[Contact Objects]
+    C --> D["name: string"]
+    C --> E["number: string"]
+    
+    D --> F[Processing]
+    E --> F
+    
+    F --> G{Use Case}
+    G -->|Search| H[Filter by name]
+    G -->|Backup| I[Export to file]
+    G -->|SMS| J[Send message]
+    
+    style A fill:#4CAF50,color:#fff
+    style F fill:#2196F3,color:#fff
+```
+
+---
+
+## ⚡ API COMMAND REFERENCE CARD
+
+| API Command | Purpose | Permissions | Example |
+|-------------|---------|-------------|---------|
+| `termux-contact-list` | List all contacts | READ_CONTACTS | `termux-contact-list` |
+| `termux-sms-list` | List SMS messages | READ_SMS | `termux-sms-list -l 20` |
+| `termux-sms-list -n` | Filter by number | READ_SMS | `termux-sms-list -n "+91..."` |
+| `termux-sms-list -t` | Filter by type | READ_SMS | `termux-sms-list -t sent` |
+| `termux-sms-send` | Send SMS | SEND_SMS | `termux-sms-send -n "+91..." "Hello"` |
+| `termux-sms-send -n -n` | Send to multiple | SEND_SMS | `termux-sms-send -n "+91a" -n "+91b" "Hi"` |
+| `termux-call-log` | View call history | READ_CALL_LOG | `termux-call-log -l 50` |
+| `termux-telephony-call` | Initiate call | CALL_PHONE | `termux-telephony-call +91...` |
+
+### Quick Syntax Reference
+
+```bash
+# Contacts
+termux-contact-list                          # List all contacts (JSON)
+
+# SMS Read
+termux-sms-list [-l limit] [-n number] [-t type] [-d date]
+
+# SMS Send
+termux-sms-send -n <number> [-n <number2>...] "message"
+
+# Call Log
+termux-call-log [-l limit]
+
+# Make Call
+termux-telephony-call <number>
+
+# JSON Processing
+termux-contact-list | jq '.[] | select(.name | contains("John"))'
+termux-sms-list | jq '.[] | select(.read == 0)'
+```
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                   CONTACTS & SMS API MASTERY PATH                             ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+     🌱 BEGINNER                    🌿 INTERMEDIATE                  🌳 ADVANCED
+     ──────────────────             ──────────────────              ──────────────────
+     
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  List Contacts  │───────────▶│  Contact        │───────────▶│  Contact        │
+     │  Basic Query    │            │  Search         │            │  Manager        │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Read SMS       │───────────▶│  SMS Filtering  │───────────▶│  SMS            │
+     │  Basic List     │            │  & Analysis     │            │  Analytics      │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Send SMS       │───────────▶│  Bulk SMS       │───────────▶│  SMS            │
+     │  Single         │            │  Operations     │            │  Automation     │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  View Call Log  │───────────▶│  Call Analysis  │───────────▶│  Communication  │
+     │  Basic          │            │  & Stats        │            │  Dashboard      │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     🏆 MASTERY CHECKPOINTS:
+     
+     □ Level 1: List and search contacts
+     □ Level 2: Read and filter SMS messages
+     □ Level 3: Send SMS programmatically
+     □ Level 4: Implement bulk SMS operations
+     □ Level 5: Analyze call log data
+     □ Level 6: Create contact backup system
+     □ Level 7: Build complete communication manager
+     
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     ⏱️ ESTIMATED TIME TO MASTERY: 5-6 Hours Practice
+     
+     📚 PREREQUISITES: Chapters 1-21 (All previous API chapters)
+     
+     🎯 NEXT STEPS: Clipboard & Share APIs (Chapter 23)
+```
+
+---
+
+## 🔧 API COMPARISON TABLE
+
+| API | Capability | Root Required | Android Version | Output Format |
+|-----|------------|---------------|-----------------|---------------|
+| `termux-contact-list` | List contacts | ❌ No | 5.0+ | JSON Array |
+| `termux-sms-list` | Read SMS | ❌ No | 5.0+ | JSON Array |
+| `termux-sms-send` | Send SMS | ❌ No | 5.0+ | None |
+| `termux-call-log` | Call history | ❌ No | 5.0+ | JSON Array |
+| `termux-telephony-call` | Make call | ❌ No | 5.0+ | None |
+
+### SMS Types Reference
+
+| Type | Description | Flag |
+|------|-------------|------|
+| inbox | Received messages | `-t inbox` |
+| sent | Sent messages | `-t sent` |
+| draft | Draft messages | `-t draft` |
+| outbox | Outgoing queue | `-t outbox` |
+| all | All messages | `-t all` |
+
+### Call Types Reference
+
+| Type | Description | Filter |
+|------|-------------|--------|
+| INCOMING | Received calls | `select(.type == "INCOMING")` |
+| OUTGOING | Dialed calls | `select(.type == "OUTGOING")` |
+| MISSED | Missed calls | `select(.type == "MISSED")` |
+
+---
+
+## 🚀 PRACTICAL PROJECT CHALLENGES
+
+### Challenge 1: Contact Backup System 💾
+
+**Objective:** Create a complete contact backup and restore system.
+
+**Requirements:**
+- Export contacts to JSON and CSV
+- Create timestamped backups
+- Restore contacts from backup
+- Validate backup integrity
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create backup system
+BACKUP_DIR=~/contact-backups
+
+# TODO: Export to JSON
+# TODO: Export to CSV
+# TODO: Create backup manifest
+# TODO: Implement restore function
+```
+
+**Expected Output:** Complete backup system with multiple export formats.
+
+---
+
+### Challenge 2: SMS Analytics Tool 📊
+
+**Objective:** Build an SMS analytics and reporting tool.
+
+**Requirements:**
+- Count total SMS (inbox/sent)
+- Find top contacts by message count
+- Analyze SMS patterns
+- Generate report
+
+**Starter Code:**
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+
+# TODO: Create SMS analytics
+# 1. Get all SMS
+# 2. Count by type
+# 3. Find top contacts
+# 4. Time-based analysis
+# 5. Generate report
+```
+
+**Expected Output:** Comprehensive SMS analysis report.
+
+---
+
+### Challenge 3: Bulk Messaging Tool 📨
+
+**Objective:** Create a controlled bulk SMS sender.
+
+**Requirements:**
+- Select contacts from list
+- Customizable message template
+- Rate limiting
+- Delivery logging
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create bulk SMS tool
+# 1. List contacts with numbers
+# 2. Multi-select interface
+# 3. Message template
+# 4. Rate limiting (2-3 sec delay)
+# 5. Log results
+```
+
+**Expected Output:** Safe bulk messaging with logging.
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **IMEI** | International Mobile Equipment Identity - Device ID |
+| **IMSI** | International Mobile Subscriber Identity - SIM ID |
+| **ContentProvider** | Android component for data sharing between apps |
+| **SmsManager** | Android API for SMS operations |
+| **MMS** | Multimedia Messaging Service |
+| **Thread ID** | Conversation identifier in SMS database |
+| **SMS PDU** | Protocol Data Unit - Raw SMS format |
+| **Call Log** | System record of phone calls |
+| **Contact Provider** | Android contacts database interface |
+| **SMS_DELIVERY_ACTION** | Broadcast when SMS is delivered |
+
+### Phone Number Formats
+
+| Format | Example | Use Case |
+|--------|---------|----------|
+| International | +919876543210 | SMS, International calls |
+| National | 09876543210 | Local calls |
+| E.164 | +919876543210 | Recommended for SMS |
+| RFC 3966 | tel:+91-98765-43210 | URI format |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How Contacts & SMS APIs Relate to Real-World Development
+
+**Mobile App Development:**
+- Social apps need contact integration
+- Messaging apps require SMS fallback
+- CRM apps sync with contacts
+
+**Security & Forensics:**
+- Mobile forensics analysis
+- Communication pattern analysis
+- Evidence collection systems
+
+**Marketing & Automation:**
+- Bulk notification systems
+- Customer communication
+- Appointment reminders
+
+### Career Paths Using These Skills
+
+| Role | Relevance | Salary Range (India) |
+|------|-----------|---------------------|
+| Android Developer | Contact/SMS APIs | ₹6-25 LPA |
+| Mobile Forensics | Evidence analysis | ₹8-30 LPA |
+| CRM Developer | Contact management | ₹5-20 LPA |
+| Security Analyst | Communication analysis | ₹6-25 LPA |
+| Automation Engineer | SMS automation | ₹5-18 LPA |
+
+### Skills Roadmap
+
+```
+Current Chapter (Contacts & SMS APIs)
+         │
+         ├──▶ Android Communication Development
+         │         │
+         │         └──▶ Android Developer
+         │
+         ├──▶ Mobile Forensics
+         │         │
+         │         └──▶ Digital Forensics Analyst
+         │
+         ├──▶ CRM Development
+         │         │
+         │         └──▶ CRM Application Developer
+         │
+         └──▶ SMS Marketing Systems
+                   │
+                   └──▶ Marketing Automation Engineer
+```
+
+---
+
+## ⚠️ PERMISSION REQUIREMENTS TABLE
+
+| API Command | Required Permission | How to Grant | Notes |
+|-------------|---------------------|--------------|-------|
+| `termux-contact-list` | READ_CONTACTS | First run prompt | Sensitive permission |
+| `termux-sms-list` | READ_SMS | First run prompt | SMS read access |
+| `termux-sms-send` | SEND_SMS | First run prompt | Can incur costs |
+| `termux-call-log` | READ_CALL_LOG | First run prompt | Sensitive permission |
+| `termux-telephony-call` | CALL_PHONE | First run prompt | Opens dialer |
+
+### Permission Setup
+
+```bash
+# Trigger contact permission
+termux-contact-list
+
+# Trigger SMS permission
+termux-sms-list
+
+# Trigger call log permission
+termux-call-log
+
+# Check permissions
+dumpsys package com.termux | grep -A 20 "runtime permissions"
+```
+
+### Android Restrictions (Important!)
+
+| Android Version | Background SMS | Call Log Access |
+|-----------------|----------------|-----------------|
+| Android 9- | ✅ Allowed | ✅ Full access |
+| Android 10 | ⚠️ Restricted | ⚠️ Need permission |
+| Android 11+ | ❌ Default SMS app only | ⚠️ More restrictions |
+| Android 12+ | ❌ Requires user interaction | ⚠️ Policy changes |
+
+### Troubleshooting
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Contact list empty | Permission denied | Grant contacts permission |
+| SMS send fails | Not default SMS app | Android 10+ restriction |
+| Call log empty | Permission denied | Grant call log permission |
+| Wrong number format | Invalid format | Use international format (+91...) |
+| SMS not delivered | Network issue | Check signal strength |
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Always check for `null` values when parsing contact/SMS JSON - fields may be missing for unsaved numbers.

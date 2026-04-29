@@ -569,6 +569,378 @@ OWASP Top 10 is a list of the 10 most critical web application security risks:
 
 ---
 
+## 📊 MERMAID DIAGRAMS - Attack Flow Visualization
+
+```mermaid
+graph TD
+    A[🔍 Reconnaissance] --> B[📡 Scanning]
+    B --> C[🎯 Exploitation]
+    C --> D[🔓 Post-Exploitation]
+    D --> E[📊 Reporting]
+    
+    A --> |OSINT, Google Dorks| A1[Passive Info Gathering]
+    A --> |Nmap, Shodan| A2[Active Info Gathering]
+    B --> |Port Scan| B1[Service Discovery]
+    B --> |Vuln Scan| B2[Vulnerability Assessment]
+    C --> |Hydra/John| C1[Password Attacks]
+    C --> |SQLMap| C2[SQL Injection]
+    C --> |Metasploit| C3[Exploit Framework]
+    D --> |Mimikatz| D1[Credential Harvesting]
+    D --> |Persistence| D2[Backdoor Installation]
+```
+
+```mermaid
+graph LR
+    subgraph Attack Phases
+        P1[Phase 1: Recon] --> P2[Phase 2: Scan]
+        P2 --> P3[Phase 3: Exploit]
+        P3 --> P4[Phase 4: Post-Exploit]
+        P4 --> P5[Phase 5: Report]
+    end
+    
+    subgraph Tools
+        T1[Nmap/Shodan]
+        T2[Hydra/John]
+        T3[SQLMap]
+        T4[Metasploit]
+        T5[Meterpreter]
+    end
+    
+    P1 -.-> T1
+    P2 -.-> T1
+    P3 -.-> T2
+    P3 -.-> T3
+    P3 -.-> T4
+    P4 -.-> T5
+```
+
+---
+
+## ⚡ SECURITY TOOL CHEATSHEET
+
+| Tool | Purpose | Command Syntax | Example |
+|------|---------|----------------|---------|
+| **Nmap** | Network scanning | `nmap -sV -sC target` | `nmap -sV 192.168.1.1` |
+| **Hydra** | Online password cracking | `hydra -l user -P wordlist target service` | `hydra -l admin -P rockyou.txt 192.168.1.1 ssh` |
+| **John** | Offline hash cracking | `john --wordlist=file hash.txt` | `john --wordlist=rockyou.txt hash.txt` |
+| **SQLMap** | SQL injection | `sqlmap -u "URL" --dbs` | `sqlmap -u "http://site.com?id=1" --dbs` |
+| **Metasploit** | Exploitation framework | `msfconsole` | `use exploit/windows/smb/ms17_010_eternalblue` |
+| **Aircrack-ng** | WiFi security | `aircrack-ng -w wordlist capture.cap` | `aircrack-ng -w rockyou.txt handshake.cap` |
+| **Hashcat** | GPU hash cracking | `hashcat -m 0 -a 0 hash.txt wordlist` | `hashcat -m 0 hash.txt rockyou.txt` |
+| **Burp Suite** | Web testing | Intercept & modify HTTP requests | Proxy: 127.0.0.1:8080 |
+| **Wireshark** | Packet analysis | Capture network traffic | Filter: `tcp.port == 80` |
+| **Netcat** | Network utility | `nc -lvp port` | `nc -lvp 4444` |
+
+---
+
+## 🎯 ETHICAL HACKER LEARNING PATH
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    🛤️ CYBERSECURITY LEARNING ROADMAP                        ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  LEVEL 1: FOUNDATION                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ 📚 Networking Basics    → TCP/IP, OSI Model, DNS, HTTP            │   ║
+║  │ 📚 Linux Fundamentals   → Commands, Permissions, File System       │   ║
+║  │ 📚 Programming Basics   → Python, Bash Scripting                   │   ║
+║  │ 📚 Security Concepts    → CIA Triad, Attack Vectors                │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                              ↓                                               ║
+║  LEVEL 2: SKILLS BUILDING                                                   ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ 🔧 Network Scanning     → Nmap, Masscan, Shodan                    │   ║
+║  │ 🔧 Web Testing          → Burp Suite, OWASP ZAP                    │   ║
+║  │ 🔧 Password Cracking    → Hydra, John, Hashcat                     │   ║
+║  │ 🔧 Exploitation         → Metasploit, SearchSploit                 │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                              ↓                                               ║
+║  LEVEL 3: SPECIALIZATION                                                    ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ 🎯 Web Application      → SQLi, XSS, CSRF, IDOR                    │   ║
+║  │ 🎯 Network Security     → Firewall, IDS/IPS, VPN                   │   ║
+║  │ 🎯 Mobile Security      → Android/iOS Pentesting                   │   ║
+║  │ 🎯 Cloud Security       → AWS, Azure, GCP Security                 │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                              ↓                                               ║
+║  LEVEL 4: ADVANCED                                                          ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ 🚀 Red Team Operations  → Adversary Simulation                     │   ║
+║  │ 🚀 Malware Analysis     → Reverse Engineering                      │   ║
+║  │ 🚀 Exploit Development  → Buffer Overflow, Shellcode               │   ║
+║  │ 🚀 APT Hunting          → Threat Intelligence                      │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+| Tool | Type | Difficulty | Best For | Learning Curve |
+|------|------|------------|----------|----------------|
+| **Nmap** | Scanner | ⭐⭐ | Network discovery | Easy |
+| **Hydra** | Password Cracker | ⭐⭐ | Online brute force | Easy |
+| **John the Ripper** | Password Cracker | ⭐⭐⭐ | Offline hash cracking | Medium |
+| **SQLMap** | Web Exploitation | ⭐⭐⭐ | SQL injection automation | Medium |
+| **Metasploit** | Exploitation Framework | ⭐⭐⭐⭐ | Comprehensive pentesting | Hard |
+| **Burp Suite** | Web Testing | ⭐⭐⭐ | Web application security | Medium |
+| **Aircrack-ng** | WiFi Security | ⭐⭐⭐⭐ | Wireless auditing | Hard |
+| **Wireshark** | Packet Analyzer | ⭐⭐⭐ | Network troubleshooting | Medium |
+| **Hashcat** | GPU Cracker | ⭐⭐⭐ | Fast hash cracking | Medium |
+| **Mimikatz** | Post-Exploitation | ⭐⭐⭐⭐ | Credential extraction | Hard |
+
+---
+
+## 🚀 PRACTICAL SECURITY CHALLENGES
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    🎯 ETHICAL HACKING PRACTICE CHALLENGES                   ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  CHALLENGE 1: Network Reconnaissance (Beginner)                             ║
+║  ─────────────────────────────────────────────────                          ║
+║  🎯 Objective: Map your home network and identify all devices               ║
+║  📋 Tasks:                                                                  ║
+║     1. Use Nmap to scan your local subnet                                   ║
+║     2. Identify all connected devices (IP, MAC, OS)                        ║
+║     3. Document open ports on each device                                   ║
+║     4. Create a network diagram                                             ║
+║  ⏱️ Time: 30-45 minutes                                                     ║
+║  🛠️ Tools: nmap, zenmap                                                     ║
+║                                                                              ║
+║  CHALLENGE 2: Password Audit (Intermediate)                                 ║
+║  ─────────────────────────────────────────────────                          ║
+║  🎯 Objective: Test password strength on your own accounts                  ║
+║  📋 Tasks:                                                                  ║
+║     1. Extract password hashes from a test system                          ║
+║     2. Use John the Ripper to test hash cracking                           ║
+║     3. Document weak passwords found                                        ║
+║     4. Create password policy recommendations                              ║
+║  ⏱️ Time: 1-2 hours                                                         ║
+║  🛠️ Tools: john, hashcat, rockyou.txt                                      ║
+║                                                                              ║
+║  CHALLENGE 3: Web Application Testing (Advanced)                            ║
+║  ─────────────────────────────────────────────────                          ║
+║  🎯 Objective: Find and document vulnerabilities in DVWA                   ║
+║  📋 Tasks:                                                                  ║
+║     1. Set up DVWA (Damn Vulnerable Web Application)                       ║
+║     2. Use SQLMap to find SQL injection                                    ║
+║     3. Use Burp Suite for manual testing                                   ║
+║     4. Write a professional vulnerability report                           ║
+║  ⏱️ Time: 2-3 hours                                                         ║
+║  🛠️ Tools: sqlmap, burp suite, browser                                     ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+⚠️ **LEGAL DISCLAIMER FOR CHALLENGES:**
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  ⚠️ CRITICAL LEGAL WARNING                                                    │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  These challenges MUST ONLY be performed on:                                 │
+│  ✅ Systems you OWN personally                                               │
+│  ✅ Systems with WRITTEN authorization                                       │
+│  ✅ Dedicated lab environments (DVWA, Metasploitable, HackTheBox, etc.)     │
+│                                                                              │
+│  NEVER attempt these on:                                                     │
+│  ❌ Production systems without permission                                    │
+│  ❌ Government or critical infrastructure                                    │
+│  ❌ Any system you don't own or have explicit permission to test            │
+│                                                                              │
+│  Violators may face:                                                         │
+│  • Criminal prosecution under IT Act / Computer Fraud laws                  │
+│  • Imprisonment up to 10 years                                              │
+│  • Heavy fines                                                               │
+│  • Civil lawsuits                                                            │
+│                                                                              │
+│  "I didn't know" is NOT a legal defense!                                    │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **Exploit** | Code or technique that takes advantage of a vulnerability |
+| **Payload** | Malicious code delivered to target system after exploitation |
+| **Vulnerability** | Weakness in system that can be exploited |
+| **Zero-Day** | Unknown vulnerability with no available patch |
+| **CVE** | Common Vulnerabilities and Exposures - unique identifier for vulnerabilities |
+| **Shellcode** | Small piece of code used as payload in exploits |
+| **Foothold** | Initial access gained to a target system |
+| **Persistence** | Maintaining access to compromised system across restarts |
+| **Privilege Escalation** | Gaining higher permissions (user → admin → root) |
+| **Lateral Movement** | Moving through a network after initial compromise |
+| **Exfiltration** | Stealing data from a compromised system |
+| **C2 (C&C)** | Command and Control - server controlling compromised systems |
+| **APT** | Advanced Persistent Threat - sophisticated, targeted attack |
+| **Social Engineering** | Manipulating people to divulge information |
+| **Phishing** | Fraudulent attempt to obtain sensitive information |
+| **Penetration Testing** | Authorized simulation of cyber attack |
+| **Red Team** | Offensive security team simulating adversaries |
+| **Blue Team** | Defensive security team protecting systems |
+| **Purple Team** | Collaboration between red and blue teams |
+| **OSINT** | Open Source Intelligence - publicly available information |
+
+---
+
+## 💼 CYBERSECURITY CAREER ROADMAP
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    💼 CYBERSECURITY CAREER PATHS                             ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  🐛 BUG BOUNTY HUNTER                                                       ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ Income:        $1,000 - $500,000+ per bug                          │   ║
+║  │ Skills:        Web hacking, mobile security, reverse engineering   │   ║
+║  │ Platforms:     HackerOne, Bugcrowd, Synack                         │   ║
+║  │ Certifications: None required (skills matter more)                 │   ║
+║  │ Pros:          Flexible, work from anywhere, high earning potential│   ║
+║  │ Cons:          Inconsistent income, competitive                    │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                              ║
+║  🔓 PENETRATION TESTER                                                      ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ Salary:        $70,000 - $150,000+ per year                        │   ║
+║  │ Skills:        Network hacking, web apps, social engineering       │   ║
+║  │ Certifications: OSCP, GPEN, CEH, eJPT                              │   ║
+║  │ Career Path:   Junior → Senior → Lead → Principal                 │   ║
+║  │ Pros:          Stable income, variety of work, continuous learning│   ║
+║  │ Cons:          Can be stressful, reporting requirements            │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                              ║
+║  🛡️ SOC ANALYST (Security Operations Center)                               ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ Salary:        $50,000 - $100,000+ per year                        │   ║
+║  │ Skills:        Log analysis, incident response, SIEM tools         │   ║
+║  │ Certifications: Security+, CySA+, GCIH                            │   ║
+║  │ Career Path:   Tier 1 → Tier 2 → Tier 3 → SOC Lead                │   ║
+║  │ Pros:          Entry-level friendly, builds strong foundation      │   ║
+║  │ Cons:          Shift work, alert fatigue                          │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                              ║
+║  🏢 OTHER CAREER PATHS                                                      ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ • Security Architect      - Design secure systems                  │   ║
+║  │ • Security Consultant     - Advise organizations                   │   ║
+║  │ • Incident Responder      - Handle security breaches              │   ║
+║  │ • Malware Analyst         - Analyze malicious code                │   ║
+║  │ • Cloud Security Engineer - Secure cloud infrastructure           │   ║
+║  │ • CISO                    - Chief Information Security Officer    │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## ⚠️ LEGAL DISCLAIMER BOX
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   ███████╗██╗   ██╗ ██████╗ ██████╗███████╗███████╗██████╗                  │
+│   ██╔════╝██║   ██║██╔═══██╗██╔══██╗██╔════╝██╔════╝██╔══██╗                 │
+│   ███████╗██║   ██║██║   ██║██║  ██║█████╗  █████╗  ██████╔╝                 │
+│   ╚════██║██║   ██║██║   ██║██║  ██║██╔══╝  ██╔══╝  ██╔══██╗                 │
+│   ███████║╚██████╔╝╚██████╔╝██████╔╝███████╗███████╗██║  ██║                 │
+│   ╚══════╝ ╚═════╝  ╚═════╝ ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝                 │
+│                                                                              │
+│                      ⚠️ EDUCATIONAL PURPOSE ONLY ⚠️                         │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  This chapter covers security tools and techniques for ETHICAL purposes     │
+│  ONLY. The information provided is intended for:                            │
+│                                                                              │
+│  ✅ Security professionals conducting authorized assessments                │
+│  ✅ Students learning cybersecurity in educational settings                 │
+│  ✅ Bug bounty hunters with explicit program permission                     │
+│  ✅ System administrators securing their own infrastructure                 │
+│                                                                              │
+│  ILLEGAL USE WARNING:                                                       │
+│  ───────────────────                                                        │
+│  Using these tools against systems without authorization is ILLEGAL and     │
+│  may result in:                                                             │
+│  • Criminal prosecution under IT Act Section 66/66A (India)                 │
+│  • Computer Fraud and Abuse Act (USA)                                       │
+│  • Computer Misuse Act (UK)                                                 │
+│  • Imprisonment up to 10 years                                              │
+│  • Substantial fines                                                        │
+│                                                                              │
+│  ALWAYS obtain written permission before testing any system!                │
+│                                                                              │
+│  Channel: T3rmuxk1ng | Module: 6 - Security | Chapter: 30                   │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🛡️ DEFENSIVE MEASURES
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    🛡️ PROTECTING AGAINST SECURITY ATTACKS                   ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  🔐 PASSWORD SECURITY                                                        ║
+║  ──────────────────                                                          ║
+║  • Use strong passwords (12+ characters, mixed types)                       ║
+║  • Implement password managers (Bitwarden, 1Password)                       ║
+║  • Enable Multi-Factor Authentication (MFA/2FA)                             ║
+║  • Regular password rotation (every 90 days)                                ║
+║  • Account lockout after 5 failed attempts                                  ║
+║                                                                              ║
+║  🌐 NETWORK SECURITY                                                         ║
+║  ──────────────────                                                          ║
+║  • Deploy firewalls (hardware + software)                                   ║
+║  • Use IDS/IPS (Snort, Suricata)                                            ║
+║  • Segment networks (VLANs)                                                 ║
+║  • Implement Zero Trust architecture                                        ║
+║  • Regular vulnerability scanning                                            ║
+║                                                                              ║
+║  💻 SYSTEM HARDENING                                                         ║
+║  ──────────────────                                                          ║
+║  • Keep systems patched and updated                                         ║
+║  • Disable unnecessary services                                             ║
+║  • Use principle of least privilege                                         ║
+║  • Implement endpoint protection (EDR)                                      ║
+║  • Regular security audits                                                   ║
+║                                                                              ║
+║  📊 MONITORING & DETECTION                                                   ║
+║  ──────────────────                                                          ║
+║  • SIEM implementation (Splunk, ELK)                                        ║
+║  • Log all security events                                                  ║
+║  • Set up alerts for suspicious activity                                    ║
+║  • Regular security assessments                                              ║
+║  • Incident response plan                                                   ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+| Defense Layer | Tools/Techniques | Purpose |
+|---------------|------------------|---------|
+| **Perimeter** | Firewall, WAF, IDS/IPS | Block malicious traffic |
+| **Network** | VLANs, NAC, VPN | Segment and control access |
+| **Endpoint** | EDR, Antivirus, DLP | Protect individual devices |
+| **Application** | Input validation, HTTPS | Secure applications |
+| **Data** | Encryption, DLP, Backup | Protect sensitive information |
+| **User** | MFA, Training, PAM | Secure user access |
+
+---
+
 ## ⚠️ SECURITY BEST PRACTICES
 
 ```

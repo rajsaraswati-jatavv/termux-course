@@ -717,6 +717,365 @@ hydra -t 8 -P huge_wordlist.txt target ssh
 
 ---
 
+## 📊 MERMAID DIAGRAMS - Hydra Attack Flow
+
+```mermaid
+graph TD
+    A[🎯 Target Selection] --> B[📋 Service Enumeration]
+    B --> C[📝 Wordlist Preparation]
+    C --> D[⚔️ Attack Execution]
+    D --> E{Credentials Found?}
+    E -->|Yes| F[✅ Success - Document]
+    E -->|No| G[🔄 Try Different Method]
+    G --> C
+    
+    subgraph Attack Methods
+        D --> D1[Dictionary Attack]
+        D --> D2[Brute Force]
+        D --> D3[Credential Stuffing]
+    end
+    
+    subgraph Protocols
+        B --> P1[SSH:22]
+        B --> P2[FTP:21]
+        B --> P3[HTTP:80/443]
+        B --> P4[MySQL:3306]
+        B --> P5[SMTP:25]
+    end
+```
+
+```mermaid
+sequenceDiagram
+    participant H as Hacker (Hydra)
+    participant T as Target Server
+    participant W as Wordlist
+    
+    H->>W: Load username/password combinations
+    loop For each credential pair
+        H->>T: Attempt login
+        T-->>H: Response (Success/Fail)
+        alt Success
+            H->>H: Log credentials
+            H->>H: Stop or continue
+        else Failure
+            H->>H: Try next combination
+        end
+    end
+```
+
+---
+
+## ⚡ SECURITY TOOL CHEATSHEET - Hydra Commands
+
+| Task | Command | Description |
+|------|---------|-------------|
+| **Basic SSH Attack** | `hydra -l user -P wordlist.txt target ssh` | Dictionary attack on SSH |
+| **Multiple Users** | `hydra -L users.txt -P pass.txt target ssh` | Test multiple usernames |
+| **Exit on First Success** | `hydra -l admin -P pass.txt -f target ssh` | Stop when credentials found |
+| **Custom Port** | `hydra -l user -P pass.txt -s 2222 target ssh` | Specify non-standard port |
+| **Verbose Output** | `hydra -l user -P pass.txt -V target ssh` | Show each attempt |
+| **Save Results** | `hydra -l user -P pass.txt -o results.txt target ssh` | Output to file |
+| **Quick Check** | `hydra -l admin -e nsr target ssh` | Try null, same, reverse |
+| **HTTP Form Attack** | `hydra -l user -P pass.txt target http-post-form "/login:user=^USER^&pass=^PASS^:F=Invalid"` | Web form brute force |
+| **FTP Attack** | `hydra -l admin -P pass.txt target ftp` | FTP password cracking |
+| **MySQL Attack** | `hydra -l root -P pass.txt target mysql` | Database credentials |
+| **With Proxy** | `hydra -l user -P pass.txt -proxy socks5://127.0.0.1:9050 target ssh` | Use Tor/proxy |
+| **Threading** | `hydra -t 8 -l user -P pass.txt target ssh` | Set parallel connections |
+| **Resume Attack** | `hydra -R` | Resume interrupted session |
+
+---
+
+## 🎯 ETHICAL HACKER LEARNING PATH - Password Cracking
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    🔐 PASSWORD CRACKING MASTERY PATH                         ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  STAGE 1: UNDERSTANDING PASSWORDS                                           ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ 📚 Password Storage    → Hashing algorithms (MD5, SHA, bcrypt)     │   ║
+║  │ 📚 Password Policies    → Complexity, length, rotation              │   ║
+║  │ 📚 Common Patterns      → rockyou.txt analysis                      │   ║
+║  │ 📚 Hash Identification  → Hash type by length/prefix                │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                              ↓                                               ║
+║  STAGE 2: ONLINE ATTACKS (Hydra Focus)                                      ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ 🔧 SSH Brute Force     → hydra -l user -P wordlist target ssh       │   ║
+║  │ 🔧 FTP Attacks         → hydra -l user -P wordlist target ftp       │   ║
+║  │ 🔧 Web Form Attacks    → http-post-form module                      │   ║
+║  │ 🔧 Database Attacks    → MySQL, PostgreSQL, MSSQL                   │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                              ↓                                               ║
+║  STAGE 3: OFFLINE ATTACKS (John/Hashcat)                                    ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ 🔧 Hash Extraction     → zip2john, pdf2john, ssh2john               │   ║
+║  │ 🔧 Dictionary Attacks  → john --wordlist=rockyou.txt hash           │   ║
+║  │ 🔧 Rule-based Attacks  → john --rules hash                          │   ║
+║  │ 🔧 GPU Cracking        → hashcat with GPU acceleration              │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                              ↓                                               ║
+║  STAGE 4: ADVANCED TECHNIQUES                                               ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ 🚀 Rainbow Tables      → Pre-computed hash tables                   │   ║
+║  │ 🚀 Password Spraying   → One password, many users                  │   ║
+║  │ 🚀 Credential Stuffing → Leaked credentials reuse                   │   ║
+║  │ 🚀 Custom Wordlists    → CeWL, crunch, mentalist                    │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE - Password Cracking Tools
+
+| Tool | Attack Type | Platform | Speed | Best For |
+|------|-------------|----------|-------|----------|
+| **Hydra** | Online | Cross-platform | Medium | Network services |
+| **John the Ripper** | Offline | Cross-platform | Fast | Hash cracking |
+| **Hashcat** | Offline | Cross-platform | Very Fast (GPU) | GPU-accelerated cracking |
+| **Medusa** | Online | Cross-platform | Fast | Parallel attacks |
+| **Patator** | Online | Linux | Medium | Multi-protocol |
+| **CrackStation** | Offline | Web-based | Fast | Quick hash lookup |
+| **Ophcrack** | Offline | Windows | Fast | Windows passwords |
+| **L0phtCrack** | Offline | Windows | Medium | Windows domain |
+
+---
+
+## 🚀 PRACTICAL SECURITY CHALLENGES - Hydra
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    🎯 HYDRA PRACTICE CHALLENGES                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  CHALLENGE 1: SSH Password Audit (Beginner)                                 ║
+║  ────────────────────────────────────────────                               ║
+║  🎯 Objective: Test your own SSH server for weak passwords                  ║
+║  📋 Tasks:                                                                  ║
+║     1. Set up a test SSH server (Metasploitable or Docker)                  ║
+║     2. Create test user accounts with various password strengths            ║
+║     3. Use Hydra to test password security                                  ║
+║     4. Document time taken to crack each password type                      ║
+║  ⏱️ Time: 45-60 minutes                                                     ║
+║  🛠️ Tools: hydra, wordlist, ssh server                                      ║
+║                                                                              ║
+║  CHALLENGE 2: Web Form Brute Force (Intermediate)                           ║
+║  ───────────────────────────────────────────────                            ║
+║  🎯 Objective: Perform web login brute force on DVWA                       ║
+║  📋 Tasks:                                                                  ║
+║     1. Install DVWA (Damn Vulnerable Web Application)                       ║
+║     2. Analyze the login form structure                                     ║
+║     3. Construct proper Hydra command with form parameters                  ║
+║     4. Successfully crack the admin password                                ║
+║  ⏱️ Time: 1-2 hours                                                         ║
+║  🛠️ Tools: hydra, browser dev tools, dvwa                                   ║
+║                                                                              ║
+║  CHALLENGE 3: Multi-Service Attack (Advanced)                               ║
+║  ────────────────────────────────────────────                               ║
+║  🎯 Objective: Comprehensive credential testing across services             ║
+║  📋 Tasks:                                                                  ║
+║     1. Set up lab with SSH, FTP, and HTTP services                         ║
+║     2. Create different users for each service                             ║
+║     3. Write a script to automate multi-service testing                    ║
+║     4. Generate professional assessment report                              ║
+║  ⏱️ Time: 2-3 hours                                                         ║
+║  🛠️ Tools: hydra, bash scripting, report template                           ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+⚠️ **LEGAL DISCLAIMER:**
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  ⚠️ CRITICAL LEGAL WARNING - PASSWORD CRACKING                               │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Password cracking tools like Hydra can ONLY be used legally on:            │
+│  ✅ Your own systems and accounts                                            │
+│  ✅ Systems with EXPLICIT written authorization                             │
+│  ✅ Authorized penetration testing engagements                              │
+│  ✅ Designated lab environments (DVWA, Metasploitable, HackTheBox)          │
+│                                                                              │
+│  ILLEGAL activities include:                                                 │
+│  ❌ Cracking passwords on systems you don't own                             │
+│  ❌ Attempting to access others' accounts                                   │
+│  ❌ Using cracked credentials for unauthorized access                       │
+│  ❌ Distributing cracked credentials                                        │
+│                                                                              │
+│  Legal consequences:                                                         │
+│  • IT Act Section 66 (India) - 3 years imprisonment                        │
+│  • CFAA (USA) - Up to 10 years for first offense                           │
+│  • Computer Misuse Act (UK) - Up to 10 years                               │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY - Password Cracking
+
+| Term | Definition |
+|------|------------|
+| **Brute Force** | Trying every possible character combination |
+| **Dictionary Attack** | Using pre-compiled list of common passwords |
+| **Rainbow Table** | Pre-computed hash chains for quick lookup |
+| **Salt** | Random data added to password before hashing |
+| **Hash** | One-way cryptographic function output |
+| **Credential Stuffing** | Using leaked credentials against multiple sites |
+| **Password Spraying** | Trying common passwords against many accounts |
+| **Wordlist** | File containing potential passwords |
+| **Online Attack** | Attack against live service (Hydra) |
+| **Offline Attack** | Attack against stolen hashes (John) |
+| **Hash Collision** | Two inputs producing same hash output |
+| **Key Stretching** | Making hash computation intentionally slow |
+| **Pepper** | Secret added to password before hashing |
+| **Mask Attack** | Targeted brute force with known patterns |
+| **Hybrid Attack** | Combining dictionary with mutations |
+
+---
+
+## 💼 CYBERSECURITY CAREER ROADMAP - Password Security
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    💼 PASSWORD SECURITY SPECIALIZATIONS                       ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  🔐 PASSWORD CRACKING SPECIALIST                                             ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ Focus:          Breaking passwords for authorized assessments       │   ║
+║  │ Tools:          Hydra, John, Hashcat, custom scripts               │   ║
+║  │ Skills:         Hash identification, attack optimization           │   ║
+║  │ Certifications: OSCP, GPEN                                         │   ║
+║  │ Salary Range:   $80,000 - $130,000                                 │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                              ║
+║  🛡️ PASSWORD POLICY ARCHITECT                                                ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ Focus:          Designing secure password policies                 │   ║
+║  │ Tools:          Policy frameworks, MFA systems, password managers  │   ║
+║  │ Skills:         Risk assessment, user behavior analysis            │   ║
+║  │ Certifications: CISSP, CISM                                        │   ║
+║  │ Salary Range:   $100,000 - $160,000                                │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                              ║
+║  🔍 DIGITAL FORENSICS ANALYST                                                ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │ Focus:          Recovering passwords from seized devices           │   ║
+║  │ Tools:          EnCase, FTK, specialized cracking rigs             │   ║
+║  │ Skills:         Evidence handling, legal procedures                │   ║
+║  │ Certifications: GCFE, EnCE                                        │   ║
+║  │ Salary Range:   $70,000 - $120,000                                 │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## ⚠️ LEGAL DISCLAIMER BOX
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   ██╗  ██╗███████╗██████╗  ██████╗  ██████╗ ██████╗ ██╗   ██╗██╗ ██████╗    │
+│   ██║  ██║██╔════╝██╔══██╗██╔═══██╗██╔════╝██╔═══██╗██║   ██║██║██╔════╝    │
+│   ███████║█████╗  ██████╔╝██║   ██║██║     ██║   ██║██║   ██║██║██║         │
+│   ██╔══██║██╔══╝  ██╔══██╗██║   ██║██║     ██║   ██║╚██╗ ██╔╝██║██║         │
+│   ██║  ██║███████╗██║  ██║╚██████╔╝╚██████╗╚██████╔╝ ╚████╔╝ ██║╚██████╗    │
+│   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═════╝   ╚═══╝  ╚═╝ ╚═════╝    │
+│                                                                              │
+│                    ⚠️ AUTHORIZED USE ONLY ⚠️                                 │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Hydra is a powerful password cracking tool. Use RESPONSIBLY!               │
+│                                                                              │
+│  ✅ PERMITTED USE:                                                           │
+│     • Testing your own accounts and systems                                 │
+│     • Authorized penetration testing                                        │
+│     • Security assessments with written permission                          │
+│     • Educational labs and CTF environments                                 │
+│                                                                              │
+│  ❌ PROHIBITED USE:                                                          │
+│     • Accessing accounts you don't own                                      │
+│     • Testing systems without authorization                                 │
+│     • Any malicious or illegal activity                                     │
+│     • Harassment or unauthorized surveillance                               │
+│                                                                              │
+│  ⚖️ LEGAL CONSEQUENCES:                                                      │
+│     • India: IT Act Section 66 - Up to 3 years imprisonment               │
+│     • USA: CFAA - Up to 10 years (first offense)                          │
+│     • UK: Computer Misuse Act - Up to 10 years                            │
+│     • EU: GDPR violations - Up to €20M or 4% global turnover              │
+│                                                                              │
+│  Channel: T3rmuxk1ng | Module: 6 - Security | Chapter: 31                   │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🛡️ DEFENSIVE MEASURES - Password Security
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    🛡️ PROTECTING AGAINST BRUTE FORCE ATTACKS                 ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  🔒 ACCOUNT LOCKOUT POLICIES                                                 ║
+║  ───────────────────────────                                                 ║
+║  • Lock account after 5 failed attempts                                      ║
+║  • Progressive delays (1min, 5min, 15min, 1hour)                            ║
+║  • Permanent lockout with admin review                                       ║
+║  • IP-based blocking for distributed attacks                                ║
+║                                                                              ║
+║  🔑 PASSWORD REQUIREMENTS                                                    ║
+║  ────────────────────────                                                    ║
+║  • Minimum 12 characters (recommend 16+)                                    ║
+║  • Mix of uppercase, lowercase, numbers, symbols                            ║
+║  • No common passwords (check against rockyou.txt)                          ║
+║  • No personal information (names, birthdays)                               ║
+║  • Unique for each account                                                   ║
+║                                                                              ║
+║  📱 MULTI-FACTOR AUTHENTICATION                                              ║
+║  ────────────────────────────                                                ║
+║  • Something you know (password)                                            ║
+║  • Something you have (phone, token)                                        ║
+║  • Something you are (biometric)                                            ║
+║  • Preferred: Authenticator apps over SMS                                   ║
+║                                                                              ║
+║  📊 RATE LIMITING                                                            ║
+║  ────────────────                                                            ║
+║  • Limit login attempts per minute                                          ║
+║  • Implement CAPTCHA after 3 failures                                       ║
+║  • Geo-blocking for unusual locations                                       ║
+║  • Device fingerprinting                                                     ║
+║                                                                              ║
+║  🔍 MONITORING & ALERTING                                                    ║
+║  ─────────────────────────                                                   ║
+║  • Log all login attempts                                                    ║
+║  • Alert on multiple failures from same IP                                  ║
+║  • Alert on successful login from new location                              ║
+║  • SIEM integration for pattern detection                                   ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+| Defense Layer | Implementation | Effectiveness |
+|---------------|----------------|---------------|
+| **MFA** | Google Authenticator, YubiKey | ⭐⭐⭐⭐⭐ Very High |
+| **Account Lockout** | Fail2ban, custom scripts | ⭐⭐⭐⭐ High |
+| **Rate Limiting** | Nginx, Apache modules | ⭐⭐⭐⭐ High |
+| **CAPTCHA** | reCAPTCHA, hCaptcha | ⭐⭐⭐ Medium |
+| **Strong Passwords** | Policy enforcement | ⭐⭐⭐⭐ High |
+| **IP Blocking** | Firewall rules | ⭐⭐⭐ Medium |
+
+---
+
 ## ⚠️ SECURITY BEST PRACTICES
 
 ```

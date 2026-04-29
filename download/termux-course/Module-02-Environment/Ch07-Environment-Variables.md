@@ -3595,6 +3595,521 @@ Complete this checklist to verify your understanding:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Diagram 1: Environment Variable Hierarchy
+
+```mermaid
+graph TD
+    A[Android/Linux Kernel] --> B[System Environment]
+    B --> C[Termux Application]
+    C --> D[Shell Session - Bash/Zsh]
+    D --> E[Child Processes]
+    
+    B --> B1[PATH, HOME, USER]
+    C --> C1[PREFIX, TMPDIR, LD_LIBRARY_PATH]
+    D --> D1[PS1, HISTSIZE, Aliases]
+    D --> D2[.bashrc Variables]
+    E --> E1[Scripts, Programs]
+    
+    style A fill:#9C27B0,color:#fff
+    style C fill:#4CAF50,color:#fff
+    style D fill:#2196F3,color:#fff
+    style D2 fill:#FF9800,color:#fff
+```
+
+### Diagram 2: Variable Scope and Inheritance
+
+```mermaid
+flowchart TB
+    A[Parent Shell] --> B{Variable Type?}
+    
+    B -->|Shell Variable| C[local MY_VAR=value]
+    C --> D[Only in current shell]
+    D --> E[❌ NOT inherited by children]
+    
+    B -->|Environment Variable| F[export MY_VAR=value]
+    F --> G[Available in current shell]
+    G --> H[✅ Inherited by child processes]
+    
+    H --> I[Child Script]
+    H --> J[Subshell]
+    H --> K[Programs]
+    
+    I --> L[Can access $MY_VAR]
+    J --> L
+    K --> L
+    
+    style A fill:#673AB7,color:#fff
+    style F fill:#4CAF50,color:#fff
+    style E fill:#f44336,color:#fff
+    style L fill:#2196F3,color:#fff
+```
+
+### Diagram 3: Configuration File Loading Order
+
+```mermaid
+sequenceDiagram
+    participant T as Termux Start
+    participant LP as .bash_profile
+    participant P as .profile
+    participant B as .bashrc
+    participant S as Shell Ready
+    
+    T->>LP: Exists?
+    alt .bash_profile exists
+        LP->>B: Source .bashrc?
+        B->>S: Load aliases, functions
+        LP->>S: Login vars loaded
+    else No .bash_profile
+        T->>P: .profile exists?
+        alt .profile exists
+            P->>B: Source .bashrc?
+            B->>S: Load config
+            P->>S: Profile loaded
+        else No .profile
+            T->>B: .bashrc exists?
+            B->>S: Direct load
+        end
+    end
+    
+    Note over S: Environment ready!
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+| Command | Syntax | Example | Output |
+|---------|--------|---------|--------|
+| `echo` | `echo $VAR` | `echo $HOME` | Display variable value |
+| `export` | `export VAR="value"` | `export PATH="$PATH:~/bin"` | Set environment variable |
+| `unset` | `unset VAR` | `unset MY_VAR` | Delete variable |
+| `env` | `env` | `env \| grep PATH` | List all environment variables |
+| `printenv` | `printenv [VAR]` | `printenv HOME` | Print variable(s) |
+| `set` | `set` | `set \| grep MY` | List all variables (shell + env) |
+| `declare` | `declare -p VAR` | `declare -p PATH` | Show variable with attributes |
+| `readonly` | `readonly VAR` | `readonly PI=3.14` | Make variable immutable |
+| `source` | `source file` | `source ~/.bashrc` | Execute file in current shell |
+| `.` | `. file` | `. ~/.bashrc` | Same as source |
+| `export -n` | `export -n VAR` | `export -n MY_VAR` | Remove export attribute |
+| `unset -v` | `unset -v VAR` | `unset -v MY_VAR` | Unset variable |
+| `unset -f` | `unset -f FUNC` | `unset -f my_func` | Unset function |
+
+### PATH Modification Commands
+
+| Operation | Command | Effect |
+|-----------|---------|--------|
+| View PATH | `echo $PATH` | Display current PATH |
+| Add to end | `export PATH="$PATH:/new/path"` | Low priority addition |
+| Add to start | `export PATH="/new/path:$PATH"` | High priority addition |
+| View as list | `echo "$PATH" \| tr ':' '\n'` | One path per line |
+| Count paths | `echo "$PATH" \| tr ':' '\n' \| wc -l` | Number of directories |
+
+### PS1 Prompt Codes
+
+| Code | Shows | Example |
+|------|-------|---------|
+| `\u` | Username | `u0_a123` |
+| `\h` | Hostname | `localhost` |
+| `\w` | Full working directory | `/data/data/.../home` |
+| `\W` | Current directory only | `~` |
+| `\d` | Date | `Mon Jan 01` |
+| `\t` | Time 24-hour | `12:00:00` |
+| `\T` | Time 12-hour | `12:00:00` |
+| `\@` | Time AM/PM | `12:00 PM` |
+| `\n` | Newline | - |
+| `\\$` | $ for user, # for root | `$` |
+| `\!` | History number | `42` |
+| `\j` | Number of jobs | `2` |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                        🗺️ YOUR TERMUX JOURNEY 🗺️                              ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║   Module 1        Module 2          Module 3         Module 4+               ║
+║   ┌──────┐       ┌──────┐         ┌──────┐         ┌──────┐                  ║
+║   │ Intro│ ───►  │Enviro│ ───►    │Script│ ───►    │Advanc│                  ║
+║   │      │       │nment │         │ing   │         │ed    │                  ║
+║   └──────┘       └──────┘         └──────┘         └──────┘                  ║
+║                                                                               ║
+║   ✓ Done         📍 YOU ARE      Coming Next    Future Goal                  ║
+║                  HERE NOW!                                                     ║
+║                     ▼                                                         ║
+║                                                                               ║
+║   ═══════════════════════════════════════════════════════════════════════    ║
+║                                                                               ║
+║   CURRENT PROGRESS - Module 2: Environment                                    ║
+║   ┌───────────────────────────────────────────────────────────────────────┐  ║
+║   │                                                                       │  ║
+║   │   Ch6: File System    ████████████████████ 100% ✓                     │  ║
+║   │   Ch7: Env Variables  ████████████████████ 100% ✅ CURRENT            │  ║
+║   │   Ch8: Text Editors   ░░░░░░░░░░░░░░░░░░░░   0%                       │  ║
+║   │   Ch9: Styling        ░░░░░░░░░░░░░░░░░░░░   0%                       │  ║
+║   │   Ch10: API Setup     ░░░░░░░░░░░░░░░░░░░░   0%                       │  ║
+║   │                                                                       │  ║
+║   └───────────────────────────────────────────────────────────────────────┘  ║
+║                                                                               ║
+║   SKILLS UNLOCKED:                                                            ║
+║   📂 Directory Navigation    ✓                                                ║
+║   🔍 File Searching          ✓                                                ║
+║   🔧 Environment Variables   ✅                                               ║
+║   🎨 Prompt Customization    ✅                                               ║
+║   📝 Config File Editing     ✅                                               ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+### Variable Viewing Commands
+
+| Feature | `echo $VAR` | `env` | `printenv` | `set` | `declare -p` |
+|---------|-------------|-------|------------|-------|--------------|
+| **Single variable** | ✅ Best | ❌ No | ✅ Yes | ❌ No | ✅ Yes |
+| **All env vars** | ❌ No | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **Shell vars only** | ❌ No | ❌ No | ❌ No | ✅ Yes | ✅ Yes |
+| **Show attributes** | ❌ No | ❌ No | ❌ No | ❌ No | ✅ Best |
+| **Filter support** | ❌ No | ✅ With grep | ✅ With grep | ✅ With grep | ✅ With grep |
+| **No $ needed** | ❌ Need $ | ✅ No | ✅ No | ❌ Need $ | ❌ Need $ |
+
+### Variable Types Comparison
+
+| Type | Scope | Inheritance | Persistence | Use Case |
+|------|-------|-------------|-------------|----------|
+| **Shell Variable** | Current shell | ❌ No | Session only | Temporary data |
+| **Environment Variable** | Current + children | ✅ Yes | Session only | System config |
+| **Exported Variable** | Current + children | ✅ Yes | Session only | Child process config |
+| **.bashrc Variable** | New shells | ✅ Yes | ✅ Permanent | User preferences |
+| **Readonly Variable** | Current shell | Varies | Session only | Constants |
+
+### Configuration Files Comparison
+
+| File | When Loaded | Best For |
+|------|-------------|----------|
+| `.bashrc` | Every interactive shell | Aliases, functions, prompt |
+| `.bash_profile` | Login shell | PATH, env vars |
+| `.profile` | Login (if no .bash_profile) | Universal settings |
+| `.bash_logout` | Shell exit | Cleanup commands |
+| `.zshrc` | Zsh shell | Zsh-specific config |
+
+---
+
+## 🚀 PRACTICAL CHALLENGES
+
+### Challenge 1: PATH Detective 🔍
+**Difficulty:** ⭐ Beginner
+**Time:** 5 minutes
+**Task:** Find out how many directories are in your PATH and list them in alphabetical order.
+
+**Hint:** Use `tr` to replace colons with newlines, then pipe to `sort`.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+# Count directories in PATH
+echo "$PATH" | tr ':' '\n' | wc -l
+
+# List them alphabetically
+echo "$PATH" | tr ':' '\n' | sort
+
+# List with numbers
+echo "$PATH" | tr ':' '\n' | nl | sort -k2
+
+# Find duplicates
+echo "$PATH" | tr ':' '\n' | sort | uniq -d
+```
+
+**Explanation:**
+- `tr ':' '\n'` - Replace colons with newlines
+- `wc -l` - Count lines
+- `sort` - Alphabetical sort
+- `uniq -d` - Find duplicate entries
+
+</details>
+
+---
+
+### Challenge 2: Custom Development Environment ⚙️
+**Difficulty:** ⭐⭐ Intermediate
+**Time:** 10 minutes
+**Task:** Create a complete development environment setup in `.bashrc` that includes:
+- A `PROJECTS` variable pointing to `~/projects`
+- Add `~/scripts` to PATH
+- Set `EDITOR` to `nano` or `vim`
+- Create a `dev` function that creates and enters a project directory
+- A colored PS1 prompt showing username and current directory
+
+**Hint:** Use the `export` command and function syntax in `.bashrc`.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+# Add to ~/.bashrc
+
+# ===== DEVELOPMENT ENVIRONMENT SETUP =====
+
+# Project directory
+export PROJECTS="$HOME/projects"
+mkdir -p "$PROJECTS" 2>/dev/null
+
+# Add scripts to PATH
+export PATH="$PATH:$HOME/scripts"
+mkdir -p "$HOME/scripts" 2>/dev/null
+
+# Set default editor
+export EDITOR="nano"
+export VISUAL="nano"
+
+# Dev function - create and enter project
+dev() {
+    if [ -z "$1" ]; then
+        echo "Usage: dev <project_name>"
+        echo "Creates and enters a new project directory"
+        return 1
+    fi
+    
+    local project_path="$PROJECTS/$1"
+    
+    if [ -d "$project_path" ]; then
+        echo "⚠️  Project '$1' already exists. Entering..."
+    else
+        mkdir -p "$project_path"
+        echo "✅ Created project: $1"
+    fi
+    
+    cd "$project_path"
+    echo "📁 Location: $(pwd)"
+}
+
+# Colored prompt with username and directory
+export PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
+# Quick aliases for development
+alias proj='cd $PROJECTS'
+alias scripts='cd $HOME/scripts'
+alias bashrc='nano ~/.bashrc && source ~/.bashrc'
+alias reload='source ~/.bashrc && echo "✅ Bashrc reloaded!"'
+```
+
+**After editing:**
+```bash
+source ~/.bashrc
+```
+
+**Test it:**
+```bash
+dev my_awesome_project
+echo $PROJECTS
+echo $EDITOR
+```
+
+</details>
+
+---
+
+### Challenge 3: Environment Backup System 💾
+**Difficulty:** ⭐⭐⭐ Advanced
+**Time:** 15 minutes
+**Task:** Create a comprehensive environment backup and restore system that:
+- Saves all environment variables to a file
+- Saves all aliases and functions
+- Can restore from backup
+- Includes a comparison tool to show changes
+
+**Hint:** Use `env`, `alias`, `declare -f`, and create functions for backup/restore.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+# Add to ~/.bashrc
+
+# ===== ENVIRONMENT BACKUP SYSTEM =====
+
+BACKUP_DIR="$HOME/env_backups"
+mkdir -p "$BACKUP_DIR"
+
+# Backup environment
+env_backup() {
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local backup_file="$BACKUP_DIR/env_backup_$timestamp"
+    
+    echo "🔄 Creating environment backup..."
+    
+    # Save environment variables
+    echo "# ENVIRONMENT VARIABLES" > "$backup_file.env"
+    env | sort >> "$backup_file.env"
+    
+    # Save aliases
+    echo "# ALIASES" > "$backup_file.aliases"
+    alias >> "$backup_file.aliases"
+    
+    # Save functions
+    echo "# FUNCTIONS" > "$backup_file.functions"
+    declare -f >> "$backup_file.functions"
+    
+    # Save complete shell state
+    set > "$backup_file.complete"
+    
+    echo "✅ Backup created: $backup_file.*"
+    echo "   - env: $(wc -l < "$backup_file.env") variables"
+    echo "   - aliases: $(wc -l < "$backup_file.aliases") aliases"
+    echo "   - functions: $(grep -c '^[a-zA-Z_].*()' "$backup_file.functions") functions"
+}
+
+# List backups
+env_list_backups() {
+    echo "📋 Available backups in $BACKUP_DIR:"
+    ls -lh "$BACKUP_DIR"/*.env 2>/dev/null | awk '{print "  " $9 " (" $5 ")"}' || echo "  No backups found"
+}
+
+# Compare current with backup
+env_compare() {
+    local backup_file="$1"
+    
+    if [ -z "$backup_file" ]; then
+        echo "Usage: env_compare <backup_file>"
+        env_list_backups
+        return 1
+    fi
+    
+    local base_file="$BACKUP_DIR/${backup_file%.env}"
+    
+    if [ ! -f "$base_file.env" ]; then
+        echo "❌ Backup not found: $base_file.env"
+        return 1
+    fi
+    
+    echo "📊 Comparing current environment with backup..."
+    echo ""
+    
+    # Compare environment variables
+    echo "=== NEW VARIABLES (not in backup) ==="
+    comm -23 <(env | sort) <(sort "$base_file.env") | head -20
+    
+    echo ""
+    echo "=== REMOVED VARIABLES (in backup, not now) ==="
+    comm -13 <(env | sort) <(sort "$base_file.env") | head -20
+}
+
+# Quick backup function
+alias backup='env_backup'
+alias backups='env_list_backups'
+alias envdiff='env_compare'
+```
+
+**Usage:**
+```bash
+# Create backup
+backup
+
+# List all backups
+backups
+
+# Compare with a backup
+envdiff env_backup_20240101_120000.env
+```
+
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **Environment Variable** | Key-value pair that affects process behavior, inherited by child processes |
+| **Shell Variable** | Variable local to current shell, not inherited by children |
+| **export** | Command to convert a shell variable to an environment variable |
+| **PATH** | Colon-separated list of directories where shell looks for executables |
+| **PS1** | Primary prompt string - controls how your command prompt looks |
+| **.bashrc** | Bash configuration file executed for interactive non-login shells |
+| **.bash_profile** | Bash configuration file executed for login shells |
+| **Sourcing** | Executing a file in the current shell with `source` or `.` command |
+| **Parameter Expansion** | Bash feature to manipulate variable values: `${VAR:-default}` |
+| **Inheritance** | Child processes receiving environment variables from parent |
+| **Scope** | The context where a variable is visible and accessible |
+| **Persistence** | Variable surviving across shell sessions (stored in config files) |
+| **Readonly** | Variable that cannot be modified or unset after declaration |
+| **Substring** | Extracting part of a string: `${VAR:0:5}` |
+| **Array** | Variable containing multiple values: `ARR=(one two three)` |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How Environment Variable Knowledge Helps Your Career
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                  ENVIRONMENT CONFIG SKILLS IN TECH CAREERS               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   🖥️  DEVOPS ENGINEER                                                   │
+│   ├── CI/CD pipeline configuration                                      │
+│   ├── Container environment setup (Docker, Kubernetes)                  │
+│   ├── Secret management and injection                                   │
+│   └── Salary Range: $80,000 - $160,000/year                             │
+│                                                                          │
+│   ☁️  CLOUD ENGINEER                                                    │
+│   ├── AWS/Azure/GCP environment variables                               │
+│   ├── Infrastructure as Code (Terraform, Ansible)                       │
+│   ├── Lambda/Functions configuration                                    │
+│   └── Salary Range: $90,000 - $175,000/year                             │
+│                                                                          │
+│   🛡️  SECURITY ENGINEER                                                 │
+│   ├── Secure credential management                                      │
+│   ├── Environment isolation                                             │
+│   ├── Secret scanning and protection                                    │
+│   └── Salary Range: $100,000 - $200,000/year                            │
+│                                                                          │
+│   💻  FULL-STACK DEVELOPER                                              │
+│   ├── Development environment setup                                     │
+│   ├── Environment-specific configuration                                │
+│   ├── API key and database URL management                               │
+│   └── Salary Range: $70,000 - $180,000/year                             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills You're Building
+
+| Skill | Career Value | Real-World Application |
+|-------|--------------|------------------------|
+| PATH Management | ⭐⭐⭐⭐⭐ | Tool installation, development setup |
+| Environment Setup | ⭐⭐⭐⭐⭐ | DevOps, CI/CD, Docker |
+| Shell Customization | ⭐⭐⭐⭐ | Productivity, team standards |
+| Config File Management | ⭐⭐⭐⭐ | System administration |
+| Variable Debugging | ⭐⭐⭐⭐ | Troubleshooting, support |
+
+### Real-World Applications
+
+1. **Docker/Containers**: `ENV` instructions in Dockerfiles
+2. **CI/CD**: GitHub Actions, GitLab CI environment variables
+3. **Cloud**: AWS Lambda environment variables, Kubernetes ConfigMaps
+4. **Security**: Managing API keys, database credentials securely
+5. **Development**: `.env` files for project configuration
+
+### Next Steps After This Chapter
+
+1. **Master .bashrc** - Create your perfect development environment
+2. **Learn .env files** - Used in web development projects
+3. **Explore Docker ENV** - Container environment configuration
+4. **Practice security** - Never commit secrets to git
+5. **Automate setup** - Create scripts to set up new environments
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1: Backup Your .bashrc Before Editing**

@@ -1933,6 +1933,442 @@ Before moving to Chapter 20, verify:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### 1. Camera API Architecture
+
+```mermaid
+flowchart TB
+    subgraph User Interface
+        A[Termux Terminal]
+    end
+    
+    subgraph Termux Commands
+        B[termux-camera-info]
+        C[termux-camera-photo]
+    end
+    
+    subgraph Android Camera Stack
+        D[Camera2 API]
+        E[Camera Service]
+        F[Camera HAL]
+    end
+    
+    subgraph Hardware
+        G[Back Camera - ID: 0]
+        H[Front Camera - ID: 1]
+        I[Additional Cameras]
+    end
+    
+    A --> B
+    A --> C
+    B --> D
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    F --> H
+    F --> I
+    
+    style A fill:#4CAF50,color:#fff
+    style C fill:#2196F3,color:#fff
+    style G fill:#FF5722,color:#fff
+```
+
+### 2. Media Operations Flow
+
+```mermaid
+flowchart LR
+    subgraph Input
+        A[Camera Capture]
+        B[Audio Recording]
+        C[File Path]
+    end
+    
+    subgraph Processing
+        D[termux-camera-photo]
+        E[termux-microphone-record]
+        F[termux-media-player]
+        G[termux-media-scan]
+    end
+    
+    subgraph Output
+        H[JPG Image]
+        I[MP3 Audio]
+        J[Playback]
+        K[Gallery Visible]
+    end
+    
+    A --> D --> H
+    B --> E --> I
+    C --> F --> J
+    H --> G --> K
+    I --> G --> K
+    
+    style D fill:#2196F3,color:#fff
+    style E fill:#9C27B0,color:#fff
+    style G fill:#4CAF50,color:#fff
+```
+
+### 3. Audio Stream Control Flow
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant T as Termux
+    participant AM as AudioManager
+    participant S as Speaker
+    
+    U->>T: termux-volume music 50
+    T->>AM: setStreamVolume(STREAM_MUSIC, 50)
+    AM->>S: Update volume
+    S-->>AM: Volume changed
+    AM-->>T: Success
+    T-->>U: Volume set to 50%
+    
+    U->>T: termux-media-player play song.mp3
+    T->>AM: Start playback
+    AM->>S: Audio output
+    S-->>U: Sound playing
+    
+    Note over AM,S: Different streams: music, ring, alarm, notification
+```
+
+---
+
+## ⚡ API COMMAND REFERENCE CARD
+
+| API Command | Purpose | Permissions | Example |
+|-------------|---------|-------------|---------|
+| `termux-camera-info` | List available cameras | Camera | `termux-camera-info` |
+| `termux-camera-photo` | Capture photo | Camera | `termux-camera-photo photo.jpg` |
+| `termux-camera-photo -c` | Capture from specific camera | Camera | `termux-camera-photo -c 1 selfie.jpg` |
+| `termux-camera-photo --size` | Capture with resolution | Camera | `termux-camera-photo --size 1920x1080 hd.jpg` |
+| `termux-media-player play` | Play audio file | None | `termux-media-player play song.mp3` |
+| `termux-media-player pause` | Pause playback | None | `termux-media-player pause` |
+| `termux-media-player stop` | Stop playback | None | `termux-media-player stop` |
+| `termux-media-player info` | Get playback info | None | `termux-media-player info` |
+| `termux-volume` | Get/set volume | None | `termux-volume music 75` |
+| `termux-microphone-record` | Record audio | Microphone | `termux-microphone-record -f audio.mp3 -l 30` |
+| `termux-media-scan` | Add to gallery | Storage | `termux-media-scan photo.jpg` |
+
+### Quick Syntax Reference
+
+```bash
+# Camera
+termux-camera-info                         # List cameras
+termux-camera-photo [-c id] [--size WxH] <output.jpg>
+
+# Media Player
+termux-media-player play <file>            # Play audio
+termux-media-player pause                  # Pause
+termux-media-player stop                   # Stop
+termux-media-player info                   # Get status
+
+# Volume (streams: ring, music, notification, alarm, call, system)
+termux-volume [stream] [level]             # Get/set (0-100)
+
+# Recording
+termux-microphone-record -f <file> [-l seconds] [-r rate] [-c channels]
+termux-microphone-record -i                # Get info
+termux-microphone-record -q                # Stop recording
+
+# Media Scan
+termux-media-scan [-r] <file_or_directory>
+```
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                   CAMERA & MEDIA API MASTERY PATH                             ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+     🌱 BEGINNER                    🌿 INTERMEDIATE                  🌳 ADVANCED
+     ──────────────────             ──────────────────              ──────────────────
+     
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  List Cameras   │───────────▶│  Camera         │───────────▶│  Multi-Camera   │
+     │  Basic Info     │            │  Selection      │            │  System         │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Single Photo   │───────────▶│  Photo with     │───────────▶│  Time-Lapse     │
+     │  Capture        │            │  Options        │            │  Photography    │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Play Audio     │───────────▶│  Media Control  │───────────▶│  Audio          │
+     │  Files          │            │  System         │            │  Playlist       │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Basic Audio    │───────────▶│  Quality        │───────────▶│  Voice          │
+     │  Recording      │            │  Recording      │            │  Notes App      │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     🏆 MASTERY CHECKPOINTS:
+     
+     □ Level 1: List available cameras on device
+     □ Level 2: Capture photo from specific camera
+     □ Level 3: Play and control audio playback
+     □ Level 4: Record audio with quality settings
+     □ Level 5: Create time-lapse capture system
+     □ Level 6: Build complete media control center
+     □ Level 7: Implement security camera automation
+     
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     ⏱️ ESTIMATED TIME TO MASTERY: 4-5 Hours Practice
+     
+     📚 PREREQUISITES: Chapters 1-18 (All previous API chapters)
+     
+     🎯 NEXT STEPS: Network Operations APIs (Chapter 20)
+```
+
+---
+
+## 🔧 API COMPARISON TABLE
+
+| API | Capability | Root Required | Android Version | Output Format |
+|-----|------------|---------------|-----------------|---------------|
+| `termux-camera-info` | List cameras | ❌ No | 5.0+ | JSON |
+| `termux-camera-photo` | Capture photo | ❌ No | 5.0+ | JPG file |
+| `termux-media-player` | Audio playback | ❌ No | 5.0+ | None/JSON |
+| `termux-volume` | Volume control | ❌ No | 5.0+ | JSON/None |
+| `termux-microphone-record` | Audio recording | ❌ No | 5.0+ | MP3 file |
+| `termux-media-scan` | Gallery update | ❌ No | 5.0+ | None |
+
+### Media Format Support
+
+| Format | Playback | Recording | Notes |
+|--------|----------|-----------|-------|
+| MP3 | ✅ | ✅ | Most compatible |
+| WAV | ✅ | ❌ | High quality, large files |
+| OGG | ✅ | ❌ | Open format |
+| FLAC | ✅ | ❌ | Lossless compression |
+| AAC/M4A | ✅ | ❌ | Apple ecosystem |
+| AMR | ❌ | ✅ | Voice recording optimized |
+
+---
+
+## 🚀 PRACTICAL PROJECT CHALLENGES
+
+### Challenge 1: Automated Photo Booth 📸
+
+**Objective:** Create a photo booth that captures photos from both cameras with countdown.
+
+**Requirements:**
+- Show countdown timer in terminal
+- Capture from front then back camera
+- Save with timestamp in filename
+- Make photos visible in gallery
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create photo booth
+FOLDER=~/storage/dcim/PhotoBooth
+mkdir -p "$FOLDER"
+
+# TODO: Show 3 second countdown
+# TODO: Capture front camera photo
+# TODO: Wait 2 seconds
+# TODO: Capture back camera photo
+# TODO: Run media scan
+# TODO: Show completion notification
+```
+
+**Expected Output:** Two photos saved with proper gallery visibility.
+
+---
+
+### Challenge 2: Voice Message Recorder 🎙️
+
+**Objective:** Build a voice message recorder with playback and sharing.
+
+**Requirements:**
+- Record voice messages with time limit
+- Auto-save with timestamp
+- Play back recordings
+- Share via Android share sheet
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create voice recorder
+FOLDER=~/storage/music/VoiceMessages
+mkdir -p "$FOLDER"
+
+# TODO: Show menu (record/play/share)
+# TODO: Implement recording with time limit
+# TODO: Implement playback
+# TODO: Implement sharing
+```
+
+**Expected Output:** Functional voice message system with playback and sharing.
+
+---
+
+### Challenge 3: Security Camera System 📹
+
+**Objective:** Create a motion-triggered or timed security camera system.
+
+**Requirements:**
+- Capture photos at intervals
+- Save with timestamp
+- Log all captures
+- Alert on motion (optional advanced)
+
+**Starter Code:**
+```python
+#!/usr/bin/env python3
+import subprocess
+import time
+import os
+from datetime import datetime
+
+# TODO: Implement security camera
+# 1. Create output directory
+# 2. Set capture interval
+# 3. Loop and capture photos
+# 4. Add timestamps
+# 5. Log to file
+# 6. Optional: Motion detection
+```
+
+**Expected Output:** Automated photo capture system running in background.
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **Camera2 API** | Modern Android camera interface (Android 5.0+) |
+| **ISO** | Camera sensitivity setting |
+| **Exposure** | Amount of light reaching camera sensor |
+| **MIME Type** | Media type identifier (e.g., image/jpeg) |
+| **Sample Rate** | Audio samples per second (e.g., 44100 Hz) |
+| **Bitrate** | Data rate for audio/video compression |
+| **Codec** | Compression/decompression algorithm |
+| **Stream** | Audio output channel (music, ring, alarm, etc.) |
+| **MediaStore** | Android database for media files |
+| **Time-lapse** | Photography technique with timed intervals |
+| **Frame Rate** | Photos per second for video |
+
+### Audio Quality Reference
+
+| Sample Rate | Quality | Use Case |
+|-------------|---------|----------|
+| 8000 Hz | Low | Voice calls, basic voice |
+| 16000 Hz | Medium | Voice recording |
+| 22050 Hz | Good | Casual audio |
+| 44100 Hz | CD Quality | Music, professional |
+| 48000 Hz | Studio | Professional production |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How Camera & Media APIs Relate to Real-World Development
+
+**Mobile App Development:**
+- Camera integration is essential for many apps
+- Media playback is fundamental to entertainment apps
+- Audio recording for social/messaging apps
+
+**Security & Surveillance:**
+- Automated camera systems for monitoring
+- Motion detection implementations
+- Evidence capture systems
+
+**Content Creation:**
+- Photo booth applications
+- Voice memo systems
+- Time-lapse photography tools
+
+### Career Paths Using These Skills
+
+| Role | Relevance | Salary Range (India) |
+|------|-----------|---------------------|
+| Android Developer | Camera/Media APIs | ₹6-25 LPA |
+| Multimedia Developer | Audio/Video processing | ₹5-20 LPA |
+| Security Systems Dev | Surveillance systems | ₹7-22 LPA |
+| App Developer | Photo/audio apps | ₹5-18 LPA |
+| Embedded Systems | IoT camera systems | ₹6-22 LPA |
+
+### Skills Roadmap
+
+```
+Current Chapter (Camera & Media APIs)
+         │
+         ├──▶ Camera Integration
+         │         │
+         │         └──▶ Android Camera Developer
+         │
+         ├──▶ Audio Processing
+         │         │
+         │         └──▶ Multimedia Developer
+         │
+         ├──▶ Surveillance Systems
+         │         │
+         │         └──▶ Security Systems Engineer
+         │
+         └──▶ Media Applications
+                   │
+                   └──▶ Content Creation Tools Developer
+```
+
+---
+
+## ⚠️ PERMISSION REQUIREMENTS TABLE
+
+| API Command | Required Permission | How to Grant | Notes |
+|-------------|---------------------|--------------|-------|
+| `termux-camera-info` | Camera | Settings > Apps > Termux | Required for camera list |
+| `termux-camera-photo` | Camera | Settings > Apps > Termux | Required for capture |
+| `termux-media-player` | None | N/A | No special permission |
+| `termux-volume` | None | N/A | No special permission |
+| `termux-microphone-record` | Microphone | Settings > Apps > Termux | Required for recording |
+| `termux-media-scan` | Storage | `termux-setup-storage` | For gallery integration |
+
+### Permission Setup Commands
+
+```bash
+# Grant camera permission (triggers on first use)
+termux-camera-info
+
+# Grant microphone permission (triggers on first use)
+termux-microphone-record -f test.mp3 -l 1
+
+# Grant storage permission
+termux-setup-storage
+
+# Check all permissions
+dumpsys package com.termux | grep "camera\|microphone\|storage"
+```
+
+### Troubleshooting Common Issues
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Camera black image | Camera in use by other app | Close other camera apps |
+| Permission denied | Permission not granted | Grant in Android settings |
+| Recording empty | Microphone permission missing | Grant microphone permission |
+| Gallery not showing | Media scan not run | Run `termux-media-scan` |
+| Photo too dark | Low light conditions | Use flash if available |
+| Audio distorted | Volume too high | Lower recording volume |
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Always use `-c 0` for back camera and `-c 1` for front camera to avoid confusion across devices.

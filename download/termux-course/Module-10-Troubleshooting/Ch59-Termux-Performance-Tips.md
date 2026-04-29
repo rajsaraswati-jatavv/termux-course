@@ -3054,6 +3054,907 @@ watch -n 1 'free -h && echo && df -h /data'
 
 ---
 
+## 📊 MERMAID TROUBLESHOOTING FLOWS
+
+### Decision Tree: Performance Diagnosis
+
+```mermaid
+flowchart TD
+    A[Performance Issue] --> B{What's the problem?}
+    B -->|Slow/Laggy| C[Check Resources]
+    B -->|Crashes| D[Check Memory]
+    B -->|Battery drain| E[Check Processes]
+    B -->|Storage full| F[Check Disk]
+    
+    C --> C1[Check CPU: top/htop]
+    C1 --> C2{High CPU?}
+    C2 -->|Yes| C3[Kill heavy processes]
+    C2 -->|No| C4[Check memory: free -h]
+    
+    D --> D1[Check OOM: dmesg]
+    D1 --> D2{OOM kills?}
+    D2 -->|Yes| D3[Reduce memory usage]
+    D3 --> D4[Setup swap if possible]
+    D2 -->|No| D5[Check logs for errors]
+    
+    E --> E1[Check wakelocks]
+    E1 --> E2[Check background processes]
+    E2 --> E3[termux-wake-unlock]
+    E3 --> E4[Set battery unrestricted]
+    
+    F --> F1[df -h]
+    F1 --> F2{High usage?}
+    F2 -->|Yes| F3[pkg clean]
+    F3 --> F4[Clear caches]
+    F4 --> F5[Remove unused packages]
+    F2 -->|No| F6[Check for large files]
+    
+    style A fill:#e74c3c
+    style B fill:#3498db
+    style C fill:#2ecc71
+    style D fill:#f39c12
+    style E fill:#9b59b6
+    style F fill:#1abc9c
+```
+
+### Decision Tree: Memory Optimization Flow
+
+```mermaid
+flowchart TD
+    A[Memory Issue] --> B{free -h shows?}
+    B -->|Low memory| C[Free up RAM]
+    B -->|Crashes| D[OOM Investigation]
+    
+    C --> C1[Close background apps]
+    C1 --> C2[Clear caches]
+    C2 --> C3{Need more?}
+    C3 -->|Yes| C4[Setup Swap]
+    C3 -->|No| C5[Done]
+    
+    C4 --> C4a{Root available?}
+    C4a -->|Yes| C4b[Create swap file]
+    C4a -->|No| C4c[Use existing zram]
+    
+    D --> D1[dmesg | grep -i oom]
+    D1 --> D2{Found OOM kills?}
+    D2 -->|Yes| D3[Reduce memory footprint]
+    D2 -->|No| D4[Check for memory leaks]
+    
+    D3 --> D3a[Close heavy tools after use]
+    D3a --> D3b[Use lighter alternatives]
+    D3b --> D3c[Limit background processes]
+    
+    D4 --> D4a[Monitor process memory]
+    D4a --> D4b[Find leaking process]
+    D4b --> D4c[Restart/Report bug]
+    
+    style A fill:#e74c3c
+    style B fill:#3498db
+    style C fill:#2ecc71
+    style D fill:#f39c12
+```
+
+### Decision Tree: Storage Optimization Flow
+
+```mermaid
+flowchart TD
+    A[Storage Issue] --> B[df -h]
+    B --> C{Usage > 80%?}
+    C -->|Yes| D[Aggressive Cleanup]
+    C -->|No| E[Regular Maintenance]
+    
+    D --> D1[pkg clean]
+    D1 --> D2[rm -rf ~/.cache/*]
+    D2 --> D3[Find large files]
+    D3 --> D4[Remove unused packages]
+    
+    E --> E1[Regular pkg clean]
+    E1 --> E2[Clear Python/node cache]
+    
+    D4 --> F{Still full?}
+    E2 --> F
+    
+    F -->|Yes| G[Find big consumers]
+    F -->|No| H[Done]
+    
+    G --> G1[du -sh ~/* | sort -rh]
+    G1 --> G2[Analyze each directory]
+    G2 --> G3[Clean or move to sdcard]
+    
+    style A fill:#e74c3c
+    style B fill:#3498db
+    style D fill:#f39c12
+    style E fill:#2ecc71
+```
+
+---
+
+## ⚡ ERROR CODE REFERENCE
+
+| Error Code | Meaning | Cause | Solution |
+|------------|---------|-------|----------|
+| `Process completed (signal 9)` | OOM Kill | Out of memory | Reduce memory usage, close apps |
+| `Cannot allocate memory` | Memory exhaustion | RAM full | Free memory, setup swap |
+| `No space left on device` | Storage full | Disk at capacity | Clean up files, remove packages |
+| `fork: Resource temporarily unavailable` | Process limit hit | Too many processes | Kill unnecessary processes |
+| `suspended (tty output)` | Background process | Terminal buffer full | Resume or kill process |
+| `Terminated` | Process killed | Timeout or manual kill | Check if intentional |
+| `Segmentation fault` | Memory violation | Bad memory access | Report bug, reinstall |
+| `Too many open files` | File descriptor limit | Limit reached | `ulimit -n 8192` |
+| `Input/output error` | I/O failure | Disk issues | Restart, check storage |
+| `Device or resource busy` | Resource locked | In use by another process | Find and kill process |
+| `Read-only file system` | Mount issue | System protection | Restart Termux |
+| `Killed` | Process terminated | Usually OOM | Free up memory |
+
+---
+
+## 🎯 TROUBLESHOOTING METHODOLOGY
+
+### Performance Troubleshooting Framework
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PERFORMANCE TROUBLESHOOTING FRAMEWORK                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  PHASE 1: IDENTIFY THE BOTTLENECK                                       │
+│  ══════════════════════════════════════                                 │
+│  □ Is CPU usage high? (top/htop)                                        │
+│  □ Is memory usage high? (free -h)                                      │
+│  □ Is disk full? (df -h)                                                │
+│  □ Is network slow? (ping, speedtest)                                   │
+│  □ Is battery draining? (check processes)                               │
+│                                                                          │
+│  PHASE 2: MEASURE BASELINE                                              │
+│  ══════════════════════════                                             │
+│  □ Document current state                                               │
+│  □ Run benchmarks: sysbench cpu run                                     │
+│  □ Note memory: free -h                                                 │
+│  □ Note disk: df -h                                                     │
+│                                                                          │
+│  PHASE 3: APPLY TARGETED FIX                                            │
+│  ═══════════════════════════                                            │
+│  For CPU:                                                                │
+│  □ Kill heavy processes                                                 │
+│  □ Use nice/renice for priorities                                       │
+│  □ Limit CPU cores with taskset                                         │
+│                                                                          │
+│  For Memory:                                                             │
+│  □ Close unnecessary apps                                               │
+│  □ Clear caches                                                          │
+│  □ Setup swap (if root)                                                 │
+│                                                                          │
+│  For Storage:                                                            │
+│  □ Run pkg clean                                                        │
+│  □ Remove unused packages                                               │
+│  □ Clear application caches                                             │
+│                                                                          │
+│  PHASE 4: VERIFY IMPROVEMENT                                            │
+│  ════════════════════════════                                           │
+│  □ Re-run benchmarks                                                    │
+│  □ Compare with baseline                                                │
+│  □ Document changes that worked                                         │
+│                                                                          │
+│  PHASE 5: IMPLEMENT PREVENTION                                          │
+│  ═════════════════════════════                                          │
+│  □ Set up automated cleanup                                             │
+│  □ Create monitoring scripts                                            │
+│  □ Schedule regular maintenance                                         │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### The REPAIR Method
+
+```
+R - RECOGNIZE the performance issue
+    What exactly is slow? When does it happen?
+
+E - EVALUATE current resource usage
+    CPU, RAM, Disk, Network - which is constrained?
+
+P - PINPOINT the cause
+    Which process/resource is the bottleneck?
+
+A - APPLY targeted solution
+    Fix the specific issue, not everything
+
+I - INCREMENTALLY test
+    One change at a time, measure results
+
+R - RECORD the solution
+    Document what worked for future reference
+```
+
+---
+
+## 🔧 DIAGNOSTIC COMMAND COLLECTION
+
+### CPU Diagnostic Commands
+
+```bash
+# CPU information
+cat /proc/cpuinfo
+nproc  # Number of cores
+
+# Real-time CPU monitoring
+top
+htop  # pkg install htop
+
+# CPU usage by process
+ps aux --sort=-%cpu | head -10
+
+# CPU load average
+cat /proc/loadavg
+uptime
+
+# CPU frequency (may require root)
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq 2>/dev/null
+
+# CPU governor
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor 2>/dev/null
+
+# Benchmark CPU
+pkg install sysbench
+sysbench cpu --cpu-max-prime=20000 run
+```
+
+### Memory Diagnostic Commands
+
+```bash
+# Memory overview
+free -h
+cat /proc/meminfo | head -15
+
+# Detailed memory
+cat /proc/meminfo
+
+# Memory by process
+ps aux --sort=-%mem | head -10
+
+# Memory maps
+pmap <PID>
+
+# Check swap
+swapon --show
+cat /proc/swaps
+
+# Virtual memory stats
+cat /proc/vmstat
+
+# OOM scores
+cat /proc/self/oom_score
+
+# Memory zones
+cat /proc/zoneinfo | grep -A3 "Node"
+```
+
+### Storage Diagnostic Commands
+
+```bash
+# Disk usage
+df -h
+df -h /data/data/com.termux
+
+# Directory sizes
+du -sh ~/*
+du -h --max-depth=1 ~ | sort -rh
+
+# Find large files
+find ~ -type f -size +50M 2>/dev/null
+
+# Inode usage
+df -i
+
+# Package cache size
+du -sh $PREFIX/var/cache/apt/archives/
+
+# Find by file type
+find ~ -name "*.log" -type f 2>/dev/null
+
+# Check for deleted but open files
+lsof | grep deleted 2>/dev/null
+
+# Storage benchmark
+dd if=/dev/zero of=~/testfile bs=1M count=100 conv=fdatasync
+rm ~/testfile
+```
+
+### Process Diagnostic Commands
+
+```bash
+# All processes
+ps aux
+ps -ef
+
+# Process tree
+pstree -p
+
+# Find process
+pgrep -a python
+pgrep -la node
+
+# Process details
+cat /proc/<PID>/status
+cat /proc/<PID>/cmdline
+cat /proc/<PID>/environ | tr '\0' '\n'
+
+# Open files by process
+lsof -p <PID>
+
+# Network connections by process
+netstat -tulpn
+ss -tulpn
+
+# Kill process
+kill <PID>
+kill -9 <PID>  # Force
+pkill process_name
+killall process_name
+```
+
+### Battery Diagnostic Commands
+
+```bash
+# Wakelock status
+cat /proc/wakelocks 2>/dev/null
+
+# Battery info via termux-api
+termux-battery-status
+
+# Acquire/release wakelock
+termux-wake-lock
+termux-wake-unlock
+
+# Check running services
+dumpsys activity services 2>/dev/null | grep termux
+
+# Process that might drain battery
+ps aux | grep -E "python|node|ruby"
+```
+
+### Network Diagnostic Commands
+
+```bash
+# Network interfaces
+ifconfig 2>/dev/null || ip addr
+
+# Active connections
+netstat -tulpn
+ss -tulpn
+
+# DNS resolution time
+time nslookup google.com
+
+# Download speed test
+curl -o /dev/null -w "Speed: %{speed_download} bytes/sec\n" https://packages.termux.dev
+
+# Latency test
+ping -c 5 google.com
+
+# Port scanning (local)
+nmap localhost
+
+# Connection statistics
+netstat -s
+```
+
+---
+
+## 🚀 PRACTICAL DEBUGGING CHALLENGES
+
+### Challenge 1: The Memory Mystery
+
+```
+SCENARIO:
+─────────────────────────────────────────────────────────────────────────
+Your Termux keeps getting killed when running a Python script. You see:
+"Process completed (signal 9)"
+
+DIAGNOSTIC STEPS:
+1. Check current memory: free -h
+2. Check for OOM kills: dmesg | grep -i "killed process"
+3. Monitor while running: watch -n 1 'free -h'
+
+TASKS:
+1. Identify the memory hog
+2. Free up memory
+3. Run the script successfully
+
+SOLUTION STEPS:
+1. free -h  # Check available memory
+2. ps aux --sort=-%mem | head -10  # Find memory hogs
+3. Kill unnecessary processes: kill <PID>
+4. Close other apps on phone
+5. If root available, setup swap:
+   dd if=/dev/zero of=~/swapfile bs=1M count=512
+   chmod 600 ~/swapfile
+   su -c "swapon ~/swapfile"
+─────────────────────────────────────────────────────────────────────────
+```
+
+### Challenge 2: The Slow Storage Syndrome
+
+```
+SCENARIO:
+─────────────────────────────────────────────────────────────────────────
+Commands are slow, package installation takes forever, and you're getting
+"No space left on device" warnings even though you have storage.
+
+DIAGNOSTIC STEPS:
+1. Check disk usage: df -h
+2. Find what's using space: du -sh ~/* | sort -rh
+3. Check for large files: find ~ -type f -size +50M
+
+TASKS:
+1. Identify what's consuming space
+2. Clean up at least 500MB
+3. Verify improvement
+
+SOLUTION STEPS:
+1. df -h  # Check usage
+2. pkg clean  # Clean package cache
+3. rm -rf ~/.cache/*  # Clear caches
+4. find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null  # Python cache
+5. npm cache clean --force 2>/dev/null  # Node cache
+6. pkg autoclean  # Remove obsolete packages
+7. Check for large files: find ~ -type f -size +100M 2>/dev/null
+8. Remove unused packages: pkg list-installed | grep -v "essential"
+
+VERIFICATION:
+df -h  # Should show more free space
+─────────────────────────────────────────────────────────────────────────
+```
+
+### Challenge 3: The Battery Drain Detective
+
+```
+SCENARIO:
+─────────────────────────────────────────────────────────────────────────
+Your phone battery drains quickly when Termux is running in background.
+You need to identify what's causing it.
+
+DIAGNOSTIC STEPS:
+1. Check running processes: ps aux
+2. Check for wake locks: termux-wake-unlock
+3. Check Termux battery settings
+
+TASKS:
+1. Find the battery-draining process
+2. Optimize battery usage
+3. Verify improvement
+
+INVESTIGATION STEPS:
+1. ps aux | head -20  # Check running processes
+2. Look for: python, node, ruby, or heavy tools
+3. Check if wakelock is held: 
+   cat /proc/wakelocks | grep -i termux
+
+SOLUTION STEPS:
+1. Release unnecessary wakelock: termux-wake-unlock
+2. Kill background processes: pkill -f "process_name"
+3. Set battery to unrestricted:
+   Settings → Apps → Termux → Battery → Unrestricted
+4. Disable keep-awake if not needed
+5. Close heavy tools when done: 
+   pkill -f metasploit
+   pkill -f python
+
+OPTIMIZATION:
+# Add to scripts that don't need wake lock
+termux-wake-unlock
+
+# For scripts that DO need wake lock
+termux-wake-lock
+# ... your work ...
+termux-wake-unlock
+─────────────────────────────────────────────────────────────────────────
+```
+
+---
+
+## 📖 GLOSSARY OF ERROR MESSAGES
+
+### Memory-Related Errors
+
+| Error Message | Meaning | What To Do |
+|--------------|---------|------------|
+| `Cannot allocate memory` | Not enough RAM | Free memory, close apps |
+| `Process completed (signal 9)` | Killed by OOM | Reduce memory usage |
+| `Killed` | Process terminated | Usually OOM or manual |
+| `Out of memory` | Memory exhausted | Free RAM, setup swap |
+| `fork: Resource temporarily unavailable` | Can't create process | Kill some processes |
+| `Virtual memory exhausted` | Memory + swap full | Free memory urgently |
+| `Memory allocation failed` | malloc() failed | Check available memory |
+
+### Storage-Related Errors
+
+| Error Message | Meaning | What To Do |
+|--------------|---------|------------|
+| `No space left on device` | Disk full | Clean up files |
+| `Input/output error` | Disk I/O failed | Restart, check storage |
+| `Read-only file system` | Cannot write | Restart Termux |
+| `Disk quota exceeded` | Quota limit hit | Clean up (rare in Termux) |
+| `Device or resource busy` | Resource in use | Find and stop process |
+| `Cannot create directory` | Write failed | Check permissions, space |
+
+### Process-Related Errors
+
+| Error Message | Meaning | What To Do |
+|--------------|---------|------------|
+| `Too many open files` | FD limit reached | `ulimit -n 8192` |
+| `Resource temporarily unavailable` | Resource locked | Wait or find locker |
+| `Text file busy` | File being executed | Stop the process |
+| `Operation not permitted` | Permission issue | Check permissions |
+| `Segmentation fault` | Memory error | Report bug, reinstall |
+
+### Performance Indicators
+
+| Symptom | Likely Cause | Investigation |
+|---------|-------------|---------------|
+| Slow commands | High CPU/Disk | Check with top/htop |
+| Frequent crashes | Low memory | Check with free -h |
+| High battery drain | Background processes | Check ps aux |
+| Unresponsive | Swap thrashing | Check memory, swap |
+| Long load times | Disk I/O | Check df, clean up |
+| Network timeouts | Slow connection | ping, speedtest |
+
+---
+
+## 💼 IT SUPPORT CAREER PATH
+
+### From Termux to Systems Administration
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CAREER PROGRESSION: SYSTEMS & PERFORMANCE            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ENTRY LEVEL: IT SUPPORT TECHNICIAN                                     │
+│  ════════════════════════════════════                                   │
+│  Skills from Termux:                                                     │
+│  • Command line proficiency                                              │
+│  • Basic troubleshooting                                                 │
+│  • Script automation                                                     │
+│  • Performance monitoring                                                │
+│                                                                          │
+│  Salary: $35,000 - $50,000                                              │
+│  Next Step: CompTIA A+, Linux+                                          │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  MID LEVEL: SYSTEMS ADMINISTRATOR                                       │
+│  ═════════════════════════════════                                      │
+│  Skills to develop:                                                      │
+│  • Server management                                                     │
+│  • Performance tuning                                                    │
+│  • Automation (Ansible, Puppet)                                         │
+│  • Monitoring systems                                                   │
+│                                                                          │
+│  Salary: $55,000 - $85,000                                              │
+│  Next Step: RHCSA, AWS SysOps                                           │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  SENIOR LEVEL: DEVOPS ENGINEER                                          │
+│  ═══════════════════════════════                                        │
+│  Skills:                                                                 │
+│  • CI/CD pipelines                                                       │
+│  • Cloud infrastructure                                                  │
+│  • Container orchestration                                               │
+│  • Performance engineering                                               │
+│                                                                          │
+│  Salary: $90,000 - $140,000                                             │
+│  Next Step: CKA, AWS DevOps Pro                                         │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  EXPERT LEVEL: SITE RELIABILITY ENGINEER (SRE)                          │
+│  ═════════════════════════════════════════                              │
+│  Skills:                                                                 │
+│  • Large-scale systems                                                   │
+│  • Incident response                                                     │
+│  • Capacity planning                                                     │
+│  • Performance optimization                                              │
+│                                                                          │
+│  Salary: $120,000 - $200,000+                                           │
+│  Next Step: Google Cloud SRE cert                                       │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills Transfer Matrix
+
+```
+TERMUX SKILL → JOB SKILL
+─────────────────────────────
+
+1. Performance Monitoring
+   Termux: htop, free, df
+   Job: Prometheus, Grafana, Nagios
+
+2. Resource Optimization
+   Termux: OOM handling, swap
+   Job: Capacity planning, auto-scaling
+
+3. Automation
+   Termux: Bash scripts, cron
+   Job: Ansible, Terraform, CI/CD
+
+4. Troubleshooting
+   Termux: Error diagnosis
+   Job: Incident response, root cause analysis
+
+5. Documentation
+   Termux: Notes, scripts
+   Job: Runbooks, SOPs, knowledge base
+```
+
+---
+
+## 🔧 PREVENTIVE MAINTENANCE CHECKLIST
+
+### Daily Performance Checks
+
+```bash
+#!/bin/bash
+# Daily Performance Check Script
+# Run each time you start a Termux session
+
+echo "═══════════════════════════════════════"
+echo "       TERMUX PERFORMANCE CHECK"
+echo "═══════════════════════════════════════"
+
+echo ""
+echo "📊 MEMORY STATUS"
+echo "─────────────────"
+free -h
+
+echo ""
+echo "💾 DISK STATUS"
+echo "─────────────────"
+df -h /data/data/com.termux
+
+echo ""
+echo "⚡ TOP CPU PROCESSES"
+echo "─────────────────"
+ps aux --sort=-%cpu | head -6
+
+echo ""
+echo "🔋 TOP MEMORY PROCESSES"
+echo "─────────────────"
+ps aux --sort=-%mem | head -6
+
+echo ""
+echo "✅ CHECKS COMPLETE"
+echo "═══════════════════════════════════════"
+```
+
+### Weekly Optimization Script
+
+```bash
+#!/bin/bash
+# Weekly Performance Optimization
+# Run every week for optimal performance
+
+echo "═══════════════════════════════════════"
+echo "    WEEKLY TERMUX OPTIMIZATION"
+echo "═══════════════════════════════════════"
+
+# 1. Update packages
+echo "[1/7] Updating packages..."
+pkg update -y
+
+# 2. Clean package cache
+echo "[2/7] Cleaning package cache..."
+pkg clean
+
+# 3. Clear Python cache
+echo "[3/7] Clearing Python cache..."
+find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null
+find ~ -type f -name "*.pyc" -delete 2>/dev/null
+
+# 4. Clear npm cache
+echo "[4/7] Clearing npm cache..."
+npm cache clean --force 2>/dev/null
+
+# 5. Clear pip cache
+echo "[5/7] Clearing pip cache..."
+pip cache purge 2>/dev/null
+
+# 6. Remove orphaned packages
+echo "[6/7] Cleaning orphaned packages..."
+pkg autoclean
+
+# 7. Generate performance report
+echo "[7/7] Generating report..."
+echo ""
+echo "═══════════════════════════════════════"
+echo "         OPTIMIZATION COMPLETE"
+echo "═══════════════════════════════════════"
+echo "Memory: $(free -h | grep Mem | awk '{print $4}') available"
+echo "Disk: $(df -h /data | tail -1 | awk '{print $4}') available"
+echo "═══════════════════════════════════════"
+```
+
+### Monthly Deep Clean
+
+```bash
+#!/bin/bash
+# Monthly Deep Clean Script
+
+echo "═══════════════════════════════════════"
+echo "      MONTHLY TERMUX DEEP CLEAN"
+echo "═══════════════════════════════════════"
+
+# Check disk before
+BEFORE=$(df /data | tail -1 | awk '{print $4}')
+echo "Disk before: ${BEFORE}KB free"
+
+# 1. Full system upgrade
+echo "[1/10] Full system upgrade..."
+pkg update && pkg upgrade -y
+
+# 2. Deep package clean
+echo "[2/10] Deep package clean..."
+pkg clean
+rm -rf $PREFIX/var/cache/apt/archives/*.deb
+rm -rf $PREFIX/var/lib/apt/lists/*
+
+# 3. Python cleanup
+echo "[3/10] Python cleanup..."
+find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null
+find ~ -type f -name "*.pyc" -delete 2>/dev/null
+find ~ -type f -name "*.pyo" -delete 2>/dev/null
+pip cache purge 2>/dev/null
+
+# 4. Node cleanup
+echo "[4/10] Node cleanup..."
+npm cache clean --force 2>/dev/null
+rm -rf ~/.npm/_cacache 2>/dev/null
+
+# 5. Go cleanup
+echo "[5/10] Go cleanup..."
+go clean -cache -modcache -i -r 2>/dev/null
+
+# 6. Rust cleanup
+echo "[6/10] Rust cleanup..."
+rm -rf ~/.cargo/registry/cache/* 2>/dev/null
+rm -rf ~/.cargo/registry/index/* 2>/dev/null
+
+# 7. User cache
+echo "[7/10] User cache cleanup..."
+rm -rf ~/.cache/* 2>/dev/null
+
+# 8. Temporary files
+echo "[8/10] Temporary files cleanup..."
+rm -rf $PREFIX/tmp/* 2>/dev/null
+rm -rf ~/.local/share/Trash/* 2>/dev/null
+
+# 9. Log rotation
+echo "[9/10] Log cleanup..."
+find ~ -name "*.log" -mtime +30 -delete 2>/dev/null
+
+# 10. Final check
+echo "[10/10] Final check..."
+AFTER=$(df /data | tail -1 | awk '{print $4}')
+echo ""
+echo "═══════════════════════════════════════"
+echo "           DEEP CLEAN COMPLETE"
+echo "═══════════════════════════════════════"
+echo "Disk before: ${BEFORE}KB"
+echo "Disk after:  ${AFTER}KB"
+echo "Freed:       $((AFTER - BEFORE))KB"
+echo "═══════════════════════════════════════"
+```
+
+### Maintenance Schedule
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PERFORMANCE MAINTENANCE SCHEDULE                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ON STARTUP (30 seconds)                                                 │
+│  ─────────────────────────                                                │
+│  □ Run quick check script                                                │
+│  □ Note any warnings                                                     │
+│  □ Close unnecessary processes                                           │
+│                                                                          │
+│  DAILY (2 minutes)                                                       │
+│  ──────────────────                                                      │
+│  □ Check memory: free -h                                                 │
+│  □ Check disk: df -h                                                     │
+│  □ Kill zombie processes if any                                          │
+│  □ Close unused screen/tmux sessions                                     │
+│                                                                          │
+│  WEEKLY (10 minutes)                                                     │
+│  ──────────────────                                                      │
+│  □ Run weekly optimization script                                        │
+│  □ Update packages                                                       │
+│  □ Clear all caches                                                      │
+│  □ Check for large files                                                 │
+│                                                                          │
+│  MONTHLY (30 minutes)                                                    │
+│  ──────────────────                                                      │
+│  □ Run deep clean script                                                 │
+│  □ Review installed packages                                             │
+│  □ Check backup integrity                                                │
+│  □ Performance benchmark comparison                                      │
+│                                                                          │
+│  QUARTERLY (1 hour)                                                      │
+│  ──────────────────                                                      │
+│  □ Full system rebuild consideration                                     │
+│  □ Review scripts and tools                                              │
+│  □ Update configurations                                                 │
+│  □ Security audit                                                        │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📚 RESOURCE CURATION
+
+### Performance Monitoring Tools
+
+| Tool | Install | Purpose |
+|------|---------|---------|
+| htop | `pkg install htop` | Interactive process viewer |
+| btop | `pkg install btop` | Resource monitor with graphs |
+| nmon | `pkg install nmon` | System performance monitor |
+| glances | `pip install glances` | Cross-platform monitoring |
+| neofetch | `pkg install neofetch` | System info display |
+| sysbench | `pkg install sysbench` | Benchmarking suite |
+
+### Storage Management Tools
+
+| Tool | Install | Purpose |
+|------|---------|---------|
+| ncdu | `pkg install ncdu` | NCurses disk usage |
+| du | Built-in | Directory usage |
+| tree | `pkg install tree` | Directory tree view |
+| fdupes | `pkg install fdupes` | Find duplicate files |
+| rdfind | `pkg install rdfind` | Find redundant files |
+
+### Process Management Tools
+
+| Tool | Install | Purpose |
+|------|---------|---------|
+| screen | `pkg install screen` | Terminal multiplexer |
+| tmux | `pkg install tmux` | Terminal multiplexer |
+| procps | `pkg install procps` | Process utilities |
+| psmisc | `pkg install psmisc` | Process utilities (killall, pstree) |
+| lsof | `pkg install lsof` | List open files |
+
+### Learning Resources
+
+| Resource | Topic | URL |
+|----------|-------|-----|
+| Linux Performance | Performance tuning | brendangregg.com/linuxperf.html |
+| OOM Killer Guide | Memory management | kernel.org/doc |
+| Termux Wiki Performance | Termux-specific | wiki.termux.com/wiki/Troubleshooting |
+| Linux Memory Management | Deep dive | kernel.org/doc |
+
+### Benchmark Comparison
+
+```
+# CPU Benchmark - Compare your results
+sysbench cpu --cpu-max-prime=20000 run
+
+# Typical results by device class:
+# High-end phone:    ~1-2 seconds
+# Mid-range phone:   ~3-5 seconds
+# Low-end phone:     ~8-15 seconds
+
+# Memory Benchmark
+sysbench memory --memory-block-size=1M --memory-total-size=1G run
+
+# Higher operations/sec = Better performance
+```
+
+---
+
 ## 💡 PRO TIPS FOR PERFORMANCE OPTIMIZATION
 
 > 💡 **Pro Tip #1:** Run `pkg clean` after every major package installation session. This alone can free up 100-500MB of space.

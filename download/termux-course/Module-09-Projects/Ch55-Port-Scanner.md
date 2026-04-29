@@ -456,6 +456,746 @@ Thank you for watching! See you in Chapter 56!
 
 ---
 
+## 📊 MERMAID PROJECT ARCHITECTURE
+
+```mermaid
+flowchart TD
+    A[Port Scanner] --> B[Input Parser]
+    B --> C[Target Host]
+    B --> D[Port Range]
+    
+    C --> E[DNS Resolution]
+    E --> F[Thread Pool]
+    D --> F
+    
+    F --> G[Scan Workers]
+    G --> H{Socket Connect}
+    
+    H -->|Success| I[Open Port]
+    H -->|Fail| J[Closed Port]
+    H -->|Timeout| K[Filtered]
+    
+    I --> L[Banner Grabbing]
+    L --> M[Service Detection]
+    
+    I --> N[Results Aggregator]
+    J --> N
+    K --> N
+    
+    N --> O[Output Formatter]
+    O --> P[Terminal Display]
+    O --> Q[JSON Export]
+    O --> R[Text Report]
+```
+
+```mermaid
+flowchart LR
+    subgraph INPUT[Input]
+        A1[Host/IP]
+        A2[Port Range]
+        A3[Scan Type]
+        A4[Thread Count]
+    end
+    
+    subgraph SCAN[Scanning Engine]
+        B1[Socket Connect]
+        B2[Banner Grab]
+        B3[Service Detect]
+    end
+    
+    subgraph OUTPUT[Results]
+        C1[Open Ports]
+        C2[Services]
+        C3[Banners]
+        C4[Report]
+    end
+    
+    INPUT --> SCAN --> OUTPUT
+```
+
+---
+
+## ⚡ PROJECT FEATURE CHEATSHEET
+
+| Feature | Implementation | Usage |
+|---------|---------------|-------|
+| **TCP Connect Scan** | `socket.connect_ex()` | Most reliable, no root needed |
+| **Port Range Scan** | Loop through range | `python scanner.py -p 1-1000` |
+| **Single Port Scan** | Single port check | `python scanner.py -p 22` |
+| **Common Ports** | Top 100 ports | `python scanner.py --common` |
+| **Banner Grabbing** | Socket recv after connect | Service version detection |
+| **Multi-threading** | ThreadPoolExecutor | Parallel scanning |
+| **Timeout Control** | `socket.settimeout()` | Prevent hanging |
+| **DNS Resolution** | `socket.gethostbyname()` | Hostname support |
+| **JSON Output** | json.dump() | Export results |
+| **Progress Display** | Progress bar | Real-time updates |
+
+### Common Ports Reference
+
+| Port | Service | Description |
+|------|---------|-------------|
+| 21 | FTP | File Transfer Protocol |
+| 22 | SSH | Secure Shell |
+| 23 | Telnet | Remote Login (insecure) |
+| 25 | SMTP | Mail Transfer |
+| 53 | DNS | Domain Name Service |
+| 80 | HTTP | Web Server |
+| 110 | POP3 | Mail Retrieval |
+| 143 | IMAP | Mail Retrieval |
+| 443 | HTTPS | Secure Web |
+| 3306 | MySQL | Database |
+| 3389 | RDP | Remote Desktop |
+| 5432 | PostgreSQL | Database |
+| 6379 | Redis | Cache Database |
+| 8080 | HTTP Proxy | Alt Web Port |
+| 27017 | MongoDB | NoSQL Database |
+
+---
+
+## 🎯 PROJECT-BASED LEARNING PATH
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     PORT SCANNER LEARNING PATH                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  BEGINNER (Foundation Skills)                                               │
+│  ────────────────────────────                                               │
+│  ├── Python socket programming: connect, send, recv                         │
+│  ├── Network basics: IP, ports, TCP/UDP                                     │
+│  ├── Error handling: timeouts, exceptions                                   │
+│  └── CLI arguments: argparse module                                         │
+│                    │                                                         │
+│                    ▼                                                         │
+│  INTERMEDIATE (Network Programming)                                         │
+│  ────────────────────────────                                               │
+│  ├── Multi-threading: concurrent scanning                                   │
+│  ├── Banner grabbing: service identification                                │
+│  ├── TCP/IP protocols: handshake, flags                                     │
+│  └── Network addressing: IPv4, IPv6, CIDR                                   │
+│                    │                                                         │
+│                    ▼                                                         │
+│  ADVANCED (Security Tools)                                                  │
+│  ────────────────────────────                                               │
+│  ├── SYN scanning: raw sockets (requires root)                              │
+│  ├── OS fingerprinting: TTL, window size                                    │
+│  ├── Service version detection: regex patterns                              │
+│  └── Scan optimization: timing, parallelism                                 │
+│                    │                                                         │
+│                    ▼                                                         │
+│  CAREER APPLICATIONS                                                        │
+│  ────────────────────────────                                               │
+│  ├── Penetration Tester                                                     │
+│  ├── Security Analyst                                                       │
+│  ├── Network Administrator                                                  │
+│  ├── DevOps Engineer (monitoring)                                           │
+│  └── SOC Analyst                                                            │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills Map to Job Roles
+
+| Skill | Job Role | Industry |
+|-------|----------|----------|
+| Network Scanning | Pen Tester | Cybersecurity |
+| Socket Programming | Network Engineer | IT Infrastructure |
+| Multi-threading | Backend Developer | Tech |
+| Security Auditing | Security Analyst | Cybersecurity |
+| Tool Development | Security Engineer | Tech |
+
+---
+
+## 🔧 PROJECT EXTENSION IDEAS
+
+### 1. 🌐 Network Range Scanner
+Scan entire network ranges.
+
+```python
+import ipaddress
+from concurrent.futures import ThreadPoolExecutor
+
+def scan_network(network_cidr, ports):
+    """Scan entire network range"""
+    network = ipaddress.ip_network(network_cidr, strict=False)
+    results = {}
+    
+    def scan_host(host):
+        host_results = scan_ports(str(host), ports)
+        if host_results['open_ports']:
+            return str(host), host_results
+        return None
+    
+    with ThreadPoolExecutor(max_workers=20) as executor:
+        futures = [executor.submit(scan_host, host) for host in network.hosts()]
+        for future in futures:
+            result = future.result()
+            if result:
+                results[result[0]] = result[1]
+    
+    return results
+
+# Usage: scan_network('192.168.1.0/24', [22, 80, 443])
+```
+
+### 2. 🔍 Service Version Detection
+Advanced service fingerprinting.
+
+```python
+import re
+
+SERVICE_SIGNATURES = {
+    'OpenSSH': r'SSH-([\d.]+)',
+    'Apache': r'Apache/([\d.]+)',
+    'nginx': r'nginx/([\d.]+)',
+    'MySQL': r'([\d.]+)-MariaDB|MySQL',
+    'PostgreSQL': r'PostgreSQL ([\d.]+)',
+}
+
+def identify_service(banner):
+    """Identify service from banner"""
+    for service, pattern in SERVICE_SIGNATURES.items():
+        match = re.search(pattern, banner, re.IGNORECASE)
+        if match:
+            return {'service': service, 'version': match.group(1)}
+    return {'service': 'Unknown', 'version': 'Unknown'}
+
+def enhanced_banner_grab(host, port):
+    """Advanced banner grabbing with probes"""
+    probes = {
+        21: b'HELP\r\n',
+        22: b'',
+        25: b'EHLO test\r\n',
+        80: b'HEAD / HTTP/1.1\r\nHost: test\r\n\r\n',
+    }
+    
+    try:
+        sock = socket.socket()
+        sock.settimeout(3)
+        sock.connect((host, port))
+        
+        # Send probe if available
+        if port in probes:
+            sock.send(probes[port])
+        
+        banner = sock.recv(1024).decode('utf-8', errors='ignore')
+        sock.close()
+        return banner.strip()
+    except:
+        return None
+```
+
+### 3. 📊 Scan Result Comparison
+Track changes in network state.
+
+```python
+import json
+from datetime import datetime
+
+class ScanComparator:
+    def __init__(self, history_file='scan_history.json'):
+        self.history_file = history_file
+        self.history = self.load_history()
+    
+    def save_scan(self, host, results):
+        timestamp = datetime.now().isoformat()
+        if host not in self.history:
+            self.history[host] = []
+        self.history[host].append({
+            'timestamp': timestamp,
+            'results': results
+        })
+        self.save_history()
+    
+    def compare_scans(self, host, current):
+        """Compare current scan with previous"""
+        if host not in self.history or len(self.history[host]) < 2:
+            return {'new_host': True}
+        
+        previous = self.history[host][-1]['results']
+        changes = {
+            'new_open': [],
+            'new_closed': [],
+            'new_services': {}
+        }
+        
+        prev_open = set(previous.get('open_ports', {}).keys())
+        curr_open = set(current.get('open_ports', {}).keys())
+        
+        changes['new_open'] = list(curr_open - prev_open)
+        changes['new_closed'] = list(prev_open - curr_open)
+        
+        return changes
+```
+
+### 4. 🔔 Alert System
+Real-time alerts for new open ports.
+
+```python
+def scan_with_alerts(host, ports, known_open=None):
+    """Scan and alert on changes"""
+    if known_open is None:
+        known_open = set()
+    
+    results = scan_ports(host, ports)
+    current_open = set(results['open_ports'].keys())
+    
+    # New open ports (potential security issue)
+    new_open = current_open - known_open
+    if new_open:
+        send_notification(
+            "⚠️ New Open Ports Detected",
+            f"Host {host}: {new_open}"
+        )
+    
+    # Closed ports (potential service down)
+    new_closed = known_open - current_open
+    if new_closed:
+        send_notification(
+            "🔴 Ports Closed",
+            f"Host {host}: {new_closed}"
+        )
+    
+    return results
+```
+
+### 5. 📈 Scan Scheduler
+Automated periodic scanning.
+
+```python
+import schedule
+import time
+
+class ScanScheduler:
+    def __init__(self):
+        self.scans = {}
+    
+    def add_scan(self, name, host, ports, interval_minutes=60):
+        """Add scheduled scan"""
+        job = schedule.every(interval_minutes).minutes.do(
+            self.run_scan, name, host, ports
+        )
+        self.scans[name] = {
+            'host': host,
+            'ports': ports,
+            'job': job,
+            'last_run': None,
+            'results': None
+        }
+    
+    def run_scan(self, name, host, ports):
+        results = scan_ports(host, ports)
+        self.scans[name]['last_run'] = datetime.now()
+        self.scans[name]['results'] = results
+        return results
+    
+    def start(self):
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+```
+
+---
+
+## 🚀 BONUS PROJECT CHALLENGES
+
+### Challenge 1: SYN Scanner (Stealth Scan) 🕵️
+**Difficulty: ⭐⭐⭐**
+
+Implement SYN scanning without completing TCP handshake.
+
+```
+Requirements:
+- Raw socket support (requires root)
+- Send SYN packets manually
+- Analyze SYN-ACK vs RST responses
+- Implement half-open scanning
+- Compare with connect scan results
+```
+
+**Implementation:**
+```python
+import socket
+import struct
+
+def syn_scan(host, port):
+    """SYN scan implementation (requires root)"""
+    try:
+        # Create raw socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
+        s.settimeout(2)
+        
+        # Build SYN packet
+        # ... packet construction code ...
+        
+        # Send SYN
+        s.sendto(syn_packet, (host, 0))
+        
+        # Receive response
+        response = s.recv(1024)
+        
+        # Parse flags
+        flags = struct.unpack('!H', response[46:48])[0]
+        
+        if flags & 0x12:  # SYN-ACK
+            return 'open'
+        elif flags & 0x14:  # RST
+            return 'closed'
+        else:
+            return 'filtered'
+    except:
+        return 'filtered'
+```
+
+### Challenge 2: OS Fingerprinting 🖥️
+**Difficulty: ⭐⭐⭐**
+
+Identify operating system from network responses.
+
+```
+Requirements:
+- Analyze TCP/IP stack behavior
+- Check TTL values
+- Examine TCP window sizes
+- Pattern matching against OS signatures
+- Support common OS detection
+```
+
+**OS Detection Logic:**
+```python
+OS_SIGNATURES = {
+    'Linux': {'ttl': 64, 'window': 5840},
+    'Windows': {'ttl': 128, 'window': 8192},
+    'macOS': {'ttl': 64, 'window': 65535},
+    'Cisco': {'ttl': 255, 'window': 4128},
+}
+
+def fingerprint_os(host):
+    """Attempt OS detection"""
+    # Ping and analyze response
+    result = subprocess.run(
+        ['ping', '-c', '1', host],
+        capture_output=True, text=True
+    )
+    
+    # Extract TTL from response
+    ttl_match = re.search(r'ttl=(\d+)', result.stdout)
+    if ttl_match:
+        ttl = int(ttl_match.group(1))
+        
+        for os_name, signature in OS_SIGNATURES.items():
+            if ttl >= signature['ttl'] - 10 and ttl <= signature['ttl']:
+                return os_name
+    
+    return 'Unknown'
+```
+
+### Challenge 3: Distributed Scanner 🌍
+**Difficulty: ⭐⭐⭐⭐**
+
+Build a distributed scanning system.
+
+```
+Requirements:
+- Master-worker architecture
+- Work distribution via queues
+- Result aggregation
+- Redis/RabbitMQ integration
+- Multiple scanner nodes
+- Centralized reporting
+```
+
+**Architecture:**
+```python
+import redis
+import json
+
+class DistributedScanner:
+    def __init__(self, redis_host='localhost'):
+        self.redis = redis.Redis(host=redis_host)
+    
+    def add_work(self, scan_id, hosts, ports):
+        """Add scanning work to queue"""
+        work = {
+            'scan_id': scan_id,
+            'hosts': hosts,
+            'ports': ports
+        }
+        self.redis.lpush('scan_queue', json.dumps(work))
+    
+    def worker(self):
+        """Worker process - runs on scanner nodes"""
+        while True:
+            work = json.loads(self.redis.brpop('scan_queue')[1])
+            results = self.scan_hosts(work['hosts'], work['ports'])
+            self.redis.publish(f'results:{work["scan_id"]}', json.dumps(results))
+```
+
+---
+
+## 📖 TECHNICAL GLOSSARY
+
+| Term | Definition |
+|------|------------|
+| **Port** | Network communication endpoint (0-65535) |
+| **TCP Connect Scan** | Full handshake scan - reliable but detectable |
+| **SYN Scan** | Half-open scan - stealthy, requires root |
+| **Banner** | Service identification string returned by server |
+| **Well-Known Ports** | Ports 0-1023, reserved for standard services |
+| **Registered Ports** | Ports 1024-49151, assigned by IANA |
+| **Dynamic Ports** | Ports 49152-65535, for ephemeral connections |
+| **Socket** | API for network communication in programming |
+| **Three-Way Handshake** | TCP connection: SYN → SYN-ACK → ACK |
+| **Filtered Port** | Port blocked by firewall, no response |
+| **Closed Port** | Port accessible but no service running |
+| **Open Port** | Port with active service accepting connections |
+| **OS Fingerprinting** | Identifying OS from network behavior |
+| **Service Detection** | Identifying service/version from banners |
+| **Scan Timing** | Speed vs stealth tradeoff in scanning |
+
+### Scan Types Comparison
+
+| Type | Flags | Detectability | Root Required | Speed |
+|------|-------|--------------|---------------|-------|
+| Connect | SYN,ACK | High | No | Slow |
+| SYN | SYN | Low | Yes | Fast |
+| FIN | FIN | Low | Yes | Fast |
+| XMAS | FIN,PSH,URG | Low | Yes | Fast |
+| NULL | No flags | Low | Yes | Fast |
+
+---
+
+## 💼 PORTFOLIO BUILDING TIPS
+
+### How to Showcase This Project
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PORTFOLIO PRESENTATION GUIDE                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  1. GITHUB REPOSITORY                                                        │
+│  ──────────────────                                                         │
+│  ✓ Well-documented with ethical use warnings                                │
+│  ✓ Multiple scan modes supported                                            │
+│  ✓ Clean code structure with modules                                        │
+│  ✓ Example outputs and screenshots                                          │
+│  ✓ Legal disclaimer in README                                               │
+│                                                                              │
+│  2. DEMONSTRATION                                                            │
+│  ──────────────────                                                         │
+│  ✓ Scan local network (your own devices)                                    │
+│  ✓ Show banner grabbing feature                                             │
+│  ✓ Demonstrate multi-threading speedup                                      │
+│  ✓ Compare scan timing with different thread counts                         │
+│                                                                              │
+│  3. USE CASES TO HIGHLIGHT                                                   │
+│  ──────────────────                                                         │
+│  ✓ Network security auditing                                                │
+│  ✓ Service inventory management                                             │
+│  ✓ Troubleshooting connectivity issues                                      │
+│  ✓ Monitoring service availability                                          │
+│                                                                              │
+│  4. RESUME BULLET POINTS                                                     │
+│  ──────────────────                                                         │
+│  • Developed multi-threaded port scanner using Python sockets              │
+│  • Implemented service detection with banner grabbing                       │
+│  • Added support for TCP connect and SYN scanning                          │
+│  • Created reporting system with JSON/text export                           │
+│                                                                              │
+│  5. INTERVIEW TALKING POINTS                                                 │
+│  ──────────────────                                                         │
+│  • What's the difference between TCP connect and SYN scan?                  │
+│  • How do you handle rate limiting in scanning?                             │
+│  • What security considerations for port scanning?                          │
+│  • Explain TCP three-way handshake                                          │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔧 CODE OPTIMIZATION TIPS
+
+### Optimal Thread Pool Size
+
+```python
+import os
+
+def get_optimal_threads():
+    """Calculate optimal thread count"""
+    cpu_count = os.cpu_count() or 4
+    # For I/O bound operations (network scanning)
+    # Use more threads than CPU cores
+    return cpu_count * 10
+```
+
+### Connection Pooling
+
+```python
+from contextlib import contextmanager
+
+@contextmanager
+def socket_connection(host, port, timeout=2):
+    """Context manager for socket connections"""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(timeout)
+    try:
+        yield sock
+    finally:
+        sock.close()
+```
+
+### Async Scanning
+
+```python
+import asyncio
+
+async def async_scan_port(host, port, timeout=2):
+    """Async port scanning"""
+    try:
+        reader, writer = await asyncio.wait_for(
+            asyncio.open_connection(host, port),
+            timeout=timeout
+        )
+        writer.close()
+        await writer.wait_closed()
+        return port, True
+    except:
+        return port, False
+
+async def async_scan_range(host, ports, max_concurrent=100):
+    """Async scan with concurrency limit"""
+    semaphore = asyncio.Semaphore(max_concurrent)
+    
+    async def limited_scan(port):
+        async with semaphore:
+            return await async_scan_port(host, port)
+    
+    tasks = [limited_scan(port) for port in ports]
+    return await asyncio.gather(*tasks)
+```
+
+### Benchmark Results
+
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│                    PERFORMANCE BENCHMARKS                                   │
+├─────────────────────────┬──────────────┬───────────────────────────────────┤
+│ Method                  │ Ports/sec    │ Notes                             │
+├─────────────────────────┼──────────────┼───────────────────────────────────┤
+│ Single-threaded         │ 10-20        │ Slow, sequential                  │
+│ Multi-threaded (10)     │ 50-100       │ Good improvement                  │
+│ Multi-threaded (100)    │ 300-500      │ Recommended                       │
+│ Async (100 concurrent)  │ 400-600      │ Best performance                  │
+│ With timeout 1s         │ Faster       │ May miss slow services            │
+└─────────────────────────┴──────────────┴───────────────────────────────────┘
+```
+
+---
+
+## 📱 APK BUILD GUIDE
+
+### Converting Port Scanner to Android App
+
+### Method 1: Kivy Mobile App
+
+```python
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.label import Label
+import socket
+import threading
+
+class PortScannerApp(App):
+    def build(self):
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=10)
+        
+        # Input fields
+        self.host_input = TextInput(hint_text='Host/IP', multiline=False, size_hint_y=0.1)
+        self.ports_input = TextInput(hint_text='Ports (e.g., 1-1000)', multiline=False, size_hint_y=0.1)
+        
+        # Scan button
+        scan_btn = Button(text='Scan', size_hint_y=0.1)
+        scan_btn.bind(on_press=self.start_scan)
+        
+        # Results area
+        self.results = ScrollView(size_hint_y=0.7)
+        self.results_label = Label(text='Enter host and ports to scan', size_hint_y=None)
+        self.results.add_widget(self.results_label)
+        
+        layout.add_widget(self.host_input)
+        layout.add_widget(self.ports_input)
+        layout.add_widget(scan_btn)
+        layout.add_widget(self.results)
+        
+        return layout
+    
+    def start_scan(self, instance):
+        host = self.host_input.text
+        ports = self.ports_input.text
+        
+        if host and ports:
+            threading.Thread(target=self.scan, args=(host, ports)).start()
+    
+    def scan(self, host, ports_str):
+        # Parse ports
+        if '-' in ports_str:
+            start, end = map(int, ports_str.split('-'))
+            ports = range(start, end + 1)
+        else:
+            ports = [int(ports_str)]
+        
+        results = []
+        for port in ports:
+            try:
+                sock = socket.socket()
+                sock.settimeout(0.5)
+                result = sock.connect_ex((host, port))
+                if result == 0:
+                    results.append(f"Port {port}: OPEN")
+                sock.close()
+            except:
+                pass
+        
+        self.results_label.text = '\n'.join(results) if results else 'No open ports found'
+
+if __name__ == '__main__':
+    PortScannerApp().run()
+```
+
+### App Features Roadmap
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ANDROID APP FEATURES ROADMAP                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Version 1.0 (Basic)                                                        │
+│  ├── Single host scan                                                       │
+│  ├── Port range input                                                       │
+│  └── Results display                                                        │
+│                                                                              │
+│  Version 2.0 (Enhanced)                                                     │
+│  ├── Service detection                                                      │
+│  ├── Scan presets (common ports)                                            │
+│  ├── Scan history                                                           │
+│  └── Export results                                                         │
+│                                                                              │
+│  Version 3.0 (Professional)                                                 │
+│  ├── Network range scanning                                                 │
+│  ├── Custom scan profiles                                                   │
+│  ├── Scheduled scans                                                        │
+│  └── Notifications                                                          │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
 
 <details>

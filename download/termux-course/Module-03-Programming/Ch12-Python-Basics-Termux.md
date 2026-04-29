@@ -1141,6 +1141,598 @@ Thank you for watching! See you in Chapter 13!
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Python Data Types Hierarchy
+
+```mermaid
+graph TD
+    A[Python Data Types] --> B[Mutable]
+    A --> C[Immutable]
+    
+    B --> B1[List]
+    B --> B2[Dictionary]
+    B --> B3[Set]
+    
+    C --> C1[int]
+    C --> C2[float]
+    C --> C3[str]
+    C --> C4[tuple]
+    C --> C5[bool]
+    C --> C6[None]
+    
+    B1 --> B1a["[1, 2, 3]"]
+    B2 --> B2a["{'key': 'value'}"]
+    B3 --> B3a["{1, 2, 3}"]
+    
+    C1 --> C1a["42"]
+    C2 --> C2a["3.14"]
+    C3 --> C3a["'Hello'"]
+    C4 --> C4a["(1, 2, 3)"]
+```
+
+### Control Flow Decision Tree
+
+```mermaid
+flowchart TD
+    A[Start Code Block] --> B{Condition Check}
+    B -->|if True| C[Execute Block]
+    B -->|if False| D{elif?}
+    D -->|Yes| E[Check elif condition]
+    D -->|No| F{else?}
+    E -->|True| G[Execute elif block]
+    E -->|False| D
+    F -->|Yes| H[Execute else block]
+    F -->|No| I[Continue]
+    C --> I
+    G --> I
+    H --> I
+```
+
+### Python Loop Execution Flow
+
+```mermaid
+flowchart TD
+    A[for item in iterable] --> B[Get next item]
+    B --> C{Items remaining?}
+    C -->|Yes| D[Execute loop body]
+    D --> E{break?}
+    E -->|Yes| F[Exit Loop]
+    E -->|No| G{continue?}
+    G -->|Yes| B
+    G -->|No| H[Complete iteration]
+    H --> B
+    C -->|No| I[Loop Complete]
+    
+    F --> J[After Loop]
+    I --> J
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+### Python Built-in Functions
+
+| Function | Syntax | Example | Return Value |
+|----------|--------|---------|--------------|
+| print | `print(*objects)` | `print("Hello")` | None (outputs to stdout) |
+| input | `input(prompt)` | `input("Name: ")` | String from user |
+| len | `len(obj)` | `len([1,2,3])` | Integer (length) |
+| type | `type(obj)` | `type(42)` | `<class 'int'>` |
+| int | `int(x)` | `int("42")` | Integer 42 |
+| float | `float(x)` | `float("3.14")` | Float 3.14 |
+| str | `str(x)` | `str(42)` | String "42" |
+| list | `list(iterable)` | `list("abc")` | ['a', 'b', 'c'] |
+| dict | `dict(**kwargs)` | `dict(a=1)` | {'a': 1} |
+| range | `range(stop)` | `range(5)` | 0,1,2,3,4 |
+| enumerate | `enumerate(iterable)` | `enumerate(['a','b'])` | (0,'a'), (1,'b') |
+| sorted | `sorted(iterable)` | `sorted([3,1,2])` | [1, 2, 3] |
+| sum | `sum(iterable)` | `sum([1,2,3])` | 6 |
+| max | `max(iterable)` | `max([1,5,3])` | 5 |
+| min | `min(iterable)` | `min([1,5,3])` | 1 |
+| abs | `abs(x)` | `abs(-5)` | 5 |
+| round | `round(x, ndigits)` | `round(3.7)` | 4 |
+| open | `open(file, mode)` | `open("f.txt", "r")` | File object |
+
+### String Methods Cheatsheet
+
+| Method | Syntax | Example | Result |
+|--------|--------|---------|--------|
+| upper | `.upper()` | `"hello".upper()` | "HELLO" |
+| lower | `.lower()` | `"HELLO".lower()` | "hello" |
+| strip | `.strip()` | `" hi ".strip()` | "hi" |
+| replace | `.replace(old, new)` | `"hi".replace("h", "H")` | "Hi" |
+| split | `.split(sep)` | `"a,b".split(",")` | ['a', 'b'] |
+| join | `.join(iterable)` | `"-".join(['a','b'])` | "a-b" |
+| find | `.find(sub)` | `"hello".find("l")` | 2 |
+| count | `.count(sub)` | `"aaa".count("a")` | 3 |
+| startswith | `.startswith(prefix)` | `"hello".startswith("he")` | True |
+| endswith | `.endswith(suffix)` | `"hello".endswith("lo")` | True |
+| isdigit | `.isdigit()` | `"123".isdigit()` | True |
+| isalpha | `.isalpha()` | `"abc".isalpha()` | True |
+| format | `.format(*args)` | `"Hi {}".format("Bob")` | "Hi Bob" |
+
+### List Methods Cheatsheet
+
+| Method | Syntax | Example | Effect |
+|--------|--------|---------|--------|
+| append | `.append(x)` | `lst.append(4)` | Add to end |
+| insert | `.insert(i, x)` | `lst.insert(0, 'a')` | Insert at index |
+| extend | `.extend(iter)` | `lst.extend([4,5])` | Add multiple |
+| remove | `.remove(x)` | `lst.remove('a')` | Remove first x |
+| pop | `.pop(i)` | `lst.pop()` | Remove & return last |
+| index | `.index(x)` | `lst.index('a')` | First index of x |
+| count | `.count(x)` | `lst.count('a')` | Count occurrences |
+| sort | `.sort()` | `lst.sort()` | Sort in place |
+| reverse | `.reverse()` | `lst.reverse()` | Reverse in place |
+| copy | `.copy()` | `lst.copy()` | Shallow copy |
+| clear | `.clear()` | `lst.clear()` | Remove all |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                  PYTHON BASICS LEARNING ROADMAP - T3RMUXK1NG                 ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                                ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                         MILESTONE 1: FOUNDATION                          │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │Variables│──►│ Data    │──►│ Strings │──►│ Numbers │                  │  ║
+║  │  │         │   │ Types   │   │         │   │         │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐         ⭐⭐           ⭐⭐           ⭐⭐                          │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║                                    │                                          ║
+║                                    ▼                                          ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                      MILESTONE 2: DATA STRUCTURES                        │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │  Lists  │──►│ Tuples  │──►│  Dicts  │──►│  Sets   │                  │  ║
+║  │  │         │   │         │   │         │   │         │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐        ⭐⭐            ⭐⭐⭐          ⭐⭐                         │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║                                    │                                          ║
+║                                    ▼                                          ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                       MILESTONE 3: CONTROL FLOW                          │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │   if    │──►│  elif   │──►│  else   │──►│ Loops   │                  │  ║
+║  │  │         │   │         │   │         │   │for/while│                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐        ⭐⭐⭐          ⭐⭐⭐          ⭐⭐⭐⭐                       │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║                                    │                                          ║
+║                                    ▼                                          ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                       MILESTONE 4: FUNCTIONS                             │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │  def    │──►│ params  │──►│ return  │──►│ lambda  │                  │  ║
+║  │  │         │   │         │   │         │   │         │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐⭐       ⭐⭐⭐⭐         ⭐⭐⭐⭐         ⭐⭐⭐⭐                       │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║                                    │                                          ║
+║                                    ▼                                          ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                      MILESTONE 5: FILES & MODULES                        │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │  open   │──►│  read   │──►│  write  │──►│ import  │                  │  ║
+║  │  │         │   │         │   │         │   │         │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐⭐       ⭐⭐⭐⭐         ⭐⭐⭐⭐         ⭐⭐⭐⭐⭐                      │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║                                                                                ║
+║                              🏆 PYTHON BASICS COMPLETE 🏆                     ║
+║                                                                                ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL/FEATURE COMPARISON TABLE
+
+### Python Data Structures Comparison
+
+| Feature | List | Tuple | Dictionary | Set |
+|---------|------|-------|------------|-----|
+| **Syntax** | `[1, 2, 3]` | `(1, 2, 3)` | `{'a': 1}` | `{1, 2, 3}` |
+| **Mutable** | ✅ Yes | ❌ No | ✅ Yes | ✅ Yes |
+| **Ordered** | ✅ Yes | ✅ Yes | ✅ Yes (3.7+) | ❌ No |
+| **Indexed** | ✅ Yes | ✅ Yes | ✅ By key | ❌ No |
+| **Duplicates** | ✅ Allowed | ✅ Allowed | ❌ Keys unique | ❌ No |
+| **Hashable** | ❌ No | ✅ Yes | ❌ No | ❌ No |
+| **Use Case** | Sequences | Constants | Key-value | Unique items |
+| **Performance** | Medium | Fast | Fast lookup | Fast membership |
+
+### Loop Types Comparison
+
+| Loop Type | Best For | Syntax | Can Break? | Can Continue? |
+|-----------|----------|--------|------------|---------------|
+| **for** | Known iterations | `for x in iter:` | ✅ Yes | ✅ Yes |
+| **while** | Unknown iterations | `while cond:` | ✅ Yes | ✅ Yes |
+| **list comprehension** | Creating lists | `[x for x in iter]` | ❌ No | ❌ No |
+| **generator** | Memory efficiency | `(x for x in iter)` | ❌ No | ❌ No |
+| **map** | Transform data | `map(func, iter)` | ❌ No | ❌ No |
+
+---
+
+## 🚀 PRACTICAL CODING CHALLENGES
+
+### Challenge 1: Data Structure Analyzer 🔍
+
+**Difficulty:** ⭐ Beginner  
+**Time:** 10 minutes
+
+**Problem:** Create a function that takes any Python object and returns detailed information about it including type, mutability, length (if applicable), and a sample of its contents.
+
+**Sample Input:**
+```python
+analyze_data([1, 2, 3, 4, 5])
+analyze_data({"name": "Termux", "version": 3})
+analyze_data((10, 20, 30))
+```
+
+**Sample Output:**
+```
+=== Data Analysis ===
+Type: list
+Mutable: Yes
+Length: 5
+Sample: [1, 2, 3]
+
+=== Data Analysis ===
+Type: dict
+Mutable: Yes
+Length: 2
+Keys: ['name', 'version']
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```python
+def analyze_data(obj):
+    print("=== Data Analysis ===")
+    print(f"Type: {type(obj).__name__}")
+    
+    # Check mutability
+    mutable_types = (list, dict, set)
+    print(f"Mutable: {'Yes' if isinstance(obj, mutable_types) else 'No'}")
+    
+    # Length
+    try:
+        print(f"Length: {len(obj)}")
+    except TypeError:
+        print("Length: N/A")
+    
+    # Sample content
+    if isinstance(obj, dict):
+        print(f"Keys: {list(obj.keys())[:5]}")
+    elif isinstance(obj, (list, tuple, set)):
+        sample = list(obj)[:3]
+        print(f"Sample: {sample}")
+    
+    print()
+
+# Test
+analyze_data([1, 2, 3, 4, 5])
+analyze_data({"name": "Termux", "version": 3})
+analyze_data((10, 20, 30))
+```
+</details>
+
+---
+
+### Challenge 2: Password Validator 🔐
+
+**Difficulty:** ⭐⭐ Intermediate  
+**Time:** 15 minutes
+
+**Problem:** Write a function that validates passwords based on these rules:
+- Minimum 8 characters
+- At least one uppercase letter
+- At least one lowercase letter
+- At least one digit
+- At least one special character (!@#$%^&*)
+
+**Sample Input:**
+```python
+validate_password("weak")
+validate_password("StrongP@ss123")
+```
+
+**Sample Output:**
+```
+❌ Password: 'weak'
+   Issues: Too short (4/8), No uppercase, No digit, No special char
+
+✅ Password: 'StrongP@ss123'
+   All requirements met!
+   Strength: ⭐⭐⭐⭐⭐
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```python
+def validate_password(password):
+    import re
+    
+    print(f"Password: '{password}'")
+    issues = []
+    score = 0
+    
+    # Check length
+    if len(password) >= 8:
+        score += 1
+    else:
+        issues.append(f"Too short ({len(password)}/8)")
+    
+    # Check uppercase
+    if re.search(r'[A-Z]', password):
+        score += 1
+    else:
+        issues.append("No uppercase")
+    
+    # Check lowercase
+    if re.search(r'[a-z]', password):
+        score += 1
+    else:
+        issues.append("No lowercase")
+    
+    # Check digit
+    if re.search(r'[0-9]', password):
+        score += 1
+    else:
+        issues.append("No digit")
+    
+    # Check special char
+    if re.search(r'[!@#$%^&*]', password):
+        score += 1
+    else:
+        issues.append("No special char")
+    
+    # Result
+    if issues:
+        print("   ❌ Issues:")
+        for issue in issues:
+            print(f"      - {issue}")
+    else:
+        print("   ✅ All requirements met!")
+        print(f"   Strength: {'⭐' * score}")
+    print()
+
+# Test
+validate_password("weak")
+validate_password("StrongP@ss123")
+```
+</details>
+
+---
+
+### Challenge 3: File Content Processor 📄
+
+**Difficulty:** ⭐⭐⭐ Advanced  
+**Time:** 20 minutes
+
+**Problem:** Create a script that reads a text file and generates a report showing:
+- Total word count
+- Unique word count
+- Most common words (top 5)
+- Average word length
+- Longest and shortest words
+
+**Sample Input File:**
+```
+Hello world this is a test file.
+Hello Termux this is Python programming.
+Python is awesome for Termux users.
+```
+
+**Sample Output:**
+```
+=== File Analysis Report ===
+Total Words: 17
+Unique Words: 13
+Average Word Length: 5.2 characters
+
+Top 5 Words:
+  1. is (3 times)
+  2. Hello (2 times)
+  3. this (2 times)
+  4. Termux (2 times)
+  5. Python (2 times)
+
+Longest Word: programming (11 chars)
+Shortest Word: a (1 char)
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```python
+def analyze_file(filename):
+    from collections import Counter
+    
+    # Read file
+    with open(filename, 'r') as f:
+        content = f.read()
+    
+    # Process words
+    words = content.lower().split()
+    words = [word.strip('.,!?;:') for word in words]
+    
+    # Statistics
+    total_words = len(words)
+    unique_words = len(set(words))
+    word_counts = Counter(words)
+    avg_length = sum(len(w) for w in words) / total_words
+    
+    # Find longest and shortest
+    longest = max(words, key=len)
+    shortest = min(words, key=len)
+    
+    # Output
+    print("=== File Analysis Report ===")
+    print(f"Total Words: {total_words}")
+    print(f"Unique Words: {unique_words}")
+    print(f"Average Word Length: {avg_length:.1f} characters")
+    
+    print("\nTop 5 Words:")
+    for i, (word, count) in enumerate(word_counts.most_common(5), 1):
+        print(f"  {i}. {word} ({count} times)")
+    
+    print(f"\nLongest Word: {longest} ({len(longest)} chars)")
+    print(f"Shortest Word: {shortest} ({len(shortest)} char)")
+
+# Create test file and analyze
+with open('test.txt', 'w') as f:
+    f.write("Hello world this is a test file.\n")
+    f.write("Hello Termux this is Python programming.\n")
+    f.write("Python is awesome for Termux users.\n")
+
+analyze_file('test.txt')
+```
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+### Python Basics Terms
+
+| Term | Definition |
+|------|------------|
+| **Variable** | A named storage location in memory that holds a value |
+| **Data Type** | Classification of data that determines possible values and operations |
+| **String** | An immutable sequence of characters enclosed in quotes |
+| **Integer** | A whole number without decimal point (e.g., 42) |
+| **Float** | A number with decimal point (e.g., 3.14) |
+| **Boolean** | A data type with only two values: True or False |
+| **List** | A mutable, ordered collection of items |
+| **Tuple** | An immutable, ordered collection of items |
+| **Dictionary** | A collection of key-value pairs |
+| **Set** | An unordered collection of unique items |
+| **Function** | A reusable block of code that performs a specific task |
+| **Parameter** | A variable in a function definition that accepts input |
+| **Argument** | The actual value passed to a function when called |
+| **Return** | The value a function sends back to the caller |
+| **Indentation** | Whitespace at the beginning of a line that defines code blocks |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Python Skills Demand in Industry
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PYTHON SKILLS DEMAND BY FIELD                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Web Development        ████████████████████░░░░░  80%                     │
+│  Data Science           ████████████████████████  100%                     │
+│  Machine Learning       ███████████████████████░  95%                      │
+│  Automation/Scripting   ██████████████████████░░  90%                      │
+│  DevOps                 ███████████████████░░░░░  75%                      │
+│  Security/Pentesting    ██████████████████░░░░░░  70%                      │
+│  Game Development       ████████░░░░░░░░░░░░░░░░  30%                      │
+│  Mobile Development     ██████░░░░░░░░░░░░░░░░░░  25%                      │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Python Developer Roles & Salaries (India)
+
+| Role | Experience | Skills Required | Salary Range |
+|------|------------|-----------------|--------------|
+| Python Intern | 0-6 months | Basics, OOP, Git | ₹10K-25K/month |
+| Junior Developer | 6m-2 years | Django/Flask, SQL, APIs | ₹4-8 LPA |
+| Python Developer | 2-4 years | Frameworks, Testing, Docker | ₹8-15 LPA |
+| Senior Developer | 4-7 years | Architecture, Cloud, Team Lead | ₹15-30 LPA |
+| Data Scientist | 2-5 years | NumPy, Pandas, ML, Stats | ₹10-25 LPA |
+| ML Engineer | 3-6 years | TensorFlow, PyTorch, Deep Learning | ₹15-35 LPA |
+| Tech Lead | 7+ years | Full Stack, Architecture, Mentoring | ₹30-50 LPA |
+
+---
+
+## 🏆 CODE OPTIMIZATION TIPS
+
+### Python Performance Tips
+
+| Tip | Description | Performance Gain |
+|-----|-------------|------------------|
+| **Use list comprehension** | `[x*2 for x in range(10)]` vs loop | ⭐⭐⭐⭐⭐ |
+| **Use generators** | `(x for x in range(10))` for large data | ⭐⭐⭐⭐⭐ |
+| **Avoid global variables** | Keep variables in function scope | ⭐⭐⭐⭐ |
+| **Use `.join()` for strings** | `''.join(list)` vs `+=` in loop | ⭐⭐⭐⭐⭐ |
+| **Use `in` for membership** | `x in set` vs `x in list` | ⭐⭐⭐⭐ |
+| **Cache with `@lru_cache`** | Memoize expensive function calls | ⭐⭐⭐⭐ |
+| **Use built-in functions** | `sum()`, `max()`, `min()` vs loops | ⭐⭐⭐⭐ |
+| **Local variable lookup** | Local is faster than global | ⭐⭐⭐ |
+
+### Memory Optimization Tips
+
+```python
+# Bad: Creates multiple strings
+result = ""
+for s in string_list:
+    result += s  # Creates new string each time!
+
+# Good: Use join
+result = "".join(string_list)  # Single allocation
+
+# Bad: List when you need tuple
+coords = [x, y, z]  # Mutable overhead
+
+# Good: Use tuple for immutable data
+coords = (x, y, z)  # Less memory, faster
+
+# Bad: Range creates full list in Python 2
+for i in range(1000000):  # Python 3: okay, Python 2: bad
+
+# Good: Use xrange in Python 2 or range in Python 3
+for i in range(1000000):  # Python 3: lazy evaluation
+```
+
+### Common Performance Anti-Patterns
+
+```python
+# ❌ SLOW: Checking membership in list
+if item in my_list:  # O(n) operation
+    pass
+
+# ✅ FAST: Use set for membership
+my_set = set(my_list)
+if item in my_set:  # O(1) operation
+    pass
+
+# ❌ SLOW: Multiple type checks
+if type(x) == int or type(x) == float or type(x) == str:
+    pass
+
+# ✅ FAST: Use isinstance
+if isinstance(x, (int, float, str)):
+    pass
+
+# ❌ SLOW: Repeated function calls
+for i in range(len(my_list)):
+    if my_list[i] > threshold:
+        process(my_list[i])
+
+# ✅ FAST: Direct iteration
+for item in my_list:
+    if item > threshold:
+        process(item)
+```
+
+---
+
 ## 📖 TECHNICAL GUIDE
 
 ### 1. Python Basics Quick Reference

@@ -1841,6 +1841,300 @@ Before moving to Chapter 26, verify:
 
 ---
 
+## 📊 MERMAID DIAGRAMS - Nmap Scanning Architecture
+
+### Nmap Scan Types Flowchart
+```mermaid
+graph TB
+    START[Nmap Scan] --> ROOT{Root Access?}
+    ROOT -->|Yes| SYN[SYN Scan -sS]
+    ROOT -->|No| TCP[TCP Connect -sT]
+    SYN --> UDP{UDP Needed?}
+    TCP --> UDP
+    UDP -->|Yes| UDPSCAN[UDP Scan -sU]
+    UDP -->|No| DETECT{Detection?}
+    UDPSCAN --> DETECT
+    DETECT -->|Version| VERSION[Version Detection -sV]
+    DETECT -->|OS| OS[OS Detection -O]
+    DETECT -->|Both| AGGRESSIVE[Aggressive -A]
+    VERSION --> OUTPUT[Save Results]
+    OS --> OUTPUT
+    AGGRESSIVE --> OUTPUT
+    
+    style START fill:#4CAF50
+    style SYN fill:#2196F3
+    style OUTPUT fill:#E91E63
+```
+
+### TCP Handshake vs SYN Scan
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    
+    Note over Client,Server: TCP Connect Scan (-sT)
+    Client->>Server: SYN
+    Server->>Client: SYN-ACK
+    Client->>Server: ACK
+    Client->>Server: RST
+    Note over Client,Server: Full Connection Made
+    
+    Note over Client,Server: SYN Scan (-sS) - Stealthy
+    Client->>Server: SYN
+    Server->>Client: SYN-ACK
+    Client->>Server: RST
+    Note over Client,Server: No Full Connection
+```
+
+### Port States Diagram
+```mermaid
+graph LR
+    A[Port Scan] --> B{Response?}
+    B -->|SYN-ACK| C[OPEN]
+    B -->|RST| D[CLOSED]
+    B -->|No Response| E[FILTERED]
+    B -->|ICMP Unreachable| E
+    
+    style C fill:#4CAF50
+    style D fill:#FF5722
+    style E fill:#FF9800
+```
+
+---
+
+## ⚡ NMAP COMMAND CHEATSHEET
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `nmap TARGET` | Basic scan | `nmap 192.168.1.1` |
+| `nmap -sS TARGET` | SYN scan (stealth) | `nmap -sS scanme.nmap.org` |
+| `nmap -sT TARGET` | TCP Connect scan | `nmap -sT 192.168.1.1` |
+| `nmap -sU TARGET` | UDP scan | `nmap -sU 192.168.1.1` |
+| `nmap -sV TARGET` | Version detection | `nmap -sV 192.168.1.1` |
+| `nmap -O TARGET` | OS detection | `nmap -O 192.168.1.1` |
+| `nmap -A TARGET` | Aggressive scan | `nmap -A scanme.nmap.org` |
+| `nmap -p PORTS TARGET` | Specific ports | `nmap -p 22,80,443 192.168.1.1` |
+| `nmap -p- TARGET` | All 65535 ports | `nmap -p- 192.168.1.1` |
+| `nmap -F TARGET` | Fast scan (100 ports) | `nmap -F 192.168.1.1` |
+| `nmap --top-ports N` | Top N ports | `nmap --top-ports 20 192.168.1.1` |
+| `nmap -sn TARGET` | Ping scan only | `nmap -sn 192.168.1.0/24` |
+| `nmap -Pn TARGET` | Skip host discovery | `nmap -Pn 192.168.1.1` |
+| `nmap -T0-5 TARGET` | Timing template | `nmap -T4 192.168.1.1` |
+| `nmap -sC TARGET` | Default scripts | `nmap -sC 192.168.1.1` |
+| `nmap --script SCRIPT` | Specific script | `nmap --script vuln 192.168.1.1` |
+| `nmap -oN FILE TARGET` | Normal output | `nmap -oN scan.txt 192.168.1.1` |
+| `nmap -oX FILE TARGET` | XML output | `nmap -oX scan.xml 192.168.1.1` |
+| `nmap -oA BASE TARGET` | All formats | `nmap -oA scan 192.168.1.1` |
+| `nmap -v TARGET` | Verbose output | `nmap -v 192.168.1.1` |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION - Nmap Mastery
+
+```mermaid
+graph TD
+    START[Start: Install Nmap] --> BASIC[Basic Scans]
+    BASIC --> TCP[TCP Connect -sT]
+    BASIC --> SYN[SYN Scan -sS]
+    TCP --> DETECT[Detection]
+    SYN --> DETECT
+    DETECT --> VERSION[Version -sV]
+    DETECT --> OS[OS Detection -O]
+    VERSION --> SCRIPTS[NSE Scripts]
+    OS --> SCRIPTS
+    SCRIPTS --> ADVANCED[Advanced Techniques]
+    ADVANCED --> EVASION[Firewall Evasion]
+    ADVANCED --> CUSTOM[Custom Scripts]
+    EVASION --> EXPERT[Nmap Expert]
+    CUSTOM --> EXPERT
+    
+    style START fill:#4CAF50
+    style EXPERT fill:#E91E63
+    style SCRIPTS fill:#2196F3
+```
+
+### Nmap Skills Progression
+
+| Level | Skills to Master | Estimated Time |
+|-------|------------------|----------------|
+| 🌱 Beginner | Basic scan, -sT, -sS, port specification | 1-2 weeks |
+| 🌿 Intermediate | -sV, -O, -A, output formats, timing | 2-3 weeks |
+| 🌳 Advanced | NSE scripts, firewall evasion, automation | 4-6 weeks |
+| 🏆 Expert | Custom NSE, professional reporting, integration | Ongoing |
+
+---
+
+## 🔧 TOOL COMPARISON TABLE - Port Scanners
+
+| Tool | Purpose | Pros | Cons | Alternatives |
+|------|---------|------|------|--------------|
+| **Nmap** | Network scanning | Comprehensive, scripts, OS detection | Can be slow, complex | masscan, rustscan |
+| **Masscan** | Fast port scanning | Extremely fast, Internet-scale | Less features, less accurate | nmap, zmap |
+| **RustScan** | Modern fast scanner | Fast, integrates with nmap | Newer, less mature | nmap, masscan |
+| **Netcat (nc)** | Quick port checks | Simple, universal | No scripting | nmap |
+| **Unicornscan** | Async scanning | Fast, stealthy | Less documentation | nmap |
+| **ZMap** | Internet scanning | Very fast for research | Specialized use | masscan |
+
+---
+
+## 🚀 PRACTICAL NMAP CHALLENGES
+
+### Challenge 1: Network Discovery
+**Objective:** Discover all live hosts and their open ports on local network
+```bash
+# Step 1: Find your network
+ip route | grep default
+
+# Step 2: Ping sweep to find hosts
+nmap -sn 192.168.1.0/24
+
+# Step 3: Port scan discovered hosts
+nmap -sS --top-ports 100 192.168.1.0/24
+
+# Step 4: Service detection on interesting hosts
+nmap -sV 192.168.1.1
+```
+**Success Criteria:** Create a network map with all hosts, IPs, and services
+
+---
+
+### Challenge 2: Comprehensive Server Scan
+**Objective:** Perform a full security assessment of a test server
+```bash
+# Target: scanme.nmap.org (Nmap's official test server)
+
+# Step 1: Quick initial scan
+nmap -F scanme.nmap.org
+
+# Step 2: Service version detection
+nmap -sV scanme.nmap.org
+
+# Step 3: Default script scan
+nmap -sC scanme.nmap.org
+
+# Step 4: Full port scan with scripts
+nmap -p- -sV -sC scanme.nmap.org -oA fullscan
+
+# Step 5: Vulnerability scan
+nmap --script vuln scanme.nmap.org
+```
+**Success Criteria:** Document all findings in a professional report
+
+---
+
+### Challenge 3: OS Fingerprinting
+**Objective:** Identify the operating system of target systems
+```bash
+# Step 1: Basic OS detection (requires root)
+sudo nmap -O 192.168.1.1
+
+# Step 2: Aggressive OS detection
+sudo nmap -O --osscan-guess 192.168.1.1
+
+# Step 3: Combined with version detection
+sudo nmap -A 192.168.1.1
+```
+**Success Criteria:** Correctly identify OS of 3 different target systems
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY - Nmap Terms
+
+| Term | Definition |
+|------|------------|
+| **Port** | Virtual endpoint for network communication (0-65535) |
+| **Open Port** | Port accepting connections, service running |
+| **Closed Port** | Port accessible but no service running |
+| **Filtered Port** | Port blocked by firewall |
+| **SYN Scan** | Stealth scan sending only SYN packets |
+| **TCP Connect** | Full connection scan, no root needed |
+| **NSE** | Nmap Scripting Engine - Lua-based scripts |
+| **Banner** | Service identification string |
+| **Fingerprint** | Unique characteristics for OS/service identification |
+| **CIDR** | Network notation (e.g., 192.168.1.0/24) |
+| **TTL** | Time To Live - packet lifetime |
+| **Fragmentation** | Breaking packets to evade detection |
+| **Decoy** | Fake source IPs to mask real scanner |
+| **Zone Transfer** | DNS full record dump |
+| **Penetration Testing** | Authorized security testing |
+
+---
+
+## 💼 CAREER INSIGHTS - Security Professional Path
+
+### Career Progression
+```
+Entry Level ─────────────────────────────────────────────────────────────────────► Expert
+    │                    │                    │                    │
+Security Analyst     Pen Tester Sr.     Security Consultant    Security Architect
+    │                    │                    │                    │
+  $50-70k             $80-120k           $120-160k             $160-250k+
+```
+
+### Certifications for Security Professionals
+| Level | Certification | Focus Area |
+|-------|--------------|------------|
+| Entry | CompTIA Security+ | Foundation security |
+| Intermediate | CEH | Ethical hacking |
+| Advanced | OSCP | Practical pentesting |
+| Expert | OSCE, OSEE | Advanced exploitation |
+| Management | CISSP, CISM | Security leadership |
+
+### Nmap in Professional Security
+- **Reconnaissance:** First step in any pentest
+- **Asset Discovery:** Finding unknown systems
+- **Vulnerability Assessment:** Service enumeration
+- **Compliance:** Network auditing
+- **Incident Response:** Investigating network intrusions
+
+---
+
+## 🔐 SECURITY CONSIDERATIONS - Nmap Ethics
+
+### Legal and Ethical Guidelines
+
+```mermaid
+graph LR
+    A[Nmap Scan] --> B{Authorized?}
+    B -->|Yes| C[Proceed]
+    B -->|No| D[STOP!]
+    C --> E[Document]
+    E --> F[Report]
+    
+    style D fill:#FF5722
+    style C fill:#4CAF50
+```
+
+### Safe Practice Targets
+| Target | Purpose | Permission |
+|--------|---------|------------|
+| `scanme.nmap.org` | Official test server | ✅ Pre-authorized |
+| Your own devices | Local testing | ✅ Your property |
+| Home network | Learning | ✅ Your network |
+| Lab VMs | Practice | ✅ Your lab |
+| HackTheBox | CTF practice | ✅ Authorized |
+| TryHackMe | Learning | ✅ Authorized |
+
+### What NOT to Scan
+> ⚠️ **Never scan without explicit permission:**
+> - Government systems
+> - Banking/Financial institutions
+> - Healthcare systems
+> - Any production systems
+> - Random Internet IPs
+> - Critical infrastructure
+
+### Best Practices
+1. **Always get written authorization**
+2. **Document all scans performed**
+3. **Use safe scan options first**
+4. **Report findings responsibly**
+5. **Follow responsible disclosure**
+6. **Maintain confidentiality**
+7. **Comply with local laws**
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Always start with `-sT` (TCP Connect scan) in Termux if you don't have root. SYN scan (`-sS`) requires root privileges.

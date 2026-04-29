@@ -3542,6 +3542,517 @@ Complete this checklist to verify your learning!
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Diagram 1: Configuration Files Hierarchy
+
+```mermaid
+graph TD
+    A[Termux Configuration] --> B[~/.termux/]
+    A --> C[~/.bashrc]
+    A --> D[~/.profile]
+    
+    B --> B1[termux.properties]
+    B --> B2[colors.properties]
+    B --> B3[font.ttf]
+    B --> B4[termux-url-opener]
+    
+    C --> C1[Aliases]
+    C --> C2[Functions]
+    C --> C3[Environment Variables]
+    C --> C4[Custom Prompt]
+    C --> C5[Welcome Message]
+    
+    B1 --> E[App Behavior]
+    B2 --> F[Color Scheme]
+    B3 --> G[Custom Font]
+    
+    style A fill:#4CAF50,color:#fff
+    style B fill:#2196F3,color:#fff
+    style C fill:#FF9800,color:#fff
+```
+
+### Diagram 2: .bashrc Loading Process
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Termux
+    participant Bash
+    participant bashrc
+    
+    User->>Termux: Open Termux App
+    Termux->>Bash: Start Bash Shell
+    Bash->>bashrc: Check ~/.bashrc exists?
+    alt .bashrc exists
+        bashrc->>Bash: Read & Execute
+        Bash->>Bash: Set Environment Variables
+        Bash->>Bash: Load Aliases
+        Bash->>Bash: Set Custom Prompt
+        Bash->>Bash: Display Welcome Message
+    else .bashrc missing
+        Bash->>Bash: Use default settings
+    end
+    Bash->>User: Show Prompt Ready
+```
+
+### Diagram 3: Environment Variables Flow
+
+```mermaid
+flowchart LR
+    subgraph Input
+        A[.bashrc File]
+        B[Export Statement]
+        C[Command Line]
+    end
+    
+    subgraph Processing
+        D[Shell Environment]
+    end
+    
+    subgraph Output
+        E[Scripts & Programs]
+        F[Child Processes]
+        G[Current Session]
+    end
+    
+    A --> D
+    B --> D
+    C --> D
+    D --> E
+    D --> F
+    D --> G
+    
+    style D fill:#9C27B0,color:#fff
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+| Command | Syntax | Example | Output |
+|---------|--------|---------|--------|
+| `source` | `source <file>` | `source ~/.bashrc` | Reloads configuration file |
+| `export` | `export VAR=value` | `export EDITOR=nano` | Sets environment variable |
+| `alias` | `alias name='command'` | `alias update='pkg update'` | Creates command shortcut |
+| `unalias` | `unalias <name>` | `unalias update` | Removes alias |
+| `echo` | `echo $VAR` | `echo $PATH` | Displays variable value |
+| `env` | `env` | `env` | Lists all environment variables |
+| `printenv` | `printenv VAR` | `printenv HOME` | Prints specific variable |
+| `set` | `set` | `set` | Shows all shell variables |
+| `unset` | `unset VAR` | `unset MY_VAR` | Removes variable |
+| `nano` | `nano <file>` | `nano ~/.bashrc` | Opens file in nano editor |
+| `cat` | `cat <file>` | `cat ~/.bashrc` | Displays file content |
+| `mkdir` | `mkdir <dir>` | `mkdir ~/.termux` | Creates directory |
+| `termux-reload-settings` | `termux-reload-settings` | `termux-reload-settings` | Reloads Termux settings |
+| `history` | `history` | `history` | Shows command history |
+| `shopt` | `shopt -s <option>` | `shopt -s cdspell` | Sets shell option |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    🎯 YOUR LEARNING JOURNEY - MODULE 1                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ✅ CHAPTER 1     [████████████████████████████████] 100% COMPLETE      │
+│     Termux Introduction & Installation                                  │
+│                                                                          │
+│  ✅ CHAPTER 2     [████████████████████████████████] 100% COMPLETE      │
+│     First Setup & Configuration                                         │
+│     ↓ You are here - Ready for Chapter 3!                               │
+│                                                                          │
+│  🔒 CHAPTER 3     [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0% LOCKED        │
+│     Linux Basics Part 1                                                 │
+│                                                                          │
+│  🔒 CHAPTER 4     [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0% LOCKED        │
+│     Linux Basics Part 2                                                 │
+│                                                                          │
+│  🔒 CHAPTER 5     [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0% LOCKED        │
+│     Package Management                                                  │
+│                                                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│  📊 OVERALL MODULE 1 PROGRESS: [████████░░░░░░░░░░░░]  40%              │
+│  🏆 Skills Unlocked: Installation, Configuration, Aliases, Prompt      │
+│  🔑 Next Unlock: File Operations, Navigation, Permissions               │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills Acquired:
+```
+┌──────────────────────────────────────────────────────────────┐
+│  ✅ Termux Installation from F-Droid                        │
+│  ✅ Package Update & Upgrade                                 │
+│  ✅ Storage Access Setup                                     │
+│  ✅ .bashrc File Creation & Editing                         │
+│  ✅ Custom Aliases (20+ shortcuts)                          │
+│  ✅ Environment Variables Configuration                      │
+│  ✅ Custom Prompt Design (PS1)                               │
+│  ✅ Welcome Message Setup                                    │
+│  ✅ termux.properties Configuration                         │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+### Text Editors Comparison
+
+| Editor | Pros | Cons | Best For |
+|--------|------|------|----------|
+| **Nano** | ✅ Beginner friendly<br/>✅ Pre-installed<br/>✅ Simple keybindings<br/>✅ Shows shortcuts at bottom | ❌ Limited features<br/>❌ No plugins | Beginners, quick edits |
+| **Vim** | ✅ Powerful<br/>✅ Modal editing<br/>✅ Extensive plugins<br/>✅ Available everywhere | ❌ Steep learning curve<br/>❌ Confusing for beginners | Power users, developers |
+| **Neovim** | ✅ Modern Vim<br/>✅ Better defaults<br/>✅ Lua configuration<br/>✅ Async plugins | ❌ Still requires learning<br/>❌ Setup time needed | Developers, power users |
+| **Emacs** | ✅ Extremely customizable<br/>✅ Org mode<br/>✅ Built-in terminal | ❌ Complex keybindings<br/>❌ Heavy<br/>❌ Large learning curve | Emacs enthusiasts |
+
+### Shell Comparison
+
+| Shell | Pros | Cons | Best For |
+|-------|------|------|----------|
+| **Bash** | ✅ Default in Termux<br/>✅ Universal<br/>✅ Great documentation<br/>✅ POSIX compatible | ❌ Slower than some<br/>❌ Less features than zsh | Most users - default choice |
+| **Zsh** | ✅ Better autocompletion<br/>✅ Oh My Zsh framework<br/>✅ Better scripting | ❌ Needs installation<br/>❌ Slightly slower startup | Power users |
+| **Fish** | ✅ Autosuggestions<br/>✅ Web-based config<br/>✅ User friendly | ❌ Not POSIX compatible<br/>❌ Different syntax | New users wanting features |
+
+### Prompt Frameworks
+
+| Framework | Features | Difficulty | Best For |
+|-----------|----------|------------|----------|
+| **Pure Prompt** | Minimal, Git integration | Easy | Minimalists |
+| **Starship** | Cross-shell, fast, configurable | Easy | Everyone |
+| **Powerlevel10k** | Highly configurable, fast | Medium | Zsh power users |
+| **Custom PS1** | Full control, no dependencies | Medium-Hard | Learning, simple needs |
+
+---
+
+## 🚀 PRACTICAL CHALLENGES
+
+### Challenge 1: Create Your Custom .bashrc
+
+**Difficulty:** ⭐ Beginner  
+**Time:** 15 minutes  
+**Objective:** Create a personalized .bashrc with essential aliases and settings
+
+**Task:**
+1. Create/edit .bashrc file
+2. Add at least 10 useful aliases
+3. Set a custom colorful prompt
+4. Add a simple welcome message
+5. Reload and verify it works
+
+**Hint:** Use the template from this chapter as a starting point
+
+<details>
+<summary>🔓 Click to reveal solution</summary>
+
+```bash
+# Step 1: Create/open .bashrc
+nano ~/.bashrc
+
+# Step 2: Add this content
+#!/data/data/com.termux/files/usr/bin/bash
+
+# ===== ENVIRONMENT VARIABLES =====
+export EDITOR=nano
+export HISTSIZE=5000
+export HISTCONTROL=ignoreboth
+
+# ===== COLORS =====
+GREEN='\[\033[0;32m\]'
+RED='\[\033[0;31m\]'
+CYAN='\[\033[0;36m\]'
+RESET='\[\033[0m\]'
+
+# ===== CUSTOM PROMPT =====
+PS1="${GREEN}[${RED}\w${GREEN}]${CYAN}\$${RESET} "
+
+# ===== ALIASES =====
+alias update='pkg update && pkg upgrade -y'
+alias install='pkg install'
+alias remove='pkg uninstall'
+alias search='pkg search'
+alias ..='cd ..'
+alias ll='ls -la'
+alias c='clear'
+alias h='history'
+alias reload='source ~/.bashrc && echo "Reloaded!"'
+
+# ===== WELCOME MESSAGE =====
+echo ""
+echo "✅ Welcome to Termux! .bashrc loaded."
+echo "📅 $(date)"
+echo ""
+
+# Step 3: Save with Ctrl+O, Enter, Ctrl+X
+
+# Step 4: Reload configuration
+source ~/.bashrc
+
+# Step 5: Verify
+echo "Prompt color changed? Check!"
+ll  # Should show detailed listing
+update  # Should run the full update command
+```
+
+**Success Criteria:**
+- ✅ .bashrc file created
+- ✅ Aliases work (test with `ll`, `c`, `update`)
+- ✅ Prompt shows colors
+- ✅ Welcome message appears
+
+</details>
+
+---
+
+### Challenge 2: Build a Productivity Function
+
+**Difficulty:** ⭐⭐ Intermediate  
+**Time:** 10 minutes  
+**Objective:** Create a bash function that creates a project folder structure
+
+**Task:**
+1. Create a function called `mkproject`
+2. Function should accept a project name as argument
+3. Create folders: src, docs, tests, assets
+4. Create a README.md file with project name
+5. Navigate into the project
+
+**Hint:** Functions in bash use `function name() { commands }` syntax
+
+<details>
+<summary>🔓 Click to reveal solution</summary>
+
+```bash
+# Add this function to your .bashrc
+
+mkproject() {
+    if [ -z "$1" ]; then
+        echo "❌ Usage: mkproject <project_name>"
+        return 1
+    fi
+    
+    local project_name="$1"
+    
+    echo "📁 Creating project: $project_name"
+    
+    # Create main directory
+    mkdir -p "$project_name"
+    
+    # Create subdirectories
+    mkdir -p "$project_name"/{src,docs,tests,assets}
+    
+    # Create README.md
+    cat > "$project_name/README.md" << EOF
+# $project_name
+
+Created on: $(date)
+
+## Structure
+- src/ - Source code
+- docs/ - Documentation
+- tests/ - Test files
+- assets/ - Images and resources
+
+## Getting Started
+TODO: Add instructions
+
+EOF
+    
+    # Navigate into project
+    cd "$project_name"
+    
+    echo "✅ Project '$project_name' created!"
+    ls -la
+}
+
+# Usage example:
+# mkproject my_web_app
+# This creates: my_web_app/ with src, docs, tests, assets folders and README.md
+```
+
+**Testing:**
+```bash
+# Reload bashrc
+source ~/.bashrc
+
+# Test the function
+mkproject test_project
+
+# Verify structure
+ls -la
+# Should show: src, docs, tests, assets, README.md
+```
+
+**Success Criteria:**
+- ✅ Function accepts project name
+- ✅ Creates folder structure correctly
+- ✅ Creates README.md with content
+- ✅ Navigates into project automatically
+
+</details>
+
+---
+
+### Challenge 3: Configure Extra Keys Row
+
+**Difficulty:** ⭐ Beginner  
+**Time:** 10 minutes  
+**Objective:** Set up a custom extra keys row for faster terminal work
+
+**Task:**
+1. Create ~/.termux directory if not exists
+2. Create termux.properties file
+3. Configure an extra keys row with useful keys
+4. Reload Termux settings
+5. Verify keys appear above keyboard
+
+**Hint:** Use the termux.properties examples from this chapter
+
+<details>
+<summary>🔓 Click to reveal solution</summary>
+
+```bash
+# Step 1: Create .termux directory
+mkdir -p ~/.termux
+
+# Step 2: Create termux.properties
+nano ~/.termux/termux.properties
+
+# Step 3: Add this configuration
+# Back key acts as escape (great for Vim)
+back-key=escape
+
+# Ignore bell characters
+bell-character=ignore
+
+# Extra keys row configuration
+extra-keys = [[ \
+  {key: ESC, popup: ~}, \
+  {key: '/', popup: '_'}, \
+  {key: '-', popup: '+'}, \
+  {key: HOME, popup: END}, \
+  {key: UP, popup: PGUP}, \
+  {key: DOWN, popup: PGDN} \
+]]
+
+# Step 4: Save with Ctrl+O, Enter, Ctrl+X
+
+# Step 5: Reload settings
+termux-reload-settings
+
+# Step 6: Close and reopen Termux to see changes
+```
+
+**Advanced Configuration (Two Rows):**
+```properties
+extra-keys = [[ \
+  {key: ESC, popup: {macro: "CTRL d", display: "exit"}}, \
+  {key: CTRL, popup: {macro: "CTRL c", display: "cancel"}}, \
+  {key: ALT, popup: {macro: "CTRL z", display: "undo"}}, \
+  {key: TAB, popup: {macro: "CTRL a", display: "all"}}, \
+  {key: '/', popup: '~'}, \
+  {key: '-', popup: '_'} \
+], [ \
+  {key: KB, popup: KEYBOARD}, \
+  {key: LEFT, popup: HOME}, \
+  {key: DOWN, popup: PGDN}, \
+  {key: UP, popup: PGUP}, \
+  {key: RIGHT, popup: END} \
+]]
+```
+
+**Success Criteria:**
+- ✅ ~/.termux directory created
+- ✅ termux.properties file exists
+- ✅ Extra keys row appears above keyboard
+- ✅ Keys work as expected (ESC, arrows, etc.)
+
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition | Example |
+|------|------------|---------|
+| **Shell** | Command-line interpreter that executes commands | Bash, Zsh, Fish |
+| **.bashrc** | Bash configuration file loaded for interactive non-login shells | `~/.bashrc` |
+| **Alias** | Shortcut for a longer command | `alias ll='ls -la'` |
+| **Environment Variable** | Named value accessible by processes | `$HOME`, `$PATH`, `$EDITOR` |
+| **Prompt (PS1)** | Text displayed before each command input | `[~/projects]$` |
+| **Source** | Command to execute commands from a file in current shell | `source ~/.bashrc` |
+| **Export** | Makes a variable available to child processes | `export PATH=$PATH:~/bin` |
+| **Function** | Named block of commands that can take arguments | `mkproject() { mkdir $1; cd $1; }` |
+| **termux.properties** | Configuration file for Termux app settings | `~/.termux/termux.properties` |
+| **Shebang** | First line of script indicating interpreter | `#!/bin/bash` |
+| **History** | Record of previously executed commands | `~/.bash_history` |
+| **Autocd** | Shell option to enter directories without `cd` | `shopt -s autocd` |
+| **Globbing** | Pattern matching for filenames | `*.txt` matches all .txt files |
+| **Pipe** | Redirects output of one command to another | `cat file | grep word` |
+| **Redirection** | Sends output to file instead of screen | `echo "text" > file.txt` |
+| **Login Shell** | Shell started after login | Reads `.bash_profile` |
+| **Interactive Shell** | Shell with user interaction | Reads `.bashrc` |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Job Roles That Use These Skills
+
+| Role | Description | Shell Skills Needed |
+|------|-------------|---------------------|
+| **DevOps Engineer** | Automates deployment and infrastructure | Scripting, aliases, automation |
+| **Site Reliability Engineer** | Maintains system reliability | Monitoring scripts, automation |
+| **Backend Developer** | Builds server-side applications | Build scripts, deployment |
+| **System Administrator** | Manages servers and systems | Configuration, automation |
+| **Security Engineer** | Implements security measures | Custom scripts, log analysis |
+| **Platform Engineer** | Builds internal platforms | Shell scripting, tooling |
+| **Build Engineer** | Manages build systems | CI/CD scripts, automation |
+| **Cloud Engineer** | Works with cloud infrastructure | CLI tools, scripting |
+
+### Salary Expectations (India)
+
+| Role | Entry Level (₹/year) | Mid Level (₹/year) | Senior (₹/year) |
+|------|---------------------|-------------------|-----------------|
+| DevOps Engineer | 5-8 LPA | 12-20 LPA | 25-45 LPA |
+| Site Reliability Engineer | 6-10 LPA | 15-25 LPA | 30-50 LPA |
+| Backend Developer | 4-8 LPA | 10-20 LPA | 25-50 LPA |
+| System Administrator | 3-5 LPA | 6-12 LPA | 12-20 LPA |
+| Security Engineer | 5-10 LPA | 12-22 LPA | 25-45 LPA |
+
+### Certifications to Pursue
+
+| Certification | Provider | Focus Area | Difficulty |
+|--------------|----------|------------|------------|
+| **RHCSA** | Red Hat | Linux System Admin | Intermediate |
+| **RHCE** | Red Hat | Advanced Linux Admin | Advanced |
+| **AWS SysOps Admin** | Amazon | AWS Operations | Intermediate |
+| **CKA** | CNCF | Kubernetes Admin | Intermediate |
+| **HashiCorp Terraform** | HashiCorp | Infrastructure as Code | Intermediate |
+| **LFCS** | Linux Foundation | Linux System Admin | Intermediate |
+
+### Configuration Management Path
+
+```
+Basic Shell Configuration
+         ↓
+    ┌────┴────┐
+    ↓         ↓
+Scripting   Automation
+    ↓         ↓
+Bash/Python  Ansible/Chef
+    ↓         ↓
+    └────┬────┘
+         ↓
+   DevOps/Platform Engineering
+         ↓
+   Infrastructure as Code
+```
+
+---
+
 ## 💡 PRO TIPS - MASTER THESE!
 
 > 💡 **Pro Tip #1:** Always backup your .bashrc before making changes: `cp ~/.bashrc ~/.bashrc.backup`

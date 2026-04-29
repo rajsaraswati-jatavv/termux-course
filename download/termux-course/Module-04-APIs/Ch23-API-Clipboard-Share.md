@@ -2284,6 +2284,418 @@ Before moving to Chapter 24, verify:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### 1. Clipboard & Share API Architecture
+
+```mermaid
+flowchart TB
+    subgraph Termux Commands
+        A[termux-clipboard-get]
+        B[termux-clipboard-set]
+        C[termux-share]
+    end
+    
+    subgraph Android System
+        D[ClipboardManager]
+        E[Share Intent]
+        F[Intent Resolver]
+    end
+    
+    subgraph External Apps
+        G[WhatsApp]
+        H[Telegram]
+        I[Gmail]
+        J[Bluetooth]
+    end
+    
+    A --> D
+    B --> D
+    C --> E --> F
+    F --> G
+    F --> H
+    F --> I
+    F --> J
+    
+    style A fill:#4CAF50,color:#fff
+    style C fill:#2196F3,color:#fff
+    style D fill:#FF5722,color:#fff
+```
+
+### 2. Clipboard Data Flow
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant T as Termux
+    participant CM as ClipboardManager
+    participant O as Other Apps
+    
+    U->>T: termux-clipboard-set "Hello"
+    T->>CM: setPrimaryClip("Hello")
+    CM-->>T: Success
+    T-->>U: Clipboard updated
+    
+    Note over CM,O: Clipboard is system-wide
+    
+    O->>CM: getPrimaryClip()
+    CM-->>O: "Hello"
+    Note over O: Can paste in any app
+    
+    U->>T: termux-clipboard-get
+    T->>CM: getPrimaryClip()
+    CM-->>T: "Hello"
+    T-->>U: Returns clipboard content
+```
+
+### 3. Share Flow Diagram
+
+```mermaid
+flowchart LR
+    A[termux-share file] --> B{Content Type}
+    B -->|Text| C[Text Sharing]
+    B -->|Image| D[Image Sharing]
+    B -->|File| E[File Sharing]
+    
+    C --> F[Share Sheet]
+    D --> F
+    E --> F
+    
+    F --> G{User Selection}
+    G --> H[Messaging App]
+    G --> I[Email App]
+    G --> J[Cloud Storage]
+    G --> K[Bluetooth]
+    
+    style A fill:#4CAF50,color:#fff
+    style F fill:#2196F3,color:#fff
+```
+
+---
+
+## ⚡ API COMMAND REFERENCE CARD
+
+| API Command | Purpose | Permissions | Example |
+|-------------|---------|-------------|---------|
+| `termux-clipboard-get` | Read clipboard content | None | `termux-clipboard-get` |
+| `termux-clipboard-set` | Set clipboard content | None | `termux-clipboard-set "Hello"` |
+| `termux-share` | Share text/file | None | `termux-share file.txt` |
+| `termux-share -a` | Share with action | None | `termux-share -a view file.pdf` |
+| `termux-share -c` | Share with MIME type | None | `termux-share -c "image/jpeg" photo.jpg` |
+| `termux-share -t` | Share with title | None | `termux-share -t "Document" file.pdf` |
+
+### Quick Syntax Reference
+
+```bash
+# Clipboard
+termux-clipboard-get                    # Get clipboard content
+termux-clipboard-set "text"             # Set clipboard text
+echo "text" | termux-clipboard-set      # Pipe to clipboard
+command | termux-clipboard-set          # Command output to clipboard
+
+# Share
+termux-share "text"                     # Share text
+termux-share file.txt                   # Share file
+termux-share -a view file.pdf           # Open with...
+termux-share -c "image/jpeg" photo.jpg  # Specify MIME type
+termux-share -t "Title" file.pdf        # With title
+command | termux-share                  # Share command output
+
+# Combos
+termux-clipboard-get | termux-share     # Share clipboard
+termux-clipboard-get | process | termux-clipboard-set  # Process clipboard
+```
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                   CLIPBOARD & SHARE API MASTERY PATH                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+     🌱 BEGINNER                    🌿 INTERMEDIATE                  🌳 ADVANCED
+     ──────────────────             ──────────────────              ──────────────────
+     
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Get Clipboard  │───────────▶│  Clipboard      │───────────▶│  Clipboard      │
+     │  Basic Read     │            │  Processing     │            │  Manager        │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Set Clipboard  │───────────▶│  Automated      │───────────▶│  Quick          │
+     │  Basic Write    │            │  Copy Scripts   │            │  Actions        │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Share Text     │───────────▶│  Share Files    │───────────▶│  Share          │
+     │  Basic          │            │  with MIME      │            │  Automation     │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Basic Share    │───────────▶│  Share with     │───────────▶│  Cross-App      │
+     │  File           │            │  Options        │            │  Integration    │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     🏆 MASTERY CHECKPOINTS:
+     
+     □ Level 1: Read and write clipboard content
+     □ Level 2: Process clipboard data with pipes
+     □ Level 3: Share text and files to apps
+     □ Level 4: Use MIME types for proper sharing
+     □ Level 5: Create clipboard history system
+     □ Level 6: Build quick share automation
+     □ Level 7: Integrate clipboard with other APIs
+     
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     ⏱️ ESTIMATED TIME TO MASTERY: 3-4 Hours Practice
+     
+     📚 PREREQUISITES: Chapters 1-22 (All previous API chapters)
+     
+     🎯 NEXT STEPS: Module 5 - Advanced Automation
+```
+
+---
+
+## 🔧 API COMPARISON TABLE
+
+| API | Capability | Root Required | Android Version | Output Format |
+|-----|------------|---------------|-----------------|---------------|
+| `termux-clipboard-get` | Read clipboard | ❌ No | 5.0+ | Text |
+| `termux-clipboard-set` | Write clipboard | ❌ No | 5.0+ | None |
+| `termux-share` | Share content | ❌ No | 5.0+ | None |
+
+### Share Actions Reference
+
+| Action | Flag | Description |
+|--------|------|-------------|
+| send | `-a send` | Default - send to app |
+| view | `-a view` | Open for viewing |
+| edit | `-a edit` | Open for editing |
+
+### MIME Types Reference
+
+| Type | MIME | Use Case |
+|------|------|----------|
+| Text | text/plain | Plain text sharing |
+| HTML | text/html | Web content |
+| Image JPEG | image/jpeg | JPEG images |
+| Image PNG | image/png | PNG images |
+| PDF | application/pdf | PDF documents |
+| JSON | application/json | JSON data |
+| Zip | application/zip | Archive files |
+| Any | */* | Wildcard |
+
+---
+
+## 🚀 PRACTICAL PROJECT CHALLENGES
+
+### Challenge 1: Clipboard History Manager 📋
+
+**Objective:** Create a clipboard history tracking system.
+
+**Requirements:**
+- Track clipboard changes
+- Store history with timestamps
+- Search past clipboard items
+- Restore any previous item
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create clipboard history
+HISTORY_FILE=~/.clipboard_history
+
+# TODO: Monitor clipboard changes
+# TODO: Store with timestamps
+# TODO: List history
+# TODO: Restore selected item
+```
+
+**Expected Output:** Full clipboard history with restore capability.
+
+---
+
+### Challenge 2: Quick Note Taker 📝
+
+**Objective:** Build a quick note system with clipboard integration.
+
+**Requirements:**
+- Save clipboard content as note
+- Add timestamp to notes
+- List and search notes
+- Share notes easily
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create note taker
+NOTES_DIR=~/quick_notes
+
+# TODO: Save clipboard as note
+# TODO: List notes
+# TODO: Search notes
+# TODO: Share note
+```
+
+**Expected Output:** Note management with clipboard integration.
+
+---
+
+### Challenge 3: Universal Share Tool 🔗
+
+**Objective:** Create a multi-purpose sharing tool.
+
+**Requirements:**
+- Share clipboard content
+- Share command output
+- Share files with detection
+- Quick share menu
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create share tool
+
+# TODO: Detect content type
+# TODO: Show share menu
+# TODO: Handle different types
+# TODO: Share to specific apps
+```
+
+**Expected Output:** Versatile sharing tool for all content types.
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **ClipboardManager** | Android system service for clipboard operations |
+| **Primary Clip** | Current clipboard content |
+| **Share Intent** | Android intent for sharing content between apps |
+| **MIME Type** | Multipurpose Internet Mail Extensions - content type identifier |
+| **Intent Resolver** | Android component that shows app selection dialog |
+| **ClipData** | Android data structure for clipboard content |
+| **Share Sheet** | System UI for selecting target app |
+| **Deep Link** | URL scheme that opens specific app |
+
+### Common MIME Types
+
+| Extension | MIME Type |
+|-----------|-----------|
+| .txt | text/plain |
+| .html | text/html |
+| .css | text/css |
+| .js | application/javascript |
+| .json | application/json |
+| .xml | application/xml |
+| .pdf | application/pdf |
+| .zip | application/zip |
+| .jpg, .jpeg | image/jpeg |
+| .png | image/png |
+| .gif | image/gif |
+| .mp4 | video/mp4 |
+| .mp3 | audio/mpeg |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How Clipboard & Share APIs Relate to Real-World Development
+
+**Mobile App Development:**
+- Clipboard integration for productivity apps
+- Share functionality for content apps
+- Cross-app data exchange
+
+**Productivity Tools:**
+- Clipboard managers
+- Quick note applications
+- Data synchronization tools
+
+**Security & Privacy:**
+- Secure clipboard handling
+- Sensitive data management
+- Privacy-focused sharing
+
+### Career Paths Using These Skills
+
+| Role | Relevance | Salary Range (India) |
+|------|-----------|---------------------|
+| Android Developer | Share/Clipboard APIs | ₹6-25 LPA |
+| Productivity App Dev | Clipboard managers | ₹5-18 LPA |
+| Automation Engineer | Cross-app automation | ₹5-20 LPA |
+| Security Developer | Secure clipboard | ₹8-28 LPA |
+| Tools Developer | Productivity tools | ₹5-22 LPA |
+
+### Skills Roadmap
+
+```
+Current Chapter (Clipboard & Share APIs)
+         │
+         ├──▶ Android Share Development
+         │         │
+         │         └──▶ Android Developer
+         │
+         ├──▶ Productivity Tools
+         │         │
+         │         └──▶ Productivity App Developer
+         │
+         ├──▶ Automation Scripts
+         │         │
+         │         └──▶ Automation Engineer
+         │
+         └──▶ Security Tools
+                   │
+                   └──▶ Security Developer
+```
+
+---
+
+## ⚠️ PERMISSION REQUIREMENTS TABLE
+
+| API Command | Required Permission | How to Grant | Notes |
+|-------------|---------------------|--------------|-------|
+| `termux-clipboard-get` | None | N/A | Works without permission |
+| `termux-clipboard-set` | None | N/A | Works without permission |
+| `termux-share` | None | N/A | Works without permission |
+
+### No Permissions Required!
+
+Unlike other Termux APIs, clipboard and share APIs work without any special permissions:
+- No storage permission needed
+- No internet permission needed
+- No sensitive permissions required
+
+### Best Practices for Sensitive Data
+
+| Scenario | Recommendation |
+|----------|----------------|
+| Passwords in clipboard | Clear after use: `termux-clipboard-set ""` |
+| API keys | Never store in plain text |
+| Personal data | Encrypt before copying |
+| Code snippets | Use share instead of clipboard |
+
+### Troubleshooting
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Empty clipboard | Nothing copied | Copy something first |
+| Share dialog empty | No apps installed | Install apps that can handle the content |
+| Wrong app opens | Default app set | Clear defaults in Android settings |
+| Large content fails | Content too big | Split into smaller chunks |
+| Unicode characters | Encoding issues | Ensure UTF-8 encoding |
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Combine `termux-clipboard-get` with text processing tools for powerful clipboard transformations.

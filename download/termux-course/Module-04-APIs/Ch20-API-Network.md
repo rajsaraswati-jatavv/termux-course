@@ -3097,6 +3097,407 @@ Before moving to Chapter 21, verify:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### 1. Network API Architecture
+
+```mermaid
+flowchart TB
+    subgraph Termux Commands
+        A[termux-wifi-connectioninfo]
+        B[termux-wifi-enable]
+        C[termux-wifi-scaninfo]
+        D[termux-telephony-deviceinfo]
+    end
+    
+    subgraph Android Managers
+        E[WifiManager]
+        F[ConnectivityManager]
+        G[TelephonyManager]
+    end
+    
+    subgraph Network Components
+        H[WiFi Radio]
+        I[Mobile Data]
+        J[Network Interfaces]
+    end
+    
+    A --> E
+    B --> E
+    C --> E
+    D --> G
+    E --> H
+    G --> I
+    F --> J
+    
+    style A fill:#4CAF50,color:#fff
+    style C fill:#2196F3,color:#fff
+    style E fill:#FF5722,color:#fff
+```
+
+### 2. WiFi Scan Flow
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant T as Termux
+    participant WM as WifiManager
+    participant S as WiFi Hardware
+    
+    U->>T: termux-wifi-scaninfo
+    T->>WM: startScan()
+    WM->>S: Scan channels
+    S-->>WM: Scan results
+    WM-->>T: List<ScanResult>
+    T-->>U: JSON Array
+    
+    Note over WM,S: Scans all channels 1-13 (2.4GHz) and 36-165 (5GHz)
+    Note over T,U: Output includes SSID, BSSID, frequency, RSSI, capabilities
+```
+
+### 3. Network Security Analysis Flow
+
+```mermaid
+flowchart LR
+    A[Scan Networks] --> B{Security Check}
+    B -->|WPA3| C[✅ Secure]
+    B -->|WPA2| D[✅ Good]
+    B -->|WPA| E[⚠️ Weak]
+    B -->|WEP| F[❌ Vulnerable]
+    B -->|Open| G[❌ No Security]
+    
+    C --> H[Safe to Connect]
+    D --> H
+    E --> I[Use VPN]
+    F --> J[Avoid Connection]
+    G --> J
+    
+    style C fill:#4CAF50,color:#fff
+    style F fill:#F44336,color:#fff
+    style G fill:#F44336,color:#fff
+```
+
+---
+
+## ⚡ API COMMAND REFERENCE CARD
+
+| API Command | Purpose | Permissions | Example |
+|-------------|---------|-------------|---------|
+| `termux-wifi-connectioninfo` | Get current WiFi details | Location (Android 10+) | `termux-wifi-connectioninfo` |
+| `termux-wifi-enable true/false` | Toggle WiFi radio | Location | `termux-wifi-enable true` |
+| `termux-wifi-scaninfo` | Scan nearby networks | Location | `termux-wifi-scaninfo` |
+| `termux-telephony-deviceinfo` | Get SIM/network info | Phone | `termux-telephony-deviceinfo` |
+| `termux-telephony-cellinfo` | Get cell tower info | Location | `termux-telephony-cellinfo` |
+
+### Network Command Quick Reference
+
+```bash
+# WiFi Information
+termux-wifi-connectioninfo              # Current connection details
+termux-wifi-enable true                 # Turn WiFi ON
+termux-wifi-enable false                # Turn WiFi OFF
+termux-wifi-scaninfo                    # Scan nearby networks
+
+# Network Diagnostics
+curl -s ifconfig.me                     # Public IP
+ip addr show wlan0                      # Local IP & MAC
+ip route                                # Gateway info
+ping -c 4 google.com                    # Connectivity test
+nslookup google.com                     # DNS lookup
+
+# Telephony
+termux-telephony-deviceinfo             # IMEI, SIM info
+termux-telephony-cellinfo               # Cell tower data
+
+# Network Tools (install separately)
+pkg install nmap netcat dnsutils -y
+nmap -sP 192.168.1.0/24                 # Network scan
+netstat -tunl                           # Open ports
+```
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    NETWORK OPERATIONS API MASTERY PATH                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+     🌱 BEGINNER                    🌿 INTERMEDIATE                  🌳 ADVANCED
+     ──────────────────             ──────────────────              ──────────────────
+     
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  WiFi Info      │───────────▶│  Connection    │───────────▶│  Network        │
+     │  Basic Query    │            │  Analysis       │            │  Troubleshooting│
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  WiFi Scan      │───────────▶│  Security       │───────────▶│  Penetration    │
+     │  Basic          │            │  Assessment     │            │  Testing        │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  IP Address     │───────────▶│  Network        │───────────▶│  Network        │
+     │  Basics         │            │  Diagnostics    │            │  Administration │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Telephony      │───────────▶│  Cell Tower     │───────────▶│  Mobile         │
+     │  Device Info    │            │  Analysis       │            │  Forensics      │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     🏆 MASTERY CHECKPOINTS:
+     
+     □ Level 1: Query WiFi connection information
+     □ Level 2: Enable/disable WiFi programmatically
+     □ Level 3: Scan and analyze nearby networks
+     □ Level 4: Perform network security assessment
+     □ Level 5: Use network diagnostic tools
+     □ Level 6: Create WiFi security auditor script
+     □ Level 7: Build network monitoring system
+     
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     ⏱️ ESTIMATED TIME TO MASTERY: 5-7 Hours Practice
+     
+     📚 PREREQUISITES: Chapters 1-19 (All previous API chapters)
+     
+     🎯 NEXT STEPS: Notifications & Dialogs APIs (Chapter 21)
+```
+
+---
+
+## 🔧 API COMPARISON TABLE
+
+| API | Capability | Root Required | Android Version | Output Format |
+|-----|------------|---------------|-----------------|---------------|
+| `termux-wifi-connectioninfo` | WiFi connection details | ❌ No | 5.0+ | JSON |
+| `termux-wifi-enable` | WiFi on/off | ❌ No | 5.0+ | None |
+| `termux-wifi-scaninfo` | Network scanning | ❌ No | 5.0+ | JSON Array |
+| `termux-telephony-deviceinfo` | SIM/IMEI info | ❌ No | 5.0+ | JSON |
+| `termux-telephony-cellinfo` | Cell tower data | ❌ No | 5.0+ | JSON |
+| `ip` commands | Network interfaces | ❌ No | 5.0+ | Text |
+| `nmap` | Port scanning | ❌ No | 5.0+ | Text |
+
+### WiFi Security Levels
+
+| Security | Capabilities Flag | Risk Level | Recommendation |
+|----------|-------------------|------------|----------------|
+| WPA3 | WPA3-SAE | ✅ Secure | Safe to connect |
+| WPA2-PSK | WPA2-PSK-CCMP | ✅ Good | Safe to connect |
+| WPA-PSK | WPA-PSK | ⚠️ Weak | Use VPN |
+| WEP | WEP | ❌ Vulnerable | Avoid |
+| Open | ESS only | ❌ No security | Avoid or use VPN |
+| WPS | WPS | ⚠️ Vulnerable | Disable WPS |
+
+---
+
+## 🚀 PRACTICAL PROJECT CHALLENGES
+
+### Challenge 1: WiFi Security Auditor 🔒
+
+**Objective:** Create a comprehensive WiFi security auditing tool.
+
+**Requirements:**
+- Scan all nearby networks
+- Analyze security protocols
+- Identify vulnerable networks (WEP, WPS, Open)
+- Generate security report
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create WiFi auditor
+REPORT_FILE="wifi_audit_$(date +%Y%m%d).txt"
+
+# TODO: Scan networks
+# TODO: Analyze security
+# TODO: Identify risks
+# TODO: Generate report
+# TODO: Show notification with summary
+```
+
+**Expected Output:** Comprehensive security report of nearby networks.
+
+---
+
+### Challenge 2: Network Monitor Dashboard 📊
+
+**Objective:** Build a continuous network monitoring system.
+
+**Requirements:**
+- Monitor WiFi connection status
+- Track signal strength changes
+- Alert on connection drops
+- Log network events
+
+**Starter Code:**
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import time
+
+# TODO: Implement network monitor
+# 1. Get initial WiFi state
+# 2. Loop and monitor changes
+# 3. Track RSSI changes
+# 4. Alert on disconnection
+# 5. Log events with timestamps
+```
+
+**Expected Output:** Real-time network monitoring with alerts.
+
+---
+
+### Challenge 3: Network Info Dashboard 📱
+
+**Objective:** Create a comprehensive network information display.
+
+**Requirements:**
+- Show all network interfaces
+- Display internal and external IPs
+- Show WiFi and mobile data info
+- Calculate network statistics
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create network dashboard
+# 1. WiFi information
+# 2. Public IP
+# 3. Network interfaces
+# 4. Signal strength
+# 5. Data usage (if available)
+```
+
+**Expected Output:** Complete network status display in terminal.
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **SSID** | Service Set Identifier - WiFi network name |
+| **BSSID** | Basic Service Set Identifier - Router MAC address |
+| **RSSI** | Received Signal Strength Indicator (dBm) |
+| **WPA** | WiFi Protected Access - Security protocol |
+| **WEP** | Wired Equivalent Privacy - Deprecated security |
+| **WPS** | WiFi Protected Setup - Vulnerable PIN method |
+| **MIMO** | Multiple Input Multiple Output |
+| **Channel** | WiFi frequency band (1-13 for 2.4GHz) |
+| **Gateway** | Network exit point (router IP) |
+| **DNS** | Domain Name System - URL to IP translation |
+| **DHCP** | Dynamic Host Configuration Protocol |
+| **NAT** | Network Address Translation |
+
+### Signal Strength Reference
+
+| RSSI Range | Quality | Bars | Use Case |
+|------------|---------|------|----------|
+| -30 to -50 | Excellent | 4/4 | HD streaming |
+| -50 to -60 | Good | 3/4 | Video calls |
+| -60 to -70 | Fair | 2/4 | Web browsing |
+| -70 to -80 | Weak | 1/4 | Basic connectivity |
+| Below -80 | Very Poor | 0/4 | Unreliable |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How Network APIs Relate to Real-World Development
+
+**Network Administration:**
+- Network monitoring and troubleshooting
+- WiFi site surveys and optimization
+- Connection management automation
+
+**Security Testing:**
+- Wireless security assessments
+- Network penetration testing
+- Vulnerability scanning
+
+**Mobile Development:**
+- Network-aware applications
+- Connection status handling
+- Offline/online synchronization
+
+### Career Paths Using These Skills
+
+| Role | Relevance | Salary Range (India) |
+|------|-----------|---------------------|
+| Network Administrator | Direct application | ₹4-15 LPA |
+| Security Analyst | Wireless security | ₹6-25 LPA |
+| DevOps Engineer | Network automation | ₹7-28 LPA |
+| Android Developer | Network APIs | ₹6-25 LPA |
+| IoT Developer | Connected devices | ₹5-20 LPA |
+
+### Skills Roadmap
+
+```
+Current Chapter (Network APIs)
+         │
+         ├──▶ Network Administration
+         │         │
+         │         └──▶ Network Engineer
+         │
+         ├──▶ Wireless Security
+         │         │
+         │         └──▶ Security Analyst
+         │
+         ├──▶ Network Programming
+         │         │
+         │         └──▶ Network Developer
+         │
+         └──▶ Mobile Networking
+                   │
+                   └──▶ Mobile App Developer
+```
+
+---
+
+## ⚠️ PERMISSION REQUIREMENTS TABLE
+
+| API Command | Required Permission | How to Grant | Notes |
+|-------------|---------------------|--------------|-------|
+| `termux-wifi-connectioninfo` | ACCESS_FINE_LOCATION | First run prompt | Android 10+ requires location |
+| `termux-wifi-enable` | ACCESS_FINE_LOCATION | First run prompt | May need location on Android 10+ |
+| `termux-wifi-scaninfo` | ACCESS_FINE_LOCATION | First run prompt | Required for scan results |
+| `termux-telephony-deviceinfo` | READ_PHONE_STATE | First run prompt | For IMEI/SIM info |
+| `termux-telephony-cellinfo` | ACCESS_FINE_LOCATION | First run prompt | For cell tower data |
+
+### Permission Setup
+
+```bash
+# Trigger location permission prompt
+termux-location
+
+# Trigger phone permission prompt
+termux-telephony-deviceinfo
+
+# Verify permissions
+dumpsys package com.termux.api | grep "location\|phone"
+```
+
+### Troubleshooting
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| WiFi info empty | Location permission missing | Grant location permission |
+| Scan returns empty | Location services off | Enable location in settings |
+| IMEI returns null | Android 10+ restriction | Expected behavior on newer Android |
+| MAC shows 02:00:00... | Privacy feature | Normal on Android 10+ |
+| Can't toggle WiFi | Missing permission | Grant location permission |
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Always check WiFi is connected before calling `termux-wifi-connectioninfo` to avoid errors in scripts.

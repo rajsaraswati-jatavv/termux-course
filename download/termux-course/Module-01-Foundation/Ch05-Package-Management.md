@@ -3230,6 +3230,704 @@ echo "Log saved to: $LOG"
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Diagram 1: Package Management Flow
+
+```mermaid
+flowchart TD
+    A[📦 Need a Package] --> B{Update Repository?}
+    B -->|Yes| C[pkg update]
+    B -->|No| D[Search Package]
+    
+    C --> D
+    D --> E[pkg search keyword]
+    E --> F{Found?}
+    
+    F -->|No| G[Try Alternative]
+    F -->|Yes| H[Check Details]
+    
+    G --> E
+    H --> I[pkg show package]
+    I --> J{Install?}
+    
+    J -->|Yes| K[pkg install package]
+    J -->|No| L[Search Different]
+    
+    K --> M{Success?}
+    M -->|Yes| N[✅ Package Ready]
+    M -->|No| O[Fix Dependencies]
+    
+    O --> P[apt --fix-broken install]
+    P --> K
+    
+    L --> E
+    
+    style A fill:#4CAF50,color:#fff
+    style N fill:#2196F3,color:#fff
+    style O fill:#f44336,color:#fff
+```
+
+### Diagram 2: Package Manager Hierarchy
+
+```mermaid
+graph TB
+    subgraph Users["👤 User Layer"]
+        U1[Beginner: pkg commands]
+        U2[Advanced: apt commands]
+        U3[Expert: dpkg commands]
+    end
+    
+    subgraph Wrappers["📦 Wrapper Layer"]
+        W1[pkg - Termux wrapper]
+        W2[apt - APT frontend]
+    end
+    
+    subgraph Core["⚙️ Core Layer"]
+        C1[dpkg - Package Manager]
+        C2[apt-get - Low-level APT]
+    end
+    
+    subgraph Repos["🌐 Repositories"]
+        R1[Main Repository]
+        R2[Games Repository]
+        R3[Science Repository]
+        R4[X11 Repository]
+        R5[Root Repository]
+    end
+    
+    U1 --> W1
+    U2 --> W2
+    U3 --> C1
+    
+    W1 --> W2
+    W2 --> C2
+    C2 --> C1
+    
+    C1 --> R1
+    C1 --> R2
+    C1 --> R3
+    C1 --> R4
+    C1 --> R5
+    
+    style Users fill:#E91E63,color:#fff
+    style Core fill:#607D8B,color:#fff
+```
+
+### Diagram 3: Repository Architecture
+
+```mermaid
+flowchart LR
+    subgraph Local["📱 Local System"]
+        L1[Package Cache]
+        L2[Installed Packages]
+        L3[Package Database]
+    end
+    
+    subgraph Remote["🌐 Remote Servers"]
+        R1[packages.termux.dev]
+        R2[termux-main]
+        R3[termux-games]
+        R4[termux-science]
+        R5[termux-x11]
+    end
+    
+    L1 <-->|Download/Cache| R1
+    R1 --> R2
+    R1 --> R3
+    R1 --> R4
+    R1 --> R5
+    
+    L1 -->|Install| L2
+    L2 -->|Track| L3
+    
+    style Local fill:#4CAF50,color:#fff
+    style Remote fill:#2196F3,color:#fff
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+| Command | Syntax | Example | Output |
+|---------|--------|---------|--------|
+| `pkg update` | `pkg update` | `pkg update` | Updates package list |
+| `pkg upgrade` | `pkg upgrade -y` | `pkg upgrade -y` | Upgrades all packages |
+| `pkg install` | `pkg install <package>` | `pkg install python` | Installs package |
+| `pkg uninstall` | `pkg uninstall <package>` | `pkg uninstall python` | Removes package |
+| `pkg search` | `pkg search <keyword>` | `pkg search nmap` | Searches for packages |
+| `pkg show` | `pkg show <package>` | `pkg show python` | Shows package details |
+| `pkg list-installed` | `pkg list-installed` | `pkg list-installed` | Lists installed packages |
+| `pkg list-all` | `pkg list-all` | `pkg list-all` | Lists all available |
+| `pkg clean` | `pkg clean` | `pkg clean` | Clears package cache |
+| `pkg autoclean` | `pkg autoclean` | `pkg autoclean` | Removes obsolete cache |
+| `pkg hold` | `pkg hold <package>` | `pkg hold python` | Prevents auto-update |
+| `pkg unhold` | `pkg unhold <package>` | `pkg unhold python` | Allows auto-update |
+| `apt install` | `apt install <package>` | `apt install python` | APT install |
+| `apt remove` | `apt remove <package>` | `apt remove python` | APT remove |
+| `apt purge` | `apt purge <package>` | `apt purge python` | Removes with config |
+| `apt autoremove` | `apt autoremove` | `apt autoremove` | Removes unused deps |
+| `apt --fix-broken` | `apt --fix-broken install` | `apt --fix-broken install` | Fixes dependency issues |
+| `apt-mark hold` | `apt-mark hold <pkg>` | `apt-mark hold python` | Marks package held |
+| `dpkg -i` | `dpkg -i <file.deb>` | `dpkg -i package.deb` | Installs .deb file |
+| `dpkg -l` | `dpkg -l` | `dpkg -l` | Lists all packages |
+| `dpkg -r` | `dpkg -r <package>` | `dpkg -r python` | Removes package |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    🎯 YOUR LEARNING JOURNEY - MODULE 1                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ✅ CHAPTER 1     [████████████████████████████████] 100% COMPLETE      │
+│     Termux Introduction & Installation                                  │
+│                                                                          │
+│  ✅ CHAPTER 2     [████████████████████████████████] 100% COMPLETE      │
+│     First Setup & Configuration                                         │
+│                                                                          │
+│  ✅ CHAPTER 3     [████████████████████████████████] 100% COMPLETE      │
+│     Linux Basics Part 1                                                 │
+│                                                                          │
+│  ✅ CHAPTER 4     [████████████████████████████████] 100% COMPLETE      │
+│     Linux Basics Part 2                                                 │
+│                                                                          │
+│  ✅ CHAPTER 5     [████████████████████████████████] 100% COMPLETE      │
+│     Package Management                                                  │
+│     ↓ Module 1 COMPLETE! Ready for Module 2!                            │
+│                                                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│  📊 OVERALL MODULE 1 PROGRESS: [████████████████████] 100% 🎉           │
+│  🏆 ALL Skills Unlocked! Foundation Module Complete!                    │
+│  🔑 Next Module: Essential Tools - Git, Editors, Network Tools          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### 🎉 CONGRATULATIONS! Module 1 Complete!
+```
+┌──────────────────────────────────────────────────────────────┐
+│  🏆 MODULE 1 MASTERY ACHIEVED!                              │
+│                                                              │
+│  ✅ Termux Installation & Setup                             │
+│  ✅ Shell Configuration & Customization                     │
+│  ✅ File System Navigation                                  │
+│  ✅ File Operations (cp, mv, rm, mkdir)                     │
+│  ✅ Text Processing (grep, find, sort, etc.)                │
+│  ✅ Permissions Management (chmod, chown)                   │
+│  ✅ Package Management (pkg, apt, dpkg)                     │
+│  ✅ Pipes & Redirection                                     │
+│                                                              │
+│  📊 Total Skills Acquired: 50+ commands                     │
+│  ⏱️ Estimated Learning Time: 5-7 hours                      │
+│                                                              │
+│  🚀 Ready for Module 2: Essential Tools!                    │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+### Package Managers Comparison
+
+| Feature | pkg | apt | dpkg |
+|---------|-----|-----|------|
+| **User Level** | Beginner | Intermediate | Advanced |
+| **Ease of Use** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **Features** | Basic | Comprehensive | Low-level |
+| **Dependency Resolution** | ✅ Automatic | ✅ Automatic | ❌ Manual |
+| **Repository Support** | ✅ Yes | ✅ Yes | ❌ No |
+| **Install .deb Files** | ❌ No | ❌ No | ✅ Yes |
+| **Best For** | Daily use | Advanced operations | Manual installs |
+
+### Repository Types
+
+| Repository | Contents | Size | Purpose |
+|------------|----------|------|---------|
+| **main** | Core packages, languages, tools | ~1500 packages | Essential tools |
+| **games** | Games and entertainment | ~100 packages | Fun & games |
+| **science** | Scientific tools, data analysis | ~200 packages | Research & analysis |
+| **x11** | GUI applications | ~300 packages | Desktop apps |
+| **root** | Root-requiring tools | ~100 packages | System tools |
+
+### Common Package Categories
+
+| Category | Popular Packages | Use Case |
+|----------|-----------------|----------|
+| **Languages** | python, nodejs, golang, rust | Programming |
+| **Editors** | vim, nano, neovim, emacs | Text editing |
+| **Development** | git, cmake, make, gcc | Building software |
+| **Networking** | curl, wget, nmap, netcat | Network tools |
+| **Security** | hydra, john, sqlmap | Penetration testing |
+| **Databases** | sqlite, mysql, postgres | Data storage |
+| **Media** | ffmpeg, imagemagick | Media processing |
+
+---
+
+## 🚀 PRACTICAL CHALLENGES
+
+### Challenge 1: Development Environment Setup
+
+**Difficulty:** ⭐ Beginner  
+**Time:** 10 minutes  
+**Objective:** Set up a complete Python development environment
+
+**Task:**
+1. Update package repositories
+2. Install Python, pip, and git
+3. Install essential Python libraries
+4. Verify the installation
+
+**Hint:** Use pkg install for multiple packages at once
+
+<details>
+<summary>🔓 Click to reveal solution</summary>
+
+```bash
+# Step 1: Update repositories
+pkg update && pkg upgrade -y
+
+# Step 2: Install Python development tools
+pkg install python git nano -y
+
+# Step 3: Verify installations
+echo "=== Python Version ==="
+python --version
+
+echo -e "\n=== pip Version ==="
+pip --version
+
+echo -e "\n=== Git Version ==="
+git --version
+
+# Step 4: Install essential Python packages
+pip install requests beautifulsoup4 pytest
+
+# Step 5: Verify Python packages
+pip list
+
+# Step 6: Create a test project
+mkdir -p ~/projects/python_test
+cd ~/projects/python_test
+
+# Create test script
+cat > test_env.py << 'EOF'
+#!/usr/bin/env python3
+import sys
+import requests
+
+print("=" * 40)
+print("Python Development Environment Test")
+print("=" * 40)
+print(f"Python: {sys.version}")
+print(f"Executable: {sys.executable}")
+print(f"Requests version: {requests.__version__}")
+
+# Test network request
+try:
+    response = requests.get("https://httpbin.org/get")
+    print(f"Network test: HTTP {response.status_code}")
+except Exception as e:
+    print(f"Network error: {e}")
+
+print("=" * 40)
+print("✅ Environment setup complete!")
+EOF
+
+# Run the test
+python test_env.py
+
+# Check total installed packages
+echo -e "\n=== Total Installed Packages ==="
+pkg list-installed | wc -l
+```
+
+**Success Criteria:**
+- ✅ Python 3.x installed
+- ✅ pip working
+- ✅ Git installed
+- ✅ Python packages installed
+- ✅ Test script runs successfully
+
+</details>
+
+---
+
+### Challenge 2: Package Management Script
+
+**Difficulty:** ⭐⭐ Intermediate  
+**Time:** 15 minutes  
+**Objective:** Create a script to backup and restore installed packages
+
+**Task:**
+1. Create a script that lists all installed packages
+2. Save the list to a file
+3. Create a restore function that reinstalls from the list
+4. Test the backup and restore process
+
+**Hint:** Use pkg list-installed and bash loops
+
+<details>
+<summary>🔓 Click to reveal solution</summary>
+
+```bash
+# Create package management script
+cat > ~/pkg_manager.sh << 'EOF'
+#!/data/data/com.termux/files/usr/bin/bash
+
+# Package Manager Utility Script
+# By T3rmuxk1ng
+
+BACKUP_DIR="$HOME/package_backups"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+# Function to backup installed packages
+backup_packages() {
+    echo "📦 Backing up installed packages..."
+    
+    mkdir -p "$BACKUP_DIR"
+    
+    # Get list of manually installed packages
+    pkg list-installed | cut -d'/' -f1 > "$BACKUP_DIR/packages_$TIMESTAMP.txt"
+    
+    # Count packages
+    local count=$(wc -l < "$BACKUP_DIR/packages_$TIMESTAMP.txt")
+    
+    echo "✅ Backup complete!"
+    echo "📁 File: $BACKUP_DIR/packages_$TIMESTAMP.txt"
+    echo "📊 Total packages: $count"
+    
+    # Show first 10 packages
+    echo -e "\nFirst 10 packages:"
+    head -10 "$BACKUP_DIR/packages_$TIMESTAMP.txt"
+}
+
+# Function to restore packages from backup
+restore_packages() {
+    local backup_file="$1"
+    
+    if [ -z "$backup_file" ]; then
+        echo "Available backups:"
+        ls -lt "$BACKUP_DIR"/*.txt 2>/dev/null | head -5
+        echo ""
+        read -p "Enter backup filename: " backup_file
+        backup_file="$BACKUP_DIR/$backup_file"
+    fi
+    
+    if [ ! -f "$backup_file" ]; then
+        echo "❌ Backup file not found: $backup_file"
+        return 1
+    fi
+    
+    echo "📦 Restoring packages from: $backup_file"
+    echo "⚠️  This will install packages. Continue? (y/N)"
+    read -r confirm
+    
+    if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
+        echo "Cancelled."
+        return 0
+    fi
+    
+    # Update first
+    pkg update -y
+    
+    # Install packages
+    local count=0
+    local total=$(wc -l < "$backup_file")
+    
+    while IFS= read -r package; do
+        count=$((count + 1))
+        echo "[$count/$total] Installing: $package"
+        pkg install "$package" -y 2>/dev/null
+    done < "$backup_file"
+    
+    echo -e "\n✅ Restore complete! Installed $count packages."
+}
+
+# Function to show package statistics
+show_stats() {
+    echo "📊 Package Statistics"
+    echo "===================="
+    echo "Total installed: $(pkg list-installed | wc -l)"
+    echo "Cache size: $(du -sh $PREFIX/var/cache/apt/archives 2>/dev/null | cut -f1)"
+    echo ""
+    echo "Largest packages:"
+    dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -rn | head -10 | \
+        awk '{printf "%s MB\t%s\n", $1/1024, $2}'
+}
+
+# Function to clean up
+cleanup() {
+    echo "🧹 Cleaning package cache..."
+    pkg clean
+    pkg autoclean
+    echo "✅ Cleanup complete!"
+}
+
+# Main menu
+case "$1" in
+    backup)
+        backup_packages
+        ;;
+    restore)
+        restore_packages "$2"
+        ;;
+    stats)
+        show_stats
+        ;;
+    clean)
+        cleanup
+        ;;
+    *)
+        echo "Package Manager Utility"
+        echo ""
+        echo "Usage: $0 {backup|restore|stats|clean}"
+        echo ""
+        echo "Commands:"
+        echo "  backup  - Create backup of installed packages"
+        echo "  restore - Restore packages from backup"
+        echo "  stats   - Show package statistics"
+        echo "  clean   - Clean package cache"
+        ;;
+esac
+EOF
+
+# Make executable
+chmod +x ~/pkg_manager.sh
+
+# Test the script
+echo "Testing backup function:"
+~/pkg_manager.sh backup
+
+echo -e "\nTesting stats function:"
+~/pkg_manager.sh stats
+
+echo -e "\nListing backup files:"
+ls -la ~/package_backups/
+```
+
+**Success Criteria:**
+- ✅ Script creates backup file
+- ✅ Backup contains package list
+- ✅ Stats function works
+- ✅ Restore function prepared
+
+</details>
+
+---
+
+### Challenge 3: Repository Management
+
+**Difficulty:** ⭐⭐⭐ Advanced  
+**Time:** 20 minutes  
+**Objective:** Add and manage multiple repositories, then install packages from each
+
+**Task:**
+1. Add X11 repository for GUI tools
+2. Add science repository
+3. List packages from each repository
+4. Install one tool from each repository
+5. Create a repository status report
+
+**Hint:** Use pkg install x11-repo and science-repo
+
+<details>
+<summary>🔓 Click to reveal solution</summary>
+
+```bash
+# Step 1: Check current repositories
+echo "=== Current Repositories ==="
+cat $PREFIX/etc/apt/sources.list
+echo ""
+
+# Step 2: Add X11 repository (for GUI apps)
+echo "📦 Adding X11 repository..."
+pkg install x11-repo -y
+
+# Step 3: Add science repository
+echo "📦 Adding science repository..."
+pkg install science-repo -y
+
+# Step 4: Add games repository (optional)
+echo "📦 Adding games repository..."
+pkg install game-repo -y
+
+# Step 5: Update after adding repositories
+echo "🔄 Updating package lists..."
+pkg update
+
+# Step 6: Check updated repositories
+echo -e "\n=== Updated Repository List ==="
+cat $PREFIX/etc/apt/sources.list
+ls $PREFIX/etc/apt/sources.list.d/
+
+# Step 7: List packages from each repository
+echo -e "\n=== Sample Packages from Each Repository ==="
+
+echo -e "\n--- Main Repository (Python related) ---"
+pkg search python | head -10
+
+echo -e "\n--- X11 Repository (GUI tools) ---"
+pkg search xterm 2>/dev/null || echo "Search x11 packages"
+apt-cache search --names-only '.*' | grep -E "^x11-|^xterm|^firefox" | head -10
+
+echo -e "\n--- Science Repository (Data tools) ---"
+pkg search numpy 2>/dev/null || echo "Search science packages"
+apt-cache search --names-only '.*' | grep -E "^r-|^julia|^numpy" | head -10
+
+# Step 8: Install sample packages from each repository
+echo -e "\n📦 Installing sample packages..."
+
+# From main repository
+pkg install tree -y
+
+# From science repository (if available)
+# pkg install python-numpy -y
+
+# Step 9: Create repository status report
+cat > ~/repo_report.txt << 'EOF'
+═══════════════════════════════════════════════════════════
+              TERMUX REPOSITORY STATUS REPORT
+═══════════════════════════════════════════════════════════
+EOF
+
+echo "Report Generated: $(date)" >> ~/repo_report.txt
+echo "" >> ~/repo_report.txt
+
+echo "=== ACTIVE REPOSITORIES ===" >> ~/repo_report.txt
+cat $PREFIX/etc/apt/sources.list >> ~/repo_report.txt
+echo "" >> ~/repo_report.txt
+
+echo "=== REPOSITORY PACKAGES ===" >> ~/repo_report.txt
+for repo in $PREFIX/etc/apt/sources.list.d/*.list; do
+    if [ -f "$repo" ]; then
+        echo "--- $(basename $repo) ---" >> ~/repo_report.txt
+        cat "$repo" >> ~/repo_report.txt
+        echo "" >> ~/repo_report.txt
+    fi
+done
+
+echo "=== PACKAGE STATISTICS ===" >> ~/repo_report.txt
+echo "Total installed: $(pkg list-installed | wc -l)" >> ~/repo_report.txt
+echo "Cache size: $(du -sh $PREFIX/var/cache/apt/archives 2>/dev/null | cut -f1)" >> ~/repo_report.txt
+echo "Available packages: $(pkg list-all | wc -l)" >> ~/repo_report.txt
+
+echo "" >> ~/repo_report.txt
+echo "═══════════════════════════════════════════════════════════" >> ~/repo_report.txt
+
+# Display report
+echo -e "\n=== REPOSITORY REPORT ==="
+cat ~/repo_report.txt
+
+# Step 10: Cleanup function
+cleanup_repos() {
+    echo "Removing extra repositories..."
+    pkg uninstall x11-repo science-repo game-repo -y 2>/dev/null
+    pkg update
+    echo "Repositories cleaned."
+}
+
+# Uncomment to remove extra repositories:
+# cleanup_repos
+```
+
+**Success Criteria:**
+- ✅ Added X11 repository
+- ✅ Added science repository
+- ✅ Updated package lists
+- ✅ Can search packages from each repo
+- ✅ Created status report
+
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition | Example |
+|------|------------|---------|
+| **Package** | Compressed software archive | `python_3.11.0_aarch64.deb` |
+| **Repository** | Server storing packages | `packages.termux.dev` |
+| **Package Manager** | Tool to manage packages | `pkg`, `apt`, `dpkg` |
+| **pkg** | Termux's simplified package manager | `pkg install python` |
+| **apt** | Advanced Package Tool | `apt install python` |
+| **dpkg** | Debian package manager (low-level) | `dpkg -i package.deb` |
+| **Dependency** | Required package for another | `libffi` for `python` |
+| **.deb file** | Debian package format | `package.deb` |
+| **Cache** | Downloaded package storage | `$PREFIX/var/cache/apt/archives` |
+| **Hold** | Prevent package from updating | `apt-mark hold python` |
+| **Purge** | Remove package with config | `apt purge python` |
+| **Autoremove** | Remove unused dependencies | `apt autoremove` |
+| **Sources List** | Repository configuration | `$PREFIX/etc/apt/sources.list` |
+| **Mirror** | Alternative repository server | Country-specific mirrors |
+| **Signature** | Package authenticity verification | GPG signatures |
+| **Prefix** | Installation directory | `$PREFIX` = `/data/data/com.termux/files/usr` |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Job Roles That Use These Skills
+
+| Role | Description | Package Skills Needed |
+|------|-------------|----------------------|
+| **DevOps Engineer** | Manages CI/CD pipelines | Package automation, dependency management |
+| **System Administrator** | Maintains servers | Repository management, updates |
+| **Security Engineer** | Implements security | Tool installation, vulnerability patching |
+| **Backend Developer** | Builds server apps | Development environment setup |
+| **Platform Engineer** | Builds platforms | Package creation, distribution |
+| **SRE** | Maintains reliability | Automated updates, monitoring tools |
+| **Build Engineer** | Manages builds | Dependency resolution, packaging |
+| **Cloud Engineer** | Works with cloud | Container images, package management |
+
+### Salary Expectations (India)
+
+| Role | Entry Level (₹/year) | Mid Level (₹/year) | Senior (₹/year) |
+|------|---------------------|-------------------|-----------------|
+| DevOps Engineer | 5-8 LPA | 12-20 LPA | 25-45 LPA |
+| System Administrator | 3-5 LPA | 6-12 LPA | 12-20 LPA |
+| Security Engineer | 5-10 LPA | 12-22 LPA | 25-45 LPA |
+| Platform Engineer | 6-10 LPA | 15-25 LPA | 30-50 LPA |
+| SRE | 6-10 LPA | 15-25 LPA | 30-50 LPA |
+
+### Certifications to Pursue
+
+| Certification | Provider | Focus Area | Difficulty |
+|--------------|----------|------------|------------|
+| **RHCE** | Red Hat | Linux Administration | Advanced |
+| **AWS DevOps Pro** | Amazon | Cloud DevOps | Advanced |
+| **CKA** | CNCF | Kubernetes Admin | Intermediate |
+| **LFCS** | Linux Foundation | Linux System Admin | Intermediate |
+| **Docker Certified** | Docker | Containerization | Intermediate |
+
+### Package Management Mastery Path
+
+```
+Basic Package Commands (pkg install, update)
+         ↓
+    Dependency Management
+    (apt, apt-mark)
+         ↓
+    ┌────┴────┐
+    ↓         ↓
+Advanced    Source
+Operations  Installation
+(dpkg)      (build from source)
+    ↓         ↓
+    └────┬────┘
+         ↓
+   Package Creation
+   (Creating .deb files)
+         ↓
+   DevOps / Platform Engineering
+         ↓
+   Infrastructure as Code
+```
+
+---
+
 ## 💡 PRO TIPS - MASTER THESE!
 
 > 💡 **Pro Tip #1:** Always run `pkg update` before installing new packages to get the latest versions.

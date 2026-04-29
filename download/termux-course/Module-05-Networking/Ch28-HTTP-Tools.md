@@ -3116,6 +3116,343 @@ echo -e "\n=== TEST COMPLETE ==="
 
 ---
 
+## 📊 MERMAID DIAGRAMS - HTTP Communication
+
+### HTTP Request-Response Cycle
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    
+    Client->>Server: HTTP Request
+    Note over Client,Server: GET /api HTTP/1.1<br/>Headers<br/>Body
+    Server-->>Client: HTTP Response
+    Note over Client,Server: 200 OK<br/>Headers<br/>Body
+    
+    Note over Client,Server: Complete Transaction
+```
+
+### HTTP Methods Flow
+```mermaid
+graph TB
+    A[HTTP Request] --> B{Method?}
+    B -->|GET| C[Retrieve Data]
+    B -->|POST| D[Create Resource]
+    B -->|PUT| E[Update Resource]
+    B -->|DELETE| F[Delete Resource]
+    B -->|PATCH| G[Partial Update]
+    
+    C --> H[Response]
+    D --> H
+    E --> H
+    F --> H
+    G --> H
+    
+    style A fill:#E91E63
+    style H fill:#4CAF50
+```
+
+### HTTP Status Code Categories
+```mermaid
+graph LR
+    A[Status Codes] --> B[2xx Success]
+    A --> C[3xx Redirect]
+    A --> D[4xx Client Error]
+    A --> E[5xx Server Error]
+    
+    B --> B1[200 OK]
+    B --> B2[201 Created]
+    
+    C --> C1[301 Moved]
+    C --> C2[302 Found]
+    
+    D --> D1[400 Bad Request]
+    D --> D2[401 Unauthorized]
+    D --> D3[404 Not Found]
+    
+    E --> E1[500 Server Error]
+    E --> E2[503 Unavailable]
+    
+    style B fill:#4CAF50
+    style D fill:#FF9800
+    style E fill:#FF5722
+```
+
+### API Testing Workflow
+```mermaid
+graph LR
+    A[API Endpoint] --> B[GET Request]
+    B --> C{Status?}
+    C -->|200| D[Parse Response]
+    C -->|Error| E[Debug]
+    D --> F[POST/PUT Test]
+    F --> G[Validate Response]
+    E --> B
+    G --> H[Document]
+    
+    style A fill:#2196F3
+    style H fill:#E91E63
+```
+
+---
+
+## ⚡ HTTP TOOLS COMMAND CHEATSHEET
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `curl URL` | GET request | `curl https://api.example.com` |
+| `curl -I URL` | Headers only | `curl -I https://google.com` |
+| `curl -X POST URL` | POST request | `curl -X POST https://api.example.com` |
+| `curl -d DATA URL` | Send data | `curl -d "name=test" https://api.example.com` |
+| `curl -H "Header" URL` | Custom header | `curl -H "Authorization: Bearer token" URL` |
+| `curl -u user:pass URL` | Basic auth | `curl -u admin:secret https://api.example.com` |
+| `curl -b "cookie" URL` | Send cookie | `curl -b "session=abc" https://example.com` |
+| `curl -c file URL` | Save cookies | `curl -c cookies.txt https://example.com` |
+| `curl -L URL` | Follow redirects | `curl -L https://example.com` |
+| `curl -s URL` | Silent mode | `curl -s https://api.example.com` |
+| `curl -k URL` | Ignore SSL | `curl -k https://self-signed.local` |
+| `curl -x proxy URL` | Use proxy | `curl -x http://proxy:8080 https://example.com` |
+| `http URL` | httpie GET | `http https://api.example.com` |
+| `http POST URL data=value` | httpie POST | `http POST https://api.example.com name=test` |
+| `http -a user:pass URL` | httpie auth | `http -a admin:secret https://api.example.com` |
+| `httping URL` | HTTP ping | `httping -c 5 https://example.com` |
+| `httpx -u URL` | Quick probe | `httpx -u https://example.com` |
+| `jq '.'` | Parse JSON | `cat data.json \| jq '.'` |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION - HTTP Tools
+
+```mermaid
+graph TD
+    START[Start: HTTP Basics] --> CURL[curl Fundamentals]
+    CURL --> GET[GET Requests]
+    CURL --> POST[POST/PUT/DELETE]
+    POST --> HEADERS[Headers & Auth]
+    GET --> HEADERS
+    HEADERS --> HTTPIE[httpie Tool]
+    HTTPIE --> API[API Testing]
+    API --> JQ[jq JSON Processing]
+    JQ --> HTTPX[httpx Recon]
+    HTTPX --> EXPERT[HTTP Expert]
+    
+    style START fill:#4CAF50
+    style EXPERT fill:#E91E63
+    style API fill:#2196F3
+```
+
+### HTTP Tools Skills Progression
+
+| Level | Skills to Master | Estimated Time |
+|-------|------------------|----------------|
+| 🌱 Beginner | Basic curl, GET requests | 1-2 weeks |
+| 🌿 Intermediate | POST, headers, authentication | 2-3 weeks |
+| 🌳 Advanced | API testing, jq, automation | 3-4 weeks |
+| 🏆 Expert | Security testing, performance testing | Ongoing |
+
+---
+
+## 🔧 TOOL COMPARISON TABLE - HTTP Clients
+
+| Tool | Purpose | Pros | Cons | Alternatives |
+|------|---------|------|------|--------------|
+| **curl** | General HTTP client | Versatile, everywhere | Complex syntax | wget, httpie |
+| **wget** | Downloads | Recursive, mirroring | No POST | curl, aria2 |
+| **httpie** | User-friendly HTTP | Clean syntax, colors | Not installed by default | curl |
+| **httpx** | Security recon | Fast, bulk testing | Go required | curl, httpie |
+| **httping** | Latency testing | HTTP-layer ping | Limited features | curl |
+| **jq** | JSON processing | Powerful filtering | Learning curve | python -m json |
+| **postman** | API testing | GUI, collections | Not CLI | curl, httpie |
+
+---
+
+## 🚀 PRACTICAL HTTP CHALLENGES
+
+### Challenge 1: API Exploration
+**Objective:** Explore a public REST API
+```bash
+# Using JSONPlaceholder API
+
+# Step 1: Get all posts
+curl -s https://jsonplaceholder.typicode.com/posts | jq '.[0:3]'
+
+# Step 2: Get specific post
+curl -s https://jsonplaceholder.typicode.com/posts/1 | jq
+
+# Step 3: Create new post
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Test","body":"Content","userId":1}' \
+  https://jsonplaceholder.typicode.com/posts
+
+# Step 4: Update post
+curl -X PUT \
+  -H "Content-Type: application/json" \
+  -d '{"id":1,"title":"Updated"}' \
+  https://jsonplaceholder.typicode.com/posts/1
+
+# Step 5: Delete post
+curl -X DELETE https://jsonplaceholder.typicode.com/posts/1
+```
+**Success Criteria:** Successfully perform all CRUD operations
+
+---
+
+### Challenge 2: Header Analysis
+**Objective:** Analyze HTTP headers of popular websites
+```bash
+# Step 1: Get headers
+curl -I https://google.com
+curl -I https://github.com
+curl -I https://youtube.com
+
+# Step 2: Compare security headers
+curl -I https://example.com | grep -i "x-frame-options\|x-xss-protection\|content-security-policy"
+
+# Step 3: Check server technology
+curl -I https://example.com | grep -i "server\|x-powered-by"
+
+# Step 4: Analyze cookies
+curl -I https://amazon.com | grep -i "set-cookie"
+```
+**Success Criteria:** Document security headers for 3 websites
+
+---
+
+### Challenge 3: Authenticated Request
+**Objective:** Make authenticated API requests
+```bash
+# Using a test API
+
+# Step 1: Basic Auth
+curl -u username:password https://httpbin.org/basic-auth/username/password
+
+# Step 2: Bearer Token
+curl -H "Authorization: Bearer YOUR_TOKEN" https://api.example.com/user
+
+# Step 3: API Key in header
+curl -H "X-API-Key: YOUR_KEY" https://api.example.com/data
+
+# Step 4: With httpie
+http -a username:password https://httpbin.org/basic-auth/username/password
+```
+**Success Criteria:** Successfully authenticate to 2 different methods
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY - HTTP
+
+| Term | Definition |
+|------|------------|
+| **HTTP** | Hypertext Transfer Protocol - web communication |
+| **HTTPS** | HTTP Secure - encrypted with TLS/SSL |
+| **Method** | Request type (GET, POST, PUT, DELETE, etc.) |
+| **Header** | Metadata in HTTP request/response |
+| **Body** | Data payload in request/response |
+| **Status Code** | 3-digit response status indicator |
+| **Cookie** | Client-side data storage |
+| **Session** | Server-side state management |
+| **REST** | Representational State Transfer - API design |
+| **API** | Application Programming Interface |
+| **JSON** | JavaScript Object Notation - data format |
+| **XML** | eXtensible Markup Language - data format |
+| **Authentication** | Verifying identity |
+| **Authorization** | Verifying permissions |
+| **Bearer Token** | Access token format |
+| **JWT** | JSON Web Token - self-contained token |
+| **CORS** | Cross-Origin Resource Sharing |
+| **User-Agent** | Client identification header |
+| **Content-Type** | Media type indicator |
+| **Cache-Control** | Caching directives |
+
+---
+
+## 💼 CAREER INSIGHTS - Web Development & API
+
+### Career Paths Using HTTP Skills
+```
+Entry Level ─────────────────────────────────────────────────────────────────────► Expert
+    │                    │                    │                    │
+Web Developer      API Developer       Backend Engineer    Principal Engineer
+    │                    │                    │                    │
+  $50-70k             $80-120k           $130-180k            $180-300k+
+```
+
+### HTTP Skills in Different Roles
+| Role | HTTP Skills Needed |
+|------|-------------------|
+| **Web Developer** | API consumption, debugging, testing |
+| **API Developer** | REST design, documentation, security |
+| **DevOps Engineer** | API monitoring, load testing |
+| **Security Tester** | API security testing, vulnerability analysis |
+| **QA Engineer** | API testing, automation |
+
+### Tools to Master for API Development
+- **Testing:** Postman, curl, httpie
+- **Documentation:** Swagger/OpenAPI
+- **Monitoring:** Prometheus, Grafana
+- **Security:** OWASP ZAP, Burp Suite
+
+---
+
+## 🔐 SECURITY CONSIDERATIONS - HTTP Security
+
+### HTTP Security Best Practices
+
+```mermaid
+graph TB
+    A[HTTP Security] --> B[Use HTTPS]
+    A --> C[Validate Input]
+    A --> D[Sanitize Output]
+    A --> E[Secure Headers]
+    A --> F[Authentication]
+    
+    E --> E1[X-Frame-Options]
+    E --> E2[X-XSS-Protection]
+    E --> E3[Content-Security-Policy]
+    E --> E4[Strict-Transport-Security]
+    
+    style A fill:#E91E63
+    style B fill:#4CAF50
+    style E fill:#2196F3
+```
+
+### Security Headers Checklist
+| Header | Purpose | Recommended Value |
+|--------|---------|-------------------|
+| **Strict-Transport-Security** | Force HTTPS | `max-age=31536000; includeSubDomains` |
+| **X-Frame-Options** | Prevent clickjacking | `DENY` or `SAMEORIGIN` |
+| **X-XSS-Protection** | XSS filter | `1; mode=block` |
+| **Content-Security-Policy** | Control resources | Custom policy |
+| **X-Content-Type-Options** | Prevent MIME sniffing | `nosniff` |
+| **Referrer-Policy** | Control referrer | `strict-origin-when-cross-origin` |
+
+### Common HTTP Vulnerabilities
+| Vulnerability | Description | Mitigation |
+|--------------|-------------|------------|
+| **MITM** | Man-in-the-middle attack | HTTPS, HSTS |
+| **XSS** | Cross-site scripting | Input validation, CSP |
+| **CSRF** | Cross-site request forgery | CSRF tokens |
+| **Injection** | SQL/Command injection | Parameterized queries |
+| **Broken Auth** | Weak authentication | MFA, secure tokens |
+
+### API Security Testing
+```bash
+# Check for information disclosure
+curl -v https://api.example.com 2>&1 | grep -i "server\|x-powered"
+
+# Test authentication
+curl -I https://api.example.com/protected
+
+# Check CORS
+curl -H "Origin: https://evil.com" -I https://api.example.com
+
+# Rate limiting test
+for i in {1..100}; do curl -s -o /dev/null -w "%{http_code}\n" https://api.example.com; done
+```
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Use `curl -sL` combination in scripts - silent mode with redirect following. This is the most common pattern for automated HTTP requests.

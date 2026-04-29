@@ -2496,6 +2496,561 @@ After completing this chapter, you should be able to:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Diagram 1: Styling Architecture
+
+```mermaid
+graph TD
+    A[Termux App] --> B[Styling Components]
+    
+    B --> C[Termux:Styling App]
+    B --> D[Configuration Files]
+    B --> E[Shell Customization]
+    
+    C --> C1[Color Schemes]
+    C --> C2[Fonts]
+    
+    D --> D1[~/.termux/termux.properties]
+    D --> D2[~/.termux/colors.properties]
+    D --> D3[~/.termux/font.ttf]
+    
+    E --> E1[~/.bashrc - PS1]
+    E --> E2[Aliases]
+    E --> E3[Functions]
+    
+    C1 --> F[Visual Theme]
+    C2 --> F
+    D1 --> G[Behavior Settings]
+    D2 --> F
+    E1 --> H[Custom Prompt]
+    
+    F --> I[Beautiful Terminal!]
+    G --> I
+    H --> I
+    
+    style A fill:#9C27B0,color:#fff
+    style F fill:#4CAF50,color:#fff
+    style I fill:#E91E63,color:#fff
+```
+
+### Diagram 2: Theme Selection Flow
+
+```mermaid
+flowchart TD
+    A[Choose Theme] --> B{Usage Context?}
+    
+    B -->|Daytime/Outdoor| C[Light Theme]
+    B -->|Night/Coding| D[Dark Theme]
+    B -->|Hacking/Pentest| E[Hacker Theme]
+    
+    C --> F[Solarized Light]
+    C --> G[GitHub Light]
+    
+    D --> H[Dracula]
+    D --> I[Monokai]
+    D --> J[Nord]
+    D --> K[One Half Dark]
+    
+    E --> L[Matrix Green]
+    E --> M[Custom Hacker]
+    
+    F --> N[Apply via Styling App]
+    G --> N
+    H --> N
+    I --> N
+    J --> N
+    K --> N
+    L --> O[Custom colors.properties]
+    M --> O
+    
+    N --> P[termux-reload-settings]
+    O --> P
+    
+    P --> Q[✅ Theme Applied!]
+    
+    style A fill:#673AB7,color:#fff
+    style Q fill:#4CAF50,color:#fff
+```
+
+### Diagram 3: PS1 Prompt Building
+
+```mermaid
+graph LR
+    A[PS1 Components] --> B[Color Codes]
+    A --> C[Information]
+    A --> D[Special Characters]
+    
+    B --> B1[\[\033[0;32m\] - Green]
+    B --> B2[\[\033[1;34m\] - Bold Blue]
+    B --> B3[\[\033[0m\] - Reset]
+    
+    C --> C1[\u - Username]
+    C --> C2[\h - Hostname]
+    C --> C3[\w - Working Dir]
+    C --> C4[\t - Time]
+    C --> C5[\d - Date]
+    
+    D --> D1[$ - Prompt]
+    D --> D2[@ - Separator]
+    D --> D3[: - Separator]
+    
+    B1 --> E[Build Prompt]
+    C1 --> E
+    D2 --> E
+    C2 --> E
+    D3 --> E
+    C3 --> E
+    B3 --> E
+    D1 --> E
+    
+    E --> F[\[\033[0;32m\]\u@\h:\[\033[0m\]\w\$]
+    
+    style A fill:#9C27B0,color:#fff
+    style F fill:#4CAF50,color:#fff
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+### Theme & Color Commands
+
+| Action | Command/Location | Description |
+|--------|-----------------|-------------|
+| Open style menu | Long press → Style | Quick access to themes |
+| Reload settings | `termux-reload-settings` | Apply configuration changes |
+| View current colors | `~/.termux/colors.properties` | Custom color file |
+| Set font size | `termux.font.size=14` | In termux.properties |
+
+### ANSI Color Codes
+
+| Color | Normal Code | Bold Code |
+|-------|-------------|-----------|
+| Black | `\033[0;30m` | `\033[1;30m` |
+| Red | `\033[0;31m` | `\033[1;31m` |
+| Green | `\033[0;32m` | `\033[1;32m` |
+| Yellow | `\033[0;33m` | `\033[1;33m` |
+| Blue | `\033[0;34m` | `\033[1;34m` |
+| Magenta | `\033[0;35m` | `\033[1;35m` |
+| Cyan | `\033[0;36m` | `\033[1;36m` |
+| White | `\033[0;37m` | `\033[1;37m` |
+| Reset | `\033[0m` | - |
+
+### PS1 Special Characters
+
+| Code | Shows | Example |
+|------|-------|---------|
+| `\u` | Username | `u0_a123` |
+| `\h` | Hostname | `localhost` |
+| `\w` | Full path | `/data/.../home` |
+| `\W` | Current dir | `~` |
+| `\d` | Date | `Mon Jan 01` |
+| `\t` | Time 24h | `12:00:00` |
+| `\@` | Time AM/PM | `12:00 PM` |
+| `\n` | Newline | - |
+| `\$` | $ or # | `$` |
+| `\!` | History # | `42` |
+
+### termux.properties Options
+
+| Property | Values | Description |
+|----------|--------|-------------|
+| `termux.font.size` | Number | Font size in points |
+| `bell-character` | ignore/vibrate/beep | Bell behavior |
+| `fullscreen` | true/false | Fullscreen mode |
+| `terminal-cursor-style` | block/underline/bar | Cursor type |
+| `terminal-cursor-blink` | true/false | Blinking cursor |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                        🗺️ YOUR TERMUX JOURNEY 🗺️                              ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║   Module 1        Module 2          Module 3         Module 4+               ║
+║   ┌──────┐       ┌──────┐         ┌──────┐         ┌──────┐                  ║
+║   │ Intro│ ───►  │Enviro│ ───►    │Script│ ───►    │Advanc│                  ║
+║   │      │       │nment │         │ing   │         │ed    │                  ║
+║   └──────┘       └──────┘         └──────┘         └──────┘                  ║
+║                                                                               ║
+║   ✓ Done         📍 YOU ARE      Coming Next    Future Goal                  ║
+║                  HERE NOW!                                                     ║
+║                     ▼                                                         ║
+║                                                                               ║
+║   ═══════════════════════════════════════════════════════════════════════    ║
+║                                                                               ║
+║   CURRENT PROGRESS - Module 2: Environment                                    ║
+║   ┌───────────────────────────────────────────────────────────────────────┐  ║
+║   │                                                                       │  ║
+║   │   Ch6: File System    ████████████████████ 100% ✓                     │  ║
+║   │   Ch7: Env Variables  ████████████████████ 100% ✓                     │  ║
+║   │   Ch8: Text Editors   ████████████████████ 100% ✓                     │  ║
+║   │   Ch9: Styling        ████████████████████ 100% ✅ CURRENT            │  ║
+║   │   Ch10: API Setup     ░░░░░░░░░░░░░░░░░░░░   0%                       │  ║
+║   │                                                                       │  ║
+║   └───────────────────────────────────────────────────────────────────────┘  ║
+║                                                                               ║
+║   SKILLS UNLOCKED:                                                            ║
+║   📂 Directory Navigation    ✓                                                ║
+║   🔍 File Searching          ✓                                                ║
+║   🔧 Environment Variables   ✓                                                ║
+║   📝 Text Editing            ✓                                                ║
+║   🎨 Terminal Styling        ✅                                               ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+### Color Scheme Comparison
+
+| Theme | Background | Best For | Eye Strain |
+|-------|------------|----------|------------|
+| **Dracula** | Dark Purple | Night coding | Low |
+| **Monokai** | Dark Gray | General coding | Low |
+| **Solarized Dark** | Dark Blue-Gray | Long sessions | Very Low |
+| **Solarized Light** | Light Cream | Daytime/outdoor | Low |
+| **Nord** | Dark Blue | Minimalists | Low |
+| **Gruvbox** | Dark Brown | Retro lovers | Low |
+| **GitHub Dark** | Very Dark | GitHub users | Low |
+| **Matrix/Hacker** | Black | Aesthetic | Medium |
+
+### Font Comparison
+
+| Font | Style | Best For | Ligatures |
+|------|-------|----------|-----------|
+| **JetBrains Mono** | Modern | Coding | ✅ Yes |
+| **Fira Code** | Modern | Coding | ✅ Yes |
+| **Hack** | Classic | General | ❌ No |
+| **Source Code Pro** | Clean | Professional | ❌ No |
+| **DejaVu Sans Mono** | Classic | Unicode | ❌ No |
+| **Ubuntu Mono** | Rounded | Readability | ❌ No |
+
+### Customization Methods
+
+| Method | Difficulty | Flexibility | Persistence |
+|--------|------------|-------------|-------------|
+| **Styling App** | ⭐ Easy | Medium | ✅ Yes |
+| **termux.properties** | ⭐⭐ Medium | High | ✅ Yes |
+| **colors.properties** | ⭐⭐⭐ Advanced | Very High | ✅ Yes |
+| **PS1 in .bashrc** | ⭐⭐ Medium | Very High | ✅ Yes |
+| **export PS1** | ⭐ Easy | High | ❌ Session only |
+
+---
+
+## 🚀 PRACTICAL CHALLENGES
+
+### Challenge 1: Theme Hopper 🎨
+**Difficulty:** ⭐ Beginner
+**Time:** 5 minutes
+**Task:** Try at least 5 different color schemes and 3 different fonts using the Termux:Styling app, then settle on your favorite combination.
+
+**Hint:** Long press anywhere on the Termux screen and select "Style".
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+**Steps:**
+```bash
+# 1. Long press on Termux screen
+# 2. Tap "Style" option
+# 3. Tap "COLOR" and try these themes:
+#    - Dracula (popular dark theme)
+#    - Monokai (classic coding theme)
+#    - Nord (minimal blue theme)
+#    - Solarized Dark (eye-friendly)
+#    - Gruvbox (warm retro theme)
+
+# 4. Tap "FONT" and try:
+#    - JetBrains Mono (modern, readable)
+#    - Fira Code (with ligatures)
+#    - Hack (classic monospace)
+
+# 5. Find your favorite combination!
+```
+
+**Recommended Combinations:**
+- **Night Coder**: Dracula + JetBrains Mono
+- **Professional**: Solarized Dark + Source Code Pro
+- **Minimal**: Nord + Hack
+- **Hacker**: Custom green theme + Powerline font
+
+</details>
+
+---
+
+### Challenge 2: Custom Theme Creator 🎯
+**Difficulty:** ⭐⭐ Intermediate
+**Time:** 10 minutes
+**Task:** Create a custom "Cyberpunk" color theme with neon colors:
+- Dark background (almost black)
+- Cyan accent for text
+- Magenta for directories
+- Yellow for special text
+- Neon green for success
+
+**Hint:** Create `~/.termux/colors.properties` with hex color codes.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+# Create the .termux directory if it doesn't exist
+mkdir -p ~/.termux
+
+# Create custom colors file
+nano ~/.termux/colors.properties
+```
+
+```bash
+# Cyberpunk Theme - ~/.termux/colors.properties
+
+# Background - Almost black with blue tint
+background=#0a0a12
+
+# Foreground - Cyan-ish white
+foreground=#00d4ff
+
+# Cursor - Bright cyan
+cursor=#00ffff
+
+# Standard ANSI Colors
+color0=#0a0a12      # Black (same as background)
+color1=#ff0055      # Red - Neon pink
+color2=#00ff88      # Green - Neon green
+color3=#ffff00      # Yellow - Neon yellow
+color4=#0088ff      # Blue - Electric blue
+color5=#ff00ff      # Magenta - Neon magenta
+color6=#00ffff      # Cyan - Neon cyan
+color7=#ffffff      # White
+
+# Bright ANSI Colors
+color8=#444455      # Bright Black - Gray
+color9=#ff4466      # Bright Red
+color10=#66ff99     # Bright Green
+color11=#ffff66     # Bright Yellow
+color12=#4488ff     # Bright Blue
+color13=#ff66ff     # Bright Magenta
+color14=#66ffff     # Bright Cyan
+color15=#ffffff     # Bright White
+```
+
+```bash
+# Apply the theme
+termux-reload-settings
+
+# Or restart Termux
+```
+
+**Test with:**
+```bash
+# Test colors
+echo -e "\033[0;31mRed\033[0m"
+echo -e "\033[0;32mGreen\033[0m"
+echo -e "\033[0;33mYellow\033[0m"
+echo -e "\033[0;34mBlue\033[0m"
+echo -e "\033[0;35mMagenta\033[0m"
+echo -e "\033[0;36mCyan\033[0m"
+```
+
+</details>
+
+---
+
+### Challenge 3: Power Prompt Builder 🚀
+**Difficulty:** ⭐⭐⭐ Advanced
+**Time:** 15 minutes
+**Task:** Create an advanced PS1 prompt that shows:
+- Username in green
+- Hostname in blue
+- Current directory in yellow
+- Git branch (if in a git repo) in magenta
+- Time in cyan
+- Exit status indicator (green ✓ or red ✗)
+
+**Hint:** Use functions and command substitution in .bashrc.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+# Add to ~/.bashrc
+
+# ===== POWER PROMPT CONFIGURATION =====
+
+# Colors
+GREEN='\[\033[01;32m\]'
+BLUE='\[\033[01;34m\]'
+YELLOW='\[\033[01;33m\]'
+MAGENTA='\[\033[01;35m\]'
+CYAN='\[\033[01;36m\]'
+RED='\[\033[01;31m\]'
+RESET='\[\033[00m\]'
+
+# Git branch function
+parse_git_branch() {
+    local branch
+    branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
+    if [ -n "$branch" ]; then
+        echo "($branch)"
+    fi
+}
+
+# Exit status indicator
+exit_status() {
+    if [ $? -eq 0 ]; then
+        echo "✓"
+    else
+        echo "✗"
+    fi
+}
+
+# Build the prompt
+build_prompt() {
+    local exit_code=$?
+    
+    # Save exit code
+    local status
+    if [ $exit_code -eq 0 ]; then
+        status="${GREEN}✓${RESET}"
+    else
+        status="${RED}✗${RESET}"
+    fi
+    
+    # Git info
+    local git_info
+    git_info=$(parse_git_branch)
+    if [ -n "$git_info" ]; then
+        git_info=" ${MAGENTA}${git_info}${RESET}"
+    fi
+    
+    # Time
+    local time_str="${CYAN}\t${RESET}"
+    
+    # Build PS1
+    PS1="${status} ${time_str} ${GREEN}\u${RESET}@${BLUE}\h${RESET}:${YELLOW}\w${RESET}${git_info}\n\$ "
+}
+
+# Set PROMPT_COMMAND to build prompt
+PROMPT_COMMAND=build_prompt
+
+# Quick reload alias
+alias reload='source ~/.bashrc && echo "✅ Prompt reloaded!"'
+```
+
+**After saving:**
+```bash
+source ~/.bashrc
+```
+
+**Test it:**
+```bash
+# Normal command
+ls
+
+# Failed command
+ls /nonexistent
+
+# Git repo test
+mkdir -p ~/test_git && cd ~/test_git
+git init
+# You should see (master) or (main) in prompt
+```
+
+**Alternative: Simple Power Prompt**
+```bash
+# Simpler version for beginners
+export PS1='\[\033[01;32m\]\u\[\033[00m\]@\[\033[01;34m\]\h\[\033[00m\]:\[\033[01;33m\]\w\[\033[00m\]\$ '
+```
+
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **Color Scheme** | A set of colors for terminal background, foreground, and syntax highlighting |
+| **ANSI Color** | Standard 16-color palette (8 standard + 8 bright) for terminal output |
+| **True Color** | 24-bit color support (16.7 million colors) in modern terminals |
+| **PS1** | Primary prompt string variable in Bash |
+| **PROMPT_COMMAND** | Command executed before each prompt display |
+| **Ligature** | Special character combination in fonts (e.g., => becomes ⇒) |
+| **Monospace Font** | Font where all characters have equal width (required for terminals) |
+| **Powerline** | Status line with special arrow/glyph characters |
+| **termux.properties** | Configuration file for Termux behavior |
+| **colors.properties** | Custom color scheme file |
+| **Hex Color** | Color code in hexadecimal format (e.g., #FF5733) |
+| **RGB** | Red-Green-Blue color model |
+| **Cursor Style** | Visual appearance of text cursor (block, underline, bar) |
+| **Bell Character** | ASCII BEL (0x07) - triggers notification/vibration |
+| **Syntax Highlighting** | Color-coded display of programming language elements |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How Terminal Customization Helps Your Career
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                 CUSTOMIZATION SKILLS IN TECH CAREERS                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   💻  SOFTWARE DEVELOPER                                                │
+│   ├── Productive development environment                                │
+│   ├── Consistent setup across machines                                  │
+│   ├── Quick visual debugging (colors)                                   │
+│   └── Salary Range: $70,000 - $180,000/year                             │
+│                                                                          │
+│   🖥️  DEVOPS ENGINEER                                                   │
+│   ├── Server management efficiency                                      │
+│   ├── Visual status indicators                                          │
+│   ├── Environment-specific prompts                                      │
+│   └── Salary Range: $80,000 - $160,000/year                             │
+│                                                                          │
+│   🛡️  SECURITY PROFESSIONAL                                             │
+│   ├── Pentest environment setup                                         │
+│   ├── Tool-specific configurations                                      │
+│   ├── Visual workflow optimization                                      │
+│   └── Salary Range: $70,000 - $150,000/year                             │
+│                                                                          │
+│   ☁️  SYSTEM ADMINISTRATOR                                              │
+│   ├── Multi-server management                                           │
+│   ├── Status indicators in prompts                                      │
+│   ├── Environment differentiation                                       │
+│   └── Salary Range: $60,000 - $120,000/year                             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills You're Building
+
+| Skill | Career Value | Real-World Application |
+|-------|--------------|------------------------|
+| Color customization | ⭐⭐⭐ | Visual differentiation, accessibility |
+| Prompt design | ⭐⭐⭐⭐ | Productivity, status awareness |
+| Font selection | ⭐⭐ | Readability, long coding sessions |
+| Configuration management | ⭐⭐⭐⭐ | Dotfiles, environment setup |
+| ANSI escape codes | ⭐⭐⭐ | Scripting, output formatting |
+
+### Next Steps After This Chapter
+
+1. **Create dotfiles repo** - Backup your configurations on GitHub
+2. **Try Oh My Zsh** - Advanced shell customization framework
+3. **Explore Powerline** - Advanced status line for shells
+4. **Learn tmux** - Terminal multiplexer for advanced workflows
+5. **Customize Vim/Neovim** - Editor theming and plugins
+
+---
+
 
 ## 💡 PRO TIPS BOX
 

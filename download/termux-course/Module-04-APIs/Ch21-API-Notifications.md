@@ -1721,6 +1721,426 @@ Before moving to Chapter 22, verify:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### 1. Notification System Architecture
+
+```mermaid
+flowchart TB
+    subgraph Termux Commands
+        A[termux-notification]
+        B[termux-notification-remove]
+        C[termux-toast]
+        D[termux-dialog]
+    end
+    
+    subgraph Android System
+        E[NotificationManager]
+        F[Notification Channel]
+        G[AlertDialog]
+        H[Toast Service]
+    end
+    
+    subgraph User Interface
+        I[Status Bar]
+        J[Notification Drawer]
+        K[Dialog Popup]
+        L[Toast Message]
+    end
+    
+    A --> E --> F --> I
+    A --> J
+    B --> E
+    C --> H --> L
+    D --> G --> K
+    
+    style A fill:#4CAF50,color:#fff
+    style C fill:#2196F3,color:#fff
+    style D fill:#FF5722,color:#fff
+```
+
+### 2. Notification Action Flow
+
+```mermaid
+sequenceDiagram
+    participant S as Script
+    participant T as Termux
+    participant NM as NotificationManager
+    participant U as User
+    
+    S->>T: termux-notification --id "alert" --button1 "Action"
+    T->>NM: Create notification with PendingIntent
+    NM->>U: Display notification
+    U->>NM: Tap button
+    NM->>T: Execute pending intent
+    T->>S: Run button action command
+    S-->>T: Continue execution
+    
+    Note over T,NM: Notification persists until dismissed or removed
+```
+
+### 3. Dialog Input Flow
+
+```mermaid
+flowchart LR
+    A[termux-dialog] --> B{Dialog Type}
+    B -->|--text| C[Text Input]
+    B -->|--password| D[Hidden Input]
+    B -->|--confirm| E[Yes/No Dialog]
+    B -->|--checkbox| F[Multi-Select]
+    B -->|--radio| G[Single Select]
+    B -->|--spinner| H[Dropdown]
+    B -->|--date| I[Date Picker]
+    B -->|--time| J[Time Picker]
+    
+    C --> K[JSON Output]
+    D --> K
+    E --> K
+    F --> K
+    G --> K
+    H --> K
+    I --> K
+    J --> K
+    
+    style A fill:#4CAF50,color:#fff
+    style K fill:#2196F3,color:#fff
+```
+
+---
+
+## ⚡ API COMMAND REFERENCE CARD
+
+| API Command | Purpose | Permissions | Example |
+|-------------|---------|-------------|---------|
+| `termux-notification` | Create notification | None | `termux-notification --title "Alert" --content "Message"` |
+| `termux-notification --ongoing` | Persistent notification | None | `termux-notification --id "proc" --ongoing` |
+| `termux-notification --sound` | Notification with sound | None | `termux-notification --sound --title "Done!"` |
+| `termux-notification --vibrate` | Notification with vibration | None | `termux-notification --vibrate 500` |
+| `termux-notification --button1` | Notification with action | None | `termux-notification --button1 "OK" --button1-action "cmd"` |
+| `termux-notification-remove` | Remove notification | None | `termux-notification-remove --id "proc"` |
+| `termux-toast` | Show toast message | None | `termux-toast "Hello World"` |
+| `termux-toast --long` | Long duration toast | None | `termux-toast --long "Long message"` |
+| `termux-dialog --text` | Text input dialog | None | `termux-dialog --title "Name" --text "Enter:"` |
+| `termux-dialog --password` | Password input | None | `termux-dialog --password "Password:"` |
+| `termux-dialog --confirm` | Yes/No dialog | None | `termux-dialog --confirm "Continue?"` |
+| `termux-dialog --checkbox` | Multi-select dialog | None | `termux-dialog --checkbox "Opt1\|Opt2\|Opt3"` |
+| `termux-dialog --radio` | Single-select dialog | None | `termux-dialog --radio "A\|B\|C"` |
+| `termux-dialog --date` | Date picker | None | `termux-dialog --date` |
+| `termux-dialog --time` | Time picker | None | `termux-dialog --time` |
+
+### Quick Syntax Reference
+
+```bash
+# Notification
+termux-notification --title "T" --content "M" [--id ID] [--sound] [--vibrate MS]
+                    [--priority high/low/max/min] [--ongoing] [--led-color HEX]
+                    [--button1 "Text" --button1-action "command"]
+
+# Remove Notification
+termux-notification-remove --id ID
+
+# Toast
+termux-toast [--long] [--bgcolor HEX] [--textcolor HEX] [--position top/middle/bottom] "message"
+
+# Dialog
+termux-dialog --title "T" [--text|--password|--number|--confirm|--checkbox|--radio|--spinner|--date|--time] "prompt"
+```
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                NOTIFICATIONS & DIALOGS API MASTERY PATH                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+     🌱 BEGINNER                    🌿 INTERMEDIATE                  🌳 ADVANCED
+     ──────────────────             ──────────────────              ──────────────────
+     
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Basic          │───────────▶│  Notifications  │───────────▶│  Notification   │
+     │  Notification   │            │  with Actions   │            │  System         │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Simple Toast   │───────────▶│  Styled Toast   │───────────▶│  Toast          │
+     │  Messages       │            │  Messages       │            │  System         │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Text Input     │───────────▶│  Multiple      │───────────▶│  Form          │
+     │  Dialog         │            │  Dialog Types   │            │  Builder       │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Basic Alert    │───────────▶│  Alert System   │───────────▶│  Monitoring    │
+     │  Script         │            │  with Dialogs   │            │  Dashboard     │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     🏆 MASTERY CHECKPOINTS:
+     
+     □ Level 1: Create basic notification with title/content
+     □ Level 2: Add sound, vibration, LED to notifications
+     □ Level 3: Create notification with action buttons
+     □ Level 4: Build and manage ongoing notifications
+     □ Level 5: Use all dialog types effectively
+     □ Level 6: Create complete alert system
+     □ Level 7: Build notification-based automation
+     
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     ⏱️ ESTIMATED TIME TO MASTERY: 4-5 Hours Practice
+     
+     📚 PREREQUISITES: Chapters 1-20 (All previous API chapters)
+     
+     🎯 NEXT STEPS: Contacts & SMS APIs (Chapter 22)
+```
+
+---
+
+## 🔧 API COMPARISON TABLE
+
+| API | Capability | Root Required | Android Version | Output Format |
+|-----|------------|---------------|-----------------|---------------|
+| `termux-notification` | Create notification | ❌ No | 5.0+ | None |
+| `termux-notification-remove` | Remove notification | ❌ No | 5.0+ | None |
+| `termux-toast` | Quick message | ❌ No | 5.0+ | None |
+| `termux-dialog` | User input dialogs | ❌ No | 5.0+ | JSON |
+
+### Notification Priority Levels
+
+| Priority | Description | Heads-up | Position |
+|----------|-------------|----------|----------|
+| max | Critical alert | ✅ Always | Top of list |
+| high | Important | ✅ If screen on | Near top |
+| default | Normal | ❌ No | Normal |
+| low | Minor update | ❌ No | Minimized |
+| min | Background | ❌ No | Collapsed |
+
+### Dialog Types Comparison
+
+| Type | Input Method | Return Format | Use Case |
+|------|--------------|---------------|----------|
+| text | Free text | `{"text": "...", "code": 0}` | Names, messages |
+| password | Hidden text | `{"text": "...", "code": 0}` | Passwords |
+| number | Numeric | `{"text": "123", "code": 0}` | Quantities |
+| confirm | Yes/No buttons | `{"text": "yes/no", "code": 0}` | Confirmations |
+| checkbox | Multi-select | `{"text": [...], "code": 0}` | Multiple choices |
+| radio | Single-select | `{"text": "...", "code": 0}` | Single choice |
+| spinner | Dropdown | `{"text": "...", "code": 0}` | Dropdown selection |
+| date | Date picker | `{"text": "YYYY-MM-DD", "code": 0}` | Date input |
+| time | Time picker | `{"text": "HH:MM", "code": 0}` | Time input |
+
+---
+
+## 🚀 PRACTICAL PROJECT CHALLENGES
+
+### Challenge 1: Reminder System ⏰
+
+**Objective:** Create a complete reminder system with notifications.
+
+**Requirements:**
+- Set reminders with title and time
+- Store multiple reminders
+- Trigger notifications at scheduled time
+- Allow dismissal
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create reminder system
+REMINDERS_DIR=~/.reminders
+
+# TODO: Add reminder function
+# TODO: List reminders function
+# TODO: Trigger reminders with notifications
+# TODO: Handle dismissal
+```
+
+**Expected Output:** Working reminder system with persistent storage.
+
+---
+
+### Challenge 2: Interactive Configuration Tool ⚙️
+
+**Objective:** Build a configuration tool using all dialog types.
+
+**Requirements:**
+- Collect user preferences via dialogs
+- Use appropriate dialog types for each setting
+- Save configuration to file
+- Show confirmation toast
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create config tool
+CONFIG_FILE=~/.config
+
+# TODO: Text input for name
+# TODO: Number input for timeout
+# TODO: Radio for theme selection
+# TODO: Checkbox for feature toggles
+# TODO: Confirm to save
+# TODO: Show success toast
+```
+
+**Expected Output:** Interactive configuration saving to file.
+
+---
+
+### Challenge 3: Alert Dashboard 📊
+
+**Objective:** Build a monitoring dashboard with notifications.
+
+**Requirements:**
+- Monitor system resources
+- Alert on threshold breach
+- Notification actions for response
+- Log all alerts
+
+**Starter Code:**
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import time
+
+# TODO: Create alert dashboard
+# 1. Monitor battery/CPU/storage
+# 2. Check thresholds
+# 3. Send notifications with actions
+# 4. Log alerts to file
+# 5. Handle button actions
+```
+
+**Expected Output:** Monitoring system with actionable alerts.
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **Notification Channel** | Android 8.0+ grouping for notifications |
+| **PendingIntent** | Intent that executes later (for notification actions) |
+| **Heads-up** | Banner notification that appears over apps |
+| **Ongoing** | Persistent notification (can't be swiped) |
+| **Toast** | Short-lived popup message at bottom of screen |
+| **AlertDialog** | Modal dialog requiring user interaction |
+| **Notification ID** | Unique identifier for notification management |
+| **LED** | Notification light indicator |
+| **Priority** | Notification importance level |
+| **BigTextStyle** | Expanded notification with more text |
+| **InboxStyle** | Notification showing multiple lines |
+
+### Notification LED Colors
+
+| Color | Hex Code | Common Use |
+|-------|----------|------------|
+| Red | FF0000 | Error, critical |
+| Green | 00FF00 | Success |
+| Blue | 0000FF | Information |
+| Yellow | FFFF00 | Warning |
+| White | FFFFFF | Default |
+| Cyan | 00FFFF | Special |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How Notification APIs Relate to Real-World Development
+
+**Mobile App Development:**
+- Push notifications for engagement
+- Alert systems for user feedback
+- Dialog flows for user onboarding
+
+**Automation Systems:**
+- Background task notifications
+- Monitoring alert systems
+- User interaction triggers
+
+**User Experience:**
+- Intuitive notification design
+- Non-intrusive alert systems
+- User preference management
+
+### Career Paths Using These Skills
+
+| Role | Relevance | Salary Range (India) |
+|------|-----------|---------------------|
+| Android Developer | Notification system design | ₹6-25 LPA |
+| UI/UX Designer | Alert/Dialog design | ₹5-18 LPA |
+| Automation Engineer | Alert systems | ₹5-20 LPA |
+| Product Manager | User engagement features | ₹8-30 LPA |
+| DevOps Engineer | Monitoring dashboards | ₹7-28 LPA |
+
+### Skills Roadmap
+
+```
+Current Chapter (Notifications & Dialogs)
+         │
+         ├──▶ Android Notification Development
+         │         │
+         │         └──▶ Android Developer
+         │
+         ├──▶ UX Alert Design
+         │         │
+         │         └──▶ UI/UX Designer
+         │
+         ├──▶ Monitoring Systems
+         │         │
+         │         └──▶ DevOps Engineer
+         │
+         └──▶ Automation Scripts
+                   │
+                   └──▶ Automation Engineer
+```
+
+---
+
+## ⚠️ PERMISSION REQUIREMENTS TABLE
+
+| API Command | Required Permission | How to Grant | Notes |
+|-------------|---------------------|--------------|-------|
+| `termux-notification` | POST_NOTIFICATIONS (Android 13+) | Auto-prompt | May need manual grant |
+| `termux-notification-remove` | None | N/A | No permission needed |
+| `termux-toast` | None | N/A | No permission needed |
+| `termux-dialog` | None | N/A | No permission needed |
+
+### Permission Setup
+
+```bash
+# Android 13+ notification permission
+# Settings > Apps > Termux > Notifications > Enable
+
+# Check notification permission
+dumpsys notification | grep -A5 "com.termux"
+
+# Test notification
+termux-notification --title "Test" --content "Permission check"
+```
+
+### Troubleshooting
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Notification not showing | Android 13+ permission | Grant notification permission |
+| Toast not appearing | Do Not Disturb mode | Disable DND |
+| Dialog returns null | User cancelled | Check code field in JSON |
+| LED not working | Device limitation | Some devices don't have LED |
+| Vibration not working | Haptic feedback off | Enable in settings |
+| Sound not playing | Silent mode | Check volume/notification sound |
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Use unique notification IDs for each notification to manage them individually with `termux-notification-remove`.

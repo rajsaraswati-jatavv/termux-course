@@ -2653,6 +2653,95 @@ KRACK (Key Reinstallation Attack):
 
 ---
 
+## 📊 MERMAID DIAGRAMS - WiFi Attack Flow
+
+```mermaid
+graph TD
+    A[Monitor Mode] --> B[Scan Networks]
+    B --> C[Target Selection]
+    C --> D{Attack Type?}
+    D -->|Handshake| E[Deauth + Capture]
+    D -->|WPS| F[WPS PIN Attack]
+    
+    E --> G[Crack Handshake]
+    F --> H[Crack WPS PIN]
+    
+    G --> I[Password Found]
+    H --> I
+```
+
+---
+
+## ⚡ TOOL CHEATSHEET
+
+| Command | Purpose |
+|---------|---------|
+| `airmon-ng start wlan0` | Monitor mode |
+| `airodump-ng wlan0mon` | Scan networks |
+| `aireplay-ng -0 5 -a MAC` | Deauth attack |
+| `aircrack-ng -w wordlist.cap` | Crack handshake |
+| `reaver -i wlan0mon -b MAC` | WPS attack |
+
+---
+
+## 🔧 TOOL COMPARISON
+
+| Tool | Purpose |
+|------|---------|
+| aircrack-ng | Suite |
+| wifite | Automated |
+| reaver | WPS attack |
+| Fern WiFi Cracker | GUI |
+
+---
+
+## 🚀 CHALLENGES
+
+1. Capture WPA handshake
+2. Crack with wordlist
+3. Audit your own WiFi
+
+⚠️ **LEGAL:** Only test YOUR WiFi!
+
+---
+
+## 📖 GLOSSARY
+
+| Term | Definition |
+|------|------------|
+| Monitor Mode | Packet capture mode |
+| Handshake | Auth negotiation |
+| Deauth | Disconnect attack |
+| WPS | WiFi Protected Setup |
+| BSSID | Router MAC |
+
+---
+
+## 💼 CAREER: Wireless Security
+
+**Salary:** $80K-$150K
+**Certs:** CWSP, OSCP
+
+---
+
+## ⚠️ LEGAL DISCLAIMER
+
+**WiFi hacking requires permission!**
+Unauthorized access is illegal.
+
+---
+
+## 🛡️ DEFENSIVE MEASURES
+
+| Measure | Purpose |
+|---------|---------|
+| WPA3 | Best encryption |
+| Disable WPS | Prevent attacks |
+| Strong password | Prevent cracking |
+| Guest network | Isolate devices |
+
+---
+
 ## ⚠️ SECURITY BEST PRACTICES
 
 ### ✅ DO's - WiFi Security Best Practices

@@ -3328,6 +3328,595 @@ grep -E " 4[0-9][0-9] " access.log | \
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Diagram 1: Text Processing Pipeline
+
+```mermaid
+flowchart LR
+    A[📄 Input File] --> B{Process Type}
+    
+    B -->|View| C[cat/head/tail]
+    B -->|Search| D[grep]
+    B -->|Find Files| E[find]
+    B -->|Count| F[wc]
+    B -->|Sort| G[sort]
+    B -->|Unique| H[uniq]
+    
+    C --> I[Output]
+    D --> I
+    E --> I
+    F --> I
+    G --> I
+    H --> I
+    
+    I --> J{Next Step?}
+    J -->|Pipe| K[More Processing]
+    J -->|Redirect| L[Save to File]
+    J -->|Display| M[Screen]
+    
+    K --> I
+    
+    style A fill:#4CAF50,color:#fff
+    style I fill:#2196F3,color:#fff
+    style K fill:#FF9800,color:#fff
+```
+
+### Diagram 2: Permission System
+
+```mermaid
+graph TB
+    subgraph Permissions["🔐 Permission System"]
+        R[Read r = 4]
+        W[Write w = 2]
+        X[Execute x = 1]
+    end
+    
+    subgraph Categories["👥 Categories"]
+        U[User/Owner]
+        G[Group]
+        O[Others]
+    end
+    
+    subgraph Examples["📋 Common Examples"]
+        E1["755 = rwxr-xr-x<br/>Scripts"]
+        E2["644 = rw-r--r--<br/>Files"]
+        E3["700 = rwx------<br/>Private"]
+        E4["777 = rwxrwxrwx<br/>Public (Dangerous)"]
+    end
+    
+    R --> U
+    W --> U
+    X --> U
+    
+    R --> G
+    W --> G
+    X --> G
+    
+    R --> O
+    W --> O
+    X --> O
+    
+    style Permissions fill:#9C27B0,color:#fff
+    style Categories fill:#2196F3,color:#fff
+```
+
+### Diagram 3: Pipes and Redirection
+
+```mermaid
+flowchart TB
+    subgraph Redirection["📤 Redirection"]
+        O1["command > file<br/>Overwrite"]
+        O2["command >> file<br/>Append"]
+        O3["command < file<br/>Input"]
+        O4["command 2> file<br/>Errors"]
+    end
+    
+    subgraph Pipes["🔗 Pipes"]
+        P1["cmd1 | cmd2<br/>Single Pipe"]
+        P2["cmd1 | cmd2 | cmd3<br/>Multiple Pipes"]
+        P3["cmd | tee file<br/>Split Output"]
+    end
+    
+    subgraph Examples["💡 Examples"]
+        E1["ls | grep txt"]
+        E2["cat file | sort | uniq"]
+        E3["find . -name '*.py' | xargs grep 'import'"]
+        E4["ps aux | grep python"]
+    end
+    
+    style Redirection fill:#E91E63,color:#fff
+    style Pipes fill:#00BCD4,color:#fff
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+| Command | Syntax | Example | Output |
+|---------|--------|---------|--------|
+| `cat` | `cat <file>` | `cat file.txt` | Displays file content |
+| `cat -n` | `cat -n <file>` | `cat -n script.py` | Shows content with line numbers |
+| `touch` | `touch <file>` | `touch newfile.txt` | Creates empty file |
+| `grep` | `grep "pattern" <file>` | `grep "error" log.txt` | Finds lines with pattern |
+| `grep -i` | `grep -i "pattern" <file>` | `grep -i "ERROR" log.txt` | Case-insensitive search |
+| `grep -r` | `grep -r "pattern" <dir>` | `grep -r "TODO" .` | Recursive search |
+| `grep -n` | `grep -n "pattern" <file>` | `grep -n "def" script.py` | Shows line numbers |
+| `grep -v` | `grep -v "pattern" <file>` | `grep -v "#" config.py` | Excludes matching lines |
+| `find` | `find <path> -name <pattern>` | `find . -name "*.txt"` | Finds files by name |
+| `find -type` | `find . -type f` | `find . -type d` | Finds files or directories |
+| `find -size` | `find . -size +1M` | `find . -size -100k` | Finds by size |
+| `chmod` | `chmod <mode> <file>` | `chmod 755 script.sh` | Changes permissions |
+| `chmod +x` | `chmod +x <file>` | `chmod +x script.sh` | Makes executable |
+| `chown` | `chown user:group <file>` | `chown root:root file` | Changes ownership |
+| `head` | `head -n <num> <file>` | `head -20 log.txt` | Shows first N lines |
+| `tail` | `tail -n <num> <file>` | `tail -20 log.txt` | Shows last N lines |
+| `tail -f` | `tail -f <file>` | `tail -f /var/log/syslog` | Follows file in real-time |
+| `wc` | `wc <file>` | `wc file.txt` | Counts lines, words, bytes |
+| `sort` | `sort <file>` | `sort names.txt` | Sorts lines alphabetically |
+| `uniq` | `uniq <file>` | `sort file | uniq` | Removes duplicate lines |
+| `diff` | `diff <file1> <file2>` | `diff old.txt new.txt` | Compares two files |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    🎯 YOUR LEARNING JOURNEY - MODULE 1                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ✅ CHAPTER 1     [████████████████████████████████] 100% COMPLETE      │
+│     Termux Introduction & Installation                                  │
+│                                                                          │
+│  ✅ CHAPTER 2     [████████████████████████████████] 100% COMPLETE      │
+│     First Setup & Configuration                                         │
+│                                                                          │
+│  ✅ CHAPTER 3     [████████████████████████████████] 100% COMPLETE      │
+│     Linux Basics Part 1                                                 │
+│                                                                          │
+│  ✅ CHAPTER 4     [████████████████████████████████] 100% COMPLETE      │
+│     Linux Basics Part 2                                                 │
+│     ↓ You are here - Ready for Chapter 5!                               │
+│                                                                          │
+│  🔒 CHAPTER 5     [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0% LOCKED        │
+│     Package Management                                                  │
+│                                                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│  📊 OVERALL MODULE 1 PROGRESS: [████████████████░░░░]  80%              │
+│  🏆 Skills Unlocked: All Basic Commands, Permissions, Text Processing   │
+│  🔑 Next Unlock: Package Management - Complete Foundation!              │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Commands Mastered in This Chapter:
+```
+┌──────────────────────────────────────────────────────────────┐
+│  ✅ cat - View and create files                              │
+│  ✅ touch - Create empty files                               │
+│  ✅ grep - Search text in files                              │
+│  ✅ find - Search for files                                  │
+│  ✅ chmod - Change file permissions                          │
+│  ✅ chown - Change file ownership                            │
+│  ✅ head/tail - View file portions                           │
+│  ✅ wc - Count lines, words, bytes                           │
+│  ✅ sort - Sort lines                                        │
+│  ✅ uniq - Remove duplicates                                 │
+│  ✅ diff - Compare files                                     │
+│  ✅ Pipes | - Chain commands                                 │
+│  ✅ Redirection > >> < - Control I/O                         │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+### Text Search Tools
+
+| Tool | Best For | Speed | Features |
+|------|----------|-------|----------|
+| `grep` | Text pattern search | Fast | Regex, recursive, context |
+| `egrep` | Extended regex | Fast | Same as grep -E |
+| `fgrep` | Fixed strings | Fastest | No regex, literal match |
+| `ripgrep (rg)` | Modern replacement | Very Fast | Git-aware, colors |
+| `ack` | Code search | Fast | File type aware |
+| `silver-searcher (ag)` | Code search | Very Fast | Similar to ack |
+
+### File Viewing Tools
+
+| Tool | Best For | Memory | Large Files |
+|------|----------|--------|-------------|
+| `cat` | Small files, quick view | Low | Not ideal |
+| `less` | Large files, scroll | Efficient | ✅ Excellent |
+| `more` | Basic paging | Medium | ✅ Good |
+| `head` | File beginning | Very Low | ✅ Excellent |
+| `tail` | File ending | Very Low | ✅ Excellent |
+| `nano` | Edit and view | Low | Medium files |
+
+### Permission Notation
+
+| Notation | User | Group | Others | Use Case |
+|----------|------|-------|--------|----------|
+| `777` | rwx | rwx | rwx | ❌ Avoid - too open |
+| `755` | rwx | r-x | r-x | ✅ Scripts, programs |
+| `700` | rwx | --- | --- | ✅ Private scripts |
+| `644` | rw- | r-- | r-- | ✅ Config files |
+| `600` | rw- | --- | --- | ✅ Private files |
+| `744` | rwx | r-- | r-- | Executable, limited read |
+| `775` | rwx | rwx | r-x | Group writable directories |
+| `750` | rwx | r-x | --- | Group access only |
+
+---
+
+## 🚀 PRACTICAL CHALLENGES
+
+### Challenge 1: Log File Analysis
+
+**Difficulty:** ⭐ Beginner  
+**Time:** 10 minutes  
+**Objective:** Analyze a log file using grep, sort, and uniq
+
+**Task:**
+1. Create a sample log file with various entries
+2. Count all ERROR lines
+3. Find unique error types
+4. Show last 5 error messages
+
+**Hint:** Use grep, wc, sort, uniq, and tail together
+
+<details>
+<summary>🔓 Click to reveal solution</summary>
+
+```bash
+# Step 1: Create sample log file
+cat > app.log << 'EOF'
+[2024-01-15 10:00:01] INFO: Application started
+[2024-01-15 10:00:05] ERROR: Database connection failed
+[2024-01-15 10:00:10] INFO: Retrying connection
+[2024-01-15 10:00:15] ERROR: Database connection failed
+[2024-01-15 10:00:20] WARNING: High memory usage
+[2024-01-15 10:00:25] INFO: Connection restored
+[2024-01-15 10:01:00] ERROR: API timeout
+[2024-01-15 10:01:30] INFO: User login: admin
+[2024-01-15 10:02:00] ERROR: Database connection failed
+[2024-01-15 10:02:30] WARNING: Disk space low
+[2024-01-15 10:03:00] INFO: Backup completed
+[2024-01-15 10:03:30] ERROR: API timeout
+[2024-01-15 10:04:00] ERROR: Memory allocation failed
+[2024-01-15 10:04:30] INFO: Cache cleared
+[2024-01-15 10:05:00] ERROR: File not found
+EOF
+
+# Step 2: Count all ERROR lines
+echo "Total ERROR count:"
+grep -c "ERROR" app.log
+# Output: 6
+
+# Step 3: Find unique error types
+echo -e "\nUnique error types:"
+grep "ERROR" app.log | cut -d']' -f2 | sort | uniq -c | sort -rn
+# Output:
+#   3  ERROR: Database connection failed
+#   2  ERROR: API timeout
+#   1  ERROR: Memory allocation failed
+#   1  ERROR: File not found
+
+# Step 4: Show last 5 error messages
+echo -e "\nLast 5 errors:"
+grep "ERROR" app.log | tail -5
+
+# Bonus: Create error summary
+echo -e "\n=== ERROR SUMMARY ==="
+echo "Total errors: $(grep -c ERROR app.log)"
+echo "Unique errors: $(grep ERROR app.log | cut -d: -f3 | sort -u | wc -l)"
+echo "Most common: $(grep ERROR app.log | cut -d: -f3 | sort | uniq -c | sort -rn | head -1)"
+
+# Clean up
+rm app.log
+```
+
+**Success Criteria:**
+- ✅ Created log file with various entries
+- ✅ Correctly counted error lines
+- ✅ Extracted unique error types
+- ✅ Displayed last 5 errors
+
+</details>
+
+---
+
+### Challenge 2: Permission Audit Script
+
+**Difficulty:** ⭐⭐ Intermediate  
+**Time:** 15 minutes  
+**Objective:** Find files with problematic permissions and fix them
+
+**Task:**
+1. Create test files with various permissions
+2. Find world-writable files (security risk)
+3. Find files without owner read permission
+4. Fix the permissions using chmod
+
+**Hint:** Use find with -perm option and chmod
+
+<details>
+<summary>🔓 Click to reveal solution</summary>
+
+```bash
+# Step 1: Create test environment
+mkdir -p perm_test
+cd perm_test
+
+# Create files with different permissions
+touch normal_file.txt          # Default permissions
+touch sensitive_file.txt       # Will be restricted
+touch risky_file.txt           # World-writable (bad!)
+touch script.sh                # Needs execute
+
+# Set various permissions
+chmod 644 normal_file.txt      # Normal: rw-r--r--
+chmod 600 sensitive_file.txt   # Restricted: rw-------
+chmod 666 risky_file.txt       # Bad: rw-rw-rw-
+chmod 644 script.sh            # No execute yet
+
+# Step 2: Find world-writable files (security risk!)
+echo "=== World-writable files (security risk) ==="
+find . -type f -perm /o=w -ls
+# Shows risky_file.txt
+
+# Step 3: Find files that owner cannot read
+echo -e "\n=== Files owner cannot read ==="
+find . -type f ! -readable
+# Should show none unless we create one
+
+# Create one for testing
+touch unreadable.txt
+chmod 000 unreadable.txt
+echo "Created unreadable file"
+find . -type f ! -readable -ls
+
+# Step 4: Fix the permissions
+echo -e "\n=== Fixing permissions ==="
+
+# Fix world-writable files
+find . -type f -perm /o=w -exec chmod o-w {} \;
+echo "Fixed world-writable files"
+
+# Make script executable
+chmod 755 script.sh
+echo "Made script.sh executable"
+
+# Fix unreadable file
+chmod 644 unreadable.txt
+echo "Fixed unreadable.txt"
+
+# Step 5: Verify fixes
+echo -e "\n=== Verification ==="
+ls -la
+
+echo -e "\nWorld-writable files after fix:"
+find . -type f -perm /o=w
+# Should output nothing
+
+# Bonus: Create a permission audit function
+audit_permissions() {
+    echo "=== PERMISSION AUDIT ==="
+    echo "World-writable files:"
+    find . -type f -perm /o=w 2>/dev/null | wc -l
+    echo "Files without owner read:"
+    find . -type f ! -readable 2>/dev/null | wc -l
+    echo "Executables:"
+    find . -type f -executable 2>/dev/null | wc -l
+}
+
+audit_permissions
+
+# Cleanup
+cd ..
+rm -rf perm_test
+```
+
+**Success Criteria:**
+- ✅ Created test files with various permissions
+- ✅ Found world-writable files
+- ✅ Identified permission issues
+- ✅ Fixed all problematic permissions
+
+</details>
+
+---
+
+### Challenge 3: Data Pipeline
+
+**Difficulty:** ⭐⭐⭐ Advanced  
+**Time:** 20 minutes  
+**Objective:** Build a data processing pipeline using pipes and redirection
+
+**Task:**
+1. Create a CSV-like data file
+2. Extract and process specific columns
+3. Sort and filter the data
+4. Generate a summary report
+
+**Hint:** Combine cat, cut, sort, uniq, grep, and redirection
+
+<details>
+<summary>🔓 Click to reveal solution</summary>
+
+```bash
+# Step 1: Create sample CSV data
+cat > sales_data.csv << 'EOF'
+date,product,region,amount
+2024-01-01,Laptop,North,50000
+2024-01-01,Phone,South,30000
+2024-01-02,Laptop,East,45000
+2024-01-02,Tablet,West,25000
+2024-01-03,Phone,North,35000
+2024-01-03,Laptop,South,52000
+2024-01-04,Tablet,East,28000
+2024-01-04,Phone,West,32000
+2024-01-05,Laptop,North,48000
+2024-01-05,Phone,South,38000
+2024-01-06,Tablet,North,26000
+2024-01-06,Laptop,East,55000
+EOF
+
+echo "=== RAW DATA ==="
+cat sales_data.csv
+
+# Step 2: Extract unique products
+echo -e "\n=== UNIQUE PRODUCTS ==="
+tail -n +2 sales_data.csv | cut -d',' -f2 | sort -u
+# Output:
+# Laptop
+# Phone
+# Tablet
+
+# Step 3: Calculate total sales per product
+echo -e "\n=== SALES BY PRODUCT ==="
+tail -n +2 sales_data.csv | while IFS=',' read date product region amount; do
+    echo "$product,$amount"
+done | awk -F',' '{sum[$1]+=$2} END {for(p in sum) print p,sum[p]}' | sort -k2 -rn
+# Output:
+# Laptop 200000
+# Phone 135000
+# Tablet 79000
+
+# Step 4: Sales by region
+echo -e "\n=== SALES BY REGION ==="
+tail -n +2 sales_data.csv | cut -d',' -f3,4 | awk -F',' '{sum[$1]+=$2} END {for(r in sum) print r,sum[r]}' | sort -k2 -rn
+
+# Step 5: Create a complete report
+cat > sales_report.txt << 'REPORT'
+===========================================
+         SALES DATA ANALYSIS REPORT
+===========================================
+
+REPORT
+
+echo "Report Generated: $(date)" >> sales_report.txt
+echo "" >> sales_report.txt
+
+echo "=== SUMMARY STATISTICS ===" >> sales_report.txt
+echo "Total Records: $(tail -n +2 sales_data.csv | wc -l)" >> sales_report.txt
+echo "Total Sales: $(tail -n +2 sales_data.csv | cut -d',' -f4 | paste -sd+ | bc)" >> sales_report.txt
+echo "Average Sale: $(tail -n +2 sales_data.csv | cut -d',' -f4 | awk '{sum+=$1} END {print sum/NR}')" >> sales_report.txt
+echo "" >> sales_report.txt
+
+echo "=== TOP PRODUCTS ===" >> sales_report.txt
+tail -n +2 sales_data.csv | cut -d',' -f2 | sort | uniq -c | sort -rn >> sales_report.txt
+echo "" >> sales_report.txt
+
+echo "=== REGION BREAKDOWN ===" >> sales_report.txt
+tail -n +2 sales_data.csv | cut -d',' -f3 | sort | uniq -c | sort -rn >> sales_report.txt
+echo "" >> sales_report.txt
+
+echo "===========================================" >> sales_report.txt
+echo "           END OF REPORT" >> sales_report.txt
+echo "===========================================" >> sales_report.txt
+
+# Display report
+echo -e "\n=== GENERATED REPORT ==="
+cat sales_report.txt
+
+# Cleanup
+rm sales_data.csv sales_report.txt
+```
+
+**Success Criteria:**
+- ✅ Created structured data file
+- ✅ Extracted and processed columns
+- ✅ Generated sorted, filtered output
+- ✅ Created formatted report file
+
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition | Example |
+|------|------------|---------|
+| **Permission** | Access rights for files and directories | `rwx` = read, write, execute |
+| **chmod** | Command to change file permissions | `chmod 755 script.sh` |
+| **chown** | Command to change file ownership | `chown user:group file` |
+| **Octal Notation** | Numeric permission representation | `755` = `rwxr-xr-x` |
+| **Symbolic Notation** | Letter-based permission representation | `u+x` = add execute for user |
+| **grep** | Search text patterns in files | `grep "error" logfile` |
+| **Regular Expression** | Pattern matching syntax | `^Error.*failed$` |
+| **find** | Search for files and directories | `find . -name "*.txt"` |
+| **Pipe** | Connect output of one command to another | `cat file | grep word` |
+| **Redirection** | Send output to file instead of screen | `echo "text" > file.txt` |
+| **Standard Input (stdin)** | Default input stream, usually keyboard | `<` redirects input |
+| **Standard Output (stdout)** | Default output stream, usually screen | `>` redirects output |
+| **Standard Error (stderr)** | Error message output stream | `2>` redirects errors |
+| **wc** | Word count - counts lines, words, bytes | `wc -l file.txt` |
+| **sort** | Sort lines in a file | `sort -n numbers.txt` |
+| **uniq** | Remove consecutive duplicate lines | `sort file | uniq` |
+| **diff** | Compare two files line by line | `diff old.txt new.txt` |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Job Roles That Use These Skills
+
+| Role | Description | Commands Used Daily |
+|------|-------------|---------------------|
+| **DevOps Engineer** | Automates infrastructure | grep, find, pipes, scripts |
+| **Security Analyst** | Analyzes security logs | grep, find, permissions, diff |
+| **Data Engineer** | Processes data pipelines | sort, uniq, wc, pipes |
+| **System Administrator** | Manages servers | chmod, chown, find, grep |
+| **Backend Developer** | Builds server apps | grep, pipes, redirection |
+| **QA Engineer** | Tests applications | diff, grep, log analysis |
+| **Site Reliability Engineer** | Maintains uptime | tail -f, grep, find |
+| **Penetration Tester** | Tests security | grep, find, permissions |
+
+### Salary Expectations (India)
+
+| Role | Entry Level (₹/year) | Mid Level (₹/year) | Senior (₹/year) |
+|------|---------------------|-------------------|-----------------|
+| DevOps Engineer | 5-8 LPA | 12-20 LPA | 25-45 LPA |
+| Security Analyst | 4-6 LPA | 8-15 LPA | 18-30 LPA |
+| Data Engineer | 5-9 LPA | 12-22 LPA | 25-45 LPA |
+| System Administrator | 3-5 LPA | 6-12 LPA | 12-20 LPA |
+| SRE | 6-10 LPA | 15-25 LPA | 30-50 LPA |
+
+### Certifications to Pursue
+
+| Certification | Provider | Focus Area | Difficulty |
+|--------------|----------|------------|------------|
+| **RHCE** | Red Hat | Advanced Linux | Advanced |
+| **LFCS** | Linux Foundation | Linux Admin | Intermediate |
+| **CEH** | EC-Council | Ethical Hacking | Intermediate |
+| **OSCP** | Offensive Security | Penetration Testing | Advanced |
+| **AWS SysOps** | Amazon | Cloud Operations | Intermediate |
+
+### Text Processing Mastery Path
+
+```
+Basic Text Viewing (cat, head, tail)
+         ↓
+    Search & Filter
+    (grep, find, sort)
+         ↓
+    ┌────┴────┐
+    ↓         ↓
+Pipes &     Permissions
+Redirection (chmod, chown)
+    ↓         ↓
+    └────┬────┘
+         ↓
+    Data Pipelines
+         ↓
+   Automation & Scripting
+         ↓
+   DevOps / Security Career
+```
+
+---
+
 ## 💡 PRO TIPS - MASTER THESE!
 
 > 💡 **Pro Tip #1:** Use `grep -r "pattern" .` to search recursively through all files in current directory.

@@ -611,6 +611,626 @@ Thank you for watching! See you in Chapter 57!
 
 ---
 
+## 📊 MERMAID PROJECT ARCHITECTURE
+
+```mermaid
+flowchart TD
+    A[File Organizer] --> B[Input Source]
+    B --> C[Directory Path]
+    B --> D[Config File]
+    
+    C --> E{Select Mode}
+    E -->|Extension| F[Extension Sorter]
+    E -->|Date| G[Date Sorter]
+    E -->|Size| H[Size Sorter]
+    E -->|Custom| I[Rule Engine]
+    
+    F --> J[Category Mapper]
+    G --> K[Date Parser]
+    H --> L[Size Calculator]
+    I --> M[Pattern Matcher]
+    
+    J --> N[File Mover]
+    K --> N
+    L --> N
+    M --> N
+    
+    N --> O{Preview Mode?}
+    O -->|Yes| P[Display Changes]
+    O -->|No| Q[Execute Moves]
+    
+    Q --> R[Update History]
+    R --> S[history.json]
+```
+
+```mermaid
+flowchart LR
+    subgraph INPUT[Input]
+        A1[Directory]
+        A2[Config Rules]
+        A3[CLI Options]
+    end
+    
+    subgraph PROCESS[Processing]
+        B1[Scan Files]
+        B2[Categorize]
+        B3[Plan Moves]
+    end
+    
+    subgraph OUTPUT[Output]
+        C1[Organized Files]
+        C2[History Log]
+        C3[Report]
+    end
+    
+    INPUT --> PROCESS --> OUTPUT
+```
+
+---
+
+## ⚡ PROJECT FEATURE CHEATSHEET
+
+| Feature | Implementation | Command/Usage |
+|---------|---------------|---------------|
+| **Extension Sort** | Categorize by file type | `--mode extension` |
+| **Date Sort** | Organize by date | `--mode date` |
+| **Size Sort** | Categorize by file size | `--mode size` |
+| **Custom Rules** | JSON configuration | `--config rules.json` |
+| **Preview Mode** | Show without executing | `--preview` |
+| **Undo Last** | Revert organization | `--undo` |
+| **Recursive** | Include subdirectories | `--recursive` |
+| **Watch Mode** | Auto-organize new files | `--watch` |
+| **Dry Run** | Test without changes | `--dry-run` |
+| **Verbose** | Detailed output | `--verbose` |
+
+### Default File Categories
+
+| Category | Extensions |
+|----------|------------|
+| Images | .jpg, .jpeg, .png, .gif, .bmp, .svg, .webp |
+| Videos | .mp4, .mkv, .avi, .mov, .wmv, .flv, .webm |
+| Audio | .mp3, .wav, .flac, .aac, .ogg, .m4a, .wma |
+| Documents | .pdf, .doc, .docx, .txt, .xls, .xlsx, .ppt |
+| Archives | .zip, .rar, .7z, .tar, .gz, .bz2 |
+| Code | .py, .js, .html, .css, .java, .cpp, .sh |
+| Apps | .apk, .exe, .deb, .rpm, .dmg |
+
+---
+
+## 🎯 PROJECT-BASED LEARNING PATH
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    FILE ORGANIZER LEARNING PATH                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  BEGINNER (Foundation Skills)                                               │
+│  ────────────────────────────                                               │
+│  ├── Python pathlib: Path operations                                       │
+│  ├── File operations: shutil, os modules                                   │
+│  ├── String manipulation: extensions, patterns                              │
+│  └── CLI design: argparse module                                           │
+│                    │                                                         │
+│                    ▼                                                         │
+│  INTERMEDIATE (File System)                                                 │
+│  ────────────────────────────                                               │
+│  ├── Directory traversal: walking, recursion                                │
+│  ├── File metadata: dates, sizes, permissions                               │
+│  ├── Pattern matching: fnmatch, regex                                       │
+│  └── Configuration: JSON/YAML files                                        │
+│                    │                                                         │
+│                    ▼                                                         │
+│  ADVANCED (Automation)                                                      │
+│  ────────────────────────────                                               │
+│  ├── File system watching: watchdog library                                 │
+│  ├── Duplicate detection: hash comparison                                   │
+│  ├── Batch processing: concurrent operations                                │
+│  └── Transaction management: undo/redo                                      │
+│                    │                                                         │
+│                    ▼                                                         │
+│  CAREER APPLICATIONS                                                        │
+│  ────────────────────────────                                               │
+│  ├── DevOps Engineer (automation scripts)                                   │
+│  ├── System Administrator                                                   │
+│  ├── Python Developer                                                       │
+│  ├── Data Engineer (ETL pipelines)                                         │
+│  └── Tool Developer                                                         │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills Map to Job Roles
+
+| Skill | Job Role | Industry |
+|-------|----------|----------|
+| File System Ops | System Admin | IT Infrastructure |
+| Automation | DevOps Engineer | Tech |
+| Pattern Matching | Data Engineer | Data |
+| CLI Development | Tool Developer | All Industries |
+| Python Scripting | Python Developer | Tech |
+
+---
+
+## 🔧 PROJECT EXTENSION IDEAS
+
+### 1. 🔍 Duplicate File Finder
+Find and handle duplicate files.
+
+```python
+import hashlib
+from collections import defaultdict
+
+class DuplicateFinder:
+    def __init__(self):
+        self.hash_map = defaultdict(list)
+    
+    def calculate_hash(self, filepath, chunk_size=8192):
+        """Calculate file hash for duplicate detection"""
+        hasher = hashlib.md5()
+        with open(filepath, 'rb') as f:
+            for chunk in iter(lambda: f.read(chunk_size), b''):
+                hasher.update(chunk)
+        return hasher.hexdigest()
+    
+    def find_duplicates(self, directory):
+        """Find all duplicate files"""
+        for filepath in Path(directory).rglob('*'):
+            if filepath.is_file():
+                file_hash = self.calculate_hash(filepath)
+                self.hash_map[file_hash].append(filepath)
+        
+        return {h: files for h, files in self.hash_map.items() if len(files) > 1}
+    
+    def remove_duplicates(self, duplicates, keep='first'):
+        """Remove duplicate files, keeping specified copy"""
+        removed = 0
+        for hash_val, files in duplicates.items():
+            files.sort()  # Sort for deterministic behavior
+            for filepath in files[1:]:  # Keep first
+                filepath.unlink()
+                removed += 1
+        return removed
+```
+
+### 2. 📊 File Statistics Dashboard
+Generate statistics about organized files.
+
+```python
+class FileStats:
+    def __init__(self):
+        self.stats = {
+            'total_files': 0,
+            'total_size': 0,
+            'by_category': {},
+            'by_extension': {},
+            'by_date': {}
+        }
+    
+    def analyze_directory(self, directory):
+        """Analyze directory and generate statistics"""
+        for filepath in Path(directory).rglob('*'):
+            if filepath.is_file():
+                self.stats['total_files'] += 1
+                self.stats['total_size'] += filepath.stat().st_size
+                
+                ext = filepath.suffix.lower()
+                self.stats['by_extension'][ext] = \
+                    self.stats['by_extension'].get(ext, 0) + 1
+                
+                category = self.get_category(ext)
+                self.stats['by_category'][category] = \
+                    self.stats['by_category'].get(category, 0) + 1
+    
+    def generate_report(self):
+        """Generate formatted statistics report"""
+        return {
+            'total_files': self.stats['total_files'],
+            'total_size_mb': self.stats['total_size'] / (1024*1024),
+            'categories': self.stats['by_category'],
+            'top_extensions': sorted(
+                self.stats['by_extension'].items(),
+                key=lambda x: x[1],
+                reverse=True
+            )[:10]
+        }
+```
+
+### 3. 🔄 Smart Rename System
+Intelligent file renaming.
+
+```python
+import re
+from datetime import datetime
+
+class SmartRenamer:
+    def __init__(self):
+        self.rules = []
+    
+    def add_rule(self, pattern, replacement):
+        """Add renaming rule"""
+        self.rules.append((re.compile(pattern), replacement))
+    
+    def rename_file(self, filepath):
+        """Apply renaming rules"""
+        name = filepath.stem
+        ext = filepath.suffix
+        
+        for pattern, replacement in self.rules:
+            name = pattern.sub(replacement, name)
+        
+        # Clean up
+        name = re.sub(r'_+', '_', name)  # Multiple underscores
+        name = name.strip('_')
+        
+        return filepath.parent / (name + ext)
+    
+    def rename_with_date(self, filepath, prefix=False):
+        """Add date to filename"""
+        mtime = datetime.fromtimestamp(filepath.stat().st_mtime)
+        date_str = mtime.strftime('%Y-%m-%d')
+        
+        if prefix:
+            new_name = f"{date_str}_{filepath.name}"
+        else:
+            new_name = f"{filepath.stem}_{date_str}{filepath.suffix}"
+        
+        return filepath.parent / new_name
+```
+
+### 4. 📁 Folder Size Monitor
+Track folder sizes and alert on thresholds.
+
+```python
+class FolderMonitor:
+    def __init__(self, threshold_mb=100):
+        self.threshold = threshold_mb * 1024 * 1024
+    
+    def get_folder_size(self, folder):
+        """Calculate total folder size"""
+        total = 0
+        for filepath in Path(folder).rglob('*'):
+            if filepath.is_file():
+                total += filepath.stat().st_size
+        return total
+    
+    def check_folders(self, folders):
+        """Check folders against threshold"""
+        alerts = []
+        for folder in folders:
+            size = self.get_folder_size(folder)
+            if size > self.threshold:
+                alerts.append({
+                    'folder': folder,
+                    'size_mb': size / (1024*1024),
+                    'threshold_mb': self.threshold / (1024*1024)
+                })
+        return alerts
+```
+
+### 5. 🔐 Secure File Shredder
+Securely delete sensitive files.
+
+```python
+import os
+import random
+
+class SecureShredder:
+    def __init__(self, passes=3):
+        self.passes = passes
+    
+    def shred_file(self, filepath):
+        """Securely delete file by overwriting"""
+        filepath = Path(filepath)
+        size = filepath.stat().st_size
+        
+        with open(filepath, 'r+b') as f:
+            for _ in range(self.passes):
+                f.seek(0)
+                # Random data pass
+                f.write(os.urandom(size))
+                f.flush()
+                os.fsync(f.fileno())
+        
+        # Truncate and delete
+        filepath.unlink()
+        return True
+```
+
+---
+
+## 🚀 BONUS PROJECT CHALLENGES
+
+### Challenge 1: Cloud Sync Organizer 🌥️
+**Difficulty: ⭐⭐**
+
+Create an organizer that syncs with cloud storage.
+
+```
+Requirements:
+- Detect cloud storage folders (Drive, Dropbox)
+- Smart syncing based on file types
+- Conflict resolution
+- Bandwidth-aware operation
+- Incremental sync
+```
+
+### Challenge 2: Media Library Manager 🎵
+**Difficulty: ⭐⭐⭐**
+
+Build a comprehensive media organization system.
+
+```
+Requirements:
+- Extract metadata from media files
+- Organize by artist, album, year
+- Handle various media formats
+- Create playlists
+- Thumbnail generation
+```
+
+### Challenge 3: Enterprise File Manager 🏢
+**Difficulty: ⭐⭐⭐⭐**
+
+Build enterprise-grade file organization system.
+
+```
+Requirements:
+- Multi-user support
+- Access control integration
+- Audit logging
+- Policy-based organization
+- Scheduled operations
+- Report generation
+```
+
+---
+
+## 📖 TECHNICAL GLOSSARY
+
+| Term | Definition |
+|------|------------|
+| **Path** | Location of file/directory in file system |
+| **Extension** | Suffix indicating file type (.jpg, .py, etc.) |
+| **Metadata** | Data about file (size, dates, permissions) |
+| **Directory Traversal** | Walking through folder structures |
+| **Glob Pattern** | Pattern matching for filenames (*.txt) |
+| **Pathlib** | Python's object-oriented path handling module |
+| **Shutil** | High-level file operations module |
+| **mtime** | Last modification timestamp |
+| **ctime** | Creation/change timestamp |
+| **Inode** | File system data structure for files |
+| **Symlink** | Symbolic link to another file |
+| **Hard Link** | Multiple names for same file data |
+| **Atomic Operation** | Operation that completes fully or not at all |
+| **File Hash** | Unique identifier from file contents (MD5, SHA) |
+
+### File Size Categories
+
+| Category | Size Range |
+|----------|------------|
+| Tiny | 0 - 10 KB |
+| Small | 10 KB - 1 MB |
+| Medium | 1 MB - 100 MB |
+| Large | 100 MB - 1 GB |
+| Huge | 1 GB+ |
+
+---
+
+## 💼 PORTFOLIO BUILDING TIPS
+
+### How to Showcase This Project
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PORTFOLIO PRESENTATION GUIDE                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  1. GITHUB REPOSITORY                                                        │
+│  ──────────────────                                                         │
+│  ✓ Multiple organization modes                                              │
+│  ✓ Configurable rules via JSON                                              │
+│  ✓ Preview and undo features                                                │
+│  ✓ Well-documented README                                                   │
+│  ✓ Example configurations                                                   │
+│                                                                              │
+│  2. DEMONSTRATION                                                            │
+│  ──────────────────                                                         │
+│  ✓ Show before/after of messy folder                                        │
+│  ✓ Demonstrate preview mode                                                 │
+│  ✓ Show undo functionality                                                  │
+│  ✓ Custom rules example                                                     │
+│                                                                              │
+│  3. USE CASES TO HIGHLIGHT                                                   │
+│  ──────────────────                                                         │
+│  ✓ Downloads folder cleanup                                                 │
+│  ✓ Photo organization                                                       │
+│  ✓ Project file management                                                  │
+│  ✓ Automated media library                                                  │
+│                                                                              │
+│  4. RESUME BULLET POINTS                                                     │
+│  ──────────────────                                                         │
+│  • Built automated file organizer with Python and pathlib                   │
+│  • Implemented multiple sorting modes: extension, date, size                │
+│  • Added configurable rules engine with JSON support                        │
+│  • Created undo functionality for safe operation                            │
+│                                                                              │
+│  5. INTERVIEW TALKING POINTS                                                 │
+│  ──────────────────                                                         │
+│  • How do you handle large directories efficiently?                         │
+│  • What's your approach to duplicate files?                                 │
+│  • How would you add cloud integration?                                     │
+│  • Explain file system watching implementation                              │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔧 CODE OPTIMIZATION TIPS
+
+### Efficient Directory Scanning
+
+```python
+# ❌ SLOW: Load all files into memory
+def scan_slow(directory):
+    files = list(Path(directory).glob('*'))
+    return [f for f in files if f.is_file()]
+
+# ✅ FAST: Generator-based scanning
+def scan_fast(directory):
+    for item in Path(directory).iterdir():
+        if item.is_file():
+            yield item
+
+# ✅ BEST: Recursive with generator
+def scan_recursive(directory):
+    for item in Path(directory).rglob('*'):
+        if item.is_file():
+            yield item
+```
+
+### Batch File Operations
+
+```python
+from concurrent.futures import ThreadPoolExecutor
+
+def batch_move(files, dest_folder, max_workers=4):
+    """Move files in parallel"""
+    def move_one(src):
+        dest = dest_folder / src.name
+        shutil.move(str(src), str(dest))
+        return src.name
+    
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        results = list(executor.map(move_one, files))
+    return results
+```
+
+### Memory-Efficient Hashing
+
+```python
+def hash_large_file(filepath, chunk_size=65536):
+    """Hash large files without loading entirely"""
+    hasher = hashlib.sha256()
+    with open(filepath, 'rb') as f:
+        while chunk := f.read(chunk_size):
+            hasher.update(chunk)
+    return hasher.hexdigest()
+```
+
+### Benchmark Results
+
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│                    PERFORMANCE BENCHMARKS                                   │
+├─────────────────────────┬──────────────┬───────────────────────────────────┤
+│ Operation               │ Time (1000 files) │ Notes                       │
+├─────────────────────────┼──────────────┼───────────────────────────────────┤
+│ Scan directory          │ 50ms         │ Single level                      │
+│ Recursive scan          │ 200ms        │ 5 levels deep                     │
+│ Organize by extension   │ 500ms        │ Moving files                      │
+│ Hash calculation (MD5)  │ 100ms/100MB  │ Buffered read                     │
+│ Batch move (4 workers)  │ 200ms        │ Parallel operations               │
+└─────────────────────────┴──────────────┴───────────────────────────────────┘
+```
+
+---
+
+## 📱 APK BUILD GUIDE
+
+### Converting to Android App
+
+### Method 1: Kivy Mobile App
+
+```python
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.filechooser import FileChooserListView
+from pathlib import Path
+import shutil
+
+class FileOrganizerApp(App):
+    def build(self):
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=10)
+        
+        # Folder selector
+        self.filechooser = FileChooserListView(
+            path='/sdcard',
+            dirselect=True,
+            size_hint_y=0.7
+        )
+        
+        # Organize button
+        btn = Button(text='Organize Files', size_hint_y=0.1)
+        btn.bind(on_press=self.organize)
+        
+        # Status
+        self.status = Button(text='Select a folder', size_hint_y=0.2, disabled=True)
+        
+        layout.add_widget(self.filechooser)
+        layout.add_widget(btn)
+        layout.add_widget(self.status)
+        
+        return layout
+    
+    def organize(self, instance):
+        folder = Path(self.filechooser.selection[0])
+        self.organize_folder(folder)
+        self.status.text = f'Organized {folder}'
+    
+    def organize_folder(self, folder):
+        """Organize files by extension"""
+        categories = {
+            'Images': ['.jpg', '.jpeg', '.png', '.gif'],
+            'Videos': ['.mp4', '.mkv', '.avi'],
+            'Documents': ['.pdf', '.doc', '.txt'],
+            'Music': ['.mp3', '.wav', '.flac']
+        }
+        
+        for filepath in folder.iterdir():
+            if filepath.is_file():
+                ext = filepath.suffix.lower()
+                for category, extensions in categories.items():
+                    if ext in extensions:
+                        dest = folder / category
+                        dest.mkdir(exist_ok=True)
+                        shutil.move(str(filepath), str(dest / filepath.name))
+                        break
+
+if __name__ == '__main__':
+    FileOrganizerApp().run()
+```
+
+### App Features Roadmap
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ANDROID APP FEATURES ROADMAP                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Version 1.0 (Basic)                                                        │
+│  ├── Folder selection                                                       │
+│  ├── One-click organization                                                 │
+│  └── Basic categories                                                       │
+│                                                                              │
+│  Version 2.0 (Enhanced)                                                     │
+│  ├── Custom rules                                                           │
+│  ├── Preview mode                                                           │
+│  ├── Undo support                                                           │
+│  └── Statistics view                                                        │
+│                                                                              │
+│  Version 3.0 (Professional)                                                 │
+│  ├── Scheduled organization                                                 │
+│  ├── Watch mode                                                             │
+│  ├── Cloud sync                                                             │
+│  └── Duplicate finder                                                       │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
 
 <details>

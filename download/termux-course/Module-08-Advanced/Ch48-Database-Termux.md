@@ -3017,6 +3017,2267 @@ Before moving to Chapter 49, verify:
 
 ---
 
+## 📊 MERMAID ARCHITECTURE DIAGRAMS
+
+### Database Architecture Overview
+
+```mermaid
+graph TB
+    subgraph Applications["📱 Applications"]
+        A[Web App]
+        B[CLI Tool]
+        C[Python Script]
+    end
+    
+    subgraph DBLayer["💾 Database Layer"]
+        D[(SQLite)]
+        E[(MariaDB)]
+        F[(PostgreSQL)]
+        G[(Redis)]
+    end
+    
+    subgraph Clients["🔌 Database Clients"]
+        H[sqlite3 CLI]
+        I[mysql Client]
+        J[psql Client]
+        K[redis-cli]
+    end
+    
+    A --> D
+    A --> E
+    B --> H
+    C --> D
+    C --> E
+    C --> F
+    
+    H --> D
+    I --> E
+    J --> F
+    K --> G
+    
+    style Applications fill:#e3f2fd
+    style DBLayer fill:#e8f5e9
+    style Clients fill:#fff3e0
+```
+
+### Database Connection Flow
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Pool as Connection Pool
+    participant DB as Database
+    participant Cache as Redis Cache
+    
+    App->>Pool: Request Connection
+    Pool->>DB: Get/Create Connection
+    
+    alt Cache Available
+        App->>Cache: Check Cache
+        Cache->>App: Return Cached Data
+    else Cache Miss
+        App->>DB: Execute Query
+        DB->>App: Return Results
+        App->>Cache: Store in Cache
+    end
+    
+    App->>Pool: Return Connection
+```
+
+### SQLite Data Flow
+
+```mermaid
+graph LR
+    subgraph App["Application"]
+        A[Python/Node.js]
+    end
+    
+    subgraph SQLite["SQLite Engine"]
+        B[SQL Parser]
+        C[Query Optimizer]
+        D[B-Tree Engine]
+        E[Page Cache]
+    end
+    
+    subgraph Storage["Storage"]
+        F[(Database.db)]
+        G[Journal/WAL]
+    end
+    
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    E --> G
+    
+    style App fill:#e3f2fd
+    style SQLite fill:#e8f5e9
+    style Storage fill:#fff3e0
+```
+
+---
+
+## ⚡ ADVANCED COMMAND CHEATSHEET
+
+### SQLite Commands Reference
+
+| Category | Command | Description |
+|----------|---------|-------------|
+| **Database** | `sqlite3 mydb.db` | Open/create database |
+| | `.databases` | List databases |
+| | `.backup 'backup.db'` | Backup database |
+| | `.restore 'backup.db'` | Restore database |
+| **Tables** | `.tables` | List all tables |
+| | `.schema tablename` | Show table structure |
+| | `CREATE TABLE` | Create new table |
+| | `DROP TABLE name` | Delete table |
+| **Data** | `INSERT INTO` | Add records |
+| | `SELECT * FROM` | Query data |
+| | `UPDATE SET` | Modify records |
+| | `DELETE FROM` | Remove records |
+| **Index** | `CREATE INDEX` | Create index |
+| | `DROP INDEX` | Remove index |
+| | `.indexes` | List indexes |
+| **Output** | `.mode column` | Column format |
+| | `.headers on` | Show headers |
+| | `.output file.txt` | Output to file |
+| **PRAGMA** | `PRAGMA table_info(tbl)` | Table info |
+| | `PRAGMA journal_mode=WAL` | Enable WAL |
+| | `PRAGMA foreign_keys=ON` | Enable FK |
+
+### MySQL/MariaDB Commands Reference
+
+| Category | Command | Description |
+|----------|---------|-------------|
+| **Connection** | `mysql -u root -p` | Connect as root |
+| | `mysql -u user -p db` | Connect to database |
+| | `mysql -h host -u user -p` | Connect to remote |
+| **Database** | `SHOW DATABASES;` | List databases |
+| | `CREATE DATABASE db;` | Create database |
+| | `USE database;` | Select database |
+| | `DROP DATABASE db;` | Delete database |
+| **Tables** | `SHOW TABLES;` | List tables |
+| | `DESCRIBE table;` | Table structure |
+| | `SHOW CREATE TABLE t;` | Show creation SQL |
+| **Users** | `CREATE USER` | Create user |
+| | `GRANT ALL ON db.*` | Grant privileges |
+| | `FLUSH PRIVILEGES;` | Apply changes |
+| **Backup** | `mysqldump -u root db > file.sql` | Export database |
+| | `mysql -u root db < file.sql` | Import database |
+| **Status** | `SHOW STATUS;` | Server status |
+| | `SHOW PROCESSLIST;` | Active queries |
+
+### PostgreSQL Commands Reference
+
+| Command | Description |
+|---------|-------------|
+| `psql` | Connect to PostgreSQL |
+| `\l` | List databases |
+| `\c dbname` | Connect to database |
+| `\dt` | List tables |
+| `\d tablename` | Table structure |
+| `\du` | List users |
+| `\q` | Exit psql |
+| `pg_dump db > file.sql` | Backup database |
+| `psql db < file.sql` | Restore database |
+
+### Redis Commands Reference
+
+| Category | Command | Description |
+|----------|---------|-------------|
+| **Strings** | `SET key value` | Set value |
+| | `GET key` | Get value |
+| | `INCR key` | Increment |
+| | `SETEX key 60 val` | Set with expiry |
+| **Hashes** | `HSET hash field val` | Set hash field |
+| | `HGET hash field` | Get hash field |
+| | `HGETALL hash` | Get all fields |
+| **Lists** | `LPUSH list val` | Add to left |
+| | `RPUSH list val` | Add to right |
+| | `LRANGE list 0 -1` | Get all items |
+| **Sets** | `SADD set val` | Add to set |
+| | `SMEMBERS set` | Get all members |
+| **Keys** | `KEYS *` | List all keys |
+| | `DEL key` | Delete key |
+| | `EXPIRE key 60` | Set expiry |
+| | `TTL key` | Time to live |
+| **Server** | `INFO` | Server info |
+| | `FLUSHALL` | Clear all data |
+| | `SAVE` | Save to disk |
+
+---
+
+## 🎯 SYSTEM ADMIN LEARNING PATH
+
+### Database Administration Journey
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      DATABASE LEARNING PATH                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🌱 BEGINNER (Week 1-2)                                                     │
+│  ├── SQLite basics and file databases                                       │
+│  ├── SQL fundamentals (SELECT, INSERT, UPDATE, DELETE)                     │
+│  ├── Basic database design concepts                                        │
+│  ├── Using sqlite3 command-line tool                                       │
+│  └── Simple Python database connectivity                                   │
+│                                                                              │
+│  📚 INTERMEDIATE (Week 3-6)                                                 │
+│  ├── MariaDB/MySQL installation and setup                                  │
+│  ├── User management and permissions                                       │
+│  ├── Index creation and optimization                                       │
+│  ├── JOINs and complex queries                                            │
+│  └── Database backup and restore                                          │
+│                                                                              │
+│  🚀 ADVANCED (Week 7-12)                                                    │
+│  ├── PostgreSQL advanced features                                          │
+│  ├── Redis caching strategies                                              │
+│  ├── Query optimization and EXPLAIN                                        │
+│  ├── Transaction management (ACID)                                         │
+│  └── Database security best practices                                      │
+│                                                                              │
+│  🏆 EXPERT (Week 13+)                                                       │
+│  ├── Database clustering and replication                                   │
+│  ├── Performance tuning and monitoring                                     │
+│  ├── Migration and scaling strategies                                      │
+│  ├── Backup automation and disaster recovery                               │
+│  └── Multi-database architecture design                                    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Certification Path
+
+| Level | Certification | Skills Covered |
+|-------|--------------|----------------|
+| Entry | SQLite Basics | Basic SQL operations |
+| Associate | MySQL Developer | SQL development |
+| Professional | PostgreSQL Admin | Advanced administration |
+| Expert | MongoDB DBA | NoSQL databases |
+| Master | AWS Database Specialty | Cloud databases |
+
+---
+
+## 🔧 TECHNOLOGY COMPARISON TABLE
+
+### Database Systems Comparison
+
+| Database | Type | Use Case | Complexity | Performance |
+|----------|------|----------|------------|-------------|
+| **SQLite** | Embedded | Mobile, small apps | ⭐ Low | ⭐⭐⭐⭐ |
+| **MariaDB** | Relational | Web apps, CMS | ⭐⭐ Medium | ⭐⭐⭐⭐ |
+| **PostgreSQL** | Object-Rel | Complex apps | ⭐⭐⭐ Advanced | ⭐⭐⭐⭐⭐ |
+| **Redis** | Key-Value | Caching, sessions | ⭐ Low | ⭐⭐⭐⭐⭐ |
+| **MongoDB** | Document | JSON data, flexible | ⭐⭐ Medium | ⭐⭐⭐⭐ |
+
+### SQL Data Types Reference
+
+| Type | SQLite | MySQL | PostgreSQL | Use For |
+|------|--------|-------|------------|---------|
+| Integer | INTEGER | INT | INTEGER | Numbers |
+| Decimal | REAL | DECIMAL | NUMERIC | Money |
+| Text | TEXT | VARCHAR | VARCHAR | Strings |
+| Boolean | INTEGER | BOOLEAN | BOOLEAN | True/False |
+| Date | TEXT | DATE | DATE | Dates |
+| DateTime | TEXT | DATETIME | TIMESTAMP | Timestamps |
+| Binary | BLOB | BLOB | BYTEA | Files |
+| JSON | TEXT | JSON | JSON | JSON data |
+
+### Join Types Comparison
+
+| Join Type | Description | Use Case |
+|-----------|-------------|----------|
+| **INNER JOIN** | Matching rows only | Standard relationships |
+| **LEFT JOIN** | All left + matches | Optional relationships |
+| **RIGHT JOIN** | All right + matches | Reverse optional |
+| **FULL JOIN** | All rows | Complete data |
+| **CROSS JOIN** | Cartesian product | Combinations |
+
+---
+
+## 🚀 PRACTICAL SERVER CHALLENGES
+
+### Challenge 1: SQLite Database Design
+
+**Objective:** Design and implement a contact management database
+
+```sql
+-- TASK: Create a complete contact management system
+
+-- Step 1: Create database
+sqlite3 contacts.db
+
+-- Step 2: Create tables with proper relationships
+CREATE TABLE contacts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE,
+    phone TEXT,
+    address TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE contact_categories (
+    contact_id INTEGER,
+    category_id INTEGER,
+    PRIMARY KEY (contact_id, category_id),
+    FOREIGN KEY (contact_id) REFERENCES contacts(id),
+    FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+
+-- Step 3: Create indexes
+CREATE INDEX idx_contact_name ON contacts(name);
+CREATE INDEX idx_contact_email ON contacts(email);
+
+-- Step 4: Insert test data
+INSERT INTO categories (name) VALUES ('Family'), ('Work'), ('Friends');
+INSERT INTO contacts (name, email, phone) VALUES 
+    ('John Doe', 'john@email.com', '555-0100'),
+    ('Jane Smith', 'jane@email.com', '555-0200');
+
+-- Step 5: Query with JOIN
+SELECT c.name, c.email, GROUP_CONCAT(cat.name) as categories
+FROM contacts c
+LEFT JOIN contact_categories cc ON c.id = cc.contact_id
+LEFT JOIN categories cat ON cc.category_id = cat.id
+GROUP BY c.id;
+
+-- Success Criteria:
+-- - All tables created
+-- - Foreign keys working
+-- - Indexes created
+-- - Complex queries working
+```
+
+### Challenge 2: MariaDB Production Setup
+
+**Objective:** Set up a production-ready MariaDB instance
+
+```bash
+# TASK: Configure secure MariaDB instance
+
+# Step 1: Install and start
+pkg install mariadb -y
+mysql_install_db
+mysqld_safe &
+
+# Step 2: Secure installation
+mysql -u root << 'SQL'
+-- Remove anonymous users
+DELETE FROM mysql.user WHERE User='';
+
+-- Disallow remote root login
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+
+-- Remove test database
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+
+-- Create application user
+CREATE USER 'appuser'@'localhost' IDENTIFIED BY 'StrongPass123!';
+GRANT SELECT, INSERT, UPDATE, DELETE ON myapp.* TO 'appuser'@'localhost';
+
+-- Create admin user
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'AdminPass456!';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
+SQL
+
+# Step 3: Create application database
+mysql -u admin -p << 'SQL'
+CREATE DATABASE myapp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE myapp;
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_username (username),
+    INDEX idx_email (email)
+);
+SQL
+
+# Success Criteria:
+# - MariaDB running
+# - Root secured
+# - Application users created
+# - Database and tables ready
+```
+
+### Challenge 3: Redis Caching Layer
+
+**Objective:** Implement Redis caching for database queries
+
+```bash
+# TASK: Set up Redis caching layer
+
+# Step 1: Install Redis
+pkg install redis -y
+redis-server --daemonize yes
+
+# Step 2: Test basic operations
+redis-cli << 'REDIS'
+# Set cache
+SET user:1:name "John Doe"
+SET user:1:email "john@example.com"
+EXPIRE user:1:name 3600
+EXPIRE user:1:email 3600
+
+# Test cache hit
+GET user:1:name
+
+# Increment counter
+INCR page:views
+INCR page:views
+
+# Store JSON
+SET config:app '{"theme":"dark","lang":"en"}'
+
+# List operations
+LPUSH logs:error "Error 1"
+LPUSH logs:error "Error 2"
+LRANGE logs:error 0 -1
+
+# Hash for user profile
+HSET user:2 name "Jane"
+HSET user:2 email "jane@example.com"
+HGETALL user:2
+
+# Check TTL
+TTL user:1:name
+REDIS
+
+# Step 3: Python Redis integration example
+pkg install python -y
+pip install redis
+
+python << 'PYTHON'
+import redis
+import json
+
+# Connect to Redis
+r = redis.Redis(host='localhost', port=6379, db=0)
+
+# Cache function
+def cache_get(key, ttl=3600):
+    value = r.get(key)
+    if value:
+        return json.loads(value)
+    return None
+
+def cache_set(key, value, ttl=3600):
+    r.setex(key, ttl, json.dumps(value))
+
+# Example usage
+user_data = {"id": 1, "name": "Test User"}
+cache_set("user:1", user_data)
+print("Cached:", cache_get("user:1"))
+print("Views:", r.get("page:views"))
+PYTHON
+
+# Success Criteria:
+# - Redis running
+# - Basic operations working
+# - Python integration functional
+```
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+### Database Terms
+
+| Term | Definition |
+|------|------------|
+| **Database** | Organized collection of structured data |
+| **DBMS** | Database Management System |
+| **RDBMS** | Relational Database Management System |
+| **SQL** | Structured Query Language |
+| **NoSQL** | Non-relational databases |
+| **Schema** | Database structure definition |
+| **Table** | Collection of related records |
+| **Row/Record** | Single entry in a table |
+| **Column/Field** | Attribute in a table |
+| **Primary Key** | Unique identifier for records |
+| **Foreign Key** | Reference to another table's primary key |
+| **Index** | Data structure for faster queries |
+| **Query** | Request to retrieve/modify data |
+
+### SQL Operation Terms
+
+| Term | Definition |
+|------|------------|
+| **SELECT** | Retrieve data from tables |
+| **INSERT** | Add new records |
+| **UPDATE** | Modify existing records |
+| **DELETE** | Remove records |
+| **JOIN** | Combine tables |
+| **WHERE** | Filter records |
+| **GROUP BY** | Aggregate data |
+| **ORDER BY** | Sort results |
+| **HAVING** | Filter after GROUP BY |
+| **UNION** | Combine result sets |
+
+### Transaction Terms
+
+| Term | Definition |
+|------|------------|
+| **Transaction** | Group of operations as single unit |
+| **ACID** | Atomicity, Consistency, Isolation, Durability |
+| **Commit** | Save transaction changes |
+| **Rollback** | Undo transaction changes |
+| **Savepoint** | Point within transaction to rollback to |
+| **Isolation Level** | Degree of transaction separation |
+| **Deadlock** | Two transactions waiting for each other |
+
+---
+
+## 💼 DEVOPS/SYSADMIN CAREER INSIGHTS
+
+### Database Administration in Industry
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    DATABASE IN DEVOPS CAREER                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  📊 Industry Statistics:                                                    │
+│  ├── 90% of applications use databases                                      │
+│  ├── DBA average salary: $85K-$140K                                        │
+│  ├── Cloud database market growing 20% yearly                              │
+│  └── Most in-demand: PostgreSQL, Redis, MongoDB                            │
+│                                                                              │
+│  💼 Key Skills Employers Seek:                                              │
+│  ├── SQL query optimization                                                │
+│  ├── Database backup and recovery                                          │
+│  ├── Performance tuning                                                    │
+│  ├── Security and access control                                           │
+│  ├── Cloud database services (AWS RDS, GCP Cloud SQL)                      │
+│  └── Migration and upgrade planning                                        │
+│                                                                              │
+│  🏢 Companies Hiring:                                                       │
+│  ├── Tech companies (data-driven)                                          │
+│  ├── Financial institutions                                                │
+│  ├── E-commerce platforms                                                  │
+│  └── SaaS companies                                                        │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Career Progression
+
+| Role | Skills Required | Experience | Salary Range |
+|------|-----------------|------------|--------------|
+| Junior DBA | Basic SQL, backup | 0-2 years | $55K-$75K |
+| Database Admin | Tuning, security | 2-5 years | $75K-$100K |
+| Senior DBA | Architecture, HA | 5-8 years | $100K-$130K |
+| Data Engineer | ETL, pipelines | 4-8 years | $95K-$140K |
+| Database Architect | Enterprise design | 8+ years | $130K-$180K |
+
+### Interview Questions
+
+```bash
+# Database Interview Questions:
+
+Q1: What's the difference between INNER JOIN and LEFT JOIN?
+A1: INNER JOIN returns only matching rows, LEFT JOIN returns all
+    left table rows with matching right rows or NULLs
+
+Q2: How do you optimize a slow query?
+A2: Use EXPLAIN to analyze, add indexes on filtered columns,
+    avoid SELECT *, optimize JOINs, consider partitioning
+
+Q3: What are database indexes and when should you use them?
+A3: Data structures that speed up data retrieval. Use on columns
+    in WHERE, JOIN, ORDER BY clauses. Avoid on frequently updated columns
+
+Q4: Explain ACID properties in databases.
+A4: Atomicity (all or nothing), Consistency (valid state),
+    Isolation (concurrent transactions), Durability (permanent changes)
+
+Q5: What's the difference between SQL and NoSQL?
+A5: SQL: structured, relational, ACID, schemas. NoSQL: flexible
+    schema, horizontal scaling, eventually consistent
+```
+
+---
+
+## 🔧 CONFIGURATION TEMPLATES
+
+### SQLite Optimization Template
+
+```sql
+-- SQLite Performance Configuration
+
+-- Enable WAL mode for better concurrency
+PRAGMA journal_mode = WAL;
+
+-- Enable foreign key enforcement
+PRAGMA foreign_keys = ON;
+
+-- Set cache size (in pages, negative = KB)
+PRAGMA cache_size = -64000;  -- 64MB cache
+
+-- Set synchronous mode (NORMAL recommended)
+PRAGMA synchronous = NORMAL;
+
+-- Set temp store to memory
+PRAGMA temp_store = MEMORY;
+
+-- Locking mode
+PRAGMA locking_mode = NORMAL;
+
+-- Auto vacuum settings
+PRAGMA auto_vacuum = INCREMENTAL;
+
+-- Create optimized table template
+CREATE TABLE IF NOT EXISTS optimized_table (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    data TEXT NOT NULL
+);
+
+-- Create useful indexes
+CREATE INDEX IF NOT EXISTS idx_created_at ON optimized_table(created_at);
+CREATE INDEX IF NOT EXISTS idx_data ON optimized_table(data);
+
+-- Regular maintenance commands
+ANALYZE;  -- Update statistics
+VACUUM;   -- Reclaim space
+```
+
+### MariaDB Production Configuration
+
+```sql
+-- MariaDB Production User and Database Setup
+
+-- Create application database
+CREATE DATABASE myapp 
+    CHARACTER SET utf8mb4 
+    COLLATE utf8mb4_unicode_ci;
+
+-- Create application user with limited privileges
+CREATE USER 'app_readonly'@'localhost' IDENTIFIED BY 'ReadOnlyPass123!';
+GRANT SELECT ON myapp.* TO 'app_readonly'@'localhost';
+
+CREATE USER 'app_readwrite'@'localhost' IDENTIFIED BY 'ReadWritePass456!';
+GRANT SELECT, INSERT, UPDATE, DELETE ON myapp.* TO 'app_readwrite'@'localhost';
+
+CREATE USER 'app_admin'@'localhost' IDENTIFIED BY 'AppAdminPass789!';
+GRANT ALL PRIVILEGES ON myapp.* TO 'app_admin'@'localhost';
+
+-- Create backup user
+CREATE USER 'backup'@'localhost' IDENTIFIED BY 'BackupPass999!';
+GRANT SELECT, LOCK TABLES, SHOW VIEW ON *.* TO 'backup'@'localhost';
+
+-- Apply changes
+FLUSH PRIVILEGES;
+
+-- Create standard table template
+USE myapp;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    uuid CHAR(36) NOT NULL DEFAULT (UUID()),
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL,
+    
+    UNIQUE KEY uk_username (username),
+    UNIQUE KEY uk_email (email),
+    INDEX idx_active (is_active),
+    INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Create audit log table
+CREATE TABLE audit_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    table_name VARCHAR(50) NOT NULL,
+    record_id INT NOT NULL,
+    action ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
+    old_values JSON,
+    new_values JSON,
+    user_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    INDEX idx_table_record (table_name, record_id),
+    INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+### Redis Configuration Template
+
+```bash
+# Redis Configuration Template
+
+# Connection settings
+bind 127.0.0.1
+port 6379
+timeout 300
+
+# Memory management
+maxmemory 256mb
+maxmemory-policy allkeys-lru
+
+# Persistence options
+# RDB snapshots
+save 900 1      # After 15 min if at least 1 key changed
+save 300 10     # After 5 min if at least 10 keys changed
+save 60 10000   # After 1 min if at least 10000 keys changed
+
+# AOF persistence
+appendonly yes
+appendfsync everysec
+auto-aof-rewrite-percentage 100
+auto-aof-rewrite-min-size 64mb
+
+# Security
+# requirepass YourStrongPassword123
+
+# Performance
+tcp-keepalive 300
+tcp-backlog 511
+
+# Logging
+loglevel notice
+logfile ""
+
+# Client management
+maxclients 10000
+```
+
+---
+
+## 📊 MERMAID ARCHITECTURE DIAGRAMS
+
+### 1. Database Ecosystem in Termux
+
+```mermaid
+graph TB
+    subgraph "Application Layer"
+        A[Python App] --> B[PHP App]
+        B --> C[Node.js App]
+    end
+    
+    subgraph "Database Layer"
+        D[(SQLite)] --> E[(MariaDB)]
+        E --> F[(PostgreSQL)]
+        F --> G[(Redis)]
+        G --> H[(MongoDB)]
+    end
+    
+    subgraph "Use Cases"
+        I[Embedded/Local]
+        J[Web Apps]
+        K[Enterprise]
+        L[Caching]
+        M[NoSQL]
+    end
+    
+    A --> D
+    A --> E
+    B --> E
+    C --> D
+    C --> H
+    
+    D --> I
+    E --> J
+    F --> K
+    G --> L
+    H --> M
+    
+    style D fill:#4CAF50,color:#fff
+    style E fill:#2196F3,color:#fff
+    style G fill:#FF5722,color:#fff
+```
+
+### 2. SQLite Architecture
+
+```mermaid
+flowchart LR
+    subgraph "SQLite Components"
+        A[Application] --> B[SQLite Engine]
+        B --> C[B-Tree Storage]
+        C --> D[Database File]
+    end
+    
+    subgraph "Features"
+        E[ACID Compliant]
+        F[Zero Config]
+        G[Single File]
+        H[Cross-Platform]
+    end
+    
+    B --> E
+    B --> F
+    B --> G
+    B --> H
+    
+    style B fill:#4CAF50,color:#fff
+```
+
+### 3. Redis Data Types
+
+```mermaid
+graph TB
+    subgraph "Redis Data Structures"
+        A[Redis] --> B[Strings]
+        A --> C[Hashes]
+        A --> D[Lists]
+        A --> E[Sets]
+        A --> F[Sorted Sets]
+    end
+    
+    subgraph "Use Cases"
+        B --> G[Cache, Counters]
+        C --> H[User Profiles]
+        D --> I[Queues, Logs]
+        E --> J[Tags, Unique Items]
+        F --> K[Leaderboards]
+    end
+    
+    style A fill:#FF5722,color:#fff
+```
+
+---
+
+## ⚡ ADVANCED COMMAND CHEATSHEET
+
+### SQLite Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `sqlite3 mydb.db` | Open/create database | Connect to DB |
+| `.tables` | List tables | Show all tables |
+| `.schema` | Show schema | Display structure |
+| `.mode column` | Column format | Pretty output |
+| `.headers on` | Show headers | Column names |
+| `.dump` | Export database | Backup as SQL |
+| `.read file.sql` | Import SQL | Execute file |
+| `.exit` | Exit SQLite | Close connection |
+
+### MariaDB Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `mysqld_safe &` | Start server | Launch MariaDB |
+| `mysql -u root` | Connect as root | Admin access |
+| `mysql -u user -p db` | Connect with password | Secure login |
+| `SHOW DATABASES;` | List databases | View all DBs |
+| `CREATE DATABASE x;` | Create database | New database |
+| `USE database;` | Select database | Switch context |
+| `SHOW TABLES;` | List tables | View tables |
+| `DESCRIBE table;` | Table structure | Show columns |
+
+### PostgreSQL Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `pg_ctl start` | Start PostgreSQL | Launch server |
+| `psql` | Connect to DB | PostgreSQL CLI |
+| `\l` | List databases | Show databases |
+| `\c dbname` | Connect to DB | Switch database |
+| `\dt` | List tables | Show tables |
+| `\d table` | Describe table | Show structure |
+| `\du` | List users | Show roles |
+| `\q` | Exit psql | Quit |
+
+### Redis Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `redis-server` | Start Redis | Launch server |
+| `redis-cli` | Connect client | Redis CLI |
+| `SET key value` | Store value | Basic set |
+| `GET key` | Retrieve value | Basic get |
+| `DEL key` | Delete key | Remove data |
+| `KEYS *` | List all keys | View keys |
+| `EXPIRE key sec` | Set TTL | Auto-expire |
+| `FLUSHDB` | Clear database | Remove all |
+
+### MongoDB Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `mongosh` | MongoDB shell | Connect to DB |
+| `show dbs` | List databases | View databases |
+| `use dbname` | Switch database | Select DB |
+| `show collections` | List collections | View collections |
+| `db.collection.find()` | Query documents | Find data |
+| `db.collection.insertOne()` | Insert document | Add data |
+| `db.collection.updateOne()` | Update document | Modify data |
+| `db.collection.deleteOne()` | Delete document | Remove data |
+
+---
+
+## 🎯 SYSTEM ADMIN LEARNING PATH
+
+### Database Administration Roadmap
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                   DATABASE MASTERY PATH                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  LEVEL 1: FUNDAMENTALS (Week 1-2)                                       │
+│  ├── SQL basics (SELECT, INSERT, UPDATE, DELETE)                        │
+│  ├── SQLite for local storage                                           │
+│  ├── Database design basics                                             │
+│  ├── Data types and constraints                                         │
+│  └── Simple queries and filters                                         │
+│                                                                          │
+│  LEVEL 2: RELATIONAL DATABASES (Week 3-4)                               │
+│  ├── MariaDB/MySQL installation                                         │
+│  ├── User and permission management                                     │
+│  ├── Database backup/restore                                            │
+│  ├── Joins and relationships                                            │
+│  └── Indexing basics                                                    │
+│                                                                          │
+│  LEVEL 3: ADVANCED SQL (Week 5-6)                                       │
+│  ├── Complex queries (subqueries, CTEs)                                 │
+│  ├── Stored procedures and functions                                    │
+│  ├── Triggers and events                                                │
+│  ├── Query optimization                                                 │
+│  └── Transaction management                                             │
+│                                                                          │
+│  LEVEL 4: NOSQL & CACHING (Week 7-8)                                    │
+│  ├── Redis for caching                                                  │
+│  ├── MongoDB basics                                                     │
+│  ├── When to use NoSQL vs SQL                                           │
+│  ├── Data modeling for NoSQL                                            │
+│  └── Performance strategies                                             │
+│                                                                          │
+│  LEVEL 5: PROFESSIONAL DBA (Ongoing)                                    │
+│  ├── Replication and clustering                                         │
+│  ├── Performance tuning                                                 │
+│  ├── Security hardening                                                 │
+│  ├── Migration strategies                                               │
+│  └── Monitoring and alerting                                            │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skill Assessment
+
+| Level | Skills | Self-Check |
+|-------|--------|------------|
+| Beginner | SQL basics, SQLite | ☐ Can write basic queries |
+| Intermediate | MariaDB, user management | ☐ Can manage databases |
+| Advanced | Optimization, stored procedures | ☐ Can tune performance |
+| Expert | NoSQL, caching | ☐ Can architect data solutions |
+| Professional | Replication, clustering | ☐ Can manage enterprise databases |
+
+---
+
+## 🔧 TECHNOLOGY COMPARISON TABLE
+
+| Database | Type | Best For | Performance | Complexity |
+|----------|------|----------|-------------|------------|
+| **SQLite** | Embedded | Mobile, small apps | High (local) | ⭐ Easy |
+| **MariaDB** | Relational | Web apps, CMS | High | ⭐⭐ Medium |
+| **PostgreSQL** | Object-Rel | Enterprise, complex | Very High | ⭐⭐⭐ Advanced |
+| **Redis** | Key-Value | Caching, sessions | Very High | ⭐ Easy |
+| **MongoDB** | Document | JSON data, flexible | High | ⭐⭐ Medium |
+
+### SQL vs NoSQL Comparison
+
+| Feature | SQL (MariaDB) | NoSQL (MongoDB) |
+|---------|---------------|-----------------|
+| **Schema** | Fixed | Flexible |
+| **Scalability** | Vertical | Horizontal |
+| **Transactions** | ACID | Eventually consistent |
+| **Joins** | Supported | Not supported |
+| **Best For** | Structured data | Unstructured data |
+
+### Data Type Mapping
+
+| SQLite | MariaDB | PostgreSQL | Redis |
+|--------|---------|------------|-------|
+| INTEGER | INT | INTEGER | String |
+| TEXT | VARCHAR | VARCHAR | String |
+| REAL | DECIMAL | NUMERIC | String |
+| BLOB | BLOB | BYTEA | String |
+| NULL | NULL | NULL | None |
+
+---
+
+## 🚀 PRACTICAL SERVER CHALLENGES
+
+### Challenge 1: Build a Contact Manager
+
+**Objective:** Create a complete CRUD application with SQLite
+
+**Tasks:**
+1. Design database schema for contacts
+2. Implement all CRUD operations
+3. Add search functionality
+4. Implement data validation
+5. Create export/import feature
+
+**Schema:**
+```sql
+CREATE TABLE contacts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE,
+    phone TEXT,
+    address TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Challenge 2: User Authentication System
+
+**Objective:** Build a secure user auth system with MariaDB
+
+**Tasks:**
+1. Create users table with secure password storage
+2. Implement registration and login
+3. Add password hashing (bcrypt)
+4. Create session management with Redis
+5. Implement password reset
+
+**Schema:**
+```sql
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP
+);
+```
+
+### Challenge 3: Real-time Analytics Dashboard
+
+**Objective:** Create a data analytics system using multiple databases
+
+**Tasks:**
+1. Store events in MongoDB (flexible schema)
+2. Cache results in Redis
+3. Generate reports with aggregation
+4. Implement real-time counters
+5. Create data visualization queries
+
+**Architecture:**
+```
+User Events → MongoDB (storage)
+              ↓
+         Redis (cache)
+              ↓
+        Aggregation Queries
+              ↓
+         Dashboard Data
+```
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+### SQL Terms
+
+| Term | Definition |
+|------|------------|
+| **Query** | SQL statement to retrieve/modify data |
+| **Table** | Collection of related data rows |
+| **Row** | Single record in a table |
+| **Column** | Field/attribute in a table |
+| **Primary Key** | Unique identifier for each row |
+| **Foreign Key** | Reference to another table's primary key |
+| **Index** | Data structure for faster queries |
+| **Join** | Combine data from multiple tables |
+| **Transaction** | Group of operations as single unit |
+| **ACID** | Atomicity, Consistency, Isolation, Durability |
+
+### NoSQL Terms
+
+| Term | Definition |
+|------|------------|
+| **Document** | JSON-like data record |
+| **Collection** | Group of documents (like table) |
+| **Key-Value** | Simple data storage model |
+| **Hash** | Field-value pairs in Redis |
+| **TTL** | Time To Live (auto-expiration) |
+| **Sharding** | Horizontal data partitioning |
+| **Replica** | Copy of database for redundancy |
+
+### Database Admin Terms
+
+| Term | Definition |
+|------|------------|
+| **Backup** | Copy of database for recovery |
+| **Restore** | Recover database from backup |
+| **Migration** | Database schema changes |
+| **Normalization** | Organizing data to reduce redundancy |
+| **Denormalization** | Optimizing reads by adding redundancy |
+| **Connection Pool** | Reusable database connections |
+| **Query Plan** | How database executes a query |
+
+---
+
+## 💼 DEVOPS/SYSADMIN CAREER INSIGHTS
+
+### Database Career Path
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                   DATABASE ADMIN CAREER                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ENTRY LEVEL (0-2 years)                                                │
+│  ├── Role: Jr. DBA / Backend Developer                                  │
+│  ├── Skills: SQL, basic admin, backups                                  │
+│  ├── Salary: $50K - $75K                                                │
+│  └── Focus: Learning fundamentals                                       │
+│                                                                          │
+│  MID LEVEL (2-5 years)                                                  │
+│  ├── Role: Database Administrator                                       │
+│  ├── Skills: Performance tuning, replication                           │
+│  ├── Salary: $80K - $120K                                               │
+│  └── Focus: Optimization                                                │
+│                                                                          │
+│  SENIOR LEVEL (5-8 years)                                               │
+│  ├── Role: Senior DBA / Data Engineer                                   │
+│  ├── Skills: Architecture, NoSQL, clustering                           │
+│  ├── Salary: $130K - $170K                                              │
+│  └── Focus: Architecture                                                │
+│                                                                          │
+│  PRINCIPAL (8+ years)                                                   │
+│  ├── Role: Database Architect / Data Platform Lead                      │
+│  ├── Skills: Enterprise architecture, strategy                          │
+│  ├── Salary: $180K - $250K+                                             │
+│  └── Focus: Strategy and leadership                                     │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Industry Demand
+
+| Role | Demand Level | Growth |
+|------|--------------|--------|
+| **SQL Developer** | High | Steady |
+| **Database Administrator** | Medium | Stable |
+| **Data Engineer** | Very High | Growing |
+| **MongoDB Developer** | High | Growing |
+| **Redis Specialist** | Medium | Growing |
+
+### Certifications
+
+| Certification | Provider | Value |
+|---------------|----------|-------|
+| **Oracle DBA** | Oracle | High |
+| **MySQL DBA** | Oracle | Medium |
+| **PostgreSQL CE** | EDB | Medium |
+| **MongoDB DBA** | MongoDB | High |
+| **Redis Certified** | Redis | Medium |
+
+---
+
+## 🔧 CONFIGURATION TEMPLATES
+
+### Template 1: SQLite Database Helper (Python)
+
+```python
+#!/usr/bin/env python3
+# sqlite_helper.py - SQLite database helper class
+
+import sqlite3
+import os
+
+class Database:
+    def __init__(self, db_path):
+        self.db_path = db_path
+        self.conn = None
+        self.cursor = None
+    
+    def connect(self):
+        self.conn = sqlite3.connect(self.db_path)
+        self.cursor = self.conn.cursor()
+        return self
+    
+    def execute(self, query, params=None):
+        if params:
+            self.cursor.execute(query, params)
+        else:
+            self.cursor.execute(query)
+        return self
+    
+    def fetchall(self):
+        return self.cursor.fetchall()
+    
+    def fetchone(self):
+        return self.cursor.fetchone()
+    
+    def commit(self):
+        self.conn.commit()
+    
+    def close(self):
+        if self.conn:
+            self.conn.close()
+
+# Usage
+db = Database('myapp.db')
+db.connect()
+db.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)")
+db.close()
+```
+
+### Template 2: MariaDB Configuration
+
+```ini
+# $PREFIX/etc/my.cnf.d/server.cnf
+
+[mysqld]
+# Basic Settings
+port = 3306
+socket = /tmp/mysql.sock
+datadir = /data/data/com.termux/files/usr/var/lib/mysql
+
+# Performance
+innodb_buffer_pool_size = 128M
+innodb_log_file_size = 32M
+max_connections = 100
+query_cache_size = 16M
+query_cache_type = 1
+
+# Security
+bind-address = 127.0.0.1
+local_infile = 0
+skip-symbolic-links
+
+# Logging
+log_error = /tmp/mysql_error.log
+slow_query_log = 1
+slow_query_log_file = /tmp/mysql_slow.log
+long_query_time = 2
+
+# Character Set
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+```
+
+### Template 3: Redis Configuration
+
+```conf
+# $PREFIX/etc/redis/redis.conf
+
+# Network
+bind 127.0.0.1
+port 6379
+protected-mode yes
+
+# Memory
+maxmemory 64mb
+maxmemory-policy allkeys-lru
+
+# Persistence
+save 900 1
+save 300 10
+save 60 10000
+appendonly yes
+appendfilename "appendonly.aof"
+
+# Security
+# requirepass YourStrongPassword
+
+# Performance
+tcp-keepalive 300
+tcp-backlog 511
+timeout 0
+```
+
+### Template 4: Database Backup Script
+
+```bash
+#!/bin/bash
+# db_backup.sh - Automated database backup
+
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR="$HOME/db_backups"
+mkdir -p "$BACKUP_DIR"
+
+# SQLite backup
+backup_sqlite() {
+    local db=$1
+    local name=$(basename "$db" .db)
+    cp "$db" "$BACKUP_DIR/${name}_${DATE}.db"
+    gzip "$BACKUP_DIR/${name}_${DATE}.db"
+    echo "SQLite backup: ${name}_${DATE}.db.gz"
+}
+
+# MariaDB backup
+backup_mysql() {
+    local db=$1
+    mysqldump -u root "$db" | gzip > "$BACKUP_DIR/${db}_${DATE}.sql.gz"
+    echo "MySQL backup: ${db}_${DATE}.sql.gz"
+}
+
+# Clean old backups (keep last 7 days)
+clean_old() {
+    find "$BACKUP_DIR" -name "*.gz" -mtime +7 -delete
+    echo "Old backups cleaned"
+}
+
+# Main
+backup_sqlite "$HOME/myapp.db"
+backup_mysql "myapp"
+clean_old
+
+echo "Backup completed: $(date)"
+```
+
+---
+
+## 📊 MERMAID ARCHITECTURE DIAGRAMS
+
+### Database Architecture Overview
+
+```mermaid
+graph TB
+    subgraph "Application Layer"
+        A[Python App] --> D{Database Router}
+        B[Node.js App] --> D
+        C[PHP App] --> D
+    end
+    
+    subgraph "Database Layer"
+        D --> E[(SQLite)]
+        D --> F[(MariaDB)]
+        D --> G[(PostgreSQL)]
+        D --> H[(Redis)]
+    end
+    
+    subgraph "SQLite - Embedded"
+        E --> E1[Single File DB]
+        E1 --> E2[No Server]
+    end
+    
+    subgraph "MariaDB - Relational"
+        F --> F1[Server Process]
+        F1 --> F2[Multiple DBs]
+    end
+    
+    subgraph "PostgreSQL - Advanced"
+        G --> G1[Server Process]
+        G1 --> G2[JSON/JSONB]
+        G1 --> G3[GIS Support]
+    end
+    
+    subgraph "Redis - Cache"
+        H --> H1[In-Memory]
+        H1 --> H2[Key-Value]
+    end
+    
+    style D fill:#FF9800,stroke:#EF6C00,color:#fff
+    style E fill:#4CAF50,stroke:#2E7D32,color:#fff
+    style F fill:#2196F3,stroke:#1565C0,color:#fff
+    style G fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style H fill:#F44336,stroke:#C62828,color:#fff
+```
+
+### Database Query Flow
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant DB as Database Engine
+    participant Cache as Redis Cache
+    participant Storage as Disk Storage
+    
+    App->>Cache: Check Cache
+    alt Cache Hit
+        Cache->>App: Return Cached Data
+    else Cache Miss
+        App->>DB: Execute Query
+        DB->>Storage: Read Data
+        Storage->>DB: Return Rows
+        DB->>App: Return Results
+        App->>Cache: Store in Cache
+    end
+```
+
+### Database Type Comparison
+
+```mermaid
+graph LR
+    subgraph "Relational - SQL"
+        A1[MariaDB] --> B1[Structured Data]
+        A2[PostgreSQL] --> B2[Complex Queries]
+        A3[SQLite] --> B3[Embedded Apps]
+    end
+    
+    subgraph "NoSQL - Document"
+        C1[MongoDB] --> D1[JSON Documents]
+        C2[Redis] --> D2[Key-Value Cache]
+    end
+    
+    subgraph "Use Cases"
+        E1[E-commerce] --> A1
+        E2[Analytics] --> A2
+        E3[Mobile Apps] --> A3
+        E4[Real-time] --> C2
+    end
+    
+    style A1 fill:#2196F3,color:#fff
+    style A2 fill:#9C27B0,color:#fff
+    style A3 fill:#4CAF50,color:#fff
+    style C2 fill:#F44336,color:#fff
+```
+
+---
+
+## ⚡ ADVANCED COMMAND CHEATSHEET
+
+### SQLite Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `sqlite3 db.db` | Open database | `sqlite3 myapp.db` |
+| `sqlite3 db.db "query"` | Run query directly | `sqlite3 my.db "SELECT * FROM users;"` |
+| `.tables` | List tables | Inside sqlite3 prompt |
+| `.schema table` | Show table structure | `.schema users` |
+| `.mode column` | Format output | `.mode column` |
+| `.headers on` | Show headers | `.headers on` |
+| `.dump` | Export database | `sqlite3 db.db .dump > backup.sql` |
+| `.read file.sql` | Import SQL file | `.read backup.sql` |
+| `.import csv table` | Import CSV | `.import data.csv users` |
+
+### MariaDB/MySQL Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `mysqld_safe &` | Start server | `mysqld_safe &` |
+| `mysql -u root` | Connect as root | `mysql -u root -p` |
+| `mysql -u user -p db` | Connect to database | `mysql -u appuser -p myapp` |
+| `SHOW DATABASES;` | List databases | In mysql prompt |
+| `CREATE DATABASE name;` | Create database | `CREATE DATABASE myapp;` |
+| `USE dbname;` | Select database | `USE myapp;` |
+| `SHOW TABLES;` | List tables | In mysql prompt |
+| `DESCRIBE table;` | Table structure | `DESCRIBE users;` |
+| `mysqldump -u root db > file.sql` | Backup | `mysqldump -u root myapp > backup.sql` |
+| `mysql -u root db < file.sql` | Restore | `mysql -u root myapp < backup.sql` |
+
+### PostgreSQL Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `pg_ctl -D datadir start` | Start server | `pg_ctl -D ~/pgdata start` |
+| `pg_ctl -D datadir stop` | Stop server | `pg_ctl -D ~/pgdata stop` |
+| `psql` | Connect to PostgreSQL | `psql -U postgres` |
+| `psql -d dbname` | Connect to database | `psql -d myapp` |
+| `\l` | List databases | In psql prompt |
+| `\c dbname` | Connect to database | `\c myapp` |
+| `\dt` | List tables | In psql prompt |
+| `\d table` | Table structure | `\d users` |
+| `\du` | List users | In psql prompt |
+| `pg_dump db > file.sql` | Backup | `pg_dump myapp > backup.sql` |
+
+### Redis Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `redis-server` | Start Redis | `redis-server --daemonize yes` |
+| `redis-cli` | Connect to Redis | `redis-cli` |
+| `SET key value` | Set value | `SET user:1 "John"` |
+| `GET key` | Get value | `GET user:1` |
+| `DEL key` | Delete key | `DEL user:1` |
+| `KEYS *` | List all keys | `KEYS *` |
+| `SETEX key sec val` | Set with expiry | `SETEX session 3600 "data"` |
+| `TTL key` | Time to live | `TTL session` |
+| `INCR key` | Increment | `INCR counter` |
+| `HSET hash field val` | Hash set | `HSET user:1 name "John"` |
+| `HGET hash field` | Hash get | `HGET user:1 name` |
+| `LPUSH list val` | List push | `LPUSH mylist item1` |
+| `LRANGE list 0 -1` | List range | `LRANGE mylist 0 -1` |
+
+### Python Database Connectivity
+
+| Database | Library | Install |
+|----------|---------|---------|
+| SQLite | `sqlite3` | Built-in |
+| MySQL | `mysql-connector-python` | `pip install mysql-connector-python` |
+| PostgreSQL | `psycopg2` | `pip install psycopg2-binary` |
+| Redis | `redis` | `pip install redis` |
+| MongoDB | `pymongo` | `pip install pymongo` |
+
+---
+
+## 🎯 SYSTEM ADMIN LEARNING PATH
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    DATABASE ADMINISTRATOR ROADMAP                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  LEVEL 1: BEGINNER (0-6 months)                                            │
+│  ══════════════════════════════                                              │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                     │
+│  │ Basic   │──▶│ SQLite  │──▶│ CRUD    │──▶│ Simple  │                     │
+│  │ SQL     │   │ Mastery │   │Queries  │   │Backups  │                     │
+│  └─────────┘   └─────────┘   └─────────┘   └─────────┘                     │
+│                                                                              │
+│  Skills: SQL basics, SQLite, basic queries, simple backups                 │
+│  Salary: ₹3-5 LPA | $40-60K                                                │
+│                                                                              │
+│  LEVEL 2: INTERMEDIATE (6-18 months)                                        │
+│  ═══════════════════════════════════                                        │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                     │
+│  │ MariaDB │──▶│PostgreSQL│──▶│ Redis   │──▶│ User    │                     │
+│  │ Setup   │   │ Basics  │   │ Caching │   │ Mgmt    │                     │
+│  └─────────┘   └─────────┘   └─────────┘   └─────────┘                     │
+│                                                                              │
+│  Skills: MySQL/MariaDB, PostgreSQL basics, Redis caching, user management  │
+│  Salary: ₹6-15 LPA | $70-110K                                              │
+│                                                                              │
+│  LEVEL 3: ADVANCED (18-36 months)                                           │
+│  ═══════════════════════════════                                            │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                     │
+│  │ Query   │──▶│ Index   │──▶│ Backup  │──▶│ Replication│                   │
+│  │Optimize │   │ Strategy│   │Strategy │   │& Recovery │                    │
+│  └─────────┘   └─────────┘   └─────────┘   └─────────┘                     │
+│                                                                              │
+│  Skills: Performance tuning, indexing, backup strategies, HA setups        │
+│  Salary: ₹15-30 LPA | $120-180K                                            │
+│                                                                              │
+│  LEVEL 4: EXPERT (3-5+ years)                                               │
+│  ════════════════════════════                                                │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                     │
+│  │Database │──▶│ Sharding│──▶│ Cloud   │──▶│Database │                     │
+│  │Security │   │& Scaling│   │Migration│   │Architect│                     │
+│  └─────────┘   └─────────┘   └─────────┘   └─────────┘                     │
+│                                                                              │
+│  Skills: Security hardening, distributed databases, cloud migrations       │
+│  Salary: ₹35-60 LPA | $180-250K+                                            │
+│                                                                              │
+│  CERTIFICATIONS:                                                            │
+│  ├─ Oracle Database Administrator (OCA/OCP)                                 │
+│  ├─ PostgreSQL Professional                                                 │
+│  ├─ AWS Database Specialty                                                  │
+│  └─ MongoDB Database Administrator                                         │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔧 TECHNOLOGY COMPARISON TABLE
+
+### Database Comparison for Different Use Cases
+
+| Database | Type | Best For | Scalability | Learning Curve |
+|----------|------|----------|-------------|----------------|
+| **SQLite** | Embedded | Mobile apps, small projects | ⭐⭐ | ⭐ Easy |
+| **MariaDB** | Relational | Web apps, CMS, e-commerce | ⭐⭐⭐⭐ | ⭐⭐⭐ Medium |
+| **PostgreSQL** | Object-Rel | Analytics, GIS, complex data | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ Hard |
+| **Redis** | Key-Value | Caching, sessions, real-time | ⭐⭐⭐⭐ | ⭐⭐ Easy |
+| **MongoDB** | Document | JSON data, flexible schema | ⭐⭐⭐⭐ | ⭐⭐⭐ Medium |
+
+### SQL vs NoSQL Comparison
+
+| Feature | SQL (Relational) | NoSQL (Document/Key-Value) |
+|---------|------------------|---------------------------|
+| Schema | Fixed, predefined | Flexible, dynamic |
+| Scalability | Vertical (scale up) | Horizontal (scale out) |
+| Relationships | Complex joins | Embedded documents |
+| ACID | Full support | Varies by database |
+| Query Language | Standard SQL | Database-specific |
+| Best For | Structured data, transactions | Unstructured data, rapid dev |
+
+### Performance Characteristics
+
+| Database | Read Speed | Write Speed | Memory Usage | Disk Usage |
+|----------|------------|-------------|--------------|------------|
+| SQLite | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Very Low | Low |
+| MariaDB | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Medium | Medium |
+| PostgreSQL | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Medium-High | Medium |
+| Redis | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | High (RAM) | Very Low |
+| MongoDB | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | High | High |
+
+---
+
+## 🚀 PRACTICAL SERVER CHALLENGES
+
+### Challenge 1: Build a Complete User Management System
+
+**Objective:** Create a full user management system with multiple databases.
+
+**Requirements:**
+- User registration with hashed passwords
+- Session management with Redis
+- User data in MariaDB
+- Audit logs in SQLite
+- Query optimization with indexes
+
+**Solution:**
+```bash
+# 1. Start services
+mysqld_safe &
+redis-server --daemonize yes
+
+# 2. Create MariaDB database
+mysql -u root << 'EOF'
+CREATE DATABASE usermgmt;
+CREATE USER 'appuser'@'localhost' IDENTIFIED BY 'securepass123';
+GRANT ALL PRIVILEGES ON usermgmt.* TO 'appuser'@'localhost';
+FLUSH PRIVILEGES;
+
+USE usermgmt;
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    INDEX idx_username (username),
+    INDEX idx_email (email)
+);
+
+CREATE TABLE user_sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    session_token VARCHAR(255) NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+EOF
+
+# 3. Create audit database in SQLite
+sqlite3 ~/audit.db << 'EOF'
+CREATE TABLE audit_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    action TEXT NOT NULL,
+    details TEXT,
+    ip_address TEXT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_user_audit ON audit_logs(user_id);
+CREATE INDEX idx_timestamp_audit ON audit_logs(timestamp);
+EOF
+
+# 4. Python script for user management
+cat > ~/usermgmt.py << 'PYEOF'
+#!/usr/bin/env python3
+import sqlite3
+import mysql.connector
+import redis
+import hashlib
+import secrets
+from datetime import datetime, timedelta
+
+# Connections
+mysql_conn = mysql.connector.connect(
+    host='localhost',
+    user='appuser',
+    password='securepass123',
+    database='usermgmt'
+)
+redis_client = redis.Redis(host='localhost', port=6379, decode_responses=True)
+audit_conn = sqlite3.connect(expanduser('~/audit.db'))
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def register_user(username, email, password):
+    cursor = mysql_conn.cursor()
+    try:
+        cursor.execute(
+            "INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)",
+            (username, email, hash_password(password))
+        )
+        mysql_conn.commit()
+        log_audit(cursor.lastrowid, 'USER_REGISTER', f'New user: {username}')
+        return True
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return False
+
+def login_user(username, password):
+    cursor = mysql_conn.cursor(dictionary=True)
+    cursor.execute(
+        "SELECT * FROM users WHERE username = %s AND password_hash = %s",
+        (username, hash_password(password))
+    )
+    user = cursor.fetchone()
+    
+    if user:
+        session_token = secrets.token_hex(32)
+        expires = datetime.now() + timedelta(hours=24)
+        
+        # Store session in Redis
+        redis_client.setex(
+            f"session:{session_token}",
+            86400,  # 24 hours
+            str(user['id'])
+        )
+        
+        # Update last login
+        cursor.execute(
+            "UPDATE users SET last_login = NOW() WHERE id = %s",
+            (user['id'],)
+        )
+        mysql_conn.commit()
+        log_audit(user['id'], 'USER_LOGIN', 'Successful login')
+        return session_token
+    return None
+
+def log_audit(user_id, action, details):
+    cursor = audit_conn.cursor()
+    cursor.execute(
+        "INSERT INTO audit_logs (user_id, action, details) VALUES (?, ?, ?)",
+        (user_id, action, details)
+    )
+    audit_conn.commit()
+
+# Test
+if __name__ == "__main__":
+    register_user("testuser", "test@example.com", "password123")
+    token = login_user("testuser", "password123")
+    print(f"Session token: {token}")
+PYEOF
+
+python3 ~/usermgmt.py
+```
+
+**Success Criteria:**
+- [ ] Users table created with indexes
+- [ ] Password hashing working
+- [ ] Redis sessions functioning
+- [ ] Audit logging operational
+
+---
+
+### Challenge 2: Database Backup & Recovery System
+
+**Objective:** Create automated backup system for multiple databases.
+
+**Requirements:**
+- Daily full backups
+- Compressed backup files
+- Backup rotation (keep last 7 days)
+- Easy restore process
+- Backup verification
+
+**Solution:**
+```bash
+#!/bin/bash
+# ~/scripts/db-backup.sh
+
+BACKUP_DIR=~/db-backups
+DATE=$(date +%Y%m%d_%H%M%S)
+LOG_FILE=~/backup.log
+
+mkdir -p $BACKUP_DIR
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> $LOG_FILE
+}
+
+# SQLite Backup
+backup_sqlite() {
+    local db=$1
+    local name=$(basename $db .db)
+    
+    sqlite3 $db ".backup '$BACKUP_DIR/${name}_${DATE}.db'"
+    gzip $BACKUP_DIR/${name}_${DATE}.db
+    
+    log "SQLite backup: $name - $(ls -lh $BACKUP_DIR/${name}_${DATE}.db.gz | awk '{print $5}')"
+}
+
+# MariaDB Backup
+backup_mysql() {
+    local db=$1
+    
+    mysqldump -u root $db | gzip > $BACKUP_DIR/${db}_${DATE}.sql.gz
+    
+    log "MariaDB backup: $db - $(ls -lh $BACKUP_DIR/${db}_${DATE}.sql.gz | awk '{print $5}')"
+}
+
+# PostgreSQL Backup
+backup_postgres() {
+    local db=$1
+    
+    pg_dump $db | gzip > $BACKUP_DIR/${db}_${DATE}.sql.gz
+    
+    log "PostgreSQL backup: $db - $(ls -lh $BACKUP_DIR/${db}_${DATE}.sql.gz | awk '{print $5}')"
+}
+
+# Redis Backup
+backup_redis() {
+    redis-cli BGSAVE
+    sleep 2
+    cp ~/.redis/dump.rdb $BACKUP_DIR/redis_${DATE}.rdb
+    gzip $BACKUP_DIR/redis_${DATE}.rdb
+    
+    log "Redis backup - $(ls -lh $BACKUP_DIR/redis_${DATE}.rdb.gz | awk '{print $5}')"
+}
+
+# Backup verification
+verify_backup() {
+    local file=$1
+    
+    if gzip -t $file 2>/dev/null; then
+        log "Verification PASSED: $file"
+        return 0
+    else
+        log "Verification FAILED: $file"
+        return 1
+    fi
+}
+
+# Clean old backups (keep last 7 days)
+clean_old_backups() {
+    find $BACKUP_DIR -name "*.gz" -mtime +7 -delete
+    log "Old backups cleaned"
+}
+
+# Main backup process
+log "=== Starting backup process ==="
+
+# SQLite databases
+for db in ~/myapp.db ~/audit.db; do
+    [ -f "$db" ] && backup_sqlite $db
+done
+
+# MariaDB databases
+mysql -u root -e "SHOW DATABASES;" | grep -v Database | grep -v information_schema | grep -v mysql | while read db; do
+    backup_mysql $db
+done
+
+# Redis
+backup_redis
+
+# Verify all backups
+for backup in $BACKUP_DIR/*_${DATE}*.gz; do
+    verify_backup $backup
+done
+
+# Clean old backups
+clean_old_backups
+
+log "=== Backup process completed ==="
+echo "Backup location: $BACKUP_DIR"
+ls -lh $BACKUP_DIR | tail -n +2
+```
+
+**Cron Setup:**
+```bash
+# Daily backup at 3 AM
+0 3 * * * ~/scripts/db-backup.sh
+```
+
+**Success Criteria:**
+- [ ] All databases backed up
+- [ ] Backups compressed
+- [ ] Verification passing
+- [ ] Old backups cleaned
+
+---
+
+### Challenge 3: Query Performance Optimization
+
+**Objective:** Optimize slow queries with indexes and analyze performance.
+
+**Steps:**
+```bash
+# 1. Create test database with large dataset
+mysql -u root << 'EOF'
+CREATE DATABASE perf_test;
+USE perf_test;
+
+CREATE TABLE orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    product_name VARCHAR(100),
+    quantity INT,
+    price DECIMAL(10,2),
+    order_date DATETIME,
+    status ENUM('pending', 'shipped', 'delivered')
+);
+
+-- Insert sample data
+DELIMITER //
+CREATE PROCEDURE insert_orders()
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    WHILE i <= 100000 DO
+        INSERT INTO orders (customer_id, product_name, quantity, price, order_date, status)
+        VALUES (
+            FLOOR(RAND() * 10000) + 1,
+            CONCAT('Product ', FLOOR(RAND() * 100)),
+            FLOOR(RAND() * 10) + 1,
+            ROUND(RAND() * 1000, 2),
+            DATE_ADD('2024-01-01', INTERVAL FLOOR(RAND() * 365) DAY),
+            ELT(FLOOR(RAND() * 3) + 1, 'pending', 'shipped', 'delivered')
+        );
+        SET i = i + 1;
+    END WHILE;
+END //
+DELIMITER ;
+
+CALL insert_orders();
+DROP PROCEDURE insert_orders;
+EOF
+
+# 2. Analyze slow query (before index)
+mysql -u root perf_test -e "
+SET profiling = 1;
+SELECT * FROM orders WHERE customer_id = 5000;
+SHOW PROFILE;
+"
+
+# 3. Create indexes
+mysql -u root perf_test << 'EOF'
+-- Index for customer_id queries
+CREATE INDEX idx_customer ON orders(customer_id);
+
+-- Index for date range queries
+CREATE INDEX idx_order_date ON orders(order_date);
+
+-- Composite index for common queries
+CREATE INDEX idx_customer_status ON orders(customer_id, status);
+
+-- Analyze table for optimizer
+ANALYZE TABLE orders;
+EOF
+
+# 4. Analyze query performance (after index)
+mysql -u root perf_test -e "
+SET profiling = 1;
+SELECT * FROM orders WHERE customer_id = 5000;
+SHOW PROFILE;
+"
+
+# 5. Use EXPLAIN to understand query plan
+mysql -u root perf_test -e "
+EXPLAIN SELECT * FROM orders WHERE customer_id = 5000;
+EXPLAIN SELECT * FROM orders WHERE customer_id = 5000 AND status = 'shipped';
+"
+
+# 6. SQLite optimization
+sqlite3 ~/test_perf.db << 'EOF'
+CREATE TABLE large_table (id INTEGER PRIMARY KEY, name TEXT, value INTEGER);
+INSERT INTO large_table WITH RECURSIVE cnt(x) AS (SELECT 1 UNION ALL SELECT x+1 FROM cnt WHERE x<10000) SELECT x, 'item_' || x, x * 10 FROM cnt;
+
+-- Analyze without index
+.timer on
+SELECT * FROM large_table WHERE value > 5000;
+.timer off
+
+-- Create index
+CREATE INDEX idx_value ON large_table(value);
+
+-- Analyze with index
+.timer on
+SELECT * FROM large_table WHERE value > 5000;
+.timer off
+
+-- Enable WAL mode for better performance
+PRAGMA journal_mode=WAL;
+
+-- Vacuum to optimize
+VACUUM;
+EOF
+```
+
+**Success Criteria:**
+- [ ] Indexes created successfully
+- [ ] Query execution time reduced
+- [ ] EXPLAIN shows index usage
+- [ ] Database optimized
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **Database** | Organized collection of structured data stored electronically |
+| **DBMS** | Database Management System - software to manage databases |
+| **SQL** | Structured Query Language - language for relational databases |
+| **NoSQL** | Non-relational databases for unstructured data |
+| **CRUD** | Create, Read, Update, Delete - basic database operations |
+| **Index** | Data structure that improves query speed |
+| **Primary Key** | Unique identifier for each record in a table |
+| **Foreign Key** | Field that links to primary key in another table |
+| **JOIN** | SQL operation to combine rows from multiple tables |
+| **Transaction** | Group of operations executed as a single unit |
+| **ACID** | Atomicity, Consistency, Isolation, Durability - database properties |
+| **Normalization** | Process of organizing data to reduce redundancy |
+| **Query Optimization** | Process of improving query performance |
+| **Replication** | Copying data across multiple database servers |
+| **Sharding** | Horizontal partitioning of data across multiple servers |
+
+---
+
+## 💼 DEVOPS/SYSADMIN CAREER INSIGHTS
+
+### Database Administrator Job Roles & Salaries
+
+| Role | Experience | India (LPA) | US ($K) | Key Skills |
+|------|------------|-------------|---------|------------|
+| Jr. DBA | 0-2 yrs | 4-7 | 50-70 | SQL, Basic admin |
+| Database Administrator | 2-5 yrs | 8-18 | 80-120 | MySQL, PostgreSQL, Backup |
+| Sr. DBA | 5-8 yrs | 18-30 | 120-160 | Performance tuning, HA |
+| Database Architect | 8-12 yrs | 30-50 | 160-200 | Design, Sharding, Cloud |
+| Data Engineer | 3-6 yrs | 15-35 | 100-160 | ETL, Pipelines, Big Data |
+
+### Top Companies Hiring DBAs
+
+**India:**
+- Banks: HDFC, ICICI, Axis, SBI
+- Tech: TCS, Infosys, Wipro, HCL
+- Startups: Paytm, Zerodha, CRED
+
+**Global:**
+- Cloud: AWS RDS, Google Cloud SQL, Azure SQL
+- Enterprise: Oracle, SAP, Salesforce
+- Tech: Facebook, Netflix, Uber
+
+### Career Progression
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    DBA CAREER PATH                              │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  SQL Developer ──▶ Jr. DBA ──▶ DBA ──▶ Sr. DBA                  │
+│                                    │              │              │
+│                                    ▼              ▼              │
+│                             Data Engineer  Database Architect    │
+│                                    │              │              │
+│                                    ▼              ▼              │
+│                             Data Architect  Platform Architect   │
+│                                              │                   │
+│                                              ▼                   │
+│                                        CTO / VP Data             │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Interview Questions
+
+1. **Basic:** What's the difference between INNER JOIN and LEFT JOIN?
+2. **Intermediate:** How would you optimize a slow query?
+3. **Advanced:** Explain database replication strategies.
+4. **Expert:** Design a high-availability database architecture.
+5. **Practical:** Recover a database from a corrupted backup.
+
+---
+
+## 🔧 CONFIGURATION TEMPLATES
+
+### MariaDB Production Configuration
+
+```ini
+# ~/.my.cnf - MariaDB Configuration
+
+[mysqld]
+# Basic Settings
+port = 3306
+bind-address = 127.0.0.1
+datadir = $PREFIX/var/lib/mysql
+socket = /tmp/mysql.sock
+
+# Performance
+innodb_buffer_pool_size = 256M
+innodb_log_file_size = 64M
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT
+
+# Connections
+max_connections = 100
+max_connect_errors = 100
+
+# Logging
+log_error = $PREFIX/var/log/mysql/error.log
+slow_query_log = 1
+slow_query_log_file = $PREFIX/var/log/mysql/slow.log
+long_query_time = 2
+
+# Security
+local_infile = 0
+skip-symbolic-links
+
+[client]
+port = 3306
+socket = /tmp/mysql.sock
+
+[mysqldump]
+quick
+max_allowed_packet = 16M
+```
+
+### PostgreSQL Configuration
+
+```ini
+# ~/postgres-data/postgresql.conf
+
+# Connection Settings
+listen_addresses = 'localhost'
+port = 5432
+max_connections = 100
+
+# Memory
+shared_buffers = 128MB
+work_mem = 4MB
+maintenance_work_mem = 64MB
+effective_cache_size = 512MB
+
+# Logging
+logging_collector = on
+log_directory = 'log'
+log_filename = 'postgresql-%Y-%m-%d.log'
+log_statement = 'ddl'
+log_min_duration_statement = 1000
+
+# Performance
+random_page_cost = 1.1
+effective_io_concurrency = 200
+
+# WAL
+wal_level = replica
+max_wal_senders = 3
+```
+
+### Redis Configuration
+
+```ini
+# ~/redis.conf
+
+# Network
+bind 127.0.0.1
+port 6379
+protected-mode yes
+
+# General
+daemonize yes
+pidfile /tmp/redis.pid
+logfile ~/redis.log
+
+# Memory
+maxmemory 256mb
+maxmemory-policy allkeys-lru
+
+# Persistence
+save 900 1
+save 300 10
+save 60 10000
+appendonly yes
+appendfilename "appendonly.aof"
+
+# Security
+# requirepass your_strong_password
+
+# Performance
+tcp-backlog 511
+tcp-keepalive 300
+```
+
+### Python Database Connection Template
+
+```python
+#!/usr/bin/env python3
+# db_connections.py - Database connection templates
+
+import sqlite3
+import mysql.connector
+import psycopg2
+import redis
+
+# SQLite Connection
+def get_sqlite_connection(db_path):
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row  # Enable dict-like access
+    return conn
+
+# MariaDB/MySQL Connection
+def get_mysql_connection():
+    return mysql.connector.connect(
+        host='localhost',
+        user='appuser',
+        password='securepass123',
+        database='myapp',
+        charset='utf8mb4'
+    )
+
+# PostgreSQL Connection
+def get_postgres_connection():
+    return psycopg2.connect(
+        host='localhost',
+        database='myapp',
+        user='postgres',
+        password='password'
+    )
+
+# Redis Connection
+def get_redis_connection():
+    return redis.Redis(
+        host='localhost',
+        port=6379,
+        db=0,
+        decode_responses=True
+    )
+
+# Context managers for safe handling
+from contextlib import contextmanager
+
+@contextmanager
+def sqlite_cursor(db_path):
+    conn = get_sqlite_connection(db_path)
+    try:
+        cursor = conn.cursor()
+        yield cursor
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise e
+    finally:
+        conn.close()
+
+# Usage example
+if __name__ == "__main__":
+    # SQLite
+    with sqlite_cursor('myapp.db') as cursor:
+        cursor.execute("SELECT * FROM users")
+        for row in cursor.fetchall():
+            print(dict(row))
+    
+    # MySQL
+    conn = get_mysql_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users")
+    print(cursor.fetchall())
+    conn.close()
+    
+    # Redis
+    r = get_redis_connection()
+    r.set('test_key', 'test_value')
+    print(r.get('test_key'))
+```
+
+---
+
 ## 💡 PRO TIPS BOXES
 
 > 💡 **Pro Tip #1:** Always use transactions for multiple related operations - it ensures data integrity and allows rollback on errors

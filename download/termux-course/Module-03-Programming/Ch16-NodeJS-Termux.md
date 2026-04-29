@@ -652,6 +652,632 @@ Thank you for watching! See you in Chapter 17!
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Node.js Event Loop Architecture
+
+```mermaid
+flowchart TD
+    A[Node.js Application] --> B[Call Stack]
+    B --> C{Synchronous?}
+    C -->|Yes| D[Execute Immediately]
+    C -->|No| E[Node APIs]
+    E --> F[Event Queue]
+    F --> G{Stack Empty?}
+    G -->|Yes| H[Event Loop]
+    G -->|No| B
+    H --> B
+    D --> I[Return Result]
+```
+
+### NPM Package Management Flow
+
+```mermaid
+flowchart LR
+    A[package.json] --> B[npm install]
+    B --> C{package-lock.json?}
+    C -->|Yes| D[Use Locked Versions]
+    C -->|No| E[Resolve Dependencies]
+    E --> F[Create package-lock.json]
+    F --> G[Download Packages]
+    D --> G
+    G --> H[node_modules/]
+```
+
+### Express.js Request Lifecycle
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant E as Express Server
+    participant M as Middleware
+    participant R as Route Handler
+    participant DB as Database/API
+    
+    C->>E: HTTP Request
+    E->>M: Pass through middleware
+    M->>M: Process request
+    M->>R: Route matched
+    R->>DB: Query/Fetch
+    DB-->>R: Data
+    R-->>E: Response
+    E-->>C: HTTP Response
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+### Node.js Commands
+
+| Command | Syntax | Example | Purpose |
+|---------|--------|---------|---------|
+| Check version | `node --version` | `node -v` | Show Node version |
+| Run file | `node <file>` | `node app.js` | Execute JavaScript |
+| REPL | `node` | `node` | Interactive shell |
+| One-liner | `node -e "code"` | `node -e "console.log('Hi')"` | Quick execution |
+| Debug | `node inspect <file>` | `node inspect app.js` | Debug mode |
+| Check path | `which node` | `which node` | Show executable path |
+
+### NPM Commands
+
+| Command | Syntax | Example | Purpose |
+|---------|--------|---------|---------|
+| Init | `npm init` | `npm init -y` | Create package.json |
+| Install | `npm install <pkg>` | `npm install express` | Add dependency |
+| Install dev | `npm install -D <pkg>` | `npm i -D nodemon` | Dev dependency |
+| Install global | `npm install -g <pkg>` | `npm i -g pm2` | Global package |
+| Uninstall | `npm uninstall <pkg>` | `npm un express` | Remove package |
+| Update | `npm update` | `npm update` | Update packages |
+| List | `npm list` | `npm ls --depth=0` | Show packages |
+| Outdated | `npm outdated` | `npm outdated` | Check updates |
+| Audit | `npm audit` | `npm audit fix` | Security check |
+| Run script | `npm run <script>` | `npm run start` | Run package.json script |
+| Start | `npm start` | `npm start` | Run start script |
+| Test | `npm test` | `npm test` | Run test script |
+
+### Express.js Quick Reference
+
+| Method | Syntax | Purpose |
+|--------|--------|---------|
+| GET | `app.get(path, callback)` | Handle GET requests |
+| POST | `app.post(path, callback)` | Handle POST requests |
+| PUT | `app.put(path, callback)` | Handle PUT requests |
+| DELETE | `app.delete(path, callback)` | Handle DELETE requests |
+| Use | `app.use(middleware)` | Add middleware |
+| Listen | `app.listen(port, callback)` | Start server |
+| Send | `res.send(data)` | Send response |
+| JSON | `res.json(data)` | Send JSON response |
+| Status | `res.status(code)` | Set status code |
+| Params | `req.params` | URL parameters |
+| Query | `req.query` | Query string |
+| Body | `req.body` | Request body |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                NODE.JS MASTERY PATH - T3RMUXK1NG                            ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                                ║
+║  🚀 GOAL: Full-Stack JavaScript Developer                                    ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 1: FOUNDATION                                   │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │Install  │──►│  REPL   │──►│ Modules │──►│ npm     │                  │  ║
+║  │  │ Node.js │   │         │   │ require │   │ basics  │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐           ⭐            ⭐            ⭐                           │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 2: CORE MODULES                                 │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │   fs    │──►│  http   │──►│  path   │──►│  os     │                  │  ║
+║  │  │ files   │   │ server  │   │ paths   │   │ system  │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐         ⭐⭐           ⭐⭐           ⭐⭐                          │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 3: WEB DEVELOPMENT                              │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │ Express │──►│ Routing │──►│Middleware│──►│  REST   │                  │  ║
+║  │  │  .js    │   │         │   │         │   │  APIs   │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐        ⭐⭐⭐          ⭐⭐⭐          ⭐⭐⭐⭐                        │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 4: ADVANCED                                     │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │ async/  │──►│ Events  │──►│ Streams │──►│ Clusters│                  │  ║
+║  │  │ await   │   │         │   │         │   │         │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐⭐       ⭐⭐⭐⭐         ⭐⭐⭐⭐        ⭐⭐⭐⭐⭐                       │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║                         🏆 NODE.JS EXPERT 🏆                                  ║
+║                                                                                ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL/FEATURE COMPARISON TABLE
+
+### Node.js vs Python vs PHP
+
+| Feature | Node.js | Python | PHP |
+|---------|---------|--------|-----|
+| **Runtime** | V8 Engine | Interpreter | Interpreter |
+| **Concurrency** | Event Loop | Threading | Process-based |
+| **Speed** | ⭐⭐⭐⭐⭐ Fast | ⭐⭐⭐ Medium | ⭐⭐⭐ Medium |
+| **Best For** | Real-time, APIs | Data, ML, Scripts | Web, CMS |
+| **Package Manager** | npm | pip | Composer |
+| **Learning Curve** | ⭐⭐⭐ Medium | ⭐⭐⭐⭐ Easy | ⭐⭐⭐ Medium |
+| **Termux Support** | ⭐⭐⭐⭐⭐ Perfect | ⭐⭐⭐⭐⭐ Perfect | ⭐⭐⭐ Good |
+| **Job Market** | ⭐⭐⭐⭐⭐ High | ⭐⭐⭐⭐⭐ Very High | ⭐⭐⭐ Moderate |
+
+### Node.js Frameworks Comparison
+
+| Framework | Type | Best For | Learning Curve |
+|-----------|------|----------|----------------|
+| **Express** | Minimal | APIs, Web Apps | ⭐⭐ Easy |
+| **Fastify** | High-performance | APIs | ⭐⭐⭐ Medium |
+| **NestJS** | Full-stack | Enterprise Apps | ⭐⭐⭐⭐ Steep |
+| **Koa** | Lightweight | Middleware-heavy | ⭐⭐⭐ Medium |
+| **Hapi** | Configuration | APIs | ⭐⭐⭐ Medium |
+
+---
+
+## 🚀 PRACTICAL CODING CHALLENGES
+
+### Challenge 1: File System Manager 📁
+
+**Difficulty:** ⭐ Beginner  
+**Time:** 10 minutes
+
+**Problem:** Create a Node.js script that:
+- Creates a directory
+- Writes multiple files
+- Reads and displays content
+- Lists all files with sizes
+
+**Sample Output:**
+```
+=== File System Manager ===
+✓ Created directory: ./myfiles
+✓ Created file1.txt (25 bytes)
+✓ Created file2.txt (30 bytes)
+✓ Created file3.json (45 bytes)
+
+=== Directory Contents ===
+file1.txt    - 25 bytes
+file2.txt    - 30 bytes
+file3.json   - 45 bytes
+
+Total: 3 files, 100 bytes
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```javascript
+// file-manager.js
+const fs = require('fs');
+const path = require('path');
+
+const DIR = './myfiles';
+
+console.log('=== File System Manager ===');
+
+// Create directory
+if (!fs.existsSync(DIR)) {
+    fs.mkdirSync(DIR);
+    console.log(`✓ Created directory: ${DIR}`);
+}
+
+// Create files
+const files = [
+    { name: 'file1.txt', content: 'Hello from Node.js!\nLine 2 here.' },
+    { name: 'file2.txt', content: 'This is file 2 content.\nMultiple lines.' },
+    { name: 'file3.json', content: JSON.stringify({ name: 'test', value: 123 }) }
+];
+
+files.forEach(file => {
+    const filePath = path.join(DIR, file.name);
+    fs.writeFileSync(filePath, file.content);
+    const stats = fs.statSync(filePath);
+    console.log(`✓ Created ${file.name} (${stats.size} bytes)`);
+});
+
+console.log('\n=== Directory Contents ===');
+
+// List files
+let totalSize = 0;
+const fileList = fs.readdirSync(DIR);
+
+fileList.forEach(file => {
+    const filePath = path.join(DIR, file);
+    const stats = fs.statSync(filePath);
+    totalSize += stats.size;
+    console.log(`${file.padEnd(12)} - ${stats.size} bytes`);
+});
+
+console.log(`\nTotal: ${fileList.length} files, ${totalSize} bytes`);
+```
+</details>
+
+---
+
+### Challenge 2: REST API Server 🌐
+
+**Difficulty:** ⭐⭐ Intermediate  
+**Time:** 15 minutes
+
+**Problem:** Create a simple REST API with Express that:
+- Has GET /api/items - list all items
+- Has POST /api/items - create item
+- Has GET /api/items/:id - get single item
+- Has DELETE /api/items/:id - delete item
+
+**Sample Output:**
+```
+Server running on port 3000
+
+GET /api/items
+Response: []
+
+POST /api/items {"name": "Item 1"}
+Response: {"id": 1, "name": "Item 1"}
+
+GET /api/items
+Response: [{"id": 1, "name": "Item 1"}]
+
+GET /api/items/1
+Response: {"id": 1, "name": "Item 1"}
+
+DELETE /api/items/1
+Response: {"message": "Item deleted"}
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```javascript
+// server.js
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+// Middleware
+app.use(express.json());
+
+// In-memory storage
+let items = [];
+let nextId = 1;
+
+// GET all items
+app.get('/api/items', (req, res) => {
+    console.log('GET /api/items');
+    res.json(items);
+});
+
+// POST create item
+app.post('/api/items', (req, res) => {
+    const { name } = req.body;
+    const item = { id: nextId++, name };
+    items.push(item);
+    console.log(`POST /api/items ${JSON.stringify(item)}`);
+    res.status(201).json(item);
+});
+
+// GET single item
+app.get('/api/items/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const item = items.find(i => i.id === id);
+    
+    if (!item) {
+        return res.status(404).json({ error: 'Item not found' });
+    }
+    
+    console.log(`GET /api/items/${id}`);
+    res.json(item);
+});
+
+// DELETE item
+app.delete('/api/items/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const index = items.findIndex(i => i.id === id);
+    
+    if (index === -1) {
+        return res.status(404).json({ error: 'Item not found' });
+    }
+    
+    items.splice(index, 1);
+    console.log(`DELETE /api/items/${id}`);
+    res.json({ message: 'Item deleted' });
+});
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+```
+</details>
+
+---
+
+### Challenge 3: Real-time Chat Server 💬
+
+**Difficulty:** ⭐⭐⭐ Advanced  
+**Time:** 20 minutes
+
+**Problem:** Create a WebSocket-based chat server using Node.js that:
+- Handles multiple connections
+- Broadcasts messages to all clients
+- Shows connected users
+- Supports nicknames
+
+**Sample Output:**
+```
+=== Chat Server Started ===
+Port: 3000
+WebSocket: ws://localhost:3000
+
+[User1 connected] Total users: 1
+[User2 connected] Total users: 2
+
+[User1]: Hello everyone!
+[User2]: Hey User1!
+
+[User1 disconnected] Total users: 1
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```javascript
+// chat-server.js
+const http = require('http');
+const WebSocket = require('ws');
+
+const PORT = 3000;
+const server = http.createServer();
+const wss = new WebSocket.Server({ server });
+
+const clients = new Map();
+let userId = 0;
+
+console.log('=== Chat Server Started ===');
+console.log(`Port: ${PORT}`);
+console.log(`WebSocket: ws://localhost:${PORT}`);
+
+wss.on('connection', (ws) => {
+    const id = ++userId;
+    const nickname = `User${id}`;
+    clients.set(ws, { id, nickname });
+    
+    console.log(`[${nickname} connected] Total users: ${clients.size}`);
+    broadcast(`${nickname} joined the chat!`);
+    
+    ws.on('message', (message) => {
+        const data = clients.get(ws);
+        const msg = message.toString();
+        console.log(`[${data.nickname}]: ${msg}`);
+        broadcast(`[${data.nickname}]: ${msg}`);
+    });
+    
+    ws.on('close', () => {
+        const data = clients.get(ws);
+        clients.delete(ws);
+        console.log(`[${data.nickname} disconnected] Total users: ${clients.size}`);
+        broadcast(`${data.nickname} left the chat.`);
+    });
+});
+
+function broadcast(message) {
+    clients.forEach((_, client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(message);
+        }
+    });
+}
+
+server.listen(PORT);
+
+// Test client (run in separate terminal):
+// const ws = new WebSocket('ws://localhost:3000');
+// ws.on('message', console.log);
+// ws.send('Hello!');
+```
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+### Node.js Terms
+
+| Term | Definition |
+|------|------------|
+| **Node.js** | JavaScript runtime built on Chrome's V8 engine |
+| **npm** | Node Package Manager - manages JavaScript packages |
+| **Module** | Reusable piece of code in Node.js |
+| **Package** | A directory with package.json and code |
+| **Event Loop** | Mechanism for handling async operations |
+| **Callback** | Function passed as argument to be called later |
+| **Promise** | Object representing future value (async) |
+| **async/await** | Syntax for handling promises |
+| **Middleware** | Functions that process requests in Express |
+| **REPL** | Read-Eval-Print Loop (interactive shell) |
+| **package.json** | File containing project metadata and dependencies |
+| **node_modules** | Directory containing installed packages |
+| **Express.js** | Popular web framework for Node.js |
+| **REST API** | Architectural style for web services |
+| **WebSocket** | Protocol for real-time communication |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Node.js Developer Career Path
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    NODE.JS CAREER PROGRESSION                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ LEVEL 5: Principal Engineer (10+ years)                             │   │
+│  │ • System Architecture        • Technical Leadership                 │   │
+│  │ • Microservices Design       • Performance Engineering              │   │
+│  │ Salary: ₹50-80 LPA | $180K-300K                                      │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                   ▲                                          │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ LEVEL 4: Senior Node.js Developer (5-8 years)                       │   │
+│  │ • Full-stack Development     • API Architecture                     │   │
+│  │ • DevOps Integration         • Team Leadership                       │   │
+│  │ Salary: ₹25-45 LPA | $100K-160K                                      │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                   ▲                                          │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ LEVEL 3: Node.js Developer (2-5 years)                              │   │
+│  │ • REST API Development       • Database Integration                 │   │
+│  │ • Testing & Debugging        • Code Review                          │   │
+│  │ Salary: ₹12-25 LPA | $70K-110K                                       │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                   ▲                                          │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ LEVEL 2: Junior Developer (0-2 years)                               │   │
+│  │ • JavaScript Fundamentals    • Basic Express.js                     │   │
+│  │ • Git Version Control        • Bug Fixes                             │   │
+│  │ Salary: ₹4-10 LPA | $45K-70K                                         │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                   ▲                                          │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ LEVEL 1: Learning (You are here!)                                   │   │
+│  │ • Node.js Basics             • npm Commands                         │   │
+│  │ • Core Modules               • Simple Scripts                       │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                    NODE.JS SPECIALIZATIONS                                   │
+│                                                                              │
+│  🔹 Backend Development   🔹 Full-Stack (MERN)   🔹 API Development        │
+│  🔹 DevOps/Cloud         🔹 Microservices       🔹 Real-time Systems      │
+│  🔹 Serverless           🔹 GraphQL              🔹 Enterprise Apps       │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Top Companies Hiring Node.js Developers
+
+| Company | Domain | Average Salary |
+|---------|--------|----------------|
+| Netflix | Streaming | ₹35-60 LPA |
+| LinkedIn | Social | ₹30-55 LPA |
+| PayPal | Finance | ₹28-50 LPA |
+| Walmart | Retail | ₹25-45 LPA |
+| Uber | Transport | ₹30-50 LPA |
+| Flipkart | E-commerce | ₹20-40 LPA |
+| Swiggy | Food Tech | ₹18-35 LPA |
+
+---
+
+## 🏆 CODE OPTIMIZATION TIPS
+
+### Node.js Performance Tips
+
+| Tip | Description | Impact |
+|-----|-------------|--------|
+| **Use async operations** | Non-blocking I/O | ⭐⭐⭐⭐⭐ |
+| **Cluster for multi-core** | Utilize all CPU cores | ⭐⭐⭐⭐⭐ |
+| **Stream large files** | Don't load all in memory | ⭐⭐⭐⭐⭐ |
+| **Use caching** | Redis/Memory cache | ⭐⭐⭐⭐⭐ |
+| **Compress responses** | gzip compression | ⭐⭐⭐⭐ |
+| **Connection pooling** | Reuse DB connections | ⭐⭐⭐⭐ |
+| **Avoid sync functions** | In production code | ⭐⭐⭐⭐ |
+| **Use production mode** | NODE_ENV=production | ⭐⭐⭐⭐ |
+
+### Express.js Best Practices
+
+```javascript
+// ❌ BAD: Synchronous in route
+app.get('/data', (req, res) => {
+    const data = fs.readFileSync('file.json');  // Blocks!
+    res.json(JSON.parse(data));
+});
+
+// ✅ GOOD: Async with streams
+app.get('/data', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    fs.createReadStream('file.json').pipe(res);
+});
+
+// ❌ BAD: No error handling
+app.get('/user/:id', async (req, res) => {
+    const user = await User.findById(req.params.id);
+    res.json(user);  // Crashes if not found!
+});
+
+// ✅ GOOD: Proper error handling
+app.get('/user/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ error: 'Not found' });
+        }
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// ❌ BAD: Large response in memory
+app.get('/export', (req, res) => {
+    const data = getAllRecords();  // Might be millions!
+    res.json(data);
+});
+
+// ✅ GOOD: Stream large responses
+app.get('/export', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    const stream = getRecordsStream();
+    stream.pipe(res);
+});
+```
+
+### npm Scripts for Productivity
+
+```json
+{
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "test": "jest --coverage",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "build": "node build.js",
+    "clean": "rm -rf node_modules && npm install",
+    "prod": "NODE_ENV=production node server.js",
+    "debug": "node inspect server.js"
+  }
+}
+```
+
+---
+
 ## 📖 TECHNICAL GUIDE
 
 ### 1. Node.js Architecture in Termux

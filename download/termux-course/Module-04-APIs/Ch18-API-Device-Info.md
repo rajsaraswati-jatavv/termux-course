@@ -3047,6 +3047,442 @@ Before moving to Chapter 19, verify:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### 1. Device Information API Architecture
+
+```mermaid
+flowchart TB
+    subgraph Termux Commands
+        A[termux-battery-status]
+        B[termux-brightness]
+        C[termux-volume]
+        D[termux-telephony-deviceinfo]
+        E[termux-telephony-cellinfo]
+        F[termux-wifi-connectioninfo]
+        G[termux-sensor]
+        H[termux-fingerprint]
+        I[termux-location]
+    end
+    
+    subgraph Android Managers
+        J[BatteryManager]
+        K[PowerManager]
+        L[AudioManager]
+        M[TelephonyManager]
+        N[WifiManager]
+        O[SensorManager]
+        P[FingerprintManager]
+        Q[LocationManager]
+    end
+    
+    A --> J
+    B --> K
+    C --> L
+    D --> M
+    E --> M
+    F --> N
+    G --> O
+    H --> P
+    I --> Q
+    
+    style A fill:#4CAF50,color:#fff
+    style D fill:#2196F3,color:#fff
+    style I fill:#FF5722,color:#fff
+```
+
+### 2. Permission Requirements Flow
+
+```mermaid
+flowchart LR
+    subgraph Required Permissions
+        A[Location Permission] --> B[GPS/Network Location]
+        C[Phone Permission] --> D[IMEI/SIM Info]
+        E[Body Sensors] --> F[Heart Rate/etc]
+    end
+    
+    subgraph Optional Permissions
+        G[Camera] --> H[Fingerprint Auth]
+    end
+    
+    subgraph No Permission Needed
+        I[Battery Status]
+        J[Screen Brightness]
+        K[Volume Control]
+    end
+    
+    style A fill:#FF5722,color:#fff
+    style C fill:#FF5722,color:#fff
+    style I fill:#4CAF50,color:#fff
+```
+
+### 3. Sensor Data Flow
+
+```mermaid
+sequenceDiagram
+    participant U as User Script
+    participant T as Termux
+    participant API as Termux:API
+    participant SM as SensorManager
+    participant S as Hardware Sensor
+    
+    U->>T: termux-sensor -s accelerometer -n 1
+    T->>API: Broadcast Intent
+    API->>SM: registerListener(accelerometer)
+    SM->>S: Enable Sensor
+    S-->>SM: Raw Data [x,y,z]
+    SM-->>API: SensorEvent
+    API-->>T: JSON Output
+    T-->>U: {"accelerometer":{"values":[0,9.8,0]}}
+    
+    Note over SM,S: Hardware sampling at configured rate
+```
+
+---
+
+## ⚡ API COMMAND REFERENCE CARD
+
+| API Command | Purpose | Permissions | Example |
+|-------------|---------|-------------|---------|
+| `termux-battery-status` | Get battery info (JSON) | None | `termux-battery-status` |
+| `termux-brightness` | Get/set screen brightness | Write Settings | `termux-brightness 150` |
+| `termux-volume` | Get/set volume levels | None | `termux-volume music 50` |
+| `termux-telephony-deviceinfo` | Get IMEI, SIM info | Phone | `termux-telephony-deviceinfo` |
+| `termux-telephony-cellinfo` | Get cell tower info | Location | `termux-telephony-cellinfo` |
+| `termux-wifi-connectioninfo` | Get WiFi details | Location (Android 10+) | `termux-wifi-connectioninfo` |
+| `termux-sensor -l` | List available sensors | None | `termux-sensor -l` |
+| `termux-sensor -s` | Get sensor reading | Body Sensors | `termux-sensor -s accelerometer -n 1` |
+| `termux-fingerprint` | Biometric auth | None (uses enrolled) | `termux-fingerprint` |
+| `termux-location` | Get GPS coordinates | Location | `termux-location -p gps` |
+
+### Quick Syntax Reference
+
+```bash
+# Battery
+termux-battery-status
+
+# Brightness (0-255)
+termux-brightness [level]
+
+# Volume (stream: ring/music/notification/alarm)
+termux-volume [stream] [level]
+
+# Telephony
+termux-telephony-deviceinfo
+termux-telephony-cellinfo
+
+# WiFi
+termux-wifi-connectioninfo
+
+# Sensors
+termux-sensor -l                    # List sensors
+termux-sensor -s accelerometer -n 1 # Single reading
+termux-sensor -s gyroscope -d 1000  # Continuous (1s interval)
+
+# Location
+termux-location -p gps              # GPS provider
+termux-location -p network          # Network provider
+
+# Fingerprint
+termux-fingerprint
+```
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                  DEVICE INFORMATION API MASTERY PATH                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+     🌱 BEGINNER                    🌿 INTERMEDIATE                  🌳 ADVANCED
+     ──────────────────             ──────────────────              ──────────────────
+     
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Battery Status │───────────▶│  Battery        │───────────▶│  Power          │
+     │  Basic Query    │            │  Monitoring     │            │  Management     │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Brightness &   │───────────▶│  Adaptive       │───────────▶│  Environment    │
+     │  Volume Control │            │  Settings       │            │  Automation     │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Device Info    │───────────▶│  Network        │───────────▶│  Security       │
+     │  Basic Query    │            │  Analysis       │            │  Profiling      │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Sensor List    │───────────▶│  Sensor Data    │───────────▶│  Motion         │
+     │  Discovery      │            │  Processing     │            │  Analytics      │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     🏆 MASTERY CHECKPOINTS:
+     
+     □ Level 1: Query battery status and parse JSON
+     □ Level 2: Control brightness and volume programmatically
+     □ Level 3: Extract device identifiers (IMEI, SIM info)
+     □ Level 4: Read and analyze sensor data
+     □ Level 5: Implement location-based features
+     □ Level 6: Build biometric authentication system
+     □ Level 7: Create comprehensive device profiler
+     
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     ⏱️ ESTIMATED TIME TO MASTERY: 4-6 Hours Practice
+     
+     📚 PREREQUISITES: Chapters 1-17 (Basic Termux & File APIs)
+     
+     🎯 NEXT STEPS: Camera & Media APIs (Chapter 19)
+```
+
+---
+
+## 🔧 API COMPARISON TABLE
+
+| API | Capability | Root Required | Android Version | Output Format |
+|-----|------------|---------------|-----------------|---------------|
+| `termux-battery-status` | Battery health/level | ❌ No | 5.0+ | JSON |
+| `termux-brightness` | Screen brightness | ❌ No | 5.0+ | None/Number |
+| `termux-volume` | Audio volume | ❌ No | 5.0+ | JSON/None |
+| `termux-telephony-deviceinfo` | IMEI/SIM info | ❌ No | 5.0+ | JSON |
+| `termux-telephony-cellinfo` | Cell tower data | ❌ No | 5.0+ | JSON |
+| `termux-wifi-connectioninfo` | WiFi details | ❌ No | 5.0+ | JSON |
+| `termux-sensor` | Hardware sensors | ❌ No | 5.0+ | JSON |
+| `termux-fingerprint` | Biometric auth | ❌ No | 6.0+ | JSON |
+| `termux-location` | GPS coordinates | ❌ No | 5.0+ | JSON |
+
+### Feature Availability Matrix
+
+| Feature | Android 5-9 | Android 10-11 | Android 12+ |
+|---------|-------------|---------------|-------------|
+| IMEI access | ✅ Full | ⚠️ Restricted | ❌ Blocked |
+| MAC address | ✅ Real | ⚠️ Randomized | ⚠️ Randomized |
+| Location (background) | ✅ Allowed | ⚠️ Limited | ⚠️ Limited |
+| Fingerprint | ✅ API 23+ | ✅ API 23+ | ✅ API 23+ |
+| Sensors | ✅ Full | ✅ Full | ✅ Full |
+
+---
+
+## 🚀 PRACTICAL PROJECT CHALLENGES
+
+### Challenge 1: Smart Battery Monitor 🔋
+
+**Objective:** Create a battery monitoring script that alerts on critical conditions.
+
+**Requirements:**
+- Check battery status every 5 minutes
+- Alert when below 20% or above 90% while charging
+- Log battery temperature warnings (>40°C)
+- Use notifications for alerts
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Build battery monitor
+while true; do
+    BATTERY=$(termux-battery-status)
+    # TODO: Parse percentage, temperature, status
+    # TODO: Check conditions and alert
+    # TODO: Log to file
+    sleep 300
+done
+```
+
+**Expected Output:** Continuous monitoring with smart alerts for battery conditions.
+
+---
+
+### Challenge 2: Device Security Profiler 📱
+
+**Objective:** Build a complete device security profile extractor.
+
+**Requirements:**
+- Collect all device identifiers
+- Check lock screen status
+- Verify encryption status
+- Generate security report as JSON
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create security profiler
+REPORT_FILE="security_profile_$(date +%Y%m%d).json"
+
+# TODO: Collect device info
+# TODO: Collect network info
+# TODO: Check security settings
+# TODO: Generate JSON report
+```
+
+**Expected Output:** Comprehensive JSON report with all device security information.
+
+---
+
+### Challenge 3: Motion Detection System 🏃
+
+**Objective:** Use accelerometer data to detect significant device movement.
+
+**Requirements:**
+- Read accelerometer data continuously
+- Calculate movement magnitude
+- Trigger action on significant movement
+- Log movement patterns
+
+**Starter Code:**
+```python
+#!/usr/bin/env python3
+import subprocess
+import json
+import time
+
+# TODO: Implement motion detection
+# 1. Read accelerometer data
+# 2. Calculate magnitude: sqrt(x² + y² + z²)
+# 3. Compare with baseline
+# 4. Trigger on threshold
+# 5. Log and notify
+```
+
+**Expected Output:** Real-time motion detection with logging and notifications.
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **IMEI** | International Mobile Equipment Identity - unique device ID |
+| **IMSI** | International Mobile Subscriber Identity - SIM identifier |
+| **BSSID** | Basic Service Set Identifier - router MAC address |
+| **RSSI** | Received Signal Strength Indicator - WiFi signal quality |
+| **MCC/MNC** | Mobile Country Code / Mobile Network Code |
+| **LAC/CID** | Location Area Code / Cell ID |
+| **Accelerometer** | Sensor measuring linear acceleration |
+| **Gyroscope** | Sensor measuring angular velocity |
+| **Magnetometer** | Sensor measuring magnetic field (compass) |
+| **RSSI** | Signal strength in dBm (closer to 0 = stronger) |
+| **SAF** | Storage Access Framework |
+| **Biometric Auth** | Authentication using fingerprints/face |
+
+### Sensor Types Reference
+
+| Sensor | Measures | Unit | Use Case |
+|--------|----------|------|----------|
+| Accelerometer | Linear acceleration | m/s² | Motion, orientation |
+| Gyroscope | Angular velocity | rad/s | Rotation detection |
+| Magnetometer | Magnetic field | µT | Compass, metal detection |
+| Light | Ambient light | lux | Auto brightness |
+| Proximity | Object distance | cm | Call screen off |
+| Pressure | Atmospheric | hPa | Weather, altitude |
+| Temperature | Ambient temp | °C | Environment monitoring |
+| Humidity | Relative humidity | % | Weather monitoring |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How Device Info APIs Relate to Real-World Development
+
+**Mobile App Development:**
+- Device profiling for analytics and debugging
+- Feature detection for compatibility
+- Battery optimization monitoring
+
+**Security & Forensics:**
+- Device identification for security audits
+- Network forensics using cell tower data
+- Mobile device management (MDM) solutions
+
+**IoT & Embedded Systems:**
+- Sensor integration and data collection
+- Location-based services (LBS)
+- Environmental monitoring systems
+
+### Career Paths Using These Skills
+
+| Role | Relevance | Salary Range (India) |
+|------|-----------|---------------------|
+| Android Developer | Device APIs usage | ₹6-25 LPA |
+| Mobile Security Analyst | Device profiling | ₹8-30 LPA |
+| IoT Developer | Sensor integration | ₹5-20 LPA |
+| QA Engineer | Device testing | ₹4-15 LPA |
+| Data Engineer | Sensor data pipelines | ₹7-28 LPA |
+
+### Skills Roadmap
+
+```
+Current Chapter (Device APIs)
+         │
+         ├──▶ Android Hardware APIs
+         │         │
+         │         └──▶ Android System Developer
+         │
+         ├──▶ Sensor Data Analysis
+         │         │
+         │         └──▶ IoT Developer
+         │
+         ├──▶ Mobile Security Testing
+         │         │
+         │         └──▶ Mobile Security Analyst
+         │
+         └──▶ Location Services
+                   │
+                   └──▶ LBS Application Developer
+```
+
+---
+
+## ⚠️ PERMISSION REQUIREMENTS TABLE
+
+| API Command | Required Permission | How to Grant | Runtime Permission |
+|-------------|---------------------|--------------|-------------------|
+| `termux-battery-status` | None | N/A | ❌ No |
+| `termux-brightness` | WRITE_SETTINGS | Settings > Apps > Termux | ⚠️ Special |
+| `termux-volume` | None | N/A | ❌ No |
+| `termux-telephony-deviceinfo` | READ_PHONE_STATE | First run prompt | ✅ Yes |
+| `termux-telephony-cellinfo` | ACCESS_FINE_LOCATION | First run prompt | ✅ Yes |
+| `termux-wifi-connectioninfo` | ACCESS_FINE_LOCATION | First run prompt | ✅ Yes (Android 10+) |
+| `termux-sensor` | BODY_SENSORS | First run prompt | ✅ Yes |
+| `termux-fingerprint` | USE_FINGERPRINT | N/A (uses enrolled) | ❌ No |
+| `termux-location` | ACCESS_FINE/COARSE_LOCATION | First run prompt | ✅ Yes |
+
+### Permission Setup Commands
+
+```bash
+# Grant location permission (triggers prompt)
+termux-location
+
+# Grant phone permission (triggers prompt)
+termux-telephony-deviceinfo
+
+# Grant sensor permission (triggers prompt)
+termux-sensor -l
+
+# Check granted permissions
+dumpsys package com.termux | grep -A 20 "runtime permissions"
+```
+
+### Permission Troubleshooting
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| IMEI returns null | Android 10+ restriction | Use alternative identifiers |
+| MAC shows 02:00:00... | Android privacy feature | Expected behavior on Android 10+ |
+| Location timeout | GPS cold start | Wait or use network provider |
+| Sensor not found | Device doesn't have it | Check with `-l` first |
+| Fingerprint fails | No prints enrolled | Enroll in Android settings |
+| Brightness won't change | WRITE_SETTINGS missing | Grant in Android settings |
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Cache device info in variables at the start of your script instead of calling APIs multiple times. It's faster and saves battery.

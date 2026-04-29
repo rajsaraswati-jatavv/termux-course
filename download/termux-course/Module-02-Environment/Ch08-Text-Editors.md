@@ -2952,6 +2952,659 @@ After completing this chapter, you should be able to:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Diagram 1: Vim Modal Editing System
+
+```mermaid
+stateDiagram-v2
+    [*] --> Normal: Open Vim
+    Normal --> Insert: i, I, a, A, o, O
+    Normal --> Visual: v, V, Ctrl+V
+    Normal --> Command: :
+    
+    Insert --> Normal: Esc
+    Visual --> Normal: Esc
+    Command --> Normal: Enter/Esc
+    
+    Command --> [*]: :q
+    Command --> [*]: :wq
+    
+    Normal: Navigation & Commands
+    Insert: Text Editing
+    Visual: Selection Mode
+    Command: Ex Commands
+    
+    note right of Normal
+        Default mode
+        h,j,k,l navigation
+        dd, yy, p operations
+    end note
+    
+    note right of Insert
+        Type text freely
+        Like normal editor
+    end note
+```
+
+### Diagram 2: Nano Workflow
+
+```mermaid
+flowchart LR
+    A[nano filename] --> B[Edit Text]
+    B --> C{Save?}
+    C -->|Ctrl+O| D[Write Out]
+    D --> E[Enter filename]
+    E --> F[File Saved]
+    C -->|Continue| B
+    F --> G{Exit?}
+    G -->|Ctrl+X| H[Exit]
+    G -->|Continue| B
+    B -->|Ctrl+W| I[Search]
+    I --> B
+    B -->|Ctrl+K| J[Cut]
+    J -->|Ctrl+U| K[Paste]
+    K --> B
+    
+    style A fill:#4CAF50,color:#fff
+    style H fill:#f44336,color:#fff
+    style F fill:#2196F3,color:#fff
+```
+
+### Diagram 3: Editor Selection Decision Tree
+
+```mermaid
+graph TD
+    A[Need to edit a file] --> B{What's the task?}
+    
+    B -->|Quick config edit| C[Use Nano]
+    B -->|Long coding session| D[Use Vim]
+    B -->|Remote server| E{Your skill level?}
+    
+    E -->|Beginner| F[Use Nano]
+    E -->|Advanced| G[Use Vim]
+    
+    B -->|Script editing| H{Complex editing?}
+    H -->|Simple| C
+    H -->|Complex patterns| D
+    
+    C --> I[✅ Quick, Easy]
+    D --> J[✅ Powerful, Efficient]
+    F --> I
+    G --> J
+    
+    style C fill:#4CAF50,color:#fff
+    style D fill:#9C27B0,color:#fff
+    style I fill:#8BC34A,color:#fff
+    style J fill:#E91E63,color:#fff
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+### Nano Commands
+
+| Action | Command | Description |
+|--------|---------|-------------|
+| **File Operations** |||
+| Open file | `nano filename` | Open or create file |
+| Save | `Ctrl+O` | Write Out (save) |
+| Exit | `Ctrl+X` | Exit editor |
+| Open another | `Ctrl+R` | Read file into current |
+| **Navigation** |||
+| Start of line | `Ctrl+A` | Move to line beginning |
+| End of line | `Ctrl+E` | Move to line end |
+| Page Up | `Ctrl+Y` | Previous page |
+| Page Down | `Ctrl+V` | Next page |
+| Go to line | `Ctrl+_` | Jump to line number |
+| **Editing** |||
+| Cut line | `Ctrl+K` | Cut current line |
+| Paste | `Ctrl+U` | Paste cut content |
+| Copy | `Alt+6` | Copy selection |
+| Mark text | `Ctrl+^` | Start/end selection |
+| **Search/Replace** |||
+| Search | `Ctrl+W` | Find text |
+| Next match | `Alt+W` | Find next |
+| Replace | `Ctrl+\` | Find and replace |
+| **Other** |||
+| Help | `Ctrl+G` | Show help |
+| Justify | `Ctrl+J` | Format paragraph |
+| Spell check | `Ctrl+T` | (if installed) |
+
+### Vim Commands
+
+| Action | Command | Description |
+|--------|---------|-------------|
+| **Modes** |||
+| Normal mode | `Esc` | Return to default |
+| Insert mode | `i, I, a, A, o, O` | Enter text input |
+| Visual mode | `v, V, Ctrl+V` | Select text |
+| Command mode | `:` | Enter ex command |
+| **Navigation (Normal)** |||
+| Left/Down/Up/Right | `h, j, k, l` | Character movement |
+| Next/Prev word | `w, b` | Word navigation |
+| Start/End of line | `0, $` | Line boundaries |
+| First/Last line | `gg, G` | File boundaries |
+| Go to line N | `:N` or `NG` | Jump to line |
+| **File Operations** |||
+| Save | `:w` | Write file |
+| Quit | `:q` | Exit (fails if unsaved) |
+| Force quit | `:q!` | Exit without saving |
+| Save & quit | `:wq` or `:x` | Save and exit |
+| **Editing (Normal)** |||
+| Delete line | `dd` | Cut current line |
+| Delete char | `x` | Delete under cursor |
+| Yank (copy) | `yy` | Copy current line |
+| Paste | `p, P` | Paste after/before |
+| Undo | `u` | Undo last change |
+| Redo | `Ctrl+R` | Redo |
+| **Search/Replace** |||
+| Search forward | `/pattern` | Find pattern |
+| Search backward | `?pattern` | Find backwards |
+| Next/Prev match | `n, N` | Navigate matches |
+| Replace all | `:%s/old/new/g` | Global replace |
+| Replace with confirm | `:%s/old/new/gc` | Interactive replace |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                        🗺️ YOUR TERMUX JOURNEY 🗺️                              ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║   Module 1        Module 2          Module 3         Module 4+               ║
+║   ┌──────┐       ┌──────┐         ┌──────┐         ┌──────┐                  ║
+║   │ Intro│ ───►  │Enviro│ ───►    │Script│ ───►    │Advanc│                  ║
+║   │      │       │nment │         │ing   │         │ed    │                  ║
+║   └──────┘       └──────┘         └──────┘         └──────┘                  ║
+║                                                                               ║
+║   ✓ Done         📍 YOU ARE      Coming Next    Future Goal                  ║
+║                  HERE NOW!                                                     ║
+║                     ▼                                                         ║
+║                                                                               ║
+║   ═══════════════════════════════════════════════════════════════════════    ║
+║                                                                               ║
+║   CURRENT PROGRESS - Module 2: Environment                                    ║
+║   ┌───────────────────────────────────────────────────────────────────────┐  ║
+║   │                                                                       │  ║
+║   │   Ch6: File System    ████████████████████ 100% ✓                     │  ║
+║   │   Ch7: Env Variables  ████████████████████ 100% ✓                     │  ║
+║   │   Ch8: Text Editors   ████████████████████ 100% ✅ CURRENT            │  ║
+║   │   Ch9: Styling        ░░░░░░░░░░░░░░░░░░░░   0%                       │  ║
+║   │   Ch10: API Setup     ░░░░░░░░░░░░░░░░░░░░   0%                       │  ║
+║   │                                                                       │  ║
+║   └───────────────────────────────────────────────────────────────────────┘  ║
+║                                                                               ║
+║   SKILLS UNLOCKED:                                                            ║
+║   📂 Directory Navigation    ✓                                                ║
+║   🔍 File Searching          ✓                                                ║
+║   🔧 Environment Variables   ✓                                                ║
+║   📝 Text Editing (Nano)     ✅                                               ║
+║   🎯 Text Editing (Vim)      ✅                                               ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+### Nano vs Vim vs Micro vs Emacs
+
+| Feature | Nano | Vim | Micro | Emacs |
+|---------|------|-----|-------|-------|
+| **Learning Curve** | ⭐ Easy | ⭐⭐⭐⭐ Steep | ⭐⭐ Easy | ⭐⭐⭐⭐⭐ Very Steep |
+| **Modes** | None | Multiple | None | Optional |
+| **Shortcuts Visible** | ✅ Always | ❌ Memorize | ✅ Status bar | ❌ Memorize |
+| **Mouse Support** | Limited | Limited | ✅ Full | ✅ Full |
+| **Syntax Highlighting** | Basic | ✅ Excellent | ✅ Good | ✅ Excellent |
+| **Plugins** | ❌ No | ✅ Thousands | ✅ Lua | ✅ Thousands |
+| **Customization** | .nanorc | .vimrc | JSON config | .emacs.d |
+| **Memory Usage** | Very Low | Low | Medium | Medium-High |
+| **Install Size** | ~500KB | ~2MB | ~15MB | ~150MB |
+| **Remote Editing** | ✅ Good | ✅ Excellent | ❌ Needs install | ❌ Needs install |
+| **Best For** | Quick edits | Professional coding | Modern feel | Power users |
+| **Installation** | `pkg install nano` | `pkg install vim` | `pkg install micro` | `pkg install emacs` |
+
+### Vim Mode Comparison
+
+| Mode | Purpose | How to Enter | How to Exit |
+|------|---------|--------------|-------------|
+| **Normal** | Navigation, commands | Default | - |
+| **Insert** | Text input | `i, I, a, A, o, O, s, S` | `Esc` |
+| **Visual** | Text selection | `v, V, Ctrl+V` | `Esc` |
+| **Command** | Ex commands | `:, /, ?` | `Enter, Esc` |
+| **Replace** | Overwrite text | `R` | `Esc` |
+| **Select** | Similar to visual | `gh` (if mapped) | `Esc` |
+
+---
+
+## 🚀 PRACTICAL CHALLENGES
+
+### Challenge 1: Nano Configuration Master 📝
+**Difficulty:** ⭐ Beginner
+**Time:** 5 minutes
+**Task:** Create a `.nanorc` configuration file with:
+- Line numbers enabled
+- Auto-indentation
+- Tab size of 4 spaces
+- Mouse support
+- Syntax highlighting for all languages
+
+**Hint:** Use `include` directive for syntax files.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+# Create .nanorc
+nano ~/.nanorc
+```
+
+```bash
+# ~/.nanorc - Nano Configuration
+
+# Enable line numbers
+set linenumber
+
+# Auto-indentation
+set autoindent
+
+# Tab size
+set tabsize 4
+
+# Convert tabs to spaces
+set tabstospaces
+
+# Enable mouse support
+set mouse
+
+# Smooth scrolling
+set smooth
+
+# Word wrap
+set softwrap
+
+# Show cursor position
+set constantshow
+
+# Backup files before saving
+set backup
+
+# Syntax highlighting for all languages
+include /data/data/com.termux/files/usr/share/nano/*.nanorc
+
+# Color scheme
+set titlecolor brightwhite,blue
+set statuscolor brightwhite,green
+set keycolor brightwhite
+set functioncolor green
+
+# Smart home key
+set smarthome
+
+# Allow suspension
+set suspend
+```
+
+**Apply changes:**
+```bash
+# Restart nano to apply
+nano test.txt
+```
+
+</details>
+
+---
+
+### Challenge 2: Vim Survival Kit 🎯
+**Difficulty:** ⭐⭐ Intermediate
+**Time:** 10 minutes
+**Task:** Create a `.vimrc` configuration that makes Vim more beginner-friendly with:
+- Line numbers
+- Syntax highlighting
+- Auto-indentation
+- A simple status line
+- Remap `jj` to exit Insert mode (easier than Esc)
+- Search highlighting
+
+**Hint:** Use `set` commands and `inoremap` for key mappings.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+# Create .vimrc
+vim ~/.vimrc
+```
+
+```vim
+" ~/.vimrc - Vim Configuration
+" ===============================
+
+" Basic Settings
+" ---------------
+set nocompatible          " Use Vim settings, not Vi
+set number               " Show line numbers
+set relativenumber       " Relative line numbers
+set cursorline           " Highlight current line
+set showcmd              " Show command in bottom bar
+set showmode             " Show current mode
+set wildmenu             " Visual autocomplete for command menu
+set lazyredraw           " Redraw only when needed
+set showmatch            " Highlight matching brackets
+
+" Indentation
+" -----------
+set autoindent           " Auto-indent new lines
+set smartindent          " Smart auto-indenting
+set tabstop=4            " Tab width
+set shiftwidth=4         " Indentation width
+set expandtab            " Convert tabs to spaces
+set smarttab             " Smart tab handling
+
+" Search Settings
+" ---------------
+set incsearch            " Search as you type
+set hlsearch             " Highlight search results
+set ignorecase           " Case insensitive search
+set smartcase            " Case sensitive if uppercase used
+
+" Visual Settings
+" ---------------
+syntax on                " Enable syntax highlighting
+set background=dark      " Dark background
+set t_Co=256             " 256 colors
+set encoding=utf-8       " UTF-8 encoding
+set scrolloff=5          " Keep 5 lines above/below cursor
+set sidescrolloff=5      " Keep 5 columns left/right of cursor
+
+" Status Line
+" -----------
+set laststatus=2         " Always show status line
+set statusline=%F        " Full filename
+set statusline+=%m       " Modified flag
+set statusline+=%r       " Read-only flag
+set statusline+=%=       " Right align
+set statusline+=%l,%c    " Line, column
+set statusline+=/%L      " Total lines
+
+" Key Mappings
+" ------------
+" Map jj to Esc (easier than reaching for Esc)
+inoremap jj <Esc>
+
+" Clear search highlighting with ,/
+nnoremap <leader><space> :nohlsearch<CR>
+
+" Quick save with ,w
+nnoremap <leader>w :w<CR>
+
+" Quick quit with ,q
+nnoremap <leader>q :q<CR>
+
+" Split navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Useful Settings
+" ---------------
+set backup               " Create backup files
+set undofile             " Persistent undo
+set undodir=~/.vim/undo  " Undo directory
+set history=1000         " Command history
+set clipboard=unnamed    " Use system clipboard
+
+" Create necessary directories
+" Run this once in Termux:
+" mkdir -p ~/.vim/undo ~/.vim/backup ~/.vim/swp
+```
+
+**Create directories:**
+```bash
+mkdir -p ~/.vim/undo ~/.vim/backup ~/.vim/swp
+```
+
+**Restart Vim to apply changes.**
+
+</details>
+
+---
+
+### Challenge 3: Multi-File Editor Workflow 📁
+**Difficulty:** ⭐⭐⭐ Advanced
+**Time:** 15 minutes
+**Task:** Learn to work with multiple files efficiently. Create a project with 3 files and practice:
+- Opening multiple files in Vim
+- Switching between files
+- Split windows
+- Copying text between files
+
+**Hint:** Use `:e`, `:bn`, `:bp`, `:split`, and `:vsplit` commands.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+# Create a practice project
+mkdir -p ~/editor_practice
+cd ~/editor_practice
+
+# Create three files
+echo "# Main Script" > main.sh
+echo "# Config File" > config.sh
+echo "# Helper Functions" > helpers.sh
+```
+
+**Open multiple files:**
+```bash
+vim main.sh config.sh helpers.sh
+```
+
+**Vim Commands for Multi-File Editing:**
+
+```
+BUFFER MANAGEMENT
+================
+:ls              " List all open buffers
+:bn              " Next buffer
+:bp              " Previous buffer
+:b2              " Go to buffer 2
+:b main.sh       " Go to buffer by name
+:bd              " Delete (close) current buffer
+
+SPLIT WINDOWS
+=============
+:split           " Horizontal split
+:vsplit          " Vertical split
+:split config.sh " Open file in new split
+Ctrl+w h/j/k/l   " Navigate splits
+Ctrl+w w         " Cycle through splits
+Ctrl+w q         " Close current split
+Ctrl+w r         " Rotate splits
+Ctrl+w =         " Make splits equal size
+Ctrl+w _         " Maximize height
+Ctrl+w |         " Maximize width
+
+TABS (Alternative)
+==================
+:tabnew          " New tab
+:tabnew file.sh  " Open file in new tab
+:tabn            " Next tab
+:tabp            " Previous tab
+:tabc            " Close tab
+gt               " Next tab (normal mode)
+gT               " Previous tab (normal mode)
+```
+
+**Practice Exercise:**
+```bash
+# 1. Open all files
+vim main.sh config.sh helpers.sh
+
+# 2. In Vim, type:
+:ls                    " See all buffers
+:split config.sh       " Open config in split below
+:vsplit helpers.sh     " Open helpers in vertical split
+
+# 3. Copy text between files
+" Go to config.sh split (Ctrl+w, then j)
+" yy to yank a line
+" Go to main.sh split (Ctrl+w, then k)
+" p to paste
+
+# 4. Save all and exit
+:wa                    " Write all
+:qa                    " Quit all
+```
+
+**Multi-file workflow script:**
+```vim
+" Add to .vimrc for easier multi-file editing
+
+" Auto-save when switching buffers
+set autowrite
+
+" Show buffer number in status line
+set statusline+=\ [%n]
+
+" Quick buffer switch
+nnoremap <F5> :bn<CR>
+nnoremap <F6> :bp<CR>
+
+" Quick split commands
+nnoremap <leader>sv :vsplit<CR>
+nnoremap <leader>sh :split<CR>
+nnoremap <leader>sc :close<CR>
+```
+
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **Modal Editor** | Editor with different modes for different tasks (like Vim) |
+| **Normal Mode** | Vim's default mode for navigation and commands |
+| **Insert Mode** | Vim mode for typing text |
+| **Visual Mode** | Vim mode for selecting text |
+| **Command Mode** | Vim mode for ex commands (entered with `:`) |
+| **Buffer** | In-memory representation of an open file |
+| **Window** | View into a buffer (can have multiple windows for one buffer) |
+| **Tab** | Collection of windows in Vim |
+| **Yank** | Vim term for copy (stored in register) |
+| **Register** | Vim's clipboard storage (named a-z, 0-9, etc.) |
+| **Motion** | Vim command that moves cursor (w, b, e, j, k, etc.) |
+| **Operator** | Vim command that performs action (d, y, c, etc.) |
+| **Text Object** | Vim concept: word, sentence, paragraph, block |
+| **Ex Command** | Command entered after `:` in Vim |
+| **Mapping** | Custom key binding in Vim |
+| **rc File** | Runtime configuration file (.vimrc, .nanorc) |
+| **Syntax Highlighting** | Color coding for programming language syntax |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How Text Editor Skills Help Your Career
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    TEXT EDITOR SKILLS IN TECH CAREERS                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   💻  SOFTWARE DEVELOPER                                                │
+│   ├── Daily code editing and navigation                                 │
+│   ├── Quick file modifications                                          │
+│   ├── Remote server editing via SSH                                     │
+│   └── Salary Range: $70,000 - $180,000/year                             │
+│                                                                          │
+│   🖥️  DEVOPS ENGINEER                                                   │
+│   ├── Server configuration editing                                      │
+│   ├── Quick log file analysis                                           │
+│   ├── Script editing and debugging                                      │
+│   └── Salary Range: $80,000 - $160,000/year                             │
+│                                                                          │
+│   🛡️  SECURITY RESEARCHER                                               │
+│   ├── Malware analysis in text mode                                     │
+│   ├── Config file forensics                                             │
+│   ├── Remote server work                                                │
+│   └── Salary Range: $70,000 - $150,000/year                             │
+│                                                                          │
+│   ☁️  SYSTEM ADMINISTRATOR                                              │
+│   ├── Server management via SSH                                         │
+│   ├── Configuration file editing                                        │
+│   ├── Log file inspection                                               │
+│   └── Salary Range: $60,000 - $120,000/year                             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills You're Building
+
+| Skill | Career Value | Real-World Application |
+|-------|--------------|------------------------|
+| Nano basics | ⭐⭐⭐⭐ | Quick edits, server configs |
+| Vim basics | ⭐⭐⭐⭐⭐ | Professional coding, remote work |
+| Vim motions | ⭐⭐⭐⭐ | Efficient navigation |
+| Multi-file editing | ⭐⭐⭐⭐ | Large project management |
+| Editor customization | ⭐⭐⭐ | Productivity optimization |
+
+### Vim Learning Roadmap
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        VIM LEARNING PROGRESSION                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   LEVEL 1: SURVIVAL                                                     │
+│   ├── i for insert, Esc for normal                                      │
+│   ├── :w to save, :q to quit                                            │
+│   └── Arrow keys for movement                                           │
+│                                                                          │
+│   LEVEL 2: BASICS (You are here after this chapter)                     │
+│   ├── h, j, k, l navigation                                             │
+│   ├── dd, yy, p for cut, copy, paste                                    │
+│   ├── / for search, :%s for replace                                     │
+│   └── u for undo, Ctrl+R for redo                                       │
+│                                                                          │
+│   LEVEL 3: INTERMEDIATE                                                 │
+│   ├── w, b, e word motions                                              │
+│   ├── Text objects (iw, aw, i", a")                                     │
+│   ├── Split windows, buffers, tabs                                      │
+│   └── Basic .vimrc customization                                        │
+│                                                                          │
+│   LEVEL 4: ADVANCED                                                     │
+│   ├── Macros (q register)                                               │
+│   ├── Plugins (vim-plug, vundle)                                       │
+│   ├── Custom functions and mappings                                     │
+│   └── Language-specific configurations                                  │
+│                                                                          │
+│   LEVEL 5: MASTER                                                       │
+│   ├── Vimscript programming                                             │
+│   ├── Plugin development                                                │
+│   └── Vim as IDE (with LSP, completion)                                 │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Next Steps After This Chapter
+
+1. **Practice daily** - Use Vim for all text editing
+2. **Run vimtutor** - Complete the built-in tutorial
+3. **Customize .vimrc** - Make it your own
+4. **Learn plugins** - Explore vim-plug for extensions
+5. **Try Neovim** - Modern Vim with better features
+
+---
+
 
 ## 💡 PRO TIPS BOX
 

@@ -624,6 +624,719 @@ Thank you for watching! See you in Chapter 54!
 
 ---
 
+## 📊 MERMAID PROJECT ARCHITECTURE
+
+```mermaid
+flowchart TD
+    A[WiFi Analyzer] --> B[Scan Module]
+    B --> C[termux-wifi-scaninfo]
+    
+    C --> D[JSON Parser]
+    D --> E[Network List]
+    
+    E --> F[Analysis Engine]
+    F --> G[Signal Strength Analysis]
+    F --> H[Channel Analysis]
+    F --> I[Security Analysis]
+    
+    G --> J[Quality Rating]
+    H --> K[Congestion Detection]
+    I --> L[Security Rating]
+    
+    J --> M[Recommendations]
+    K --> M
+    L --> M
+    
+    M --> N[Display Module]
+    N --> O[Terminal Table]
+    N --> P[Rich Console]
+    N --> Q[ASCII Graphs]
+    
+    M --> R[Export Module]
+    R --> S[JSON Report]
+    R --> T[Text Report]
+```
+
+```mermaid
+flowchart LR
+    subgraph SCAN[WiFi Scanning]
+        A1[termux-wifi-scaninfo]
+        A2[termux-wifi-connectioninfo]
+    end
+    
+    subgraph ANALYZE[Network Analysis]
+        B1[Signal Quality]
+        B2[Channel Analysis]
+        B3[Security Check]
+        B4[Vendor Lookup]
+    end
+    
+    subgraph OUTPUT[Results]
+        C1[Console Display]
+        C2[Report Generation]
+        C3[Continuous Monitor]
+        C4[Alert System]
+    end
+    
+    SCAN --> ANALYZE --> OUTPUT
+```
+
+---
+
+## ⚡ PROJECT FEATURE CHEATSHEET
+
+| Feature | Implementation | Usage |
+|---------|---------------|-------|
+| **Network Scan** | `termux-wifi-scaninfo` | Single scan command |
+| **Connection Info** | `termux-wifi-connectioninfo` | Current WiFi details |
+| **Signal Analysis** | dBm to quality conversion | -30 to -100 scale |
+| **Channel Detection** | Frequency mapping | 2.4GHz: 1-14, 5GHz: 36-165 |
+| **Security Parsing** | Capabilities regex | WPA2, WPA3 detection |
+| **Vendor Lookup** | OUI database | First 3 MAC octets |
+| **Continuous Monitor** | Loop with interval | Real-time updates |
+| **Report Export** | JSON/Text formats | `--report` flag |
+| **Channel Recommend** | Congestion analysis | Best channel suggest |
+| **Signal Graph** | ASCII bar chart | Visual strength |
+
+### WiFi Frequency to Channel Map
+
+| Band | Channels | Frequency Range (MHz) |
+|------|----------|----------------------|
+| 2.4GHz | 1-14 | 2412-2484 |
+| 5GHz | 36-48 | 5170-5240 |
+| 5GHz | 52-64 | 5260-5320 |
+| 5GHz | 100-144 | 5500-5720 |
+| 5GHz | 149-165 | 5745-5825 |
+
+### Signal Strength Quality Scale
+
+| dBm Range | Quality | Icon |
+|-----------|---------|------|
+| -30 to -50 | Excellent | ⭐⭐⭐⭐⭐ |
+| -50 to -60 | Very Good | ⭐⭐⭐⭐ |
+| -60 to -67 | Good | ⭐⭐⭐ |
+| -67 to -70 | Fair | ⭐⭐ |
+| -70 to -80 | Weak | ⭐ |
+| -80 to -100 | Unusable | ❌ |
+
+---
+
+## 🎯 PROJECT-BASED LEARNING PATH
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     WIFI ANALYZER LEARNING PATH                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  BEGINNER (Foundation Skills)                                               │
+│  ────────────────────────────                                               │
+│  ├── JSON parsing: Nested data structures                                   │
+│  ├── Terminal output: Rich, colorama libraries                              │
+│  ├── Signal basics: dBm, RSSI, SNR concepts                                 │
+│  └── WiFi fundamentals: SSID, BSSID, channels                               │
+│                    │                                                         │
+│                    ▼                                                         │
+│  INTERMEDIATE (Network Analysis)                                            │
+│  ────────────────────────────                                               │
+│  ├── WiFi security: WEP, WPA, WPA2, WPA3                                    │
+│  ├── Channel analysis: Overlap, interference                                │
+│  ├── Signal propagation: Attenuation, obstacles                             │
+│  └── Network troubleshooting: Dead zones, congestion                        │
+│                    │                                                         │
+│                    ▼                                                         │
+│  ADVANCED (Professional Tools)                                              │
+│  ────────────────────────────                                               │
+│  ├── Site survey automation: Walk-through mapping                           │
+│  ├── Security auditing: Vulnerability detection                             │
+│  ├── Performance optimization: Channel selection                            │
+│  └── Integration: APIs, dashboards, alerting                                │
+│                    │                                                         │
+│                    ▼                                                         │
+│  CAREER APPLICATIONS                                                        │
+│  ────────────────────────────                                               │
+│  ├── Network Administrator                                                  │
+│  ├── WiFi Site Surveyor                                                     │
+│  ├── Security Analyst (wireless)                                            │
+│  ├── IoT Engineer (wireless deployment)                                     │
+│  └── NOC Engineer (network operations)                                      │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills Map to Job Roles
+
+| Skill | Job Role | Industry |
+|-------|----------|----------|
+| WiFi Security | Wireless Security Analyst | Cybersecurity |
+| Site Survey | WiFi Engineer | IT Infrastructure |
+| Channel Optimization | Network Admin | Enterprise IT |
+| Signal Analysis | RF Engineer | Telecom |
+| Automation | DevOps Engineer | All Industries |
+
+---
+
+## 🔧 PROJECT EXTENSION IDEAS
+
+### 1. 🗺️ WiFi Heatmap Generator
+Create signal strength heatmaps for site surveys.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+def generate_heatmap(scan_results, locations):
+    """Generate WiFi signal heatmap"""
+    # locations: list of (x, y, signal_dbm) tuples
+    x = [loc[0] for loc in locations]
+    y = [loc[1] for loc in locations]
+    signals = [loc[2] for loc in locations]
+    
+    # Create grid
+    xi = np.linspace(min(x), max(x), 100)
+    yi = np.linspace(min(y), max(y), 100)
+    
+    # Interpolate
+    from scipy.interpolate import griddata
+    zi = griddata((x, y), signals, (xi[None,:], yi[:,None]), method='cubic')
+    
+    # Plot
+    plt.contourf(xi, yi, zi, levels=20, cmap='RdYlGn')
+    plt.colorbar(label='Signal (dBm)')
+    plt.scatter(x, y, c=signals, cmap='RdYlGn', edgecolors='black')
+    plt.savefig('wifi_heatmap.png')
+```
+
+### 2. 🔒 Security Assessment Tool
+Enhanced security analysis with recommendations.
+
+```python
+def assess_network_security(network):
+    """Comprehensive security assessment"""
+    score = 100
+    issues = []
+    
+    # Check encryption
+    caps = network.get('capabilities', '')
+    if 'WEP' in caps:
+        score -= 50
+        issues.append("⚠️ WEP encryption - VERY VULNERABLE")
+    elif 'WPA3' in caps:
+        score += 10
+        issues.append("✅ WPA3 - Best security")
+    elif 'WPA2' in caps:
+        issues.append("✓ WPA2 - Good security")
+    else:
+        score -= 80
+        issues.append("❌ Open network - No encryption!")
+    
+    # Check for common vulnerabilities
+    ssid = network.get('ssid', '')
+    if ssid in ['NETGEAR', 'Linksys', 'TP-LINK', 'admin']:
+        score -= 20
+        issues.append("⚠️ Default SSID - Change it!")
+    
+    return {'score': score, 'issues': issues}
+```
+
+### 3. 📡 Deauth Detection
+Monitor for deauthentication attacks.
+
+```python
+def monitor_deauth(packets):
+    """Detect deauthentication attacks"""
+    deauth_count = {}
+    
+    for packet in packets:
+        if packet.type == 0 and packet.subtype == 10:  # Deauth frame
+            src = packet.addr2
+            deauth_count[src] = deauth_count.get(src, 0) + 1
+    
+    for src, count in deauth_count.items():
+        if count > 5:  # Threshold
+            alert(f"Possible deauth attack from {src}: {count} frames")
+```
+
+### 4. 📊 Historical Tracking
+Store and analyze network changes over time.
+
+```python
+import sqlite3
+from datetime import datetime
+
+class WiFiHistory:
+    def __init__(self, db='wifi_history.db'):
+        self.conn = sqlite3.connect(db)
+        self.conn.execute('''
+            CREATE TABLE IF NOT EXISTS scans (
+                timestamp DATETIME, ssid TEXT, bssid TEXT,
+                signal INT, channel INT, security TEXT
+            )
+        ''')
+    
+    def log_scan(self, networks):
+        now = datetime.now()
+        for net in networks:
+            self.conn.execute('''
+                INSERT INTO scans VALUES (?, ?, ?, ?, ?, ?)
+            ''', (now, net['ssid'], net['bssid'], 
+                  net['level'], net['channel'], net['capabilities']))
+        self.conn.commit()
+```
+
+### 5. 🤖 Auto-Connect Optimizer
+Automatically connect to best available network.
+
+```python
+def auto_connect_best(networks, known_passwords):
+    """Connect to best available known network"""
+    # Filter known networks
+    known = [n for n in networks if n['ssid'] in known_passwords]
+    
+    # Sort by signal strength
+    known.sort(key=lambda x: x['level'], reverse=True)
+    
+    if known:
+        best = known[0]
+        ssid = best['ssid']
+        password = known_passwords[ssid]
+        
+        # Connect via Termux
+        subprocess.run(['termux-wifi-enable', 'true'])
+        # Additional connection logic...
+        return f"Connected to {ssid}"
+    return "No known networks available"
+```
+
+---
+
+## 🚀 BONUS PROJECT CHALLENGES
+
+### Challenge 1: WiFi Site Survey Tool 📋
+**Difficulty: ⭐⭐**
+
+Create a complete site survey tool for building WiFi coverage maps.
+
+```
+Requirements:
+- Walk-through data collection with location tagging
+- Signal strength recording at each point
+- Generate coverage heatmaps
+- Identify dead zones
+- Export to professional report format
+```
+
+**Implementation Framework:**
+```python
+class SiteSurvey:
+    def __init__(self, building_name):
+        self.building = building_name
+        self.measurements = []
+    
+    def take_measurement(self, x, y, floor=1):
+        """Record measurement at location"""
+        networks = scan_networks()
+        self.measurements.append({
+            'location': (x, y, floor),
+            'timestamp': datetime.now(),
+            'networks': networks
+        })
+    
+    def generate_report(self):
+        """Create complete survey report"""
+        return {
+            'building': self.building,
+            'total_points': len(self.measurements),
+            'coverage_map': self.create_heatmap(),
+            'dead_zones': self.find_dead_zones(),
+            'recommendations': self.get_recommendations()
+        }
+```
+
+### Challenge 2: Rogue Access Point Detector 🕵️
+**Difficulty: ⭐⭐⭐**
+
+Build a tool to detect fake WiFi access points.
+
+```
+Requirements:
+- Maintain database of known/authorized APs
+- Detect new APs with similar SSIDs
+- Identify evil twin attacks
+- Alert on suspicious configurations
+- Log all detections with timestamps
+```
+
+**Detection Logic:**
+```python
+def detect_rogue_aps(current_scan, known_aps):
+    """Detect potential rogue access points"""
+    alerts = []
+    
+    for ap in current_scan:
+        ssid = ap['ssid']
+        bssid = ap['bssid']
+        
+        # Check for SSID spoofing
+        if ssid in known_aps:
+            known_bssid = known_aps[ssid]['bssid']
+            if bssid != known_bssid:
+                alerts.append({
+                    'type': 'EVIL_TWIN',
+                    'ssid': ssid,
+                    'expected_bssid': known_bssid,
+                    'detected_bssid': bssid
+                })
+        
+        # Check for unusual configurations
+        caps = ap.get('capabilities', '')
+        if 'ESS' in caps and 'WPA' not in caps:
+            alerts.append({
+                'type': 'OPEN_AP',
+                'ssid': ssid,
+                'bssid': bssid,
+                'message': 'Open network - potential honeypot'
+            })
+    
+    return alerts
+```
+
+### Challenge 3: WiFi Performance Benchmark 📊
+**Difficulty: ⭐⭐⭐⭐**
+
+Create comprehensive WiFi performance testing tool.
+
+```
+Requirements:
+- Throughput testing (speed test)
+- Latency measurement
+- Packet loss analysis
+- Jitter calculation
+- Signal quality vs distance correlation
+- Generate performance score
+```
+
+**Performance Test:**
+```python
+import speedtest
+import ping3
+import statistics
+
+def wifi_performance_test(target='google.com'):
+    """Comprehensive WiFi performance test"""
+    results = {}
+    
+    # Speed test
+    st = speedtest.Speedtest()
+    results['download'] = st.download() / 1_000_000  # Mbps
+    results['upload'] = st.upload() / 1_000_000  # Mbps
+    
+    # Latency test
+    latencies = [ping3.ping(target) * 1000 for _ in range(10)]
+    results['avg_latency'] = statistics.mean(latencies)
+    results['jitter'] = statistics.stdev(latencies)
+    
+    # Packet loss
+    lost = sum(1 for l in latencies if l is None)
+    results['packet_loss'] = (lost / 10) * 100
+    
+    # Calculate score
+    results['score'] = calculate_perf_score(results)
+    
+    return results
+```
+
+---
+
+## 📖 TECHNICAL GLOSSARY
+
+| Term | Definition |
+|------|------------|
+| **SSID** | Service Set Identifier - The name of a WiFi network broadcast to devices. |
+| **BSSID** | Basic Service Set Identifier - MAC address of the access point. |
+| **RSSI** | Received Signal Strength Indicator - Raw signal strength measurement. |
+| **dBm** | Decibels relative to milliwatt - Unit for signal power (-30 to -100). |
+| **SNR** | Signal-to-Noise Ratio - Quality of signal relative to background noise. |
+| **Channel** | Specific frequency range for WiFi communication. |
+| **2.4GHz Band** | Longer range, lower speed, more interference (WiFi 4). |
+| **5GHz Band** | Shorter range, higher speed, less interference (WiFi 5/6). |
+| **WPA2** | WiFi Protected Access 2 - Current security standard (AES encryption). |
+| **WPA3** | WiFi Protected Access 3 - Latest security with SAE handshake. |
+| **WPS** | WiFi Protected Setup - Vulnerable pairing method (avoid!). |
+| **Channel Width** | Bandwidth of WiFi channel (20MHz, 40MHz, 80MHz, 160MHz). |
+| **MU-MIMO** | Multi-User MIMO - Simultaneous communication with multiple devices. |
+| **OFDMA** | Orthogonal Frequency Division Multiple Access - WiFi 6 feature. |
+| **Beacon Frame** | Management frame broadcast by AP to announce presence. |
+| **Deauth Frame** | Frame used to disconnect clients (can be malicious). |
+
+### Security Protocol Comparison
+
+| Protocol | Encryption | Key Size | Status |
+|----------|------------|----------|--------|
+| WEP | RC4 | 40/104-bit | ❌ Broken |
+| WPA | TKIP | 128-bit | ⚠️ Deprecated |
+| WPA2 | AES-CCMP | 128-bit | ✅ Current Standard |
+| WPA3 | AES-GCMP | 256-bit | ⭐ Best |
+
+---
+
+## 💼 PORTFOLIO BUILDING TIPS
+
+### How to Showcase This Project
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PORTFOLIO PRESENTATION GUIDE                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  1. GITHUB REPOSITORY                                                        │
+│  ──────────────────                                                         │
+│  ✓ Well-documented code with docstrings                                     │
+│  ✓ Sample scan results in /examples                                         │
+│  ✓ Screenshots of console output                                            │
+│  ✓ Unit tests for analysis functions                                        │
+│  ✓ CI/CD for automated testing                                              │
+│                                                                              │
+│  2. DEMONSTRATION VIDEO                                                      │
+│  ──────────────────                                                         │
+│  ✓ Show live network scanning                                               │
+│  ✓ Demonstrate security analysis                                            │
+│  ✓ Compare multiple locations                                               │
+│  ✓ Show continuous monitoring mode                                          │
+│                                                                              │
+│  3. USE CASES TO HIGHLIGHT                                                   │
+│  ──────────────────                                                         │
+│  ✓ Home network optimization                                                │
+│  ✓ Office WiFi troubleshooting                                              │
+│  ✓ Security auditing (open networks, weak encryption)                       │
+│  ✓ Site survey for new deployments                                          │
+│                                                                              │
+│  4. RESUME BULLET POINTS                                                     │
+│  ──────────────────                                                         │
+│  • Built WiFi network analyzer using Termux API and Python                  │
+│  • Implemented signal strength analysis and channel optimization            │
+│  • Created security assessment module detecting WEP/WPA vulnerabilities     │
+│  • Added continuous monitoring with real-time alerts                        │
+│                                                                              │
+│  5. INTERVIEW TALKING POINTS                                                 │
+│  ──────────────────                                                         │
+│  • How does WiFi channel overlap affect performance?                        │
+│  • What makes WPA3 more secure than WPA2?                                   │
+│  • How would you detect a rogue access point?                               │
+│  • Explain dBm and signal strength interpretation                           │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔧 CODE OPTIMIZATION TIPS
+
+### Parallel Network Scanning
+
+```python
+import concurrent.futures
+
+def parallel_scan(n=3):
+    """Run multiple scans in parallel for faster results"""
+    with concurrent.futures.ThreadPoolExecutor(max_workers=n) as executor:
+        futures = [executor.submit(termux_wifi_scan) for _ in range(n)]
+        results = [f.result() for f in concurrent.futures.as_completed(futures)]
+    
+    # Merge and deduplicate results
+    all_networks = {}
+    for scan in results:
+        for net in scan:
+            bssid = net['bssid']
+            if bssid not in all_networks or net['level'] > all_networks[bssid]['level']:
+                all_networks[bssid] = net
+    
+    return list(all_networks.values())
+```
+
+### Efficient Signal Processing
+
+```python
+# ❌ SLOW: String operations for signal parsing
+def parse_signal_slow(data):
+    for net in data:
+        if 'level' in net:
+            level = int(net['level'])
+            # Process...
+
+# ✅ FAST: Direct numeric comparison
+SIGNAL_THRESHOLDS = [
+    (-30, 'Excellent'),
+    (-50, 'Very Good'),
+    (-60, 'Good'),
+    (-67, 'Fair'),
+    (-70, 'Weak'),
+    (-100, 'Unusable')
+]
+
+def get_signal_quality(dbm):
+    """Fast lookup for signal quality"""
+    for threshold, quality in SIGNAL_THRESHOLDS:
+        if dbm >= threshold:
+            return quality
+    return 'Unusable'
+```
+
+### Caching Scan Results
+
+```python
+import time
+from functools import lru_cache
+
+@lru_cache(maxsize=1)
+def get_cached_scan(cache_time=5):
+    """Cache scan results for specified seconds"""
+    # LRU cache with timestamp check
+    pass
+
+class ScanCache:
+    def __init__(self, ttl=5):
+        self.ttl = ttl
+        self.cache = None
+        self.last_scan = 0
+    
+    def get(self):
+        if time.time() - self.last_scan > self.ttl:
+            self.cache = termux_wifi_scan()
+            self.last_scan = time.time()
+        return self.cache
+```
+
+### Benchmark Results
+
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│                    PERFORMANCE BENCHMARKS                                   │
+├─────────────────────────┬──────────────┬───────────────────────────────────┤
+│ Operation               │ Time         │ Notes                             │
+├─────────────────────────┼──────────────┼───────────────────────────────────┤
+│ Single scan             │ 2-3s         │ Depends on environment            │
+│ Parallel (3 workers)    │ 3-4s         │ Better coverage                   │
+│ Signal analysis         │ <1ms         │ Per network                       │
+│ Full report generation  │ 50ms         │ JSON + Text                       │
+│ Continuous mode (5s)    │ Real-time    │ Low CPU usage                     │
+└─────────────────────────┴──────────────┴───────────────────────────────────┘
+```
+
+---
+
+## 📱 APK BUILD GUIDE
+
+### Converting WiFi Analyzer to Android App
+
+### Method 1: Native Android App
+
+```bash
+# Create with Kivy for cross-platform
+pip install kivy
+
+# Main app structure
+cat > wifi_analyzer_app.py << 'EOF'
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.scrollview import ScrollView
+import subprocess
+import json
+
+class WiFiAnalyzerApp(App):
+    def build(self):
+        layout = BoxLayout(orientation='vertical')
+        
+        # Scan button
+        btn = Button(text='Scan Networks', size_hint_y=0.1)
+        btn.bind(on_press=self.scan)
+        
+        # Results area
+        self.results = ScrollView()
+        self.label = Label(text='Press Scan to start', size_hint_y=None)
+        self.results.add_widget(self.label)
+        
+        layout.add_widget(btn)
+        layout.add_widget(self.results)
+        return layout
+    
+    def scan(self, instance):
+        result = subprocess.run(['termux-wifi-scaninfo'], 
+                                capture_output=True, text=True)
+        networks = json.loads(result.stdout)
+        
+        text = '\n'.join(
+            f"{n['ssid']}: {n['level']}dBm Ch{n['channel']}"
+            for n in networks
+        )
+        self.label.text = text
+
+if __name__ == '__main__':
+    WiFiAnalyzerApp().run()
+EOF
+
+# Build with Buildozer
+buildozer android debug
+```
+
+### Method 2: Web Dashboard
+
+```python
+from flask import Flask, render_template, jsonify
+import subprocess
+import json
+
+app = Flask(__name__)
+
+@app.route('/')
+def dashboard():
+    return render_template('wifi_dashboard.html')
+
+@app.route('/api/scan')
+def api_scan():
+    result = subprocess.run(['termux-wifi-scaninfo'],
+                            capture_output=True, text=True)
+    return result.stdout
+
+@app.route('/api/status')
+def api_status():
+    result = subprocess.run(['termux-wifi-connectioninfo'],
+                            capture_output=True, text=True)
+    return result.stdout
+
+# Run: flask run --host=0.0.0.0 --port=5000
+# Access from any device on network
+```
+
+### App Features Roadmap
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ANDROID APP FEATURES ROADMAP                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Version 1.0 (Basic)                                                        │
+│  ├── Network list display                                                   │
+│  ├── Signal strength indicator                                              │
+│  └── Security info                                                          │
+│                                                                              │
+│  Version 2.0 (Analysis)                                                     │
+│  ├── Channel graph                                                          │
+│  ├── Security recommendations                                               │
+│  ├── Export reports                                                         │
+│  └── Dark/Light theme                                                       │
+│                                                                              │
+│  Version 3.0 (Professional)                                                 │
+│  ├── Real-time monitoring                                                   │
+│  ├── Site survey mode                                                       │
+│  ├── Cloud sync                                                             │
+│  └── Alert system                                                           │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## 🎮 INTERACTIVE QUIZ - Test Your Knowledge!
 
 ### Test Your WiFi Analyzer Knowledge!

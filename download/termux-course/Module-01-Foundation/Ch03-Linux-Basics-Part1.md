@@ -3810,6 +3810,568 @@ Complete this checklist to verify your learning!
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Diagram 1: File System Navigation Flow
+
+```mermaid
+flowchart TD
+    A[🏠 Home Directory ~] --> B[📁 Navigate with cd]
+    B --> C{What to do?}
+    
+    C -->|List files| D[ls command]
+    C -->|Create folder| E[mkdir command]
+    C -->|Delete| F[rm command]
+    C -->|Copy| G[cp command]
+    C -->|Move/Rename| H[mv command]
+    
+    D --> D1[ls -la for details]
+    D --> D2[ls -laS by size]
+    D --> D3[ls -lat by time]
+    
+    E --> E1[mkdir folder]
+    E --> E2[mkdir -p path/to/folder]
+    
+    F --> F1[rm file]
+    F --> F2[rm -r folder]
+    F --> F3[rm -i safe delete]
+    
+    G --> G1[cp file dest]
+    G --> G2[cp -r folder dest]
+    
+    H --> H1[mv file newname]
+    H --> H2[mv file dest/]
+    
+    style A fill:#4CAF50,color:#fff
+    style C fill:#2196F3,color:#fff
+```
+
+### Diagram 2: Command Options Decision Tree
+
+```mermaid
+flowchart LR
+    subgraph LS["ls Options"]
+        L1[-l detailed]
+        L2[-a show hidden]
+        L3[-h human sizes]
+        L4[-t sort by time]
+        L5[-S sort by size]
+    end
+    
+    subgraph RM["rm Options"]
+        R1[-r recursive]
+        R2[-f force]
+        R3[-i interactive]
+        R4[-v verbose]
+    end
+    
+    subgraph CP["cp Options"]
+        C1[-r recursive]
+        C2[-v verbose]
+        C3[-i interactive]
+        C4[-p preserve]
+    end
+    
+    subgraph MV["mv Options"]
+        M1[-v verbose]
+        M2[-i interactive]
+        M3[-f force]
+        M4[-n no overwrite]
+    end
+```
+
+### Diagram 3: Absolute vs Relative Paths
+
+```mermaid
+graph TB
+    subgraph FileSystem["📁 File System"]
+        ROOT["/ (Root)"]
+        HOME["~ (Home)"]
+        PROJECTS["~/projects"]
+        SCRIPTS["~/projects/scripts"]
+        DATA["~/projects/data"]
+    end
+    
+    subgraph Absolute["📍 Absolute Paths"]
+        A1["/data/data/com.termux/files/home"]
+        A2["/sdcard/Download"]
+        A3["/system/etc"]
+    end
+    
+    subgraph Relative["📍 Relative Paths from ~"]
+        R1["projects/"]
+        R2["./projects/scripts"]
+        R3["../other_folder"]
+    end
+    
+    ROOT --> HOME
+    HOME --> PROJECTS
+    PROJECTS --> SCRIPTS
+    PROJECTS --> DATA
+    
+    style ROOT fill:#f44336,color:#fff
+    style HOME fill:#4CAF50,color:#fff
+    style PROJECTS fill:#2196F3,color:#fff
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+| Command | Syntax | Example | Output |
+|---------|--------|---------|--------|
+| `pwd` | `pwd` | `pwd` | `/data/data/com.termux/files/home` |
+| `ls` | `ls [options] [path]` | `ls -la ~/storage/` | Lists files with details |
+| `cd` | `cd <path>` | `cd ~/storage/downloads` | Changes to downloads folder |
+| `cd ..` | `cd ..` | `cd ../..` | Goes up 1 or 2 levels |
+| `cd ~` | `cd ~` | `cd` | Goes to home directory |
+| `cd -` | `cd -` | `cd -` | Goes to previous directory |
+| `mkdir` | `mkdir <folder>` | `mkdir projects` | Creates folder |
+| `mkdir -p` | `mkdir -p path/to/folder` | `mkdir -p src/js/components` | Creates nested folders |
+| `rm` | `rm <file>` | `rm oldfile.txt` | Deletes file |
+| `rm -r` | `rm -r <folder>` | `rm -rf old_project` | Deletes folder recursively |
+| `rm -i` | `rm -i <file>` | `rm -i important.txt` | Deletes with confirmation |
+| `cp` | `cp <src> <dest>` | `cp file.txt backup/` | Copies file |
+| `cp -r` | `cp -r <src> <dest>` | `cp -r project backup/` | Copies folder |
+| `mv` | `mv <src> <dest>` | `mv old.txt new.txt` | Renames file |
+| `mv` | `mv <file> <dir>` | `mv file.txt ~/docs/` | Moves file to directory |
+| `touch` | `touch <file>` | `touch newfile.txt` | Creates empty file |
+| `file` | `file <filename>` | `file image.png` | Shows file type |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    🎯 YOUR LEARNING JOURNEY - MODULE 1                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ✅ CHAPTER 1     [████████████████████████████████] 100% COMPLETE      │
+│     Termux Introduction & Installation                                  │
+│                                                                          │
+│  ✅ CHAPTER 2     [████████████████████████████████] 100% COMPLETE      │
+│     First Setup & Configuration                                         │
+│                                                                          │
+│  ✅ CHAPTER 3     [████████████████████████████████] 100% COMPLETE      │
+│     Linux Basics Part 1                                                 │
+│     ↓ You are here - Ready for Chapter 4!                               │
+│                                                                          │
+│  🔒 CHAPTER 4     [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0% LOCKED        │
+│     Linux Basics Part 2                                                 │
+│                                                                          │
+│  🔒 CHAPTER 5     [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0% LOCKED        │
+│     Package Management                                                  │
+│                                                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│  📊 OVERALL MODULE 1 PROGRESS: [████████████░░░░░░░░]  60%              │
+│  🏆 Skills Unlocked: Navigation, File Operations, Directory Management  │
+│  🔑 Next Unlock: Text Processing, Permissions, Pipes & Redirection      │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Commands Mastered:
+```
+┌──────────────────────────────────────────────────────────────┐
+│  ✅ pwd - Print Working Directory                            │
+│  ✅ ls - List Directory Contents                             │
+│  ✅ cd - Change Directory                                    │
+│  ✅ mkdir - Make Directory                                   │
+│  ✅ rm - Remove Files & Directories                          │
+│  ✅ cp - Copy Files & Directories                            │
+│  ✅ mv - Move/Rename Files & Directories                     │
+│  ✅ touch - Create Empty Files                               │
+│  ✅ Tab Completion - Auto-complete paths                     │
+│  ✅ Absolute & Relative Paths                                │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+### File Listing Commands
+
+| Command | Best For | Example | Output |
+|---------|----------|---------|--------|
+| `ls` | Quick listing | `ls` | Simple list |
+| `ls -l` | Detailed info | `ls -la` | Permissions, size, date |
+| `ls -la` | Everything visible | `ls -la` | All files including hidden |
+| `ls -lh` | Human readable | `ls -lh` | Sizes in KB, MB, GB |
+| `ls -lt` | Recent first | `ls -lt` | Sorted by modification time |
+| `ls -lS` | Largest first | `ls -lS` | Sorted by file size |
+| `ls -R` | Tree view | `ls -R` | Recursive listing |
+| `tree` | Visual tree | `tree` | ASCII tree (needs install) |
+
+### Delete Commands Comparison
+
+| Command | Use Case | Risk Level | Recovery |
+|---------|----------|------------|----------|
+| `rm file` | Single file | Medium | Difficult |
+| `rm -i file` | Safe delete | Low | Possible |
+| `rm -r folder` | Directory | High | Very Difficult |
+| `rm -rf folder` | Force delete | Very High | Nearly Impossible |
+| `rmdir folder` | Empty folder | Low | Easy |
+| `trash-cli` | Trash bin | Low | Easy recovery |
+
+### Copy vs Move
+
+| Operation | Command | Original File | Speed | Use Case |
+|-----------|---------|---------------|-------|----------|
+| Copy | `cp file dest/` | ✅ Kept | Slower | Backup, duplicate |
+| Move | `mv file dest/` | ❌ Removed | Faster | Relocate, rename |
+| Hard Link | `ln file link` | ✅ Shared data | Instant | Space saving |
+| Soft Link | `ln -s file link` | ✅ Kept | Instant | Shortcuts |
+
+---
+
+## 🚀 PRACTICAL CHALLENGES
+
+### Challenge 1: Directory Structure Creation
+
+**Difficulty:** ⭐ Beginner  
+**Time:** 5 minutes  
+**Objective:** Create a project directory structure using mkdir commands
+
+**Task:**
+1. Create a main project folder called "my_project"
+2. Inside it, create: src, docs, tests, assets folders
+3. Inside src, create: js, css, html folders
+4. Verify the structure with ls -R
+
+**Hint:** Use `mkdir -p` for nested directories
+
+<details>
+<summary>🔓 Click to reveal solution</summary>
+
+```bash
+# Method 1: Step by step
+mkdir my_project
+cd my_project
+mkdir src docs tests assets
+cd src
+mkdir js css html
+cd ..
+ls -R
+
+# Method 2: One-liner with brace expansion
+mkdir -p my_project/{src/{js,css,html},docs,tests,assets}
+
+# Verify structure
+cd my_project
+ls -R
+
+# Expected output:
+# .:
+# assets  docs  src  tests
+#
+# ./assets:
+#
+# ./docs:
+#
+# ./src:
+# css  html  js
+#
+# ./src/css:
+#
+# ./src/html:
+#
+# ./src/js:
+#
+# ./tests:
+
+# Create some placeholder files
+touch src/js/app.js
+touch src/css/style.css
+touch src/html/index.html
+touch docs/README.md
+touch tests/test.js
+
+# Check final structure
+ls -R
+```
+
+**Success Criteria:**
+- ✅ Main folder created
+- ✅ All subfolders present
+- ✅ Nested structure correct
+- ✅ Can navigate through all folders
+
+</details>
+
+---
+
+### Challenge 2: File Operations Practice
+
+**Difficulty:** ⭐⭐ Intermediate  
+**Time:** 10 minutes  
+**Objective:** Practice copy, move, and rename operations
+
+**Task:**
+1. Create 5 text files with sample content
+2. Copy all .txt files to a backup folder
+3. Rename one file and move another to a different location
+4. Delete the original files (not backups)
+
+**Hint:** Use wildcards (`*.txt`) for batch operations
+
+<details>
+<summary>_UNLOCK Click to reveal solution</summary>
+
+```bash
+# Step 1: Create test environment
+mkdir -p file_practice/{original,backup,archive}
+
+# Step 2: Create 5 text files with content
+cd file_practice/original
+echo "This is file 1 - Important notes" > file1.txt
+echo "This is file 2 - Meeting minutes" > file2.txt
+echo "This is file 3 - Project ideas" > file3.txt
+echo "This is file 4 - Task list" > file4.txt
+echo "This is file 5 - Contact info" > file5.txt
+
+# Verify files created
+ls -la
+
+# Step 3: Copy all txt files to backup
+cp *.txt ../backup/
+
+# Verify backup
+ls ../backup/
+
+# Step 4: Rename file1.txt to notes.txt
+mv file1.txt notes.txt
+
+# Step 5: Move notes.txt to archive folder
+mv notes.txt ../archive/
+
+# Step 6: Delete remaining original files (backups exist)
+rm *.txt
+
+# Verify cleanup
+ls
+# Should be empty
+
+# Check all locations
+echo "=== Backup folder ===" && ls ../backup/
+echo "=== Archive folder ===" && ls ../archive/
+echo "=== Original folder ===" && ls
+
+# Navigate back
+cd ../..
+rm -rf file_practice  # Cleanup for practice
+```
+
+**Success Criteria:**
+- ✅ Created 5 files with content
+- ✅ Copied all to backup folder
+- ✅ Renamed file successfully
+- ✅ Moved file to archive
+- ✅ Cleaned up original location
+
+</details>
+
+---
+
+### Challenge 3: Safe File Management Script
+
+**Difficulty:** ⭐⭐⭐ Advanced  
+**Time:** 15 minutes  
+**Objective:** Create a function that safely moves files to a "trash" folder instead of deleting
+
+**Task:**
+1. Create a trash folder in home directory
+2. Write a bash function called `trash`
+3. Function should move files to trash with timestamp
+4. Include a `restore` function to recover files
+
+**Hint:** Use `mv` command and `date` command for timestamps
+
+<details>
+<summary>🔓 Click to reveal solution</summary>
+
+```bash
+# Add these functions to your ~/.bashrc
+
+# Create trash directory
+mkdir -p ~/.trash
+
+# Trash function - safer alternative to rm
+trash() {
+    if [ -z "$1" ]; then
+        echo "Usage: trash <file_or_folder>"
+        return 1
+    fi
+    
+    # Create trash folder if it doesn't exist
+    mkdir -p ~/.trash
+    
+    for item in "$@"; do
+        if [ -e "$item" ]; then
+            # Get the basename and add timestamp
+            local basename=$(basename "$item")
+            local timestamp=$(date +%Y%m%d_%H%M%S)
+            local trash_name="${basename}_${timestamp}"
+            
+            # Move to trash
+            mv "$item" ~/.trash/"$trash_name"
+            echo "✅ Moved '$item' to trash as '$trash_name'"
+        else
+            echo "❌ '$item' not found"
+        fi
+    done
+}
+
+# Restore function - recover from trash
+restore() {
+    if [ -z "$1" ]; then
+        echo "Usage: restore <file_pattern>"
+        echo "Available items in trash:"
+        ls -la ~/.trash/
+        return 1
+    fi
+    
+    # Find matching file in trash
+    local found=$(ls ~/.trash/ | grep "$1" | head -1)
+    
+    if [ -n "$found" ]; then
+        # Extract original name (remove timestamp)
+        local original=$(echo "$found" | sed 's/_[0-9]\{8\}_[0-9]\{6\}$//')
+        mv ~/.trash/"$found" "./$original"
+        echo "✅ Restored '$found' as '$original'"
+    else
+        echo "❌ No matching file found in trash"
+        echo "Available items:"
+        ls ~/.trash/
+    fi
+}
+
+# Empty trash function
+empty-trash() {
+    echo "⚠️  This will permanently delete all files in trash!"
+    read -p "Are you sure? (y/N): " confirm
+    if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
+        rm -rf ~/.trash/*
+        echo "✅ Trash emptied"
+    else
+        echo "Cancelled"
+    fi
+}
+
+# After adding, reload:
+# source ~/.bashrc
+
+# Usage examples:
+# trash old_file.txt        # Moves to trash
+# trash folder1 folder2     # Multiple items
+# restore old_file          # Restores from trash
+# empty-trash               # Permanently deletes all trash
+```
+
+**Testing:**
+```bash
+# Reload bashrc
+source ~/.bashrc
+
+# Test the functions
+echo "test content" > testfile.txt
+trash testfile.txt
+ls ~/.trash/  # Should show the file with timestamp
+restore testfile
+ls testfile.txt  # Should exist again
+```
+
+**Success Criteria:**
+- ✅ trash function moves files safely
+- ✅ Timestamp added to trashed files
+- ✅ restore function recovers files
+- ✅ Multiple files can be trashed at once
+
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition | Example |
+|------|------------|---------|
+| **Directory** | A folder that contains files and other directories | `/home/user/documents` |
+| **Path** | Location of a file or directory in the filesystem | `/sdcard/Download/file.txt` |
+| **Absolute Path** | Full path starting from root directory | `/data/data/com.termux/files/home` |
+| **Relative Path** | Path relative to current working directory | `../documents/file.txt` |
+| **Parent Directory** | The directory one level above current | `..` in `cd ..` |
+| **Current Directory** | The directory you are currently in | `.` (dot) represents current |
+| **Home Directory** | User's personal directory, represented by `~` | `~` = `/home/username` |
+| **Root Directory** | Top-level directory, represented by `/` | `/` contains all other directories |
+| **Wildcard** | Character that matches multiple files | `*.txt` matches all text files |
+| **Recursive** | Operation applied to directory and all contents | `rm -r folder` deletes everything inside |
+| **Hidden File** | File starting with a dot, not shown by default | `.bashrc`, `.profile` |
+| **Symbolic Link** | Shortcut pointing to another file or directory | `~/storage/downloads` → `/sdcard/Download` |
+| **Inode** | Data structure storing file metadata | Used internally by filesystem |
+| **Tab Completion** | Auto-complete by pressing Tab key | `cd pro<TAB>` → `cd projects/` |
+| **Permission** | Access rights for files/directories | `rwx` = read, write, execute |
+| **Flag/Option** | Modifier for command behavior | `-l` in `ls -l` |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Job Roles That Use These Skills
+
+| Role | Description | File Operations Needed |
+|------|-------------|----------------------|
+| **System Administrator** | Manages servers and systems | Daily - log management, backups |
+| **DevOps Engineer** | Automates deployment pipelines | High - CI/CD scripts, configs |
+| **Backend Developer** | Builds server applications | Medium - code organization |
+| **Data Engineer** | Manages data pipelines | High - file processing, ETL |
+| **Security Analyst** | Analyzes security logs | High - log analysis, reports |
+| **Site Reliability Engineer** | Maintains system uptime | High - config management |
+| **Cloud Engineer** | Works with cloud infrastructure | Medium - deployment files |
+| **QA Engineer** | Tests software quality | Medium - test file management |
+
+### Salary Expectations (India)
+
+| Role | Entry Level (₹/year) | Mid Level (₹/year) | Senior (₹/year) |
+|------|---------------------|-------------------|-----------------|
+| System Administrator | 3-5 LPA | 6-12 LPA | 12-20 LPA |
+| DevOps Engineer | 5-8 LPA | 12-20 LPA | 25-45 LPA |
+| Backend Developer | 4-8 LPA | 10-20 LPA | 25-50 LPA |
+| Data Engineer | 5-9 LPA | 12-22 LPA | 25-45 LPA |
+| Security Analyst | 4-6 LPA | 8-15 LPA | 18-30 LPA |
+
+### Certifications to Pursue
+
+| Certification | Provider | Focus Area | Difficulty |
+|--------------|----------|------------|------------|
+| **LFCS** | Linux Foundation | Linux System Admin | Intermediate |
+| **RHCSA** | Red Hat | Red Hat Admin | Intermediate |
+| **LPIC-1** | LPI | Linux Essentials | Beginner |
+| **CompTIA Linux+** | CompTIA | Linux Fundamentals | Beginner |
+| **AWS SysOps** | Amazon | AWS Operations | Intermediate |
+
+### Learning Path - File Operations
+
+```
+Basic File Commands (pwd, ls, cd)
+         ↓
+    File Operations
+    (cp, mv, rm, mkdir)
+         ↓
+    ┌────┴────┐
+    ↓         ↓
+Scripting   Automation
+    ↓         ↓
+Bash/Python  Cron Jobs
+    ↓         ↓
+    └────┬────┘
+         ↓
+   System Administration
+         ↓
+   DevOps / Platform Engineering
+```
+
+---
+
 ## 💡 PRO TIPS - MASTER THESE!
 
 > 💡 **Pro Tip #1:** Use `cd -` to quickly toggle between your current and previous directory - huge time saver!

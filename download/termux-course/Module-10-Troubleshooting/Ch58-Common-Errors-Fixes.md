@@ -2498,6 +2498,1047 @@ pkg install file        # File type identification
 
 ---
 
+## 📊 MERMAID TROUBLESHOOTING FLOWS
+
+### Decision Tree: Package Installation Error
+
+```mermaid
+flowchart TD
+    A[Package Install Error] --> B{Error Type?}
+    B -->|Unable to locate| C[Check Package Name]
+    B -->|Dependency issues| D[Run pkg install -f]
+    B -->|Network error| E[Check Internet]
+    B -->|Permission denied| F[Check Permissions]
+    
+    C --> C1[pkg search keyword]
+    C1 --> C2{Found?}
+    C2 -->|Yes| C3[pkg install correct_name]
+    C2 -->|No| C4[pkg update && pkg upgrade]
+    C4 --> C5[Add repos: root-repo, x11-repo]
+    
+    D --> D1[pkg install -f]
+    D1 --> D2{Fixed?}
+    D2 -->|No| D3[dpkg --configure -a]
+    D3 --> D4[pkg update && pkg upgrade -y]
+    
+    E --> E1[ping google.com]
+    E1 --> E2{Works?}
+    E2 -->|No| E3[Check WiFi/Data]
+    E2 -->|Yes| E4[Change DNS to 8.8.8.8]
+    
+    F --> F1[termux-setup-storage]
+    F1 --> F2[chmod +x script]
+    F2 --> F3[Check SELinux: getenforce]
+    
+    style A fill:#ff6b6b
+    style B fill:#4ecdc4
+    style C fill:#ffe66d
+    style D fill:#ffe66d
+    style E fill:#ffe66d
+    style F fill:#ffe66d
+```
+
+### Decision Tree: Python/pip Error Debugging
+
+```mermaid
+flowchart TD
+    A[Python/pip Error] --> B{Error Message?}
+    B -->|Module not found| C[pip install module]
+    B -->|Permission denied| D[pip install --user]
+    B -->|Build failed| E[Install build deps]
+    B -->|SSL error| F[Install openssl]
+    
+    C --> C1[pip search module_name]
+    C1 --> C2[pip install correct_name]
+    
+    D --> D1[pip install --user package]
+    D1 --> D2{Still fails?}
+    D2 -->|Yes| D3[Check file permissions]
+    D3 --> D4[ls -la $PREFIX/lib/python*]
+    
+    E --> E1[pkg install build-essential]
+    E1 --> E2[pkg install libffi openssl]
+    E2 --> E3[pip install --upgrade pip wheel]
+    E3 --> E4[Retry pip install]
+    
+    F --> F1[pkg install openssl libssl]
+    F1 --> F2[pkg reinstall python]
+    F2 --> F3[Update CA certs: pkg install ca-certificates]
+    
+    style A fill:#e74c3c
+    style B fill:#3498db
+    style C fill:#2ecc71
+    style D fill:#2ecc71
+    style E fill:#f39c12
+    style F fill:#f39c12
+```
+
+### Decision Tree: Network Connectivity Issues
+
+```mermaid
+flowchart TD
+    A[Network Error] --> B{Can ping 8.8.8.8?}
+    B -->|Yes| C[DNS Issue]
+    B -->|No| D[Connection Issue]
+    
+    C --> C1[Edit resolv.conf]
+    C1 --> C2[Add nameserver 8.8.8.8]
+    C2 --> C3[Add nameserver 8.8.4.4]
+    C3 --> C4[Test: nslookup google.com]
+    
+    D --> D1{WiFi Connected?}
+    D1 -->|No| D2[Enable WiFi]
+    D1 -->|Yes| D3[Check Airplane Mode]
+    D3 --> D4[Restart Termux]
+    D4 --> D5[Check ifconfig/ip addr]
+    
+    D5 --> D6{IP Address?}
+    D6 -->|None| D7[Restart WiFi/Router]
+    D6 -->|Has IP| D8[Firewall Issue?]
+    D8 --> D9[Try different mirror]
+    
+    style A fill:#e74c3c
+    style B fill:#3498db
+    style C fill:#2ecc71
+    style D fill:#f39c12
+```
+
+### Decision Tree: Storage & Permission Issues
+
+```mermaid
+flowchart TD
+    A[Storage/Permission Error] --> B{Error Type?}
+    B -->|No space left| C[Clean Storage]
+    B -->|Permission denied| D[Fix Permissions]
+    B -->|Read-only| E[System Issue]
+    B -->|Cannot access| F[Storage Access]
+    
+    C --> C1[df -h]
+    C1 --> C2[pkg clean]
+    C2 --> C3[rm -rf ~/.cache/*]
+    C3 --> C4[Find large files: du -sh ~/* | sort -rh]
+    
+    D --> D1[chmod +x file]
+    D1 --> D2[termux-setup-storage]
+    D2 --> D3[Check: ls -la filename]
+    
+    E --> E1[Restart Termux]
+    E1 --> E2{Persistent?}
+    E2 -->|Yes| E3[Backup & Reinstall]
+    E2 -->|No| E4[Problem Solved]
+    
+    F --> F1[termux-setup-storage]
+    F1 --> F2[Allow in popup]
+    F2 --> F3{Still fails?}
+    F3 -->|Yes| F4[Settings → Apps → Termux → Permissions]
+    
+    style A fill:#e74c3c
+    style B fill:#3498db
+    style C fill:#2ecc71
+    style D fill:#f39c12
+    style E fill:#9b59b6
+    style F fill:#1abc9c
+```
+
+---
+
+## ⚡ ERROR CODE REFERENCE
+
+| Error Code | Meaning | Cause | Solution |
+|------------|---------|-------|----------|
+| `E: Unable to locate package` | Package not found | Wrong name, outdated repo, no internet | `pkg update`, `pkg search`, check internet |
+| `E: Package has no installation candidate` | No installable version | Package not in repo, wrong repo | Add correct repo, check package name |
+| `dpkg: dependency problems` | Missing dependencies | Broken install, version conflict | `pkg install -f`, `dpkg --configure -a` |
+| `E: Sub-process returned error code (1)` | dpkg failed | Lock file, corrupted db | Remove locks, `pkg update` |
+| `Hash sum mismatch` | Corrupt download | Bad cache, network issue | `pkg clean`, `rm -rf $PREFIX/var/cache/apt/archives/*` |
+| `Permission denied` | Access denied | No execute permission, no storage access | `chmod +x`, `termux-setup-storage` |
+| `Read-only file system` | Cannot write | Disk error, mount issue | Restart, backup & reinstall if persistent |
+| `Temporary failure resolving` | DNS failure | No DNS, network down | Set DNS manually, check network |
+| `Connection refused` | Service not running | Port closed, service down | Start service, check firewall |
+| `Connection timed out` | No response | Firewall, server down, slow network | Try different mirror, check firewall |
+| `SSL certificate problem` | Certificate issue | Missing CA certs, expired cert | `pkg install ca-certificates` |
+| `No space left on device` | Disk full | Too many files, packages | `pkg clean`, delete large files |
+| `Input/output error` | I/O failure | Disk corruption, hardware issue | Restart, backup if persistent |
+| `Segmentation fault` | Memory violation | Bug in program, memory issue | Reinstall package, check memory |
+| `Process completed (signal 9)` | OOM Kill | Out of memory | Reduce memory usage, close apps |
+| `command not found` | Binary not in PATH | Not installed, PATH issue | Install package, fix PATH |
+| `ModuleNotFoundError` | Python module missing | Not installed, wrong environment | `pip install module` |
+| `error while loading shared libraries` | Missing library | Library not installed | Find and install library package |
+| `cannot find -l<library>` | Linker error | Library missing during compile | Install `-dev` package |
+| `fatal error: xyz.h: No such file` | Header missing | Dev headers not installed | Install `<library>-dev` |
+| `Address already in use` | Port occupied | Another process using port | Kill process or use different port |
+| `Too many open files` | File descriptor limit | Too many files open | `ulimit -n 8192` |
+| `Text file busy` | File in use | Being executed | Stop process first: `pkill` |
+| `Bus error` | Alignment issue | Memory alignment bug | Report to maintainer |
+| `Broken pipe` | Pipe closed | Recipient closed early | Usually harmless |
+| `Operation not permitted` | Root required | Need elevated privileges | Use `su` or find alternative |
+| `GPG error` | Signature verification failed | Bad key, repo change | `pkg update`, reset sources |
+| `404 Not Found` | URL not found | Repo moved, package removed | Update sources.list |
+| `Bus error (core dumped)` | Hardware exception | Memory access error | Report bug, reinstall |
+
+---
+
+## 🎯 TROUBLESHOOTING METHODOLOGY
+
+### The Systematic 7-Step Approach
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    TROUBLESHOOTING METHODOLOGY                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  STEP 1: IDENTIFY                                                       │
+│  ════════════════                                                       │
+│  □ What exactly is the error?                                           │
+│  □ What command caused it?                                              │
+│  □ What was the expected outcome?                                       │
+│  □ When did it start happening?                                         │
+│                                                                          │
+│  STEP 2: ISOLATE                                                        │
+│  ════════════════                                                       │
+│  □ Can you reproduce it?                                                │
+│  □ Does it happen every time?                                           │
+│  □ Does it happen with other commands?                                  │
+│  □ What changed recently?                                               │
+│                                                                          │
+│  STEP 3: RESEARCH                                                       │
+│  ═══════════════                                                        │
+│  □ Read the complete error message                                      │
+│  □ Check Termux Wiki                                                    │
+│  □ Search Google with exact error                                       │
+│  □ Check GitHub issues                                                  │
+│                                                                          │
+│  STEP 4: HYPOTHESIZE                                                    │
+│  ══════════════════                                                     │
+│  □ What is the most likely cause?                                       │
+│  □ List 2-3 possible causes                                             │
+│  □ Rank by probability                                                  │
+│                                                                          │
+│  STEP 5: TEST                                                           │
+│  ═══════════                                                            │
+│  □ Try the simplest solution first                                      │
+│  □ One change at a time                                                 │
+│  □ Document what you try                                                │
+│  □ Note results of each attempt                                         │
+│                                                                          │
+│  STEP 6: FIX                                                            │
+│  ══════════                                                             │
+│  □ Apply the working solution                                           │
+│  □ Verify the fix works                                                 │
+│  □ Check for side effects                                               │
+│                                                                          │
+│  STEP 7: DOCUMENT                                                       │
+│  ═══════════════                                                        │
+│  □ Record the problem and solution                                      │
+│  □ Add to your notes/scripts                                            │
+│  □ Share with community if helpful                                      │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Troubleshooting Flowchart
+
+```mermaid
+flowchart TD
+    A[Problem Detected] --> B[Read Error Message]
+    B --> C[Identify Error Type]
+    C --> D{Have I seen this before?}
+    D -->|Yes| E[Apply Known Fix]
+    D -->|No| F[Research: Wiki/Google/GitHub]
+    F --> G[Form Hypothesis]
+    G --> H[Test Solution]
+    H --> I{Fixed?}
+    I -->|Yes| J[Document Solution]
+    I -->|No| K[Refine Hypothesis]
+    K --> H
+    E --> I
+    J --> L[Prevent Recurrence]
+    
+    style A fill:#e74c3c
+    style D fill:#3498db
+    style I fill:#f39c12
+    style J fill:#2ecc71
+    style L fill:#9b59b6
+```
+
+### The 5 Whys Technique
+
+```
+Example: Package installation fails
+
+Problem: pkg install python fails
+
+Why #1: Why does it fail?
+Answer: Error says "Unable to locate package"
+
+Why #2: Why can't it locate the package?
+Answer: Repository might not be updated
+
+Why #3: Why isn't the repository updated?
+Answer: Last pkg update was 2 weeks ago
+
+Why #4: Why hasn't it been updated?
+Answer: Forgot to run regular updates
+
+Why #5: Why did I forget?
+Answer: No automatic update reminder set
+
+Root Cause: Need to set up automated updates or reminders
+
+Solution: 
+1. Run pkg update now
+2. Add update to crontab or Tasker
+3. Document in .bashrc as reminder
+```
+
+---
+
+## 🔧 DIAGNOSTIC COMMAND COLLECTION
+
+### System Information Commands
+
+```bash
+# Termux version
+echo $TERMUX_VERSION
+pkg show termux | grep Version
+
+# Android version
+getprop ro.build.version.release
+getprop ro.build.version.sdk
+
+# Device info
+getprop ro.product.model
+getprop ro.product.brand
+getprop ro.product.device
+
+# CPU info
+cat /proc/cpuinfo
+nproc  # Number of cores
+
+# Memory info
+free -h
+cat /proc/meminfo | head -10
+
+# Disk info
+df -h
+df -h /data/data/com.termux
+
+# Environment variables
+env
+echo $PATH
+echo $HOME
+echo $PREFIX
+```
+
+### Package Diagnostic Commands
+
+```bash
+# List all installed packages
+pkg list-installed
+
+# Check for broken packages
+pkg check
+
+# Find package containing file
+pkg files <package-name>
+dpkg -S <filename>
+
+# Package info
+pkg show <package-name>
+
+# Search for package
+pkg search <keyword>
+
+# Check dependencies
+apt-cache depends <package>
+apt-cache rdepends <package>
+
+# List files in package
+dpkg -L <package-name>
+
+# Check if package is installed
+dpkg -l | grep <package-name>
+```
+
+### Network Diagnostic Commands
+
+```bash
+# Basic connectivity
+ping -c 4 google.com
+ping -c 4 8.8.8.8
+
+# DNS resolution
+nslookup google.com
+dig google.com
+
+# Check open ports
+netstat -tulpn
+ss -tulpn
+
+# Network interfaces
+ifconfig 2>/dev/null || ip addr
+
+# Route table
+route -n 2>/dev/null || ip route
+
+# Check specific port
+nc -zv <host> <port>
+
+# Trace route
+traceroute google.com
+
+# Download test
+curl -I https://packages.termux.dev
+wget --spider https://packages.termux.dev
+```
+
+### Process & Memory Diagnostic Commands
+
+```bash
+# List all processes
+ps aux
+ps -ef
+
+# Process tree
+pstree -p
+
+# Real-time process monitor
+top
+htop  # pkg install htop
+
+# Find specific process
+pgrep -a python
+pgrep -a node
+
+# Process details
+cat /proc/<PID>/status
+cat /proc/<PID>/cmdline
+cat /proc/<PID>/maps
+
+# Open files by process
+lsof -p <PID>
+
+# Memory usage
+cat /proc/meminfo
+free -h
+
+# Check for zombie processes
+ps aux | grep -w Z
+```
+
+### File System Diagnostic Commands
+
+```bash
+# Directory size
+du -sh ~/*
+du -h --max-depth=1 ~ | sort -rh
+
+# Find large files
+find ~ -type f -size +50M 2>/dev/null
+
+# Find files by name
+find ~ -name "*.py" 2>/dev/null
+
+# Check file permissions
+ls -la filename
+stat filename
+
+# Check file type
+file filename
+
+# Check disk usage
+df -h
+df -i  # Inode usage
+
+# Find broken symlinks
+find ~ -xtype l 2>/dev/null
+
+# Check for open files
+lsof | grep deleted
+```
+
+### Log Checking Commands
+
+```bash
+# Termux-specific logs
+ls $PREFIX/var/log/
+cat $PREFIX/var/log/apt/history.log
+cat $PREFIX/var/log/dpkg.log
+
+# Command history
+cat ~/.bash_history
+history
+
+# System logcat (limited)
+logcat -d 2>/dev/null | tail -100
+
+# Kernel messages
+dmesg | tail -50
+
+# Check for OOM kills
+dmesg | grep -i "out of memory"
+dmesg | grep -i "killed process"
+```
+
+### Debugging Commands
+
+```bash
+# Trace system calls
+strace -o trace.log <command>
+strace -e trace=openat <command>
+
+# Trace library calls
+ltrace <command>
+
+# Verbose apt
+apt install -v <package>
+apt-get install -o Debug::pkgProblemResolver=yes <package>
+
+# Debug bash script
+bash -x script.sh
+bash -n script.sh  # Syntax check only
+
+# Verbose pip
+pip install -v <package>
+pip install -vvv <package>  # Very verbose
+
+# Verbose curl
+curl -v <url>
+curl --trace-ascii debug.log <url>
+```
+
+---
+
+## 🚀 PRACTICAL DEBUGGING CHALLENGES
+
+### Challenge 1: The Mysterious Package Failure
+
+```
+SCENARIO:
+─────────────────────────────────────────────────────────────────────────
+You're trying to install a package but getting this error:
+
+$ pkg install metasploit-framework
+E: Unable to locate package metasploit-framework
+
+TASKS:
+1. Identify why the package can't be found
+2. Find the correct package name
+3. Successfully install the package
+
+HINTS:
+□ Is metasploit-framework the correct package name?
+□ Do you need additional repositories?
+□ Check Termux Wiki for security tools
+
+SOLUTION:
+1. pkg update && pkg upgrade -y
+2. pkg install root-repo
+3. pkg install metasploit (not metasploit-framework)
+4. Alternative: Use metasploit from GitHub
+─────────────────────────────────────────────────────────────────────────
+```
+
+### Challenge 2: The Python Import Error
+
+```
+SCENARIO:
+─────────────────────────────────────────────────────────────────────────
+Your Python script fails with this error:
+
+$ python script.py
+Traceback (most recent call last):
+  File "script.py", line 1, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+
+The script worked before on another device.
+
+TASKS:
+1. Install the missing module
+2. Verify the installation
+3. Run the script successfully
+
+BONUS:
+□ Create a requirements.txt for future use
+□ Install all dependencies at once
+
+HINTS:
+□ pip install --help
+□ pip freeze > requirements.txt
+□ Check if pip is installed: which pip
+
+SOLUTION:
+1. pip install requests
+2. python -c "import requests; print('OK')"
+3. python script.py
+
+BONUS:
+pip freeze > requirements.txt  # Create
+pip install -r requirements.txt  # Restore
+─────────────────────────────────────────────────────────────────────────
+```
+
+### Challenge 3: The Permission Puzzle
+
+```
+SCENARIO:
+─────────────────────────────────────────────────────────────────────────
+You downloaded a script and made it executable, but it still fails:
+
+$ chmod +x tool.sh
+$ ./tool.sh
+bash: ./tool.sh: Permission denied
+
+TASKS:
+1. Identify the real cause
+2. Fix the permission issue
+3. Run the script successfully
+
+INVESTIGATION STEPS:
+□ Check file location
+□ Check file permissions: ls -la tool.sh
+□ Check SELinux status: getenforce
+□ Try different locations
+
+HINTS:
+□ Where is the file located?
+□ Does /sdcard allow execute permission?
+□ Try moving to home directory
+
+SOLUTION:
+1. Check location: pwd
+   If in /sdcard, execute permission doesn't work!
+   
+2. Move to home:
+   mv tool.sh ~/
+   cd ~
+   chmod +x tool.sh
+   ./tool.sh
+
+EXPLANATION:
+Android's external storage (/sdcard) is mounted with noexec
+flag, which prevents execution of scripts. Move to ~/ instead.
+─────────────────────────────────────────────────────────────────────────
+```
+
+---
+
+## 📖 GLOSSARY OF ERROR MESSAGES
+
+### Installation Errors
+
+| Error Message | Meaning | What To Do |
+|--------------|---------|------------|
+| `E: Unable to locate package` | Package doesn't exist in configured repos | Update repos, check name, add repos |
+| `E: Package 'xyz' has no installation candidate` | Package exists but not installable | Check alternative repos, build from source |
+| `dpkg: dependency problems` | Required packages missing or version conflict | Fix with `pkg install -f` |
+| `E: Sub-process /usr/bin/dpkg returned an error code` | Package manager internal error | Clean locks, rebuild database |
+| `Hash sum mismatch` | Downloaded file doesn't match expected checksum | Clear cache, retry download |
+| `The repository is not signed` | Missing GPG key for repository | Update with `pkg update` |
+| `404 Not Found [IP: x.x.x.x]` | Repository URL is invalid | Update sources.list |
+| `Could not get lock /var/lib/dpkg/lock` | Another package operation running | Wait or kill the process |
+
+### Permission Errors
+
+| Error Message | Meaning | What To Do |
+|--------------|---------|------------|
+| `Permission denied` | You don't have access rights | chmod, chown, or check user |
+| `Cannot access '/sdcard': Permission denied` | Storage permission not granted | Run `termux-setup-storage` |
+| `Read-only file system` | File system mounted read-only | Restart, check disk health |
+| `Operation not permitted` | Requires root or special permission | Check if root needed |
+| `mkdir: cannot create directory: Permission denied` | Cannot write to directory | Check permissions, use different location |
+| `Access denied` | Generic access error | Check file/directory permissions |
+
+### Network Errors
+
+| Error Message | Meaning | What To Do |
+|--------------|---------|------------|
+| `Temporary failure resolving 'hostname'` | DNS lookup failed | Check DNS settings |
+| `Connection refused` | Target reachable but port closed | Start service, check port |
+| `Connection timed out` | No response from server | Check firewall, try different host |
+| `Network is unreachable` | No route to network | Check network configuration |
+| `SSL certificate problem` | Certificate verification failed | Update CA certificates |
+| `wget: unable to resolve host address` | DNS resolution failed | Set DNS manually |
+| `curl: (7) Failed to connect to host` | Cannot establish connection | Check network, firewall |
+
+### Python/pip Errors
+
+| Error Message | Meaning | What To Do |
+|--------------|---------|------------|
+| `ModuleNotFoundError: No module named 'xyz'` | Python module not installed | `pip install xyz` |
+| `pip: command not found` | pip not installed | `pkg install python` |
+| `ERROR: Could not install packages due to an OSError` | Installation permission issue | Use `--user` flag |
+| `ERROR: Command errored out with exit status 1` | Build/compilation failed | Install build dependencies |
+| `SSL module is not available` | OpenSSL not linked | `pkg install openssl libssl` |
+| `Failed building wheel for xyz` | C extension build failed | Install dev packages |
+| `Requirement already satisfied` | Package already installed | Use `--upgrade` to update |
+
+### System Errors
+
+| Error Message | Meaning | What To Do |
+|--------------|---------|------------|
+| `Segmentation fault (core dumped)` | Memory access violation | Report bug, reinstall |
+| `Bus error (core dumped)` | Hardware/alignment error | Report bug |
+| `Process completed (signal 9)` | Killed by OOM killer | Free up memory |
+| `Killed` | Process terminated | Usually memory issue |
+| `Too many open files` | File descriptor limit reached | Increase with `ulimit -n` |
+| `No space left on device` | Disk full | Clean up files |
+| `Input/output error` | Hardware/storage error | Backup data, restart |
+| `Broken pipe` | Pipe recipient closed early | Usually harmless |
+| `Text file busy` | File being executed | Stop process first |
+| `Address already in use` | Port already bound | Kill process or use different port |
+
+---
+
+## 💼 IT SUPPORT CAREER PATH
+
+### Helpdesk to Security: The Journey
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    IT SUPPORT CAREER LADDER                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  LEVEL 1: HELPDESK / IT SUPPORT (0-1 year)                              │
+│  ═════════════════════════════════════                                   │
+│  Skills:                                                                 │
+│  • Basic troubleshooting (you're learning now!)                         │
+│  • Windows/Linux basics                                                  │
+│  • Network fundamentals                                                  │
+│  • Customer service                                                      │
+│                                                                          │
+│  Salary Range: $35,000 - $50,000                                        │
+│  Certifications: CompTIA A+                                              │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  LEVEL 2: SYSTEM ADMINISTRATOR (1-3 years)                              │
+│  ═══════════════════════════════════════                                 │
+│  Skills:                                                                 │
+│  • Advanced troubleshooting                                              │
+│  • Server administration                                                 │
+│  • Scripting (Bash, Python)                                              │
+│  • Network configuration                                                 │
+│                                                                          │
+│  Salary Range: $50,000 - $75,000                                        │
+│  Certifications: CompTIA Network+, Linux+, RHCSA                        │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  LEVEL 3: SECURITY ANALYST (2-4 years)                                  │
+│  ═════════════════════════════════                                       │
+│  Skills:                                                                 │
+│  • Security fundamentals                                                  │
+│  • Log analysis                                                          │
+│  • Incident response                                                     │
+│  • Vulnerability assessment                                              │
+│                                                                          │
+│  Salary Range: $65,000 - $95,000                                        │
+│  Certifications: CompTIA Security+, CEH                                 │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  LEVEL 4: PENETRATION TESTER (3-5 years)                                │
+│  ═════════════════════════════════                                       │
+│  Skills:                                                                 │
+│  • Ethical hacking                                                       │
+│  • Exploitation techniques                                               │
+│  • Report writing                                                        │
+│  • Tool development                                                      │
+│                                                                          │
+│  Salary Range: $80,000 - $130,000                                       │
+│  Certifications: OSCP, eJPT, GPEN                                        │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  LEVEL 5: SENIOR SECURITY ENGINEER (5-8 years)                          │
+│  ═══════════════════════════════════════                                 │
+│  Skills:                                                                 │
+│  • Architecture design                                                   │
+│  • Team leadership                                                       │
+│  • Advanced exploitation                                                 │
+│  • Security strategy                                                     │
+│                                                                          │
+│  Salary Range: $110,000 - $170,000                                      │
+│  Certifications: OSWE, OSEP, CISSP                                       │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills Developed Through Troubleshooting
+
+```
+TROUBLESHOOTING SKILLS = JOB SKILLS
+─────────────────────────────────────
+
+1. ERROR ANALYSIS → Incident Response
+   - Reading logs = Security monitoring
+   - Pattern recognition = Threat detection
+
+2. ROOT CAUSE ANALYSIS → Forensics
+   - Finding cause = Digital forensics
+   - Evidence preservation = Chain of custody
+
+3. SOLUTION DOCUMENTATION → Reporting
+   - Writing fixes = Security reports
+   - Clear communication = Client interaction
+
+4. SYSTEMATIC APPROACH → Methodology
+   - Structured thinking = Penetration testing
+   - Process documentation = Playbooks
+
+5. TOOL MASTERY → Technical Skills
+   - Using diagnostic tools = Security tools
+   - Scripting automation = Tool development
+```
+
+### Building Your Troubleshooting Portfolio
+
+```markdown
+# What to Document for Your Portfolio
+
+## 1. Problem-Solving Examples
+- Describe a complex error you solved
+- Document the troubleshooting process
+- Explain the solution clearly
+
+## 2. Custom Scripts
+- Diagnostic scripts you've written
+- Automation scripts for common fixes
+- Monitoring scripts
+
+## 3. Knowledge Base
+- Your personal error reference
+- Solutions you've discovered
+- Tips and tricks
+
+## 4. GitHub Projects
+- Share useful scripts
+- Document your learning
+- Contribute to open source
+
+## 5. Blog Posts/Writeups
+- Detailed troubleshooting guides
+- "How I solved X" articles
+- Tool reviews and comparisons
+```
+
+---
+
+## 🔧 PREVENTIVE MAINTENANCE CHECKLIST
+
+### Daily Maintenance
+
+```bash
+#!/bin/bash
+# Daily Maintenance Checklist
+# Run this script daily or schedule via cron
+
+echo "=== DAILY TERMUX MAINTENANCE ==="
+
+# 1. Check disk space
+echo "[1/5] Checking disk space..."
+df -h /data/data/com.termux
+
+# 2. Check running processes
+echo "[2/5] Checking processes..."
+ps aux | head -10
+
+# 3. Check memory
+echo "[3/5] Checking memory..."
+free -h
+
+# 4. Check for zombie processes
+echo "[4/5] Checking for zombies..."
+ps aux | grep -w Z
+
+# 5. Check network connectivity
+echo "[5/5] Testing network..."
+ping -c 1 google.com > /dev/null && echo "Network: OK" || echo "Network: ISSUE"
+
+echo "=== DAILY CHECK COMPLETE ==="
+```
+
+### Weekly Maintenance
+
+```bash
+#!/bin/bash
+# Weekly Maintenance Script
+# Run every Sunday
+
+echo "=== WEEKLY TERMUX MAINTENANCE ==="
+
+# 1. Update packages
+echo "[1/6] Updating packages..."
+pkg update -y
+
+# 2. Clean package cache
+echo "[2/6] Cleaning package cache..."
+pkg clean
+
+# 3. Remove orphaned packages
+echo "[3/6] Removing orphaned packages..."
+pkg autoclean
+
+# 4. Clear Python cache
+echo "[4/6] Clearing Python cache..."
+find ~ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null
+
+# 5. Check for broken packages
+echo "[5/6] Checking package integrity..."
+pkg check
+
+# 6. Backup important configs
+echo "[6/6] Backing up configs..."
+tar -czvf ~/storage/downloads/config_backup_$(date +%Y%m%d).tar.gz \
+    ~/.bashrc ~/.profile ~/.ssh ~/.gitconfig 2>/dev/null
+
+echo "=== WEEKLY MAINTENANCE COMPLETE ==="
+```
+
+### Monthly Maintenance
+
+```bash
+#!/bin/bash
+# Monthly Maintenance Script
+# Run on the 1st of each month
+
+echo "=== MONTHLY TERMUX MAINTENANCE ==="
+
+# 1. Full system upgrade
+echo "[1/8] Full system upgrade..."
+pkg update && pkg upgrade -y
+
+# 2. Check for large files
+echo "[2/8] Finding large files (>100MB)..."
+find ~ -type f -size +100M 2>/dev/null
+
+# 3. Clean various caches
+echo "[3/8] Cleaning caches..."
+rm -rf ~/.cache/* 2>/dev/null
+npm cache clean --force 2>/dev/null
+pip cache purge 2>/dev/null
+
+# 4. Check logs
+echo "[4/8] Checking logs..."
+ls -lh $PREFIX/var/log/
+
+# 5. List unused packages
+echo "[5/8] Listing all packages..."
+pkg list-installed > ~/installed_packages_$(date +%Y%m%d).txt
+
+# 6. Check SSH keys
+echo "[6/8] Checking SSH keys..."
+ls -la ~/.ssh/
+
+# 7. Verify backups
+echo "[7/8] Verifying recent backups..."
+ls -lh ~/storage/downloads/*backup* 2>/dev/null | tail -5
+
+# 8. Security check
+echo "[8/8] Security check..."
+# Check for world-readable files in home
+find ~ -perm -o+r -type f 2>/dev/null | head -10
+
+echo "=== MONTHLY MAINTENANCE COMPLETE ==="
+```
+
+### Maintenance Schedule Summary
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    MAINTENANCE SCHEDULE                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  DAILY (5 minutes)                                                       │
+│  ────────────────────                                                    │
+│  □ Check disk space (df -h)                                             │
+│  □ Check memory (free -h)                                               │
+│  □ Verify network connectivity                                          │
+│  □ Check for unusual processes                                          │
+│                                                                          │
+│  WEEKLY (15 minutes)                                                     │
+│  ─────────────────────                                                   │
+│  □ Update packages (pkg update)                                         │
+│  □ Clean cache (pkg clean)                                              │
+│  □ Clear Python/node cache                                              │
+│  □ Backup configuration files                                           │
+│  □ Check package integrity                                              │
+│                                                                          │
+│  MONTHLY (30 minutes)                                                    │
+│  ─────────────────────                                                   │
+│  □ Full system upgrade                                                   │
+│  □ Find and handle large files                                          │
+│  □ Deep cache cleaning                                                   │
+│  □ Export installed packages list                                       │
+│  □ Security audit                                                        │
+│  □ Verify backup integrity                                              │
+│                                                                          │
+│  QUARTERLY (1 hour)                                                      │
+│  ────────────────────                                                    │
+│  □ Full backup to cloud                                                  │
+│  □ Review and remove unused packages                                    │
+│  □ Update SSH keys                                                       │
+│  □ Review scripts and tools                                             │
+│  □ Check for deprecated packages                                        │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📚 RESOURCE CURATION
+
+### Official Documentation
+
+| Resource | URL | Description |
+|----------|-----|-------------|
+| Termux Wiki | https://wiki.termux.com/ | Official documentation |
+| Termux GitHub | https://github.com/termux | Source code & issues |
+| F-Droid | https://f-droid.org/packages/com.termux/ | Official APK downloads |
+| Termux Packages | https://github.com/termux/termux-packages | Package build scripts |
+
+### Troubleshooting Resources
+
+| Resource | URL | Description |
+|----------|-----|-------------|
+| Termux FAQ | https://wiki.termux.com/wiki/FAQ | Common questions |
+| Troubleshooting Wiki | https://wiki.termux.com/wiki/Troubleshooting | Official troubleshooting |
+| GitHub Issues | https://github.com/termux/termux-app/issues | Bug reports & solutions |
+| Stack Overflow | https://stackoverflow.com/questions/tagged/termux | Q&A community |
+
+### Learning Resources
+
+| Resource | Topic | Level |
+|----------|-------|-------|
+| Linux Journey | Linux basics | Beginner |
+| OverTheWire Bandit | Linux command line | Beginner-Intermediate |
+| The Linux Command Line (book) | Comprehensive guide | All levels |
+| Red Hat Documentation | Enterprise Linux | Intermediate |
+
+### Community Help
+
+| Platform | Handle/Link | Description |
+|----------|-------------|-------------|
+| Reddit | r/termux | Main community |
+| Telegram | @termux | Official group |
+| Discord | Termux Server | Voice & text |
+| IRC | #termux on Libera.Chat | Real-time chat |
+
+### Diagnostic Tools
+
+| Tool | Install Command | Purpose |
+|------|-----------------|---------|
+| strace | `pkg install strace` | System call tracing |
+| htop | `pkg install htop` | Process monitoring |
+| nmap | `pkg install nmap` | Network scanning |
+| lsof | `pkg install lsof` | Open files listing |
+| tcpdump | `pkg install tcpdump` | Packet analysis |
+| gdb | `pkg install gdb` | Debugging |
+
+---
+
 ## 💡 PRO TIPS FOR ERROR TROUBLESHOOTING
 
 > 💡 **Pro Tip #1:** Always read error messages completely - the solution is often hidden in the details. The last line usually tells you exactly what failed.

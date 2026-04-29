@@ -2595,6 +2595,366 @@ echo -e "\n=== ANALYSIS COMPLETE ==="
 
 ---
 
+## 📊 MERMAID DIAGRAMS - DNS Architecture
+
+### DNS Hierarchy Structure
+```mermaid
+graph TB
+    ROOT[Root Server .] --> COM[.com TLD]
+    ROOT --> ORG[.org TLD]
+    ROOT --> IN[.in TLD]
+    
+    COM --> GOOGLE[google.com]
+    COM --> FACEBOOK[facebook.com]
+    COM --> AMAZON[amazon.com]
+    
+    GOOGLE --> WWW[www.google.com]
+    GOOGLE --> MAIL[mail.google.com]
+    GOOGLE --> API[api.google.com]
+    
+    style ROOT fill:#E91E63
+    style COM fill:#2196F3
+    style GOOGLE fill:#4CAF50
+```
+
+### DNS Resolution Process
+```mermaid
+sequenceDiagram
+    participant User
+    participant Browser
+    participant Resolver
+    participant Root
+    participant TLD
+    participant Auth
+    
+    User->>Browser: Type google.com
+    Browser->>Resolver: Query google.com
+    Resolver->>Root: Where is .com?
+    Root-->>Resolver: .com TLD servers
+    Resolver->>TLD: Where is google.com?
+    TLD-->>Resolver: google.com nameservers
+    Resolver->>Auth: IP for google.com?
+    Auth-->>Resolver: 142.250.195.78
+    Resolver-->>Browser: 142.250.195.78
+    Browser-->>User: Display page
+```
+
+### DNS Record Types
+```mermaid
+graph LR
+    A[DNS Records] --> A_RECORD[A - IPv4]
+    A --> AAAA[AAAA - IPv6]
+    A --> MX[MX - Mail]
+    A --> NS[NS - Nameserver]
+    A --> TXT[TXT - Text]
+    A --> CNAME[CNAME - Alias]
+    A --> SOA[SOA - Authority]
+    A --> PTR[PTR - Reverse]
+    
+    style A fill:#E91E63
+    style A_RECORD fill:#4CAF50
+    style MX fill:#2196F3
+    style TXT fill:#FF9800
+```
+
+### Zone Transfer Attack
+```mermaid
+graph LR
+    A[Attacker] -->|AXFR Request| B[Vulnerable DNS]
+    B -->|All Records| A
+    
+    style A fill:#FF5722
+    style B fill:#FF9800
+```
+
+---
+
+## ⚡ DNS COMMAND CHEATSHEET
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `dig DOMAIN` | Basic DNS lookup | `dig google.com` |
+| `dig +short DOMAIN` | Short output | `dig +short google.com` |
+| `dig DOMAIN A` | A record (IPv4) | `dig google.com A` |
+| `dig DOMAIN AAAA` | AAAA record (IPv6) | `dig google.com AAAA` |
+| `dig DOMAIN MX` | Mail servers | `dig google.com MX` |
+| `dig DOMAIN NS` | Nameservers | `dig google.com NS` |
+| `dig DOMAIN TXT` | Text records | `dig google.com TXT` |
+| `dig DOMAIN SOA` | Start of Authority | `dig google.com SOA` |
+| `dig @SERVER DOMAIN` | Use specific DNS | `dig @8.8.8.8 google.com` |
+| `dig -x IP` | Reverse lookup | `dig -x 8.8.8.8` |
+| `dig +trace DOMAIN` | Trace resolution | `dig +trace google.com` |
+| `dig DOMAIN ANY` | All records | `dig google.com ANY` |
+| `nslookup DOMAIN` | Classic lookup | `nslookup google.com` |
+| `nslookup -type=MX DOMAIN` | Specific record | `nslookup -type=MX google.com` |
+| `host DOMAIN` | Simple lookup | `host google.com` |
+| `host -t MX DOMAIN` | Specific record | `host -t MX google.com` |
+| `whois DOMAIN` | Domain info | `whois google.com` |
+| `whois IP` | IP ownership | `whois 8.8.8.8` |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION - DNS Mastery
+
+```mermaid
+graph TD
+    START[Start: DNS Basics] --> QUERY[Query Tools]
+    QUERY --> DIG[dig Command]
+    QUERY --> NSLOOKUP[nslookup]
+    QUERY --> HOST[host Command]
+    DIG --> RECORDS[Record Types]
+    NSLOOKUP --> RECORDS
+    HOST --> RECORDS
+    RECORDS --> ADVANCED[Advanced DNS]
+    ADVANCED --> REVERSE[Reverse DNS]
+    ADVANCED --> ZONE[Zone Transfer]
+    ADVANCED --> ENUM[Enumeration]
+    ENUM --> SECURITY[DNS Security]
+    SECURITY --> EXPERT[DNS Expert]
+    
+    style START fill:#4CAF50
+    style EXPERT fill:#E91E63
+    style SECURITY fill:#FF5722
+```
+
+### DNS Skills Progression
+
+| Level | Skills to Master | Estimated Time |
+|-------|------------------|----------------|
+| 🌱 Beginner | dig, nslookup, basic records | 1-2 weeks |
+| 🌿 Intermediate | All record types, reverse DNS | 2-3 weeks |
+| 🌳 Advanced | Zone transfers, enumeration | 3-4 weeks |
+| 🏆 Expert | DNS security, troubleshooting | Ongoing |
+
+---
+
+## 🔧 TOOL COMPARISON TABLE - DNS Tools
+
+| Tool | Purpose | Pros | Cons | Alternatives |
+|------|---------|------|------|--------------|
+| **dig** | DNS lookup | Powerful, flexible | Complex syntax | nslookup, host |
+| **nslookup** | DNS lookup | Simple, Windows compatible | Less features | dig |
+| **host** | Simple lookup | Clean output | Limited options | dig |
+| **whois** | Domain info | Registration details | Can be slow | online tools |
+| **dnsenum** | Enumeration | Automated | Requires Perl | dnsrecon |
+| **dnsrecon** | Enumeration | Python-based | Dependencies | dnsenum |
+| **fierce** | Subdomain enum | Fast, recursive | Older tool | subfinder |
+| **subfinder** | Subdomain discovery | Fast, modern | Go required | amass |
+
+---
+
+## 🚀 PRACTICAL DNS CHALLENGES
+
+### Challenge 1: Complete DNS Enumeration
+**Objective:** Enumerate all DNS records for a domain
+```bash
+# Step 1: Get basic A record
+dig google.com A +short
+
+# Step 2: Get all mail servers
+dig google.com MX
+
+# Step 3: Get nameservers
+dig google.com NS
+
+# Step 4: Get TXT records (SPF, DKIM info)
+dig google.com TXT
+
+# Step 5: Get SOA record
+dig google.com SOA
+
+# Step 6: Get IPv6 addresses
+dig google.com AAAA
+
+# Step 7: Create report
+{
+    echo "=== DNS Report for google.com ==="
+    echo "A Record:"; dig +short google.com A
+    echo "MX Record:"; dig +short google.com MX
+    echo "NS Record:"; dig +short google.com NS
+    echo "TXT Record:"; dig +short google.com TXT
+}
+```
+**Success Criteria:** Create complete DNS report with all record types
+
+---
+
+### Challenge 2: Subdomain Discovery
+**Objective:** Discover subdomains using DNS
+```bash
+# Manual subdomain check
+for sub in www mail ftp admin api dev staging blog shop; do
+    host $sub.google.com 2>/dev/null | grep "has address"
+done
+
+# Using dig
+for sub in www mail ftp admin; do
+    dig +short $sub.google.com A && echo "$sub.google.com exists"
+done
+
+# Check for wildcard DNS
+dig +short random123.google.com
+dig +short another456.google.com
+# If same IP, wildcard exists
+```
+**Success Criteria:** Find at least 5 valid subdomains
+
+---
+
+### Challenge 3: DNS Security Analysis
+**Objective:** Analyze DNS security configuration
+```bash
+# Step 1: Check SPF record
+dig TXT google.com | grep -i spf
+
+# Step 2: Check DMARC
+dig TXT _dmarc.google.com
+
+# Step 3: Check DKIM (common selectors)
+dig TXT default._domainkey.google.com
+dig TXT selector1._domainkey.google.com
+
+# Step 4: Check DNSSEC
+dig +dnssec google.com
+
+# Step 5: Check for zone transfer
+dig AXFR @ns1.google.com google.com
+
+# Step 6: Check CAA record
+dig CAA google.com
+```
+**Success Criteria:** Document security posture of DNS configuration
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY - DNS
+
+| Term | Definition |
+|------|------------|
+| **DNS** | Domain Name System - translates domains to IPs |
+| **A Record** | Maps domain to IPv4 address |
+| **AAAA Record** | Maps domain to IPv6 address |
+| **CNAME** | Canonical Name - domain alias |
+| **MX Record** | Mail Exchange - email server |
+| **NS Record** | Nameserver - DNS server |
+| **TXT Record** | Text record - various uses (SPF, DKIM) |
+| **SOA** | Start of Authority - zone information |
+| **PTR** | Pointer - reverse DNS |
+| **SRV** | Service record - specific services |
+| **TTL** | Time To Live - cache duration |
+| **Resolver** | DNS server that queries for clients |
+| **Authoritative** | DNS server with original records |
+| **Zone** | Collection of DNS records |
+| **Zone Transfer** | Copying zone data (AXFR) |
+| **DNSSEC** | DNS Security Extensions |
+| **SPF** | Sender Policy Framework |
+| **DKIM** | DomainKeys Identified Mail |
+| **DMARC** | Domain-based Message Authentication |
+| **TLD** | Top Level Domain (.com, .org, etc.) |
+| **FQDN** | Fully Qualified Domain Name |
+| **CIDR** | Classless Inter-Domain Routing |
+
+---
+
+## 💼 CAREER INSIGHTS - DNS & Network Admin
+
+### Career Paths Using DNS Skills
+```
+Entry Level ─────────────────────────────────────────────────────────────────────► Expert
+    │                    │                    │                    │
+IT Support         Network Admin       DNS Engineer       Infrastructure Arch
+    │                    │                    │                    │
+  $40-60k             $60-90k            $90-130k            $130-180k+
+```
+
+### DNS Skills in Different Roles
+| Role | DNS Skills Needed |
+|------|-------------------|
+| **IT Support** | Basic troubleshooting, DNS client config |
+| **Network Admin** | DNS server management, troubleshooting |
+| **Security Analyst** | DNS security, monitoring, forensics |
+| **DevOps Engineer** | DNS automation, infrastructure as code |
+| **Pentester** | DNS enumeration, zone transfer attacks |
+
+### Certifications with DNS Focus
+| Certification | Provider | Level |
+|--------------|----------|-------|
+| CompTIA Network+ | CompTIA | Entry |
+| CCNA | Cisco | Associate |
+| CCNP | Cisco | Professional |
+| RHCE | Red Hat | Professional |
+
+---
+
+## 🔐 SECURITY CONSIDERATIONS - DNS Security
+
+### DNS Security Architecture
+
+```mermaid
+graph TB
+    A[DNS Security] --> B[DNSSEC]
+    A --> C[DoH/DoT]
+    A --> D[Monitoring]
+    A --> E[Access Control]
+    
+    B --> B1[Digital Signatures]
+    B --> B2[Chain of Trust]
+    
+    C --> C1[Encryption]
+    C --> C2[Privacy]
+    
+    D --> D1[Query Logging]
+    D --> D2[Anomaly Detection]
+    
+    E --> E1[Zone Transfer Limits]
+    E --> E2[Rate Limiting]
+    
+    style A fill:#E91E63
+    style B fill:#4CAF50
+    style C fill:#2196F3
+```
+
+### DNS Security Checklist
+| Area | Best Practice | Priority |
+|------|--------------|----------|
+| **Zone Transfers** | Restrict to authorized servers | 🔴 Critical |
+| **DNSSEC** | Enable for domain | 🟡 High |
+| **SPF Record** | Configure for email security | 🟡 High |
+| **DMARC** | Enable with policy | 🟡 High |
+| **DKIM** | Configure signing | 🟡 High |
+| **Monitoring** | Log and analyze queries | 🟢 Medium |
+| **Rate Limiting** | Protect against DDoS | 🟢 Medium |
+| **CAA Record** | Specify allowed CAs | 🟢 Medium |
+
+### Common DNS Attacks
+| Attack | Description | Mitigation |
+|--------|-------------|------------|
+| **DNS Spoofing** | Fake DNS responses | DNSSEC, monitoring |
+| **DNS Cache Poisoning** | Corrupt cache entries | DNSSEC, patching |
+| **DDoS** | Overwhelm DNS servers | Rate limiting, Anycast |
+| **Zone Transfer** | Unauthorized data dump | Restrict AXFR |
+| **DNS Tunneling** | Data exfiltration | Traffic analysis |
+| **Typosquatting** | Similar domain names | Monitoring, registration |
+
+### Email Security Records
+```bash
+# SPF - Sender Policy Framework
+"v=spf1 include:_spf.google.com ~all"
+
+# DKIM - DomainKeys Identified Mail
+# Check with: dig TXT selector._domainkey.domain.com
+
+# DMARC - Domain-based Message Authentication
+"v=DMARC1; p=quarantine; rua=mailto:admin@domain.com"
+
+# Check all:
+dig TXT domain.com | grep -i spf
+dig TXT _dmarc.domain.com
+dig TXT selector._domainkey.domain.com
+```
+
+---
+
 ## 💡 PRO TIPS - DNS Expert Tips
 
 ### Pro Tip #1: Quick IP Resolution

@@ -2247,6 +2247,93 @@ Office 2010+ uses AES-128/256 which is slow to crack. Older Office (XP/2003) use
 
 ---
 
+## 📊 MERMAID DIAGRAMS - John Workflow
+
+```mermaid
+graph TD
+    A[Hash File] --> B[John Engine]
+    B --> C{Attack Mode}
+    C --> D[Wordlist]
+    C --> E[Incremental]
+    C --> F[Rules]
+    D --> G[Crack]
+    E --> G
+    F --> G
+    G --> H{Success?}
+    H -->|Yes| I[Password Found]
+    H -->|No| J[Try Next]
+```
+
+---
+
+## ⚡ TOOL CHEATSHEET
+
+| Command | Purpose |
+|---------|---------|
+| `john hash.txt` | Basic crack |
+| `john --wordlist=rockyou.txt hash.txt` | Wordlist attack |
+| `john --show hash.txt` | Show cracked |
+| `zip2john file.zip > hash.txt` | Extract ZIP hash |
+| `pdf2john file.pdf > hash.txt` | Extract PDF hash |
+
+---
+
+## 🔧 TOOL COMPARISON
+
+| Tool | Best For |
+|------|----------|
+| John | General cracking |
+| Hashcat | GPU acceleration |
+| Ophcrack | Windows passwords |
+
+---
+
+## 🚀 CHALLENGES
+
+1. Crack MD5 hashes
+2. Recover ZIP password
+3. Audit shadow file
+
+⚠️ **LEGAL:** Authorized use only!
+
+---
+
+## 📖 GLOSSARY
+
+| Term | Definition |
+|------|------------|
+| Hash | Cryptographic fingerprint |
+| Salt | Random data added |
+| Wordlist | Password dictionary |
+
+---
+
+## 💼 CAREER: Forensics & Security
+
+**Salary:** $70K-$150K
+**Certs:** GCFE, OSCP
+
+---
+
+## ⚠️ LEGAL DISCLAIMER
+
+**Authorized use only for:**
+- Own password recovery
+- Authorized testing
+- Forensic investigations
+
+---
+
+## 🛡️ DEFENSIVE MEASURES
+
+| Hash | Security |
+|------|----------|
+| bcrypt | ✅ Recommended |
+| Argon2 | ✅✅ Best |
+| MD5 | ❌ Never use |
+
+---
+
 ## ⚠️ SECURITY BEST PRACTICES
 
 ### ✅ DO's

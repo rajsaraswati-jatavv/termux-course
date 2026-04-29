@@ -2562,6 +2562,449 @@ Complete this checklist to verify your understanding:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Diagram 1: Termux File System Architecture
+
+```mermaid
+graph TD
+    A[Android System] --> B[/data/data/com.termux/]
+    B --> C[files/]
+    C --> D[usr/ - $PREFIX]
+    C --> E[home/ - $HOME]
+    
+    D --> D1[bin/ - Executables]
+    D --> D2[lib/ - Libraries]
+    D --> D3[etc/ - Configuration]
+    D --> D4[share/ - Documentation]
+    D --> D5[var/ - Variable Data]
+    D --> D6[tmp/ - Temporary Files]
+    
+    E --> E1[.bashrc - Shell Config]
+    E --> E2[.config/ - App Configs]
+    E --> E3[storage/ - Android Storage]
+    E --> E4[scripts/ - Your Scripts]
+    E --> E5[projects/ - Your Projects]
+    
+    E3 --> F[~/storage/downloads]
+    E3 --> G[~/storage/dcim]
+    E3 --> H[~/storage/music]
+    
+    style D fill:#4CAF50,color:#fff
+    style E fill:#2196F3,color:#fff
+    style E3 fill:#FF9800,color:#fff
+```
+
+### Diagram 2: Navigation Flow Chart
+
+```mermaid
+flowchart LR
+    A[Open Termux] --> B{Where to go?}
+    B -->|Home| C[cd ~]
+    B -->|System| D[cd $PREFIX]
+    B -->|Storage| E[cd ~/storage]
+    B -->|Downloads| F[cd ~/storage/downloads]
+    
+    C --> G[~/.bashrc<br/>Personal Files]
+    D --> H[$PREFIX/bin<br/>Executables]
+    E --> I[~/storage/shared<br/>Android Files]
+    
+    G --> J[Edit Configs]
+    H --> K[Find Commands]
+    I --> L[Access Media]
+    
+    style A fill:#9C27B0,color:#fff
+    style B fill:#FF5722,color:#fff
+    style C fill:#4CAF50,color:#fff
+    style D fill:#2196F3,color:#fff
+    style E fill:#FF9800,color:#fff
+```
+
+### Diagram 3: File Command Decision Tree
+
+```mermaid
+graph TD
+    A[File System Task] --> B{What do you need?}
+    
+    B -->|List files| C{Details needed?}
+    C -->|Yes| D[ls -la]
+    C -->|No| E[ls]
+    C -->|Tree view| F[tree -L 2]
+    
+    B -->|Find file| G{Search type?}
+    G -->|By name| H[find . -name '*.py']
+    G -->|By size| I[find ~ -size +10M]
+    G -->|By date| J[find ~ -mtime -7]
+    
+    B -->|Disk space| K{What to check?}
+    K -->|Directory size| L[du -sh *]
+    K -->|Free space| M[df -h]
+    
+    B -->|File info| N{Information type?}
+    N -->|File type| O[file filename]
+    N -->|Detailed stats| P[stat filename]
+    
+    style A fill:#673AB7,color:#fff
+    style B fill:#E91E63,color:#fff
+    style G fill:#00BCD4,color:#fff
+    style K fill:#8BC34A,color:#fff
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+| Command | Syntax | Example | Output |
+|---------|--------|---------|--------|
+| `pwd` | `pwd` | `pwd` | `/data/data/com.termux/files/home` |
+| `ls` | `ls [options] [path]` | `ls -la ~` | List all files with details |
+| `cd` | `cd [path]` | `cd ~/storage` | Change to storage directory |
+| `tree` | `tree [options]` | `tree -L 2 $PREFIX` | Show directory tree 2 levels |
+| `find` | `find [path] [options]` | `find ~ -name "*.sh"` | Find all shell scripts |
+| `du` | `du [options] [path]` | `du -sh *` | Directory sizes |
+| `df` | `df [options]` | `df -h` | Disk space info |
+| `file` | `file [filename]` | `file script.sh` | Identify file type |
+| `stat` | `stat [filename]` | `stat ~/.bashrc` | Detailed file info |
+| `mkdir` | `mkdir [options] [dir]` | `mkdir -p ~/projects/web` | Create nested directories |
+| `rmdir` | `rmdir [dir]` | `rmdir emptydir` | Remove empty directory |
+| `rm` | `rm [options] [file]` | `rm -rf oldfolder/` | Remove files/directories |
+| `cp` | `cp [options] src dest` | `cp -r dir1/ dir2/` | Copy files/directories |
+| `mv` | `mv src dest` | `mv oldname newname` | Move or rename |
+| `ln` | `ln -s target link` | `ln -s ~/storage .` | Create symbolic link |
+| `touch` | `touch [filename]` | `touch newfile.txt` | Create empty file |
+| `cat` | `cat [filename]` | `cat ~/.bashrc` | Display file contents |
+| `head` | `head -n N [file]` | `head -n 20 file.txt` | First N lines |
+| `tail` | `tail -n N [file]` | `tail -f log.txt` | Last N lines / follow |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                        🗺️ YOUR TERMUX JOURNEY 🗺️                              ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║   Module 1        Module 2          Module 3         Module 4+               ║
+║   ┌──────┐       ┌──────┐         ┌──────┐         ┌──────┐                  ║
+║   │ Intro│ ───►  │Enviro│ ───►    │Script│ ───►    │Advanc│                  ║
+║   │      │       │nment │         │ing   │         │ed    │                  ║
+║   └──────┘       └──────┘         └──────┘         └──────┘                  ║
+║                                                                               ║
+║   ✓ Done         📍 YOU ARE      Coming Next    Future Goal                  ║
+║                  HERE NOW!                                                     ║
+║                     ▼                                                         ║
+║                                                                               ║
+║   ═══════════════════════════════════════════════════════════════════════    ║
+║                                                                               ║
+║   CURRENT PROGRESS - Module 2: Environment                                    ║
+║   ┌───────────────────────────────────────────────────────────────────────┐  ║
+║   │                                                                       │  ║
+║   │   Ch6: File System    ████████████████████ 100% ✅ CURRENT            │  ║
+║   │   Ch7: Env Variables  ░░░░░░░░░░░░░░░░░░░░   0%                       │  ║
+║   │   Ch8: Text Editors   ░░░░░░░░░░░░░░░░░░░░   0%                       │  ║
+║   │   Ch9: Styling        ░░░░░░░░░░░░░░░░░░░░   0%                       │  ║
+║   │   Ch10: API Setup     ░░░░░░░░░░░░░░░░░░░░   0%                       │  ║
+║   │                                                                       │  ║
+║   └───────────────────────────────────────────────────────────────────────┘  ║
+║                                                                               ║
+║   SKILLS UNLOCKED:                                                            ║
+║   📂 Directory Navigation    ✅                                              ║
+║   🔍 File Searching          ✅                                              ║
+║   📊 Disk Usage Analysis     ✅                                              ║
+║   🔗 Symlink Understanding   ✅                                              ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+### File Listing Commands Comparison
+
+| Feature | `ls` | `tree` | `find` | `locate` |
+|---------|------|--------|--------|----------|
+| **Speed** | ⚡⚡⚡ Fast | ⚡⚡ Medium | ⚡ Slow | ⚡⚡⚡ Fast |
+| **Recursive** | With -R flag | Yes, default | Yes, default | Database-based |
+| **Visual Tree** | ❌ No | ✅ Yes | ❌ No | ❌ No |
+| **Filter by name** | Limited | Limited | ✅ Powerful | ✅ Yes |
+| **Filter by size** | ❌ No | ❌ No | ✅ Yes | ❌ No |
+| **Filter by date** | ❌ No | ❌ No | ✅ Yes | ❌ No |
+| **Best Use Case** | Quick listing | Visual structure | Complex search | Fast filename search |
+| **Installation** | Built-in | `pkg install tree` | Built-in | `pkg install mlocate` |
+
+### Disk Analysis Commands Comparison
+
+| Feature | `du` | `df` | `ncdu` |
+|---------|------|------|--------|
+| **Purpose** | Directory usage | Filesystem space | Interactive disk usage |
+| **Interactive** | ❌ No | ❌ No | ✅ Yes |
+| **Human-readable** | `-h` flag | `-h` flag | Default |
+| **Sort by size** | Manual | N/A | ✅ Automatic |
+| **Delete files** | ❌ No | ❌ No | ✅ Yes |
+| **Best For** | Quick size check | Disk space overview | Deep cleanup |
+| **Installation** | Built-in | Built-in | `pkg install ncdu` |
+
+### Path Types Comparison
+
+| Path Type | Example | When to Use |
+|-----------|---------|-------------|
+| **Absolute** | `/data/data/com.termux/files/home` | Scripts, configs, precision |
+| **Relative** | `./scripts/myscript.sh` | Quick navigation, portable scripts |
+| **Home-relative** | `~/projects/webapp` | User-specific paths |
+| **Prefix-relative** | `$PREFIX/bin/python` | System files, installations |
+| **Environment** | `$HOME/.bashrc` | Dynamic, portable configurations |
+
+---
+
+## 🚀 PRACTICAL CHALLENGES
+
+### Challenge 1: Directory Detective 🔍
+**Difficulty:** ⭐ Beginner
+**Time:** 5 minutes
+**Task:** Find all Python files in your Termux home directory that were modified in the last 7 days.
+
+**Hint:** Use the `find` command with `-name` and `-mtime` options.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+# Find Python files modified in last 7 days
+find ~ -name "*.py" -mtime -7
+
+# For more detailed output:
+find ~ -name "*.py" -mtime -7 -ls
+
+# To count them:
+find ~ -name "*.py" -mtime -7 | wc -l
+```
+
+**Explanation:**
+- `~` - Search in home directory
+- `-name "*.py"` - Filter by .py extension
+- `-mtime -7` - Modified within last 7 days
+- `-ls` - Show detailed listing
+- `wc -l` - Count lines (files found)
+
+</details>
+
+---
+
+### Challenge 2: Storage Space Analyzer 📊
+**Difficulty:** ⭐⭐ Intermediate
+**Time:** 10 minutes
+**Task:** Create a script that shows the top 5 largest directories in your home folder and saves the report to a file.
+
+**Hint:** Combine `du`, `sort`, and `head` commands with output redirection.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+#!/bin/bash
+# storage_report.sh
+
+REPORT_FILE="~/storage_report_$(date +%Y%m%d).txt"
+
+echo "=== STORAGE ANALYSIS REPORT ===" > $REPORT_FILE
+echo "Generated on: $(date)" >> $REPORT_FILE
+echo "" >> $REPORT_FILE
+
+echo "Top 5 Largest Directories:" >> $REPORT_FILE
+echo "---------------------------" >> $REPORT_FILE
+
+# Analyze and save top 5
+du -sh ~/* 2>/dev/null | sort -rh | head -5 >> $REPORT_FILE
+
+echo "" >> $REPORT_FILE
+echo "Total Home Directory Size:" >> $REPORT_FILE
+du -sh ~ >> $REPORT_FILE
+
+echo "" >> $REPORT_FILE
+echo "Available Storage:" >> $REPORT_FILE
+df -h /data >> $REPORT_FILE
+
+cat $REPORT_FILE
+echo ""
+echo "Report saved to: $REPORT_FILE"
+```
+
+**Run it:**
+```bash
+chmod +x storage_report.sh
+./storage_report.sh
+```
+
+</details>
+
+---
+
+### Challenge 3: Custom Navigation System 🧭
+**Difficulty:** ⭐⭐⭐ Advanced
+**Time:** 15 minutes
+**Task:** Create a set of aliases and functions in your `.bashrc` that creates a custom navigation system with:
+- Quick jump commands to important directories
+- A `mkcd` function that creates and enters a directory in one command
+- A `back` function to return to previous directory
+- A `whereami` function showing current location and its type
+
+**Hint:** Use aliases for simple commands and functions for complex operations.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+# Add these to your ~/.bashrc
+
+# ===== QUICK NAVIGATION ALIASES =====
+alias home='cd ~ && pwd'
+alias sys='cd $PREFIX && pwd'
+alias conf='cd $PREFIX/etc && pwd'
+alias down='cd ~/storage/downloads && pwd'
+alias docs='cd ~/storage/documents && pwd 2>/dev/null || mkdir -p ~/storage/documents && cd ~/storage/documents'
+alias proj='cd ~/projects 2>/dev/null || mkdir -p ~/projects && cd ~/projects'
+alias scripts='cd ~/scripts 2>/dev/null || mkdir -p ~/scripts && cd ~/scripts'
+
+# ===== MKCD FUNCTION =====
+mkcd() {
+    if [ -z "$1" ]; then
+        echo "Usage: mkcd <directory_name>"
+        return 1
+    fi
+    mkdir -p "$1" && cd "$1" && echo "Created and entered: $(pwd)"
+}
+
+# ===== BACK FUNCTION =====
+back() {
+    cd - > /dev/null && pwd
+}
+
+# ===== WHEREAMI FUNCTION =====
+whereami() {
+    local current=$(pwd)
+    echo "📍 Current Location: $current"
+    echo ""
+    
+    # Check what type of location
+    if [[ "$current" == "$HOME"* ]]; then
+        echo "🏠 In HOME directory"
+    elif [[ "$current" == "$PREFIX"* ]]; then
+        echo "⚙️ In SYSTEM (PREFIX) directory"
+    elif [[ "$current" == *"/storage/"* ]] || [[ "$current" == *"/sdcard"* ]]; then
+        echo "📱 In ANDROID STORAGE"
+    fi
+    
+    echo ""
+    echo "Directory contents:"
+    ls -la | head -10
+}
+
+# ===== QUICK INFO FUNCTION =====
+dirinfo() {
+    echo "📁 Directory: $(pwd)"
+    echo "📊 Items: $(ls -1 | wc -l) files/folders"
+    echo "💾 Size: $(du -sh . 2>/dev/null | cut -f1)"
+    echo "📅 Modified: $(stat -c %y . 2>/dev/null | cut -d. -f1)"
+}
+```
+
+**After adding, reload:**
+```bash
+source ~/.bashrc
+```
+
+**Test it:**
+```bash
+mkcd test_project
+whereami
+dirinfo
+back
+```
+
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **Absolute Path** | Complete path from root directory, starting with `/`. Example: `/data/data/com.termux/files/home` |
+| **Relative Path** | Path relative to current directory. Example: `./scripts/myscript.sh` |
+| **$PREFIX** | Termux-specific environment variable pointing to `/data/data/com.termux/files/usr` - the system root |
+| **$HOME** | Environment variable pointing to user's home directory - `/data/data/com.termux/files/home` |
+| **Symlink** | Symbolic link - a pointer to another file or directory. Created with `ln -s` |
+| **Dotfile** | Hidden configuration file starting with a dot (.), like `.bashrc` |
+| **Mount Point** | Directory where a filesystem is attached. Android storage is mounted at `/sdcard` |
+| **Inode** | Data structure that stores file metadata (permissions, ownership, location on disk) |
+| **FHS** | Filesystem Hierarchy Standard - the standard for Linux directory structure |
+| **Recursive** | Operation that applies to a directory and all its subdirectories |
+| **Permission** | Access rights (read, write, execute) for files and directories |
+| **Wildcard** | Pattern matching character like `*` (any characters) or `?` (single character) |
+| **Fstab** | File systems table - configuration file for disk mounts (not commonly used in Termux) |
+| **Block Device** | Storage device accessed in blocks (like hard drives, SD cards) |
+| **Directory Tree** | Hierarchical structure of directories and files, visualized with `tree` command |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How File System Knowledge Helps Your Career
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    FILE SYSTEM SKILLS IN TECH CAREERS                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   🖥️  SYSTEM ADMINISTRATOR                                              │
+│   ├── Daily navigation and file management                              │
+│   ├── Disk space monitoring and cleanup                                 │
+│   ├── Backup and restore operations                                     │
+│   └── Salary Range: $60,000 - $120,000/year                             │
+│                                                                          │
+│   🛡️  SECURITY ANALYST / PENETRATION TESTER                            │
+│   ├── Finding sensitive files and configurations                        │
+│   ├── Understanding privilege escalation paths                          │
+│   ├── Log analysis and evidence collection                              │
+│   └── Salary Range: $70,000 - $150,000/year                             │
+│                                                                          │
+│   ⚙️  DEVOPS ENGINEER                                                   │
+│   ├── CI/CD pipeline configurations                                     │
+│   ├── Container filesystem management                                   │
+│   ├── Server log analysis                                               │
+│   └── Salary Range: $80,000 - $160,000/year                             │
+│                                                                          │
+│   💻  SOFTWARE DEVELOPER                                                │
+│   ├── Project organization and structure                                │
+│   ├── Build system configurations                                       │
+│   ├── Environment setup and debugging                                   │
+│   └── Salary Range: $70,000 - $180,000/year                             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills You're Building
+
+| Skill | Career Value | Real-World Application |
+|-------|--------------|------------------------|
+| Directory Navigation | ⭐⭐⭐⭐⭐ | Essential for every tech role |
+| File Searching | ⭐⭐⭐⭐⭐ | Security audits, log analysis |
+| Disk Management | ⭐⭐⭐⭐ | Server maintenance, optimization |
+| Path Understanding | ⭐⭐⭐⭐ | Scripting, automation |
+| Symlink Usage | ⭐⭐⭐ | Configuration management, deployments |
+
+### Next Steps After This Chapter
+
+1. **Practice daily** - Navigate your Termux filesystem without a GUI
+2. **Create organization** - Set up proper project folders
+3. **Write scripts** - Automate file operations
+4. **Learn advanced commands** - `rsync`, `tar`, `grep` for file operations
+5. **Understand permissions** - Chapter 7 will help with user/group concepts
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1: Create Directory Shortcuts**

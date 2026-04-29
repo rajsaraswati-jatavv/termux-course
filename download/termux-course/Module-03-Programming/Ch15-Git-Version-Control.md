@@ -684,6 +684,783 @@ Thank you for watching! See you in Chapter 16!
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Git Workflow Architecture
+
+```mermaid
+flowchart TD
+    subgraph Local["Local Machine"]
+        WD[Working Directory]
+        SA[Staging Area]
+        LR[Local Repository]
+    end
+    
+    subgraph Remote["Remote Server"]
+        RR[Remote Repository]
+    end
+    
+    WD -->|git add| SA
+    SA -->|git commit| LR
+    LR -->|git push| RR
+    RR -->|git pull/fetch| LR
+    LR -->|git checkout| WD
+    SA -.->|git restore --staged| WD
+    LR -.->|git restore| WD
+```
+
+### Branch Management Flow
+
+```mermaid
+gitGraph
+    commit
+    commit
+    branch develop
+    checkout develop
+    commit
+    commit
+    branch feature
+    checkout feature
+    commit
+    checkout develop
+    merge feature
+    checkout main
+    merge develop
+    commit
+```
+
+### Git Merge Conflict Resolution
+
+```mermaid
+flowchart TD
+    A[Merge Attempt] --> B{Conflicts?}
+    B -->|No| C[Merge Complete]
+    B -->|Yes| D[Conflict Markers in Files]
+    D --> E[Manually Edit Files]
+    E --> F[Choose: Keep Yours/Theirs/Both]
+    F --> G[Stage Resolved Files]
+    G --> H[git add resolved_files]
+    H --> I[git commit]
+    I --> C
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+### Essential Git Commands
+
+| Command | Syntax | Example | Purpose |
+|---------|--------|---------|---------|
+| init | `git init` | `git init` | Create new repository |
+| clone | `git clone <url>` | `git clone https://github.com/user/repo` | Copy remote repo |
+| add | `git add <files>` | `git add .` | Stage changes |
+| commit | `git commit -m "msg"` | `git commit -m "Initial commit"` | Save changes |
+| push | `git push <remote> <branch>` | `git push origin main` | Upload to remote |
+| pull | `git pull <remote> <branch>` | `git pull origin main` | Download from remote |
+| status | `git status` | `git status` | Check repo state |
+| log | `git log` | `git log --oneline` | View history |
+| diff | `git diff` | `git diff HEAD` | View changes |
+
+### Branch Commands
+
+| Command | Syntax | Example | Purpose |
+|---------|--------|---------|---------|
+| branch | `git branch <name>` | `git branch feature` | Create branch |
+| checkout | `git checkout <branch>` | `git checkout main` | Switch branch |
+| checkout -b | `git checkout -b <name>` | `git checkout -b new-feature` | Create & switch |
+| merge | `git merge <branch>` | `git merge feature` | Merge branch |
+| branch -d | `git branch -d <name>` | `git branch -d old` | Delete branch |
+| branch -a | `git branch -a` | `git branch -a` | List all branches |
+
+### Remote Commands
+
+| Command | Syntax | Example | Purpose |
+|---------|--------|---------|---------|
+| remote add | `git remote add <name> <url>` | `git remote add origin url` | Add remote |
+| remote -v | `git remote -v` | `git remote -v` | List remotes |
+| remote set-url | `git remote set-url <name> <url>` | Change remote URL |
+| fetch | `git fetch <remote>` | `git fetch origin` | Download without merge |
+| push -u | `git push -u <remote> <branch>` | Set upstream |
+
+### Stash Commands
+
+| Command | Syntax | Purpose |
+|---------|--------|---------|
+| stash | `git stash` | Save changes temporarily |
+| stash list | `git stash list` | List stashes |
+| stash pop | `git stash pop` | Apply and remove stash |
+| stash apply | `git stash apply` | Apply without removing |
+| stash drop | `git stash drop` | Remove stash |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                  GIT MASTERY LEARNING PATH - T3RMUXK1NG                      ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                                ║
+║  🎯 GOAL: Git Version Control Expert                                         ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 1: FUNDAMENTALS                                 │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │git init │──►│git add  │──►│git commit│──►│git status│                 │  ║
+║  │  │         │   │         │   │         │   │         │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐           ⭐            ⭐            ⭐                           │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 2: REMOTE OPERATIONS                            │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │git clone│──►│ remote  │──►│git push │──►│git pull │                  │  ║
+║  │  │         │   │  add    │   │         │   │         │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐         ⭐⭐           ⭐⭐⭐         ⭐⭐⭐                          │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 3: BRANCHING & MERGING                          │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │ branch  │──►│checkout │──►│ merge   │──►│ resolve │                  │  ║
+║  │  │ create  │   │ switch  │   │         │   │conflicts│                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐        ⭐⭐⭐          ⭐⭐⭐⭐        ⭐⭐⭐⭐⭐                       │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    LEVEL 4: ADVANCED FEATURES                            │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │  stash  │──►│  tags   │──►│rebase   │──►│ cherry  │                  │  ║
+║  │  │         │   │         │   │         │   │  pick   │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐⭐       ⭐⭐⭐⭐         ⭐⭐⭐⭐⭐       ⭐⭐⭐⭐⭐                       │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║                         🏆 GIT EXPERT 🏆                                      ║
+║                                                                                ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL/FEATURE COMPARISON TABLE
+
+### Version Control Systems Comparison
+
+| Feature | Git | SVN | Mercurial |
+|---------|-----|-----|-----------|
+| **Architecture** | Distributed | Centralized | Distributed |
+| **Offline Work** | ✅ Full | ❌ Limited | ✅ Full |
+| **Branching** | ⭐⭐⭐⭐⭐ Excellent | ⭐⭐ Poor | ⭐⭐⭐⭐ Good |
+| **Speed** | ⭐⭐⭐⭐⭐ Fast | ⭐⭐⭐ Medium | ⭐⭐⭐⭐⭐ Fast |
+| **Learning Curve** | ⭐⭐⭐ Medium | ⭐⭐⭐⭐ Easy | ⭐⭐⭐⭐ Easy |
+| **Industry Adoption** | ⭐⭐⭐⭐⭐ Dominant | ⭐⭐⭐ Legacy | ⭐⭐ Niche |
+| **GitHub Support** | ✅ Native | ❌ No | ⚠️ Limited |
+| **Termux Support** | ✅ Perfect | ✅ Yes | ✅ Yes |
+
+### Git Hosting Platforms
+
+| Platform | Free Private | CI/CD | Best For |
+|----------|-------------|-------|----------|
+| **GitHub** | ✅ Yes | ✅ Actions | Open source, community |
+| **GitLab** | ✅ Yes | ✅ Built-in | Enterprise, self-hosted |
+| **Bitbucket** | ✅ Yes | ✅ Pipelines | Jira integration |
+| **Gitea** | ✅ Self-host | ⚠️ Limited | Self-hosted, lightweight |
+
+---
+
+## 🚀 PRACTICAL CODING CHALLENGES
+
+### Challenge 1: First Repository Setup 🎬
+
+**Difficulty:** ⭐ Beginner  
+**Time:** 10 minutes
+
+**Problem:** Create a complete Git repository with proper setup:
+- Initialize repo
+- Create README.md
+- Make initial commit
+- Set up .gitignore
+- Connect to GitHub (simulated)
+
+**Sample Output:**
+```
+=== Git Repository Setup ===
+✓ Initialized empty Git repository
+✓ Created README.md
+✓ Created .gitignore
+✓ Staged all files
+✓ Initial commit created
+✓ Main branch set as default
+
+Files in initial commit:
+  - README.md
+  - .gitignore
+
+Repository ready for development!
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```bash
+#!/bin/bash
+# Git Repository Setup Script
+
+REPO_NAME="${1:-my-project}"
+
+echo "=== Git Repository Setup ==="
+
+# Create directory
+mkdir -p "$REPO_NAME" && cd "$REPO_NAME"
+
+# Initialize git
+git init
+echo "✓ Initialized empty Git repository"
+
+# Create README
+cat > README.md << 'EOF'
+# Project Name
+
+## Description
+A brief description of the project.
+
+## Installation
+```bash
+# Installation commands here
+```
+
+## Usage
+```bash
+# Usage examples
+```
+
+## License
+MIT
+EOF
+echo "✓ Created README.md"
+
+# Create .gitignore
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Node
+node_modules/
+npm-debug.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+EOF
+echo "✓ Created .gitignore"
+
+# Configure (if not set)
+git config user.name "Developer" 2>/dev/null || true
+git config user.email "dev@example.com" 2>/dev/null || true
+
+# Stage and commit
+git add .
+echo "✓ Staged all files"
+
+git commit -m "Initial commit: Project setup"
+echo "✓ Initial commit created"
+
+# Set main branch
+git branch -M main
+echo "✓ Main branch set as default"
+
+# Show files
+echo ""
+echo "Files in initial commit:"
+git ls-tree --name-only HEAD | while read file; do
+    echo "  - $file"
+done
+
+echo ""
+echo "Repository ready for development!"
+```
+</details>
+
+---
+
+### Challenge 2: Feature Branch Workflow 🌿
+
+**Difficulty:** ⭐⭐ Intermediate  
+**Time:** 15 minutes
+
+**Problem:** Implement a complete feature branch workflow:
+- Create feature branch
+- Make multiple commits
+- Switch back to main
+- Merge with proper message
+- Delete feature branch
+
+**Sample Output:**
+```
+=== Feature Branch Workflow ===
+
+Current branch: main
+Creating feature branch: feature/user-auth
+✓ Switched to new branch 'feature/user-auth'
+
+Making commits...
+✓ Commit 1: Add login form
+✓ Commit 2: Add validation
+✓ Commit 3: Add session handling
+
+Switching to main...
+✓ Switched to branch 'main'
+
+Merging feature branch...
+✓ Merge made by 'ort' strategy
+ feature/auth/login.py     | 25 ++++++
+ feature/auth/session.py   | 30 +++++++
+ 2 files changed, 55 insertions(+)
+
+Cleaning up...
+✓ Deleted branch feature/user-auth
+
+=== Commit History ===
+*   abc1234 Merge branch 'feature/user-auth'
+|\  
+| * def5678 Add session handling
+| * def5677 Add validation
+| * def5676 Add login form
+|/  
+* abc1230 Initial commit
+
+Workflow complete!
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```bash
+#!/bin/bash
+# Feature Branch Workflow Demo
+
+echo "=== Feature Branch Workflow ==="
+echo ""
+
+# Ensure we're in a git repo
+if [[ ! -d .git ]]; then
+    git init -q
+    touch README.md && git add README.md
+    git commit -q -m "Initial commit"
+fi
+
+# Show current branch
+BRANCH=$(git branch --show-current)
+echo "Current branch: $BRANCH"
+
+# Create feature branch
+FEATURE="feature/user-auth"
+echo "Creating feature branch: $FEATURE"
+git checkout -q -b "$FEATURE"
+echo "✓ Switched to new branch '$FEATURE'"
+echo ""
+
+# Simulate commits
+echo "Making commits..."
+
+# Commit 1
+mkdir -p feature/auth
+cat > feature/auth/login.py << 'EOF'
+def login(username, password):
+    """User login function"""
+    if validate_user(username, password):
+        create_session(username)
+        return True
+    return False
+EOF
+git add feature/auth/login.py
+git commit -q -m "Add login form"
+echo "✓ Commit 1: Add login form"
+
+# Commit 2
+cat > feature/auth/validation.py << 'EOF'
+def validate_user(username, password):
+    """Validate user credentials"""
+    if len(username) < 3:
+        return False
+    if len(password) < 8:
+        return False
+    return True
+EOF
+git add feature/auth/validation.py
+git commit -q -m "Add validation"
+echo "✓ Commit 2: Add validation"
+
+# Commit 3
+cat > feature/auth/session.py << 'EOF'
+import time
+
+sessions = {}
+
+def create_session(username):
+    """Create user session"""
+    token = f"{username}_{time.time()}"
+    sessions[token] = username
+    return token
+EOF
+git add feature/auth/session.py
+git commit -q -m "Add session handling"
+echo "✓ Commit 3: Add session handling"
+echo ""
+
+# Switch to main
+echo "Switching to main..."
+git checkout -q main 2>/dev/null || git checkout -q master
+echo "✓ Switched to branch 'main'"
+echo ""
+
+# Merge
+echo "Merging feature branch..."
+git merge --no-edit "$FEATURE"
+echo "✓ Merge complete"
+echo ""
+
+# Clean up
+echo "Cleaning up..."
+git branch -d "$FEATURE"
+echo "✓ Deleted branch $FEATURE"
+echo ""
+
+# Show history
+echo "=== Commit History ==="
+git log --oneline --graph -5
+echo ""
+
+echo "Workflow complete!"
+```
+</details>
+
+---
+
+### Challenge 3: Conflict Resolution Master 🔀
+
+**Difficulty:** ⭐⭐⭐ Advanced  
+**Time:** 20 minutes
+
+**Problem:** Create a scenario with merge conflicts and demonstrate resolution:
+- Create two branches modifying same file
+- Generate conflict
+- Show conflict markers
+- Resolve manually
+- Complete merge
+
+**Sample Output:**
+```
+=== Conflict Resolution Demo ===
+
+Creating conflict scenario...
+✓ Created main.txt on main branch
+✓ Created conflicting version on feature branch
+
+Attempting merge...
+Auto-merging main.txt
+CONFLICT (content): Merge conflict in main.txt
+✗ Merge conflict detected!
+
+=== Conflict Markers ===
+<<<<<<< HEAD
+Welcome to the Main Branch!
+This is the production version.
+=======
+Welcome to the Feature Branch!
+This is the development version.
+>>>>>>> feature
+
+Resolving conflict...
+✓ Chose: Keep both versions with modification
+
+New content:
+Welcome to the Project!
+This combines main and feature versions.
+
+Staging resolved file...
+✓ Added resolved file
+
+Committing merge...
+✓ Merge committed
+
+=== Final History ===
+*   merged conflict resolution
+|\
+| * feature branch changes
+* | main branch changes
+|/
+* initial commit
+
+Conflict resolved successfully!
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```bash
+#!/bin/bash
+# Conflict Resolution Demo
+
+echo "=== Conflict Resolution Demo ==="
+echo ""
+
+# Setup repo
+rm -rf conflict-demo && mkdir conflict-demo && cd conflict-demo
+git init -q
+
+# Configure git
+git config user.name "Demo User"
+git config user.email "demo@example.com"
+
+echo "Creating conflict scenario..."
+
+# Create initial file
+cat > main.txt << 'EOF'
+# Main Configuration
+version = 1.0
+environment = production
+EOF
+git add main.txt
+git commit -q -m "Initial commit"
+echo "✓ Created main.txt on main branch"
+
+# Create feature branch and modify
+git checkout -q -b feature
+cat > main.txt << 'EOF'
+# Feature Configuration
+version = 2.0
+environment = development
+EOF
+git add main.txt
+git commit -q -m "Feature branch changes"
+echo "✓ Created conflicting version on feature branch"
+
+# Back to main and modify differently
+git checkout -q main 2>/dev/null || git checkout -q master
+cat > main.txt << 'EOF'
+# Production Configuration
+version = 1.5
+environment = staging
+EOF
+git add main.txt
+git commit -q -m "Main branch changes"
+echo ""
+
+# Attempt merge
+echo "Attempting merge..."
+git merge feature --no-edit 2>&1 || true
+
+if git status | grep -q "both modified"; then
+    echo "✗ Merge conflict detected!"
+    echo ""
+    
+    echo "=== Conflict Markers ==="
+    cat main.txt
+    echo ""
+    
+    echo "Resolving conflict..."
+    
+    # Resolve by combining
+    cat > main.txt << 'EOF'
+# Unified Configuration
+version = 2.0
+environment = development
+# Merged from both branches
+production_ready = false
+EOF
+    
+    echo "✓ Created resolved version"
+    echo ""
+    
+    echo "New content:"
+    cat main.txt
+    echo ""
+    
+    # Stage and commit
+    echo ""
+    echo "Staging resolved file..."
+    git add main.txt
+    echo "✓ Added resolved file"
+    
+    echo ""
+    echo "Committing merge..."
+    git commit -q -m "Merged feature branch with conflict resolution"
+    echo "✓ Merge committed"
+fi
+
+echo ""
+echo "=== Final History ==="
+git log --oneline --graph --all -5
+
+echo ""
+echo "Conflict resolved successfully!"
+```
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+### Git Terms
+
+| Term | Definition |
+|------|------------|
+| **Repository** | A directory containing your project and all version history |
+| **Commit** | A snapshot of changes saved to the repository |
+| **Branch** | An independent line of development |
+| **Merge** | Combining changes from different branches |
+| **Clone** | Creating a local copy of a remote repository |
+| **Fork** | Creating a personal copy of someone else's repository |
+| **Pull Request** | Request to merge changes into a repository |
+| **Staging Area** | Intermediate area before committing (index) |
+| **Remote** | A repository hosted on a server (e.g., GitHub) |
+| **HEAD** | Pointer to current branch/commit |
+| **Revert** | Create new commit that undoes previous commit |
+| **Reset** | Move HEAD to different commit |
+| **Rebase** | Reapply commits on top of another base tip |
+| **Stash** | Temporarily save uncommitted changes |
+| **Tag** | A named reference to a specific commit |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Git Skills in Industry
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    GIT SKILL VALUE IN CAREERS                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │ ALL DEVELOPER ROLES                                               │    │
+│  │ • Version Control: MANDATORY for 95%+ of jobs                     │    │
+│  │ • Git is the #1 required VCS skill                                 │    │
+│  │ • Expected in: Frontend, Backend, DevOps, Mobile, Data Science    │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │ DEVOPS ENGINEER                                                   │    │
+│  │ • CI/CD Pipeline Configuration                                    │    │
+│  │ • Git Branching Strategies (GitFlow, trunk-based)                 │    │
+│  │ • Git Hooks & Automation                                          │    │
+│  │ Salary Premium: +25% with advanced Git skills                     │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │ OPEN SOURCE CONTRIBUTOR                                           │    │
+│  │ • Fork, Branch, PR workflow                                       │    │
+│  │ • Code review participation                                       │    │
+│  │ • Community collaboration                                         │    │
+│  │ Portfolio Impact: HIGH - visible contributions                    │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Git Proficiency Levels & Salary Impact
+
+| Level | Skills | Years | Impact |
+|-------|--------|-------|--------|
+| Beginner | add, commit, push, pull | 0-1 | Baseline |
+| Intermediate | Branching, merging, conflict resolution | 1-2 | +10% |
+| Advanced | Rebase, stash, hooks, workflows | 2-4 | +20% |
+| Expert | Git internals, custom workflows | 4+ | +30% |
+
+---
+
+## 🏆 CODE OPTIMIZATION TIPS
+
+### Git Workflow Optimization
+
+| Tip | Description | Impact |
+|-----|-------------|--------|
+| **Use .gitignore properly** | Ignore unnecessary files | ⭐⭐⭐⭐⭐ |
+| **Write meaningful commits** | Clear, descriptive messages | ⭐⭐⭐⭐⭐ |
+| **Use branches liberally** | Isolate features/fixes | ⭐⭐⭐⭐⭐ |
+| **Pull before push** | Avoid conflicts | ⭐⭐⭐⭐ |
+| **Use git aliases** | Shorten common commands | ⭐⭐⭐ |
+| **Commit often, push regularly** | Small, focused commits | ⭐⭐⭐⭐ |
+| **Review changes before commit** | Use git diff | ⭐⭐⭐⭐ |
+| **Use git stash wisely** | Save work temporarily | ⭐⭐⭐ |
+
+### Git Aliases for Productivity
+
+```bash
+# Add to ~/.gitconfig
+[alias]
+    co = checkout
+    br = branch
+    ci = commit
+    st = status
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    visual = log --graph --oneline --all
+    amend = commit --amend --no-edit
+    undo = reset --soft HEAD~1
+    
+# Usage examples:
+# git co main          -> checkout main
+# git st               -> status
+# git visual           -> beautiful log
+# git unstage file.txt -> unstage file
+```
+
+### Common Git Mistakes to Avoid
+
+```bash
+# ❌ BAD: Committing sensitive data
+git add .  # May include .env files
+
+# ✅ GOOD: Review before commit
+git add -p  # Interactive staging
+git diff --cached  # Review staged changes
+
+# ❌ BAD: Large, unfocused commits
+git commit -m "updates"
+
+# ✅ GOOD: Atomic, focused commits
+git commit -m "Add user authentication validation"
+
+# ❌ BAD: Force pushing to shared branches
+git push --force origin main
+
+# ✅ GOOD: Use force-with-lease
+git push --force-with-lease origin main
+
+# ❌ BAD: Committing directly to main
+git commit -m "new feature"
+
+# ✅ GOOD: Create feature branch first
+git checkout -b feature/new-feature
+```
+
+---
+
 ## 📖 TECHNICAL GUIDE
 
 ### 1. Git Architecture

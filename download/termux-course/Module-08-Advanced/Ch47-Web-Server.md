@@ -2057,6 +2057,2285 @@ Before moving to Chapter 48, verify:
 
 ---
 
+## 📊 MERMAID ARCHITECTURE DIAGRAMS
+
+### Web Server Architecture Overview
+
+```mermaid
+graph TB
+    subgraph Client["🌐 Client Layer"]
+        A[Browser] --> B[HTTP Request]
+        B --> C[HTTPS/TLS]
+    end
+    
+    subgraph Network["📡 Network"]
+        D[DNS Resolution]
+        E[Load Balancer]
+        F[Firewall]
+    end
+    
+    subgraph WebServer["🖥️ Web Server Layer"]
+        G[Nginx Reverse Proxy]
+        H[Apache HTTP Server]
+        I[Node.js App Server]
+        J[Python HTTP Server]
+    end
+    
+    subgraph AppLayer["⚙️ Application Layer"]
+        K[PHP-FPM]
+        L[Python/Django]
+        M[Node.js/Express]
+    end
+    
+    subgraph DataLayer["💾 Data Layer"]
+        N[(MariaDB)]
+        O[(SQLite)]
+        P[(Redis Cache)]
+    end
+    
+    C --> D --> E --> F
+    F --> G
+    G --> H
+    G --> I
+    G --> J
+    
+    H --> K
+    I --> M
+    J --> L
+    
+    K --> N
+    L --> O
+    M --> N
+    M --> P
+    
+    style Client fill:#e3f2fd
+    style WebServer fill:#e8f5e9
+    style DataLayer fill:#fff3e0
+```
+
+### HTTP Request Flow
+
+```mermaid
+sequenceDiagram
+    participant B as Browser
+    participant N as Nginx
+    participant A as Apache/PHP
+    participant D as Database
+    
+    B->>N: HTTP Request (GET /page)
+    N->>N: Check Cache
+    
+    alt Cache Hit
+        N->>B: Return Cached Response
+    else Cache Miss
+        N->>A: Forward Request
+        A->>D: Query Database
+        D->>A: Return Data
+        A->>A: Render PHP/Template
+        A->>N: Return HTML
+        N->>N: Cache Response
+        N->>B: Return HTML Response
+    end
+```
+
+### Termux Web Server Stack
+
+```mermaid
+graph LR
+    subgraph Termux["📱 Termux Environment"]
+        A[Python :8000] --> E[Local Network]
+        B[Node.js :3000] --> E
+        C[Apache :8080] --> E
+        D[Nginx :80] --> E
+    end
+    
+    subgraph Services["🔧 Services"]
+        F[MariaDB :3306]
+        G[Redis :6379]
+        H[SQLite Files]
+    end
+    
+    subgraph External["🌍 External Access"]
+        I[Ngrok Tunnel]
+        J[Cloudflare Tunnel]
+    end
+    
+    E --> I
+    E --> J
+    
+    A -.-> F
+    C -.-> F
+    C -.-> H
+    D -.-> G
+    
+    style Termux fill:#e8f5e9
+    style Services fill:#fff3e0
+    style External fill:#e3f2fd
+```
+
+---
+
+## ⚡ ADVANCED COMMAND CHEATSHEET
+
+### Python HTTP Server Commands
+
+| Command | Description | Port |
+|---------|-------------|------|
+| `python -m http.server` | Basic server, default port | 8000 |
+| `python -m http.server 8080` | Custom port | 8080 |
+| `python -m http.server --bind 127.0.0.1 8080` | Localhost only | 8080 |
+| `python -m http.server --directory /path 8080` | Custom directory | 8080 |
+| `python -m http.server --cgi` | CGI support | 8000 |
+| `python3 -m http.server 8080` | Python 3 explicit | 8080 |
+| `nohup python -m http.server 8080 &` | Background process | 8080 |
+
+### Node.js Server Commands
+
+| Command | Description |
+|---------|-------------|
+| `node server.js` | Run Node.js server |
+| `npm start` | Run with package.json script |
+| `npm run dev` | Development mode |
+| `npx nodemon server.js` | Auto-reload on changes |
+| `pm2 start server.js` | Production process manager |
+| `pm2 list` | List running processes |
+| `pm2 logs` | View logs |
+| `pm2 restart all` | Restart all apps |
+| `pm2 stop all` | Stop all apps |
+
+### Apache Commands
+
+| Command | Description |
+|---------|-------------|
+| `apachectl start` | Start Apache |
+| `apachectl stop` | Stop Apache |
+| `apachectl restart` | Restart Apache |
+| `apachectl graceful` | Graceful restart |
+| `apachectl configtest` | Test configuration |
+| `apachectl -v` | Show version |
+| `apachectl -V` | Show compile settings |
+| `apachectl -M` | List loaded modules |
+| `apachectl -S` | Show virtual hosts |
+
+### Nginx Commands
+
+| Command | Description |
+|---------|-------------|
+| `nginx` | Start Nginx |
+| `nginx -s stop` | Quick stop |
+| `nginx -s quit` | Graceful stop |
+| `nginx -s reload` | Reload configuration |
+| `nginx -s reopen` | Reopen log files |
+| `nginx -t` | Test configuration |
+| `nginx -T` | Test and dump config |
+| `nginx -v` | Show version |
+| `nginx -V` | Show compile options |
+
+### PHP Built-in Server Commands
+
+| Command | Description |
+|---------|-------------|
+| `php -S localhost:8080` | Start PHP server |
+| `php -S 0.0.0.0:8080` | Listen on all interfaces |
+| `php -S localhost:8080 -t public/` | Custom document root |
+| `php -S localhost:8080 router.php` | With router file |
+| `php -a` | Interactive shell |
+| `php -m` | List modules |
+| `php -i` | PHP info |
+
+### MariaDB/MySQL Commands
+
+| Command | Description |
+|---------|-------------|
+| `mysqld_safe &` | Start MariaDB server |
+| `mysql -u root` | Connect as root |
+| `mysql -u root -p` | Connect with password |
+| `mysql -u user -p database` | Connect to database |
+| `mysqladmin -u root shutdown` | Stop server |
+| `mysqladmin -u root status` | Server status |
+| `mysqldump -u root db > backup.sql` | Backup database |
+| `mysql -u root db < backup.sql` | Restore database |
+
+---
+
+## 🎯 SYSTEM ADMIN LEARNING PATH
+
+### Web Server Administration Journey
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       WEB SERVER LEARNING PATH                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🌱 BEGINNER (Week 1-2)                                                     │
+│  ├── Python http.server basics                                             │
+│  ├── Understanding HTTP protocol                                           │
+│  ├── Local file serving                                                    │
+│  ├── Basic HTML hosting                                                    │
+│  └── Local network access concepts                                         │
+│                                                                              │
+│  📚 INTERMEDIATE (Week 3-6)                                                 │
+│  ├── Node.js HTTP server setup                                             │
+│  ├── Apache installation and configuration                                 │
+│  ├── Nginx reverse proxy basics                                            │
+│  ├── PHP integration with Apache                                           │
+│  └── SQLite database basics                                                │
+│                                                                              │
+│  🚀 ADVANCED (Week 7-12)                                                    │
+│  ├── Full LAMP/LEMP stack deployment                                       │
+│  ├── MariaDB database management                                           │
+│  ├── SSL/HTTPS configuration                                               │
+│  ├── Virtual host configuration                                            │
+│  ├── Redis caching setup                                                   │
+│  └── Ngrok for public access                                               │
+│                                                                              │
+│  🏆 EXPERT (Week 13+)                                                       │
+│  ├── Load balancing with Nginx                                             │
+│  ├── Containerization (Docker concepts)                                    │
+│  ├── CI/CD pipeline integration                                            │
+│  ├── Performance optimization                                              │
+│  ├── Security hardening                                                    │
+│  └── Production deployment strategies                                       │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Certification Path
+
+| Level | Certification | Skills Covered |
+|-------|--------------|----------------|
+| Entry | CompTIA Server+ | Basic server concepts |
+| Associate | RHCSA | Linux web server admin |
+| Professional | AWS Solutions Architect | Cloud web deployment |
+| Expert | CKA | Kubernetes web services |
+
+---
+
+## 🔧 TECHNOLOGY COMPARISON TABLE
+
+### Web Server Software Comparison
+
+| Server | Type | Performance | Memory | Complexity | Best For |
+|--------|------|-------------|--------|------------|----------|
+| **Python http.server** | Static | ⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐ | Quick testing, development |
+| **Node.js** | Dynamic | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | APIs, SPAs, real-time |
+| **Apache** | Full-featured | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ | PHP apps, .htaccess, legacy |
+| **Nginx** | Reverse Proxy | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ | High traffic, static files |
+| **PHP Built-in** | Development | ⭐⭐ | ⭐⭐⭐⭐ | ⭐ | PHP development testing |
+| **darkhttpd** | Static | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐ | Minimal static serving |
+
+### Database Comparison for Web Apps
+
+| Database | Type | Performance | Scalability | Use Case |
+|----------|------|-------------|-------------|----------|
+| **SQLite** | Embedded | ⭐⭐⭐⭐ | ⭐⭐ | Small apps, mobile, local |
+| **MariaDB** | Relational | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Web apps, CMS, e-commerce |
+| **PostgreSQL** | Object-Rel | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Complex apps, analytics |
+| **Redis** | Key-Value | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Caching, sessions, queues |
+| **MongoDB** | Document | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | JSON data, flexible schema |
+
+### Port Reference Table
+
+| Port | Protocol | Service | Default For |
+|------|----------|---------|-------------|
+| 80 | HTTP | Web Server | Production web |
+| 443 | HTTPS | Web Server (SSL) | Secure web |
+| 8080 | HTTP Alt | Web Server | Development, Termux |
+| 3000 | HTTP | Node.js | Express, React, Next.js |
+| 8000 | HTTP | Python | Django, http.server |
+| 3306 | TCP | MySQL/MariaDB | Database |
+| 5432 | TCP | PostgreSQL | Database |
+| 6379 | TCP | Redis | Cache |
+| 27017 | TCP | MongoDB | Database |
+
+---
+
+## 🚀 PRACTICAL SERVER CHALLENGES
+
+### Challenge 1: Static Website Hosting
+
+**Objective:** Host a complete static website with Python server
+
+```bash
+# TASK: Create and host a professional-looking static website
+
+# Step 1: Create project structure
+mkdir -p ~/website/{css,js,images}
+
+# Step 2: Create HTML file
+cat > ~/website/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Termux Website</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>🌐 Welcome to My Website</h1>
+        <p>Hosted on Termux - Android Linux</p>
+    </header>
+    <main>
+        <section id="about">
+            <h2>About</h2>
+            <p>This website is running on Python HTTP Server!</p>
+        </section>
+    </main>
+    <script src="js/main.js"></script>
+</body>
+</html>
+EOF
+
+# Step 3: Create CSS
+cat > ~/website/css/style.css << 'EOF'
+body { font-family: Arial; background: #1a1a2e; color: #eee; margin: 0; }
+header { background: #16213e; padding: 20px; text-align: center; }
+h1 { color: #00ff88; }
+main { padding: 40px; max-width: 800px; margin: 0 auto; }
+EOF
+
+# Step 4: Create JavaScript
+cat > ~/website/js/main.js << 'EOF'
+console.log('Website loaded successfully!');
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM ready');
+});
+EOF
+
+# Step 5: Start server
+cd ~/website
+python -m http.server 8080
+
+# Test: Open browser to http://localhost:8080
+# Success Criteria:
+# - Website accessible on port 8080
+# - CSS loads correctly
+# - JavaScript executes
+```
+
+### Challenge 2: Node.js API Server
+
+**Objective:** Build a REST API server with Node.js
+
+```bash
+# TASK: Create a complete REST API server
+
+# Step 1: Initialize project
+mkdir -p ~/api-server && cd ~/api-server
+npm init -y
+npm install express cors body-parser
+
+# Step 2: Create server file
+cat > server.js << 'EOF'
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const PORT = 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// In-memory data
+let items = [
+    { id: 1, name: 'Item 1', description: 'First item' },
+    { id: 2, name: 'Item 2', description: 'Second item' }
+];
+
+// Routes
+app.get('/', (req, res) => {
+    res.json({ message: 'API Server Running', version: '1.0.0' });
+});
+
+// GET all items
+app.get('/api/items', (req, res) => {
+    res.json(items);
+});
+
+// GET single item
+app.get('/api/items/:id', (req, res) => {
+    const item = items.find(i => i.id === parseInt(req.params.id));
+    if (!item) return res.status(404).json({ error: 'Not found' });
+    res.json(item);
+});
+
+// POST new item
+app.post('/api/items', (req, res) => {
+    const newItem = {
+        id: items.length + 1,
+        name: req.body.name,
+        description: req.body.description
+    };
+    items.push(newItem);
+    res.status(201).json(newItem);
+});
+
+// PUT update item
+app.put('/api/items/:id', (req, res) => {
+    const item = items.find(i => i.id === parseInt(req.params.id));
+    if (!item) return res.status(404).json({ error: 'Not found' });
+    item.name = req.body.name || item.name;
+    item.description = req.body.description || item.description;
+    res.json(item);
+});
+
+// DELETE item
+app.delete('/api/items/:id', (req, res) => {
+    items = items.filter(i => i.id !== parseInt(req.params.id));
+    res.status(204).send();
+});
+
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`API Server running on http://localhost:${PORT}`);
+});
+EOF
+
+# Step 3: Start server
+node server.js
+
+# Test with curl:
+# curl http://localhost:3000/api/items
+# curl -X POST http://localhost:3000/api/items -H "Content-Type: application/json" -d '{"name":"New Item","description":"Test"}'
+
+# Success Criteria:
+# - API responds to GET requests
+# - POST creates new items
+# - PUT updates items
+# - DELETE removes items
+```
+
+### Challenge 3: Full Stack Setup
+
+**Objective:** Set up a complete LAMP-like stack
+
+```bash
+# TASK: Configure Apache + PHP + MariaDB
+
+# Step 1: Install all components
+pkg install apache2 php php-apache mariadb -y
+
+# Step 2: Start MariaDB
+mysqld_safe &
+sleep 5
+mysql -u root << 'SQL'
+CREATE DATABASE webapp;
+CREATE USER 'webuser'@'localhost' IDENTIFIED BY 'password123';
+GRANT ALL PRIVILEGES ON webapp.* TO 'webuser'@'localhost';
+FLUSH PRIVILEGES;
+
+USE webapp;
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+INSERT INTO users (name, email) VALUES ('Test User', 'test@example.com');
+SQL
+
+# Step 3: Configure Apache for PHP
+cat >> $PREFIX/etc/apache2/httpd.conf << 'EOF'
+LoadModule php_module $PREFIX/libexec/apache2/libphp.so
+AddHandler php-script .php
+AddType text/html .php
+DirectoryIndex index.php index.html
+EOF
+
+# Step 4: Create PHP application
+cat > $PREFIX/var/www/html/index.php << 'EOF'
+<?php
+$host = 'localhost';
+$user = 'webuser';
+$pass = 'password123';
+$db   = 'webapp';
+
+$conn = new mysqli($host, $user, $pass, $db);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$result = $conn->query("SELECT * FROM users");
+?>
+<!DOCTYPE html>
+<html>
+<head><title>Termux Web App</title></head>
+<body>
+<h1>Users from Database</h1>
+<ul>
+<?php while($row = $result->fetch_assoc()): ?>
+    <li><?php echo $row['name']; ?> - <?php echo $row['email']; ?></li>
+<?php endwhile; ?>
+</ul>
+</body>
+</html>
+<?php $conn->close(); ?>
+EOF
+
+# Step 5: Start Apache
+apachectl start
+
+# Test: http://localhost:8080
+
+# Success Criteria:
+# - Apache running on port 8080
+# - PHP parsing correctly
+# - Database connection working
+# - Data displayed on page
+```
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+### Web Server Terms
+
+| Term | Definition |
+|------|------------|
+| **HTTP** | HyperText Transfer Protocol - web communication protocol |
+| **HTTPS** | HTTP Secure - encrypted web communication |
+| **Web Server** | Software serving web content (Apache, Nginx) |
+| **Reverse Proxy** | Server forwarding requests to backend servers |
+| **Virtual Host** | Multiple websites on one server |
+| **Document Root** | Directory containing web files |
+| **CGI** | Common Gateway Interface - dynamic content generation |
+| **FastCGI** | Optimized CGI for persistent processes |
+| **SSL/TLS** | Encryption protocols for HTTPS |
+| **Certificate** | Digital certificate for SSL/HTTPS |
+
+### Server Software Terms
+
+| Term | Definition |
+|------|------------|
+| **Apache** | Most popular open-source web server |
+| **Nginx** | High-performance web server and reverse proxy |
+| **Node.js** | JavaScript runtime for server-side apps |
+| **PHP-FPM** | PHP FastCGI Process Manager |
+| **PM2** | Node.js process manager |
+| **WSGI** | Web Server Gateway Interface (Python) |
+| **UWSGI** | Application server for Python/PHP |
+| **Gunicorn** | Python WSGI HTTP Server |
+
+### Database Terms
+
+| Term | Definition |
+|------|------------|
+| **SQL** | Structured Query Language |
+| **MariaDB** | MySQL fork, open-source database |
+| **SQLite** | Lightweight embedded database |
+| **Redis** | In-memory data structure store |
+| **CRUD** | Create, Read, Update, Delete operations |
+| **Schema** | Database structure definition |
+| **Query** | Database request/command |
+| **Connection Pool** | Reusable database connections |
+
+---
+
+## 💼 DEVOPS/SYSADMIN CAREER INSIGHTS
+
+### Web Server Administration in Industry
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    WEB SERVER IN DEVOPS CAREER                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  📊 Industry Statistics:                                                    │
+│  ├── Nginx powers 33% of all websites                                      │
+│  ├── Apache powers 25% of websites                                         │
+│  ├── Node.js used by 98% of Fortune 500 companies                          │
+│  └── Average salary: $95K-$145K for web server admins                      │
+│                                                                              │
+│  💼 Key Skills Employers Seek:                                              │
+│  ├── Nginx configuration and optimization                                  │
+│  ├── SSL/TLS certificate management                                        │
+│  ├── Load balancing and high availability                                  │
+│  ├── Performance monitoring and tuning                                     │
+│  ├── Security hardening                                                    │
+│  └── Container orchestration (Docker/K8s)                                  │
+│                                                                              │
+│  🏢 Companies Hiring:                                                       │
+│  ├── Cloud providers (AWS, GCP, Azure)                                     │
+│  ├── Web hosting companies                                                 │
+│  ├── SaaS companies                                                        │
+│  └── Enterprise IT departments                                             │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Career Progression
+
+| Role | Skills Required | Experience | Salary Range |
+|------|-----------------|------------|--------------|
+| Junior Web Admin | Basic Apache/Nginx | 0-2 years | $50K-$70K |
+| Web Server Admin | SSL, Load Balancing | 2-4 years | $70K-$95K |
+| DevOps Engineer | Full stack, CI/CD | 3-6 years | $90K-$130K |
+| SRE | High availability, monitoring | 5-8 years | $120K-$160K |
+| Platform Engineer | Architecture, K8s | 7+ years | $140K-$190K |
+
+### Interview Questions
+
+```bash
+# Web Server Interview Questions:
+
+Q1: What's the difference between Apache and Nginx?
+A1: Apache uses process/thread-based model, Nginx uses event-driven
+    asynchronous architecture. Nginx is better for high concurrency.
+
+Q2: How do you configure HTTPS on a web server?
+A2: Install SSL certificate, configure server block with SSL directives,
+    enable port 443, redirect HTTP to HTTPS.
+
+Q3: What is a reverse proxy and when would you use it?
+A3: Server that forwards client requests to backend servers. Used for
+    load balancing, SSL termination, caching, and hiding backend servers.
+
+Q4: How do you optimize web server performance?
+A4: Enable gzip compression, implement caching, use CDN, optimize
+    database queries, enable HTTP/2, configure proper headers.
+
+Q5: What's the difference between HTTP/1.1 and HTTP/2?
+A5: HTTP/2 supports multiplexing, header compression, server push,
+    and binary protocol vs HTTP/1.1's text-based sequential requests.
+```
+
+---
+
+## 🔧 CONFIGURATION TEMPLATES
+
+### Nginx Reverse Proxy Configuration
+
+```nginx
+# $PREFIX/etc/nginx/nginx.conf - Reverse Proxy Setup
+
+worker_processes 1;
+events {
+    worker_connections 1024;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile      on;
+    keepalive_timeout 65;
+    gzip         on;
+    gzip_types   text/plain text/css application/json application/javascript;
+
+    # Upstream definitions
+    upstream node_backend {
+        server 127.0.0.1:3000;
+        keepalive 64;
+    }
+
+    upstream python_backend {
+        server 127.0.0.1:8000;
+    }
+
+    # Main server block
+    server {
+        listen       8080;
+        server_name  localhost;
+
+        # Root for static files
+        root   $PREFIX/usr/share/nginx/html;
+        index  index.html index.htm;
+
+        # Static files
+        location /static/ {
+            alias /data/data/com.termux/files/home/static/;
+            expires 30d;
+        }
+
+        # Node.js app proxy
+        location /api/ {
+            proxy_pass http://node_backend/;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+        }
+
+        # Python app proxy
+        location /app/ {
+            proxy_pass http://python_backend/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+
+        # PHP through FastCGI (if using PHP-FPM)
+        location ~ \.php$ {
+            fastcgi_pass 127.0.0.1:9000;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
+
+        # Error pages
+        error_page 404 /404.html;
+        error_page 500 502 503 504 /50x.html;
+    }
+
+    # Virtual host example
+    server {
+        listen 8081;
+        server_name mysite.local;
+        
+        root /data/data/com.termux/files/home/mysite;
+        index index.html;
+    }
+}
+```
+
+### Apache Virtual Host Configuration
+
+```apache
+# $PREFIX/etc/apache2/httpd.conf - Virtual Host Configuration
+
+# Load PHP module
+LoadModule php_module $PREFIX/libexec/apache2/libphp.so
+
+# PHP configuration
+AddHandler php-script .php
+AddType text/html .php
+DirectoryIndex index.php index.html
+
+# Main virtual host
+<VirtualHost *:8080>
+    ServerAdmin admin@localhost
+    DocumentRoot "$PREFIX/var/www/html"
+    ServerName localhost
+    
+    <Directory "$PREFIX/var/www/html">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog "$PREFIX/var/log/apache2/error.log"
+    CustomLog "$PREFIX/var/log/apache2/access.log" common
+</VirtualHost>
+
+# Additional virtual host
+<VirtualHost *:8081>
+    ServerAdmin admin@localhost
+    DocumentRoot "/data/data/com.termux/files/home/mysite"
+    ServerName mysite.local
+
+    <Directory "/data/data/com.termux/files/home/mysite">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+
+# SSL virtual host (if configured)
+<VirtualHost *:8443>
+    ServerName localhost
+    SSLEngine on
+    SSLCertificateFile "$PREFIX/etc/apache2/server.crt"
+    SSLCertificateKeyFile "$PREFIX/etc/apache2/server.key"
+    DocumentRoot "$PREFIX/var/www/html"
+</VirtualHost>
+```
+
+### Node.js Production Server Template
+
+```javascript
+// server.js - Production-ready Node.js server
+const express = require('express');
+const helmet = require('helmet');
+const compression = require('compression');
+const cors = require('cors');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Security middleware
+app.use(helmet());
+app.use(cors());
+app.use(compression());
+
+// Body parsing
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
+
+// Static files
+app.use(express.static('public'));
+
+// Request logging
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} ${req.method} ${req.path}`);
+    next();
+});
+
+// Routes
+app.get('/', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        message: 'Server running',
+        timestamp: new Date().toISOString()
+    });
+});
+
+app.get('/health', (req, res) => {
+    res.json({ health: 'healthy' });
+});
+
+// API routes would go here
+// app.use('/api', require('./routes/api'));
+
+// Error handling
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
+});
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ error: 'Not found' });
+});
+
+// Start server
+const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Access at http://localhost:${PORT}`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('SIGTERM received, shutting down...');
+    server.close(() => {
+        console.log('Server closed');
+        process.exit(0);
+    });
+});
+```
+
+---
+
+## 📊 MERMAID ARCHITECTURE DIAGRAMS
+
+### 1. Web Server Architecture in Termux
+
+```mermaid
+graph TB
+    subgraph "Client Layer"
+        A[Browser] --> B[HTTP Request]
+    end
+    
+    subgraph "Network Layer"
+        C[Local Network]
+        D[ngrok Tunnel]
+    end
+    
+    subgraph "Termux Web Server"
+        E[Web Server] --> F{Server Type}
+        F -->|Static| G[Python http.server]
+        F -->|Dynamic| H[Node.js/PHP]
+        F -->|Production| I[Apache/Nginx]
+    end
+    
+    subgraph "Data Layer"
+        J[(SQLite)]
+        K[(MariaDB)]
+        L[(Redis)]
+    end
+    
+    B --> C --> E
+    D --> E
+    H --> J
+    H --> K
+    H --> L
+    
+    style E fill:#2196F3,color:#fff
+    style F fill:#FF9800,color:#fff
+    style G fill:#4CAF50,color:#fff
+```
+
+### 2. LAMP Stack Architecture
+
+```mermaid
+flowchart TB
+    subgraph "LAMP Stack"
+        A[Linux - Termux] --> B[Apache]
+        B --> C[MySQL/MariaDB]
+        B --> D[PHP]
+    end
+    
+    subgraph "Request Flow"
+        E[Client Request] --> F[Apache :8080]
+        F --> G{Static/Dynamic}
+        G -->|Static| H[HTML/CSS/JS]
+        G -->|Dynamic| I[PHP Processor]
+        I --> J[MySQL Query]
+        J --> K[Response]
+    end
+    
+    style B fill:#E53935,color:#fff
+    style C fill:#4CAF50,color:#fff
+    style D fill:#2196F3,color:#fff
+```
+
+### 3. Node.js Server Components
+
+```mermaid
+graph LR
+    subgraph "Node.js Server"
+        A[HTTP Module] --> B[Express.js]
+        B --> C[Middleware]
+        C --> D[Routes]
+        D --> E[Controllers]
+        E --> F[Database]
+    end
+    
+    subgraph "Ecosystem"
+        G[npm Packages]
+        H[Template Engines]
+        I[API Layer]
+    end
+    
+    B --> G
+    B --> H
+    B --> I
+    
+    style B fill:#4CAF50,color:#fff
+    style F fill:#FF9800,color:#fff
+```
+
+---
+
+## ⚡ ADVANCED COMMAND CHEATSHEET
+
+### Python HTTP Server
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `python -m http.server 8080` | Basic server | Port 8080 |
+| `python -m http.server 8080 --bind 127.0.0.1` | Localhost only | Security |
+| `python -m http.server 8080 --directory /path` | Custom directory | Serve specific folder |
+| `python -m http.server 8080 &` | Background | Detached |
+| `pkill -f http.server` | Stop server | Kill process |
+
+### Node.js Server Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `node server.js` | Run server | Start application |
+| `npm init -y` | Initialize project | Create package.json |
+| `npm install express` | Install Express | Web framework |
+| `npm install -g nodemon` | Dev dependency | Auto-reload |
+| `nodemon server.js` | Dev server | Hot reload |
+
+### Apache Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `apachectl start` | Start Apache | Launch server |
+| `apachectl stop` | Stop Apache | Shutdown |
+| `apachectl restart` | Restart | Apply changes |
+| `apachectl configtest` | Test config | Validate syntax |
+| `apachectl -v` | Version | Check version |
+| `apachectl -M` | List modules | Loaded modules |
+
+### Nginx Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `nginx` | Start Nginx | Launch server |
+| `nginx -s stop` | Stop Nginx | Fast shutdown |
+| `nginx -s reload` | Reload config | Graceful reload |
+| `nginx -t` | Test config | Validate syntax |
+| `nginx -v` | Version | Check version |
+
+### Database Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `mysqld_safe &` | Start MariaDB | Background |
+| `mysql -u root` | Connect to MariaDB | Admin access |
+| `mysqladmin -u root shutdown` | Stop MariaDB | Shutdown |
+| `sqlite3 mydb.db` | Open SQLite | Database access |
+| `redis-server --daemonize yes` | Start Redis | Background |
+
+### SSL/TLS Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `openssl req -x509 -newkey rsa:2048` | Generate cert | Self-signed |
+| `openssl x509 -in cert.crt -text` | View certificate | Inspect |
+| `openssl genrsa -out key.pem 2048` | Generate key | Private key |
+
+---
+
+## 🎯 SYSTEM ADMIN LEARNING PATH
+
+### Web Server Administration Roadmap
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                   WEB SERVER MASTERY PATH                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  LEVEL 1: FUNDAMENTALS (Week 1-2)                                       │
+│  ├── HTTP protocol basics                                               │
+│  ├── Simple Python http.server                                          │
+│  ├── Understanding ports and binding                                    │
+│  ├── Local vs network access                                            │
+│  └── Basic HTML hosting                                                 │
+│                                                                          │
+│  LEVEL 2: DYNAMIC CONTENT (Week 3-4)                                    │
+│  ├── Node.js server setup                                               │
+│  ├── Express.js basics                                                  │
+│  ├── PHP with built-in server                                           │
+│  ├── REST API creation                                                  │
+│  └── JSON handling                                                      │
+│                                                                          │
+│  LEVEL 3: PRODUCTION SERVERS (Week 5-6)                                 │
+│  ├── Apache installation & config                                       │
+│  ├── Nginx setup & reverse proxy                                        │
+│  ├── Virtual hosts                                                      │
+│  ├── SSL/HTTPS configuration                                            │
+│  └── Log management                                                     │
+│                                                                          │
+│  LEVEL 4: DATABASE INTEGRATION (Week 7-8)                                │
+│  ├── MariaDB setup & management                                         │
+│  ├── SQLite for lightweight apps                                        │
+│  ├── Redis for caching                                                  │
+│  ├── PHP-MySQL integration                                              │
+│  └── Node.js database connectivity                                      │
+│                                                                          │
+│  LEVEL 5: PROFESSIONAL (Ongoing)                                        │
+│  ├── Production deployment strategies                                   │
+│  ├── Load balancing                                                     │
+│  ├── Containerization (Docker)                                          │
+│  ├── CI/CD integration                                                  │
+│  └── Performance optimization                                           │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills Assessment
+
+| Skill Level | Skills | Self-Check |
+|-------------|--------|------------|
+| Beginner | Python http.server, basic HTML | ☐ Can host static files |
+| Intermediate | Node.js, Express, APIs | ☐ Can create dynamic apps |
+| Advanced | Apache, Nginx, SSL | ☐ Can configure production server |
+| Expert | Full stack, databases | ☐ Can build complete applications |
+| Professional | DevOps, scaling | ☐ Can architect web infrastructure |
+
+---
+
+## 🔧 TECHNOLOGY COMPARISON TABLE
+
+| Web Server | Use Case | Complexity | Performance | Best For |
+|------------|----------|------------|-------------|----------|
+| **Python http.server** | Quick testing | ⭐ Easy | Low | Development |
+| **Node.js** | APIs, SPAs | ⭐⭐ Medium | High | Real-time apps |
+| **Apache** | PHP, legacy | ⭐⭐⭐ Advanced | Medium | Traditional hosting |
+| **Nginx** | Reverse proxy | ⭐⭐⭐ Advanced | Very High | Production |
+| **PHP built-in** | PHP testing | ⭐ Easy | Medium | PHP development |
+| **darkhttpd** | Static files | ⭐ Easy | High | Quick static hosting |
+
+### Database Comparison for Web Apps
+
+| Database | Type | Performance | Complexity | Best For |
+|----------|------|-------------|------------|----------|
+| **SQLite** | Embedded | High (local) | Low | Mobile, small apps |
+| **MariaDB** | Relational | High | Medium | Web apps, CMS |
+| **PostgreSQL** | Object-Rel | Very High | High | Enterprise apps |
+| **Redis** | Key-Value | Very High | Low | Caching, sessions |
+| **MongoDB** | NoSQL | High | Medium | JSON data, flexibility |
+
+### Port Reference
+
+| Port | Service | Description |
+|------|---------|-------------|
+| 80 | HTTP | Default web (requires root) |
+| 443 | HTTPS | Secure web |
+| 8080 | HTTP Alt | Common alternative |
+| 3000 | Node.js | Default Node |
+| 8000 | Python | Default Python server |
+| 3306 | MySQL | MariaDB default |
+| 5432 | PostgreSQL | Postgres default |
+| 6379 | Redis | Redis default |
+
+---
+
+## 🚀 PRACTICAL SERVER CHALLENGES
+
+### Challenge 1: Complete LAMP Stack Setup
+
+**Objective:** Deploy a complete LAMP (Linux-Apache-MySQL-PHP) stack
+
+**Tasks:**
+1. Install Apache, PHP, and MariaDB
+2. Configure PHP module in Apache
+3. Create a database and user
+4. Build a simple CRUD application
+5. Test all components together
+
+**Verification:**
+```bash
+# Check services
+apachectl -v
+mysql -u root -e "SELECT VERSION();"
+php -v
+
+# Test PHP
+echo "<?php phpinfo(); ?>" > $PREFIX/var/www/html/test.php
+curl http://localhost:8080/test.php
+```
+
+### Challenge 2: Node.js REST API
+
+**Objective:** Create a complete REST API with database
+
+**Tasks:**
+1. Initialize Node.js project
+2. Install Express and dependencies
+3. Create CRUD endpoints
+4. Connect to SQLite database
+5. Test with curl commands
+
+**API Structure:**
+```javascript
+// Endpoints to implement
+GET    /api/users       - List all users
+GET    /api/users/:id   - Get single user
+POST   /api/users       - Create user
+PUT    /api/users/:id   - Update user
+DELETE /api/users/:id   - Delete user
+```
+
+### Challenge 3: Nginx Reverse Proxy
+
+**Objective:** Configure Nginx as reverse proxy for Node.js
+
+**Tasks:**
+1. Start Node.js app on port 3000
+2. Configure Nginx to proxy requests
+3. Set up load balancing (conceptual)
+4. Add caching headers
+5. Test proxy functionality
+
+**Nginx Config:**
+```nginx
+server {
+    listen 8080;
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+### Web Server Terms
+
+| Term | Definition |
+|------|------------|
+| **HTTP** | HyperText Transfer Protocol - web communication protocol |
+| **HTTPS** | HTTP Secure - encrypted HTTP with SSL/TLS |
+| **Port** | Network endpoint for services (80, 443, 8080) |
+| **Virtual Host** | Multiple websites on one server |
+| **Reverse Proxy** | Server that forwards requests to backend |
+| **Load Balancer** | Distributes traffic across servers |
+| **Document Root** | Directory containing web files |
+| **CGI** | Common Gateway Interface - dynamic content |
+
+### Server Technologies
+
+| Term | Definition |
+|------|------------|
+| **Apache** | Most popular web server software |
+| **Nginx** | High-performance web server/reverse proxy |
+| **Node.js** | JavaScript runtime for servers |
+| **PHP** | Server-side scripting language |
+| **FastCGI** | Protocol for PHP processing |
+| **WSGI** | Python web server gateway |
+
+### Database Terms
+
+| Term | Definition |
+|------|------------|
+| **SQL** | Structured Query Language |
+| **NoSQL** | Non-relational database |
+| **CRUD** | Create, Read, Update, Delete |
+| **ORM** | Object-Relational Mapping |
+| **Query** | Database request |
+| **Schema** | Database structure definition |
+
+### Security Terms
+
+| Term | Definition |
+|------|------------|
+| **SSL/TLS** | Secure Sockets Layer / Transport Layer Security |
+| **Certificate** | Digital identity document |
+| **HTTPS** | HTTP over SSL/TLS |
+| **Firewall** | Network security system |
+| **Authentication** | Identity verification |
+| **Authorization** | Permission verification |
+
+---
+
+## 💼 DEVOPS/SYSADMIN CAREER INSIGHTS
+
+### Web Server Skills Value
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                   WEB SERVER CAREER PATH                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ENTRY LEVEL (0-2 years)                                                │
+│  ├── Role: Web Developer / Jr. SysAdmin                                 │
+│  ├── Skills: Basic server setup, HTML hosting                           │
+│  ├── Salary: $45K - $65K                                                │
+│  └── Focus: Learning fundamentals                                       │
+│                                                                          │
+│  MID LEVEL (2-5 years)                                                  │
+│  ├── Role: DevOps Engineer / Web Admin                                  │
+│  ├── Skills: Apache, Nginx, SSL, databases                              │
+│  ├── Salary: $70K - $100K                                               │
+│  └── Focus: Production systems                                          │
+│                                                                          │
+│  SENIOR LEVEL (5-8 years)                                               │
+│  ├── Role: Senior DevOps / SRE                                          │
+│  ├── Skills: Load balancing, scaling, security                          │
+│  ├── Salary: $110K - $150K                                              │
+│  └── Focus: Architecture                                                │
+│                                                                          │
+│  PRINCIPAL (8+ years)                                                   │
+│  ├── Role: Infrastructure Architect                                     │
+│  ├── Skills: Full infrastructure design                                 │
+│  ├── Salary: $160K - $200K+                                             │
+│  └── Focus: Strategy and leadership                                     │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Industry Applications
+
+| Industry | Web Server Use | Importance |
+|----------|---------------|------------|
+| **E-commerce** | Online stores, payments | Critical |
+| **SaaS** | Application delivery | Essential |
+| **Media** | Content delivery | Important |
+| **Finance** | Secure transactions | Critical |
+| **Healthcare** | HIPAA-compliant apps | Essential |
+| **Education** | Learning platforms | Growing |
+
+### Certifications
+
+| Certification | Provider | Focus |
+|---------------|----------|-------|
+| **AWS Solutions Architect** | Amazon | Cloud infrastructure |
+| **NGINX Certification** | F5 | Nginx expertise |
+| **Linux Foundation Certified** | LF | System administration |
+| **Certified Kubernetes Admin** | CNCF | Container orchestration |
+
+---
+
+## 🔧 CONFIGURATION TEMPLATES
+
+### Template 1: Apache Virtual Host
+
+```apache
+# $PREFIX/etc/apache2/sites-available/myapp.conf
+
+<VirtualHost *:8080>
+    ServerAdmin webmaster@localhost
+    DocumentRoot "/data/data/com.termux/files/home/myapp"
+    ServerName myapp.local
+    
+    <Directory "/data/data/com.termux/files/home/myapp">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+    
+    ErrorLog "$PREFIX/var/log/apache2/myapp-error.log"
+    CustomLog "$PREFIX/var/log/apache2/myapp-access.log" combined
+    
+    # PHP-FPM or mod_php configuration
+    <FilesMatch \.php$>
+        SetHandler application/x-httpd-php
+    </FilesMatch>
+</VirtualHost>
+```
+
+### Template 2: Nginx Reverse Proxy
+
+```nginx
+# $PREFIX/etc/nginx/conf.d/reverse-proxy.conf
+
+upstream nodejs_backend {
+    server 127.0.0.1:3000;
+    keepalive 64;
+}
+
+server {
+    listen 8080;
+    server_name localhost;
+    
+    location / {
+        proxy_pass http://nodejs_backend;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+    
+    # Static files
+    location /static/ {
+        alias /data/data/com.termux/files/home/myapp/static/;
+        expires 30d;
+    }
+}
+```
+
+### Template 3: Node.js Express Server
+
+```javascript
+// server.js - Complete Express server template
+const express = require('express');
+const path = require('path');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
+// Routes
+app.get('/', (req, res) => {
+    res.json({ message: 'Welcome to Termux API' });
+});
+
+app.get('/api/status', (req, res) => {
+    res.json({ 
+        status: 'ok',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Error handling
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something broke!' });
+});
+
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
+
+module.exports = app;
+```
+
+### Template 4: SSL Configuration
+
+```bash
+# Generate self-signed certificate
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout $PREFIX/etc/apache2/server.key \
+    -out $PREFIX/etc/apache2/server.crt \
+    -subj "/C=IN/ST=State/L=City/O=Termux/CN=localhost"
+
+# Apache SSL configuration (add to httpd.conf)
+Listen 8443
+<VirtualHost *:8443>
+    ServerName localhost
+    SSLEngine on
+    SSLCertificateFile $PREFIX/etc/apache2/server.crt
+    SSLCertificateKeyFile $PREFIX/etc/apache2/server.key
+    DocumentRoot $PREFIX/var/www/html
+</VirtualHost>
+```
+
+---
+
+## 📊 MERMAID ARCHITECTURE DIAGRAMS
+
+### Web Server Stack Architecture
+
+```mermaid
+graph TB
+    subgraph "Client Layer"
+        A[Browser/Mobile] --> B[HTTP Request]
+    end
+    
+    subgraph "Network Layer"
+        B --> C{Load Balancer<br/>or Direct}
+        C --> D[ngrok Tunnel<br/>Optional]
+    end
+    
+    subgraph "Web Server Layer"
+        D --> E{Web Server}
+        E --> F[Python<br/>http.server]
+        E --> G[Node.js<br/>Express]
+        E --> H[Apache<br/>httpd]
+        E --> I[Nginx<br/>Reverse Proxy]
+    end
+    
+    subgraph "Application Layer"
+        F --> J[Static Files]
+        G --> K[API/Backend]
+        H --> L[PHP App]
+        I --> M[Multiple Apps]
+    end
+    
+    subgraph "Database Layer"
+        K --> N[(MariaDB)]
+        L --> N
+        K --> O[(SQLite)]
+        K --> P[(Redis Cache)]
+    end
+    
+    style E fill:#2196F3,stroke:#1565C0,color:#fff
+    style N fill:#4CAF50,stroke:#2E7D32,color:#fff
+    style P fill:#FF9800,stroke:#EF6C00,color:#fff
+```
+
+### Request Flow Diagram
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant N as Nginx
+    participant A as Apache/Node
+    participant P as PHP/Python
+    participant D as Database
+    
+    C->>N: HTTP Request (port 8080)
+    N->>N: Check Cache
+    
+    alt Static Content
+        N->>C: Return Static File
+    else Dynamic Content
+        N->>A: Forward Request
+        A->>P: Execute Script
+        P->>D: Query Data
+        D->>P: Return Data
+        P->>A: HTML Response
+        A->>N: Response
+        N->>C: HTTP Response
+    end
+```
+
+### Web Server Comparison Architecture
+
+```mermaid
+graph LR
+    subgraph "Python - Development"
+        A1[Python http.server] --> B1[Simple]
+        B1 --> C1[Quick Testing]
+    end
+    
+    subgraph "Node.js - APIs"
+        A2[Node.js/Express] --> B2[Fast]
+        B2 --> C2[REST APIs]
+    end
+    
+    subgraph "Apache - LAMP"
+        A3[Apache httpd] --> B3[PHP Support]
+        B3 --> C3[WordPress/CMS]
+    end
+    
+    subgraph "Nginx - High Traffic"
+        A4[Nginx] --> B4[Reverse Proxy]
+        B4 --> C4[Load Balancing]
+    end
+    
+    style A1 fill:#4CAF50,stroke:#2E7D32,color:#fff
+    style A2 fill:#2196F3,stroke:#1565C0,color:#fff
+    style A3 fill:#FF9800,stroke:#EF6C00,color:#fff
+    style A4 fill:#9C27B0,stroke:#6A1B9A,color:#fff
+```
+
+---
+
+## ⚡ ADVANCED COMMAND CHEATSHEET
+
+### Python HTTP Server Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `python -m http.server PORT` | Start server | `python -m http.server 8080` |
+| `python -m http.server --bind IP` | Bind to IP | `python -m http.server 8080 --bind 127.0.0.1` |
+| `python -m http.server --dir PATH` | Custom directory | `python -m http.server --dir /sdcard/Download` |
+| `python -m SimpleHTTPServer` | Python 2 server | `python2 -m SimpleHTTPServer 8080` |
+| `python3 -m http.server` | Explicit Python 3 | `python3 -m http.server 3000` |
+
+### Node.js Server Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `node server.js` | Run Node server | `node app.js` |
+| `npm start` | Run npm script | `npm start` |
+| `npm run dev` | Development mode | `npm run dev` |
+| `npm install` | Install dependencies | `npm install express` |
+| `npx nodemon server.js` | Auto-reload | `npx nodemon app.js` |
+| `pkill node` | Kill all Node processes | `pkill -f node` |
+
+### Apache Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `apachectl start` | Start Apache | `apachectl start` |
+| `apachectl stop` | Stop Apache | `apachectl stop` |
+| `apachectl restart` | Restart Apache | `apachectl restart` |
+| `apachectl graceful` | Graceful restart | `apachectl graceful` |
+| `apachectl configtest` | Test config | `apachectl configtest` |
+| `apachectl -v` | Show version | `apachectl -v` |
+| `apachectl -M` | List modules | `apachectl -M` |
+| `apachectl -S` | Virtual hosts | `apachectl -S` |
+
+### Nginx Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `nginx` | Start Nginx | `nginx` |
+| `nginx -s stop` | Stop Nginx | `nginx -s stop` |
+| `nginx -s reload` | Reload config | `nginx -s reload` |
+| `nginx -s quit` | Graceful quit | `nginx -s quit` |
+| `nginx -t` | Test config | `nginx -t` |
+| `nginx -T` | Test + dump config | `nginx -T` |
+| `nginx -v` | Show version | `nginx -v` |
+
+### PHP Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `php -S HOST:PORT` | Built-in server | `php -S 0.0.0.0:8080` |
+| `php -S HOST:PORT -t DIR` | Document root | `php -S localhost:8080 -t public/` |
+| `php -S HOST router.php` | With router | `php -S localhost:8080 router.php` |
+| `php -v` | Show version | `php -v` |
+| `php -m` | List modules | `php -m` |
+| `php -i` | PHP info | `php -i` |
+| `php -a` | Interactive shell | `php -a` |
+
+### MariaDB/MySQL Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `mysqld_safe &` | Start server | `mysqld_safe &` |
+| `mysql -u root` | Connect as root | `mysql -u root -p` |
+| `mysql -u user -p db` | Connect to db | `mysql -u appuser -p myapp` |
+| `mysqladmin -u root shutdown` | Stop server | `mysqladmin -u root shutdown` |
+| `mysqladmin -u root status` | Server status | `mysqladmin -u root status` |
+| `mysqldump -u root db > file.sql` | Backup database | `mysqldump -u root myapp > backup.sql` |
+| `mysql -u root db < file.sql` | Restore database | `mysql -u root myapp < backup.sql` |
+
+### ngrok Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `ngrok http PORT` | HTTP tunnel | `ngrok http 8080` |
+| `ngrok http HOST:PORT` | Specific host | `ngrok http localhost:3000` |
+| `ngrok tcp PORT` | TCP tunnel | `ngrok tcp 22` |
+| `ngrok config add-authtoken TOKEN` | Add auth | `ngrok config add-authtoken xxx` |
+| `ngrok http --auth user:pass PORT` | Password protect | `ngrok http --auth admin:secret 8080` |
+| `ngrok http --region in PORT` | India region | `ngrok http --region in 8080` |
+
+---
+
+## 🎯 SYSTEM ADMIN LEARNING PATH
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    WEB SERVER ADMINISTRATOR ROADMAP                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  LEVEL 1: BEGINNER (0-6 months)                                            │
+│  ══════════════════════════════                                              │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                     │
+│  │ HTML    │──▶│ Python  │──▶│ Local   │──▶│ Basic   │                     │
+│  │ Basics  │   │ Server  │   │ Hosting │   │ HTTP    │                     │
+│  └─────────┘   └─────────┘   └─────────┘   └─────────┘                     │
+│                                                                              │
+│  Skills: HTML, Python http.server, localhost testing                       │
+│  Salary: ₹2-4 LPA | $35-50K                                                │
+│                                                                              │
+│  LEVEL 2: INTERMEDIATE (6-18 months)                                        │
+│  ═══════════════════════════════════                                        │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                     │
+│  │ Apache  │──▶│ Nginx   │──▶│ PHP/    │──▶│ MySQL   │                     │
+│  │ Setup   │   │ Basics  │   │ Backend │   │ Basics  │                     │
+│  └─────────┘   └─────────┘   └─────────┘   └─────────┘                     │
+│                                                                              │
+│  Skills: Apache, Nginx, PHP, MySQL/MariaDB, LAMP stack                     │
+│  Salary: ₹5-12 LPA | $60-100K                                              │
+│                                                                              │
+│  LEVEL 3: ADVANCED (18-36 months)                                           │
+│  ═══════════════════════════════                                            │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                     │
+│  │Reverse  │──▶│ SSL/TLS │──▶│ Load    │──▶│ Docker  │                     │
+│  │ Proxy   │   │ Certs   │   │Balance  │   │ Deploy  │                     │
+│  └─────────┘   └─────────┘   └─────────┘   └─────────┘                     │
+│                                                                              │
+│  Skills: Reverse proxy, SSL, load balancing, containerization              │
+│  Salary: ₹15-28 LPA | $110-160K                                            │
+│                                                                              │
+│  LEVEL 4: EXPERT (3-5+ years)                                               │
+│  ════════════════════════════                                                │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                     │
+│  │ High    │──▶│ Security│──▶│ Cloud   │──▶│ Platform│                     │
+│  │Available│   │Hardening│   │ Deploy  │   │Architect│                     │
+│  └─────────┘   └─────────┘   └─────────┘   └─────────┘                     │
+│                                                                              │
+│  Skills: HA architecture, security hardening, cloud deployment             │
+│  Salary: ₹30-50 LPA | $160-220K+                                            │
+│                                                                              │
+│  CERTIFICATIONS:                                                            │
+│  ├─ AWS Solutions Architect                                                 │
+│  ├─ Nginx Professional                                                      │
+│  ├─ Certified Kubernetes Admin (CKA)                                        │
+│  └─ Linux Foundation Certified System Administrator                        │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔧 TECHNOLOGY COMPARISON TABLE
+
+### Web Servers Comparison
+
+| Server | Performance | Memory | PHP | Reverse Proxy | SSL | Best For |
+|--------|-------------|--------|-----|---------------|-----|----------|
+| **Nginx** | ⭐⭐⭐⭐⭐ | Low | ⚠️ Via FPM | ✅ Excellent | ✅ | High traffic, reverse proxy |
+| **Apache** | ⭐⭐⭐⭐ | High | ✅ Native | ⚠️ Possible | ✅ | PHP apps, .htaccess |
+| **Python http** | ⭐⭐ | Low | ❌ | ❌ | ❌ | Quick testing |
+| **Node.js** | ⭐⭐⭐⭐⭐ | Medium | ❌ | ✅ Via code | ✅ | APIs, real-time apps |
+| **PHP built-in** | ⭐⭐⭐ | Low | ✅ Native | ❌ | ⚠️ | PHP development |
+| **darkhttpd** | ⭐⭐⭐⭐ | Very Low | ❌ | ❌ | ⚠️ | Static files |
+
+### Database Comparison for Web Apps
+
+| Database | Type | Speed | Scalability | Use Case |
+|----------|------|-------|-------------|----------|
+| **SQLite** | Embedded | ⭐⭐⭐⭐ | ⭐⭐ | Small apps, mobile |
+| **MariaDB** | Relational | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Web apps, CMS |
+| **PostgreSQL** | Object-Rel | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Complex apps, analytics |
+| **Redis** | Key-Value | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Caching, sessions |
+| **MongoDB** | NoSQL | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | JSON data, flexible schema |
+
+### Port Reference
+
+| Port | Service | Description |
+|------|---------|-------------|
+| 80 | HTTP | Standard web (requires root) |
+| 443 | HTTPS | Secure web (requires root) |
+| 8080 | HTTP Alt | Common alternative |
+| 8000 | Python | Python default |
+| 3000 | Node.js | Node.js default |
+| 5000 | Flask | Flask default |
+| 3306 | MySQL | MariaDB default |
+| 5432 | PostgreSQL | Postgres default |
+| 6379 | Redis | Redis default |
+| 27017 | MongoDB | MongoDB default |
+
+---
+
+## 🚀 PRACTICAL SERVER CHALLENGES
+
+### Challenge 1: Complete LAMP Stack Setup
+
+**Objective:** Set up a complete LAMP (Linux, Apache, MySQL, PHP) stack in Termux.
+
+**Requirements:**
+- Apache with PHP module
+- MariaDB database
+- PHP-MySQL connectivity
+- Test application with database
+
+**Steps:**
+```bash
+# 1. Install LAMP components
+pkg install apache2 php php-apache mariadb -y
+
+# 2. Initialize MariaDB
+mysql_install_db
+mysqld_safe &
+
+# 3. Create database and user
+mysql -u root << 'EOF'
+CREATE DATABASE webapp;
+CREATE USER 'webuser'@'localhost' IDENTIFIED BY 'securepass123';
+GRANT ALL PRIVILEGES ON webapp.* TO 'webuser'@'localhost';
+FLUSH PRIVILEGES;
+EOF
+
+# 4. Configure Apache for PHP
+cat >> $PREFIX/etc/apache2/httpd.conf << 'EOF'
+LoadModule php_module $PREFIX/libexec/apache2/libphp.so
+AddHandler php-script .php
+<FilesMatch "\.php$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+DirectoryIndex index.php index.html
+EOF
+
+# 5. Create test application
+cat > $PREFIX/var/www/html/app.php << 'PHPEOF'
+<?php
+$conn = new mysqli('localhost', 'webuser', 'securepass123', 'webapp');
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Create table
+$conn->query("CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    email VARCHAR(50)
+)");
+
+// Insert test data
+$conn->query("INSERT IGNORE INTO users (id, name, email) VALUES (1, 'Test User', 'test@example.com')");
+
+// Display data
+$result = $conn->query("SELECT * FROM users");
+echo "<h1>LAMP Stack Working!</h1>";
+echo "<table border='1'><tr><th>ID</th><th>Name</th><th>Email</th></tr>";
+while ($row = $result->fetch_assoc()) {
+    echo "<tr><td>{$row['id']}</td><td>{$row['name']}</td><td>{$row['email']}</td></tr>";
+}
+echo "</table>";
+$conn->close();
+?>
+PHPEOF
+
+# 6. Start Apache
+apachectl start
+
+# 7. Test in browser
+echo "Open: http://localhost:8080/app.php"
+```
+
+**Success Criteria:**
+- [ ] Apache running on port 8080
+- [ ] MariaDB accepting connections
+- [ ] PHP processing correctly
+- [ ] Database connectivity working
+
+---
+
+### Challenge 2: Nginx Reverse Proxy Setup
+
+**Objective:** Configure Nginx as a reverse proxy for multiple backend services.
+
+**Architecture:**
+```
+Client → Nginx (8080) → Node.js App (3000)
+                       → Python API (5000)
+                       → Static Files
+```
+
+**Steps:**
+```bash
+# 1. Install Nginx
+pkg install nginx -y
+
+# 2. Create backend services
+mkdir -p ~/webapps/{nodeapp,pythonapi,static}
+
+# 3. Create Node.js app
+cat > ~/webapps/nodeapp/app.js << 'EOF'
+const http = require('http');
+http.createServer((req, res) => {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end('<h1>Node.js Backend</h1><p>Response from Node.js on port 3000</p>');
+}).listen(3000, '127.0.0.1');
+console.log('Node.js running on port 3000');
+EOF
+
+# 4. Create Python API
+cat > ~/webapps/pythonapi/app.py << 'EOF'
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import json
+
+class APIHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+        response = {"status": "ok", "service": "Python API", "port": 5000}
+        self.wfile.write(json.dumps(response).encode())
+
+HTTPServer(('127.0.0.1', 5000), APIHandler).serve_forever()
+EOF
+
+# 5. Create static content
+echo "<h1>Static Content</h1><p>Served directly by Nginx</p>" > ~/webapps/static/index.html
+
+# 6. Configure Nginx
+cat > $PREFIX/etc/nginx/nginx.conf << 'EOF'
+worker_processes 1;
+events { worker_connections 1024; }
+http {
+    include mime.types;
+    default_type application/octet-stream;
+    sendfile on;
+    
+    upstream node_backend {
+        server 127.0.0.1:3000;
+    }
+    
+    upstream python_api {
+        server 127.0.0.1:5000;
+    }
+    
+    server {
+        listen 8080;
+        server_name localhost;
+        
+        # Static files
+        location /static/ {
+            root /data/data/com.termux/files/home/webapps;
+            index index.html;
+        }
+        
+        # Node.js app
+        location /app {
+            proxy_pass http://node_backend;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+        }
+        
+        # Python API
+        location /api {
+            proxy_pass http://python_api;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+        }
+        
+        # Default
+        location / {
+            return 301 /static/;
+        }
+    }
+}
+EOF
+
+# 7. Start all services
+nginx
+node ~/webapps/nodeapp/app.js &
+python ~/webapps/pythonapi/app.py &
+
+echo "Test URLs:"
+echo "  Static:  http://localhost:8080/static/"
+echo "  Node.js: http://localhost:8080/app"
+echo "  API:     http://localhost:8080/api"
+```
+
+**Success Criteria:**
+- [ ] Nginx proxying to Node.js
+- [ ] Nginx proxying to Python API
+- [ ] Static files served directly
+- [ ] All routes accessible
+
+---
+
+### Challenge 3: HTTPS with Self-Signed Certificate
+
+**Objective:** Set up secure HTTPS server with SSL/TLS certificates.
+
+**Requirements:**
+- Generate SSL certificate
+- Configure Apache with HTTPS
+- Configure Nginx with HTTPS
+- Test secure connections
+
+**Steps:**
+```bash
+# 1. Create certificates directory
+mkdir -p ~/certificates
+cd ~/certificates
+
+# 2. Generate private key
+openssl genrsa -out server.key 2048
+
+# 3. Generate certificate signing request
+openssl req -new -key server.key -out server.csr << 'EOF'
+IN
+State
+City
+Organization
+Termux
+localhost
+admin@localhost
+EOF
+
+# 4. Generate self-signed certificate
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
+# 5. Apache HTTPS configuration
+cat >> $PREFIX/etc/apache2/httpd.conf << 'EOF'
+LoadModule ssl_module $PREFIX/libexec/apache2/mod_ssl.so
+
+Listen 8443
+<VirtualHost *:8443>
+    ServerName localhost
+    SSLEngine on
+    SSLCertificateFile /data/data/com.termux/files/home/certificates/server.crt
+    SSLCertificateKeyFile /data/data/com.termux/files/home/certificates/server.key
+    DocumentRoot $PREFIX/var/www/html
+</VirtualHost>
+EOF
+
+# 6. Create HTTPS test page
+cat > $PREFIX/var/www/html/secure.html << 'EOF'
+<!DOCTYPE html>
+<html>
+<head><title>HTTPS Working!</title></head>
+<body>
+    <h1>🔒 Secure Connection</h1>
+    <p>HTTPS is working correctly!</p>
+    <p>Protocol: <script>document.write(location.protocol)</script></p>
+</body>
+</html>
+EOF
+
+# 7. Restart Apache
+apachectl restart
+
+# 8. Test HTTPS
+echo "Test: https://localhost:8443/secure.html"
+echo "Note: Browser will show certificate warning (self-signed)"
+```
+
+**Success Criteria:**
+- [ ] Certificate generated successfully
+- [ ] Apache listening on HTTPS port
+- [ ] Secure connection established
+- [ ] Certificate warning appears (expected)
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **Web Server** | Software that serves web content over HTTP/HTTPS protocols |
+| **HTTP** | Hypertext Transfer Protocol - standard protocol for web communication |
+| **HTTPS** | HTTP Secure - encrypted HTTP using SSL/TLS |
+| **Reverse Proxy** | Server that forwards client requests to backend servers |
+| **Virtual Host** | Configuration for hosting multiple domains on one server |
+| **DocumentRoot** | Directory containing files served by the web server |
+| **CGI** | Common Gateway Interface - method for running programs on web servers |
+| **FastCGI** | Improved CGI with persistent processes for better performance |
+| **PHP-FPM** | FastCGI Process Manager for PHP |
+| **SSL/TLS** | Secure Sockets Layer / Transport Layer Security - encryption protocols |
+| **Certificate** | Digital certificate for SSL/TLS encryption |
+| **Load Balancer** | Distributes traffic across multiple servers |
+| **CORS** | Cross-Origin Resource Sharing - security mechanism for web requests |
+| **WebSocket** | Protocol for full-duplex communication over TCP |
+| **Session** | Server-side storage for user-specific data |
+
+---
+
+## 💼 DEVOPS/SYSADMIN CAREER INSIGHTS
+
+### Web Server Admin Job Roles & Salaries
+
+| Role | Experience | India (LPA) | US ($K) | Key Skills |
+|------|------------|-------------|---------|------------|
+| Jr. Web Admin | 0-2 yrs | 3-6 | 45-65 | Apache, Nginx basics |
+| Web Server Admin | 2-5 yrs | 6-15 | 70-100 | Apache, Nginx, SSL, PHP |
+| DevOps Engineer | 3-6 yrs | 12-25 | 100-150 | Docker, CI/CD, Cloud |
+| SRE | 4-8 yrs | 18-35 | 130-180 | HA, Monitoring, Scaling |
+| Platform Engineer | 5-10 yrs | 25-50 | 150-220 | Kubernetes, Cloud Native |
+
+### Top Companies Hiring
+
+**India:**
+- E-commerce: Amazon, Flipkart, Myntra, BigBasket
+- Fintech: Paytm, Razorpay, PhonePe, CRED
+- SaaS: Freshworks, Zoho, Chargebee
+
+**Global:**
+- Cloud: AWS, Google Cloud, Azure, Cloudflare
+- Tech: Meta, Netflix, Uber, Airbnb
+- CDN: Cloudflare, Fastly, Akamai
+
+### Career Progression
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    WEB ADMIN CAREER PATH                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  Web Support ──▶ Jr. Web Admin ──▶ Web Server Admin              │
+│                                        │                         │
+│                                        ▼                         │
+│                               DevOps Engineer ──▶ SRE            │
+│                                        │              │          │
+│                                        ▼              ▼          │
+│                               Cloud Engineer   Platform Engineer │
+│                                                      │           │
+│                                                      ▼           │
+│                                              Cloud Architect     │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Interview Questions
+
+1. **Basic:** What's the difference between Apache and Nginx?
+2. **Intermediate:** How would you set up load balancing with Nginx?
+3. **Advanced:** Explain how to secure a web server with SSL/TLS.
+4. **Expert:** Design a high-availability web architecture.
+5. **Practical:** Troubleshoot a 502 Bad Gateway error.
+
+---
+
+## 🔧 CONFIGURATION TEMPLATES
+
+### Production Nginx Configuration
+
+```nginx
+# $PREFIX/etc/nginx/nginx.conf - Production Ready
+
+user nobody;
+worker_processes auto;
+error_log $PREFIX/var/log/nginx/error.log warn;
+pid $PREFIX/var/run/nginx.pid;
+
+events {
+    worker_connections 1024;
+    multi_accept on;
+}
+
+http {
+    include $PREFIX/etc/nginx/mime.types;
+    default_type application/octet-stream;
+    
+    # Logging
+    log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                    '$status $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent"';
+    
+    access_log $PREFIX/var/log/nginx/access.log main;
+    
+    # Performance
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    
+    # Gzip Compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css application/json application/javascript 
+               text/xml application/xml application/xml+rss text/javascript;
+    
+    # Security Headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    
+    # Upstream Backends
+    upstream node_backend {
+        server 127.0.0.1:3000;
+        keepalive 32;
+    }
+    
+    upstream python_backend {
+        server 127.0.0.1:5000;
+        keepalive 32;
+    }
+    
+    # Main Server
+    server {
+        listen 8080;
+        server_name localhost;
+        
+        root $PREFIX/usr/share/nginx/html;
+        index index.html index.htm;
+        
+        # Static files
+        location /static/ {
+            alias /data/data/com.termux/files/home/web/static/;
+            expires 30d;
+            add_header Cache-Control "public, immutable";
+        }
+        
+        # API proxy
+        location /api/ {
+            proxy_pass http://node_backend/;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_connect_timeout 60s;
+            proxy_read_timeout 60s;
+        }
+        
+        # PHP-FPM (if using)
+        location ~ \.php$ {
+            fastcgi_pass 127.0.0.1:9000;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
+        
+        # Health check
+        location /health {
+            return 200 "OK\n";
+            add_header Content-Type text/plain;
+        }
+        
+        # Error pages
+        error_page 404 /404.html;
+        error_page 500 502 503 504 /50x.html;
+    }
+}
+```
+
+### Apache Virtual Host Template
+
+```apache
+# $PREFIX/etc/apache2/sites-available/mysite.conf
+
+<VirtualHost *:8080>
+    ServerName mysite.local
+    ServerAdmin admin@localhost
+    DocumentRoot "/data/data/com.termux/files/home/mysite"
+    
+    # Logging
+    ErrorLog "$PREFIX/var/log/apache2/mysite-error.log"
+    CustomLog "$PREFIX/var/log/apache2/mysite-access.log" combined
+    
+    # Directory permissions
+    <Directory "/data/data/com.termux/files/home/mysite">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+        
+        # Disable directory listing
+        Options -Indexes
+        
+        # Enable URL rewriting
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule ^(.*)$ index.php [QSA,L]
+    </Directory>
+    
+    # PHP settings
+    <FilesMatch \.php$>
+        SetHandler application/x-httpd-php
+    </FilesMatch>
+    
+    # Security
+    <FilesMatch "^\.">
+        Require all denied
+    </FilesMatch>
+    
+    # Cache static files
+    <FilesMatch "\.(ico|pdf|jpg|jpeg|png|gif|js|css)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+    
+    # Gzip compression
+    <IfModule mod_deflate.c>
+        AddOutputFilterByType DEFLATE text/html text/plain text/xml 
+                             text/css text/javascript application/javascript
+    </IfModule>
+</VirtualHost>
+```
+
+### Node.js Production Server
+
+```javascript
+// server.js - Production ready Node.js server
+
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
+
+const MIME_TYPES = {
+    '.html': 'text/html',
+    '.css': 'text/css',
+    '.js': 'text/javascript',
+    '.json': 'application/json',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
+    '.ico': 'image/x-icon'
+};
+
+const server = http.createServer((req, res) => {
+    // Security headers
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    
+    // Parse URL
+    let filePath = '.' + req.url;
+    if (filePath === './') filePath = './index.html';
+    
+    const extname = path.extname(filePath).toLowerCase();
+    const contentType = MIME_TYPES[extname] || 'application/octet-stream';
+    
+    fs.readFile(filePath, (err, content) => {
+        if (err) {
+            if (err.code === 'ENOENT') {
+                res.writeHead(404, { 'Content-Type': 'text/html' });
+                res.end('<h1>404 Not Found</h1>');
+            } else {
+                res.writeHead(500, { 'Content-Type': 'text/html' });
+                res.end('<h1>500 Server Error</h1>');
+            }
+        } else {
+            res.writeHead(200, { 
+                'Content-Type': contentType,
+                'Cache-Control': 'max-age=3600'
+            });
+            res.end(content);
+        }
+    });
+});
+
+server.listen(PORT, HOST, () => {
+    console.log(`Server running at http://${HOST}:${PORT}/`);
+    console.log(`PID: ${process.pid}`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('Shutting down...');
+    server.close(() => process.exit(0));
+});
+```
+
+---
+
 ## 💡 PRO TIPS BOXES
 
 > 💡 **Pro Tip #1:** Use `python -m http.server 8080 --bind 127.0.0.1` for localhost-only access - prevents network exposure!

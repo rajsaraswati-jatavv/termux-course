@@ -2249,6 +2249,299 @@ Before moving to Chapter 25, verify:
 
 ---
 
+## 📊 MERMAID DIAGRAMS - Network Topology
+
+### Basic Network Architecture
+```mermaid
+graph LR
+    A[Client Device] --> B[Router/Gateway]
+    B --> C[Firewall]
+    C --> D[Internet]
+    D --> E[Remote Server]
+    
+    style A fill:#4CAF50
+    style B fill:#2196F3
+    style C fill:#FF5722
+    style D fill:#9C27B0
+    style E fill:#607D8B
+```
+
+### OSI Model Layers
+```mermaid
+graph TB
+    L7[Layer 7: Application<br/>HTTP, FTP, DNS, SSH]
+    L6[Layer 6: Presentation<br/>SSL/TLS, JPEG, JSON]
+    L5[Layer 5: Session<br/>NetBIOS, RPC]
+    L4[Layer 4: Transport<br/>TCP, UDP]
+    L3[Layer 3: Network<br/>IP, ICMP, IPSec]
+    L2[Layer 2: Data Link<br/>Ethernet, WiFi, MAC]
+    L1[Layer 1: Physical<br/>Cables, Radio Waves]
+    
+    L7 --> L6 --> L5 --> L4 --> L3 --> L2 --> L1
+    
+    style L7 fill:#E91E63
+    style L4 fill:#2196F3
+    style L3 fill:#4CAF50
+    style L2 fill:#FF9800
+```
+
+### DNS Resolution Flow
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Resolver
+    participant Root
+    participant TLD
+    participant Auth
+    
+    Client->>Resolver: Query google.com
+    Resolver->>Root: Where is .com?
+    Root-->>Resolver: Go to .com TLD
+    Resolver->>TLD: Where is google.com?
+    TLD-->>Resolver: Go to Auth NS
+    Resolver->>Auth: IP for google.com?
+    Auth-->>Resolver: 142.250.195.78
+    Resolver-->>Client: IP: 142.250.195.78
+```
+
+---
+
+## ⚡ NETWORK COMMAND CHEATSHEET
+
+| Command | Purpose | Syntax | Example |
+|---------|---------|--------|---------|
+| `ping` | Test connectivity | `ping -c COUNT HOST` | `ping -c 4 google.com` |
+| `curl` | HTTP requests | `curl [OPTIONS] URL` | `curl -I https://google.com` |
+| `wget` | Download files | `wget [OPTIONS] URL` | `wget -c https://file.zip` |
+| `ip addr` | Show IP addresses | `ip a` | `ip -4 addr` |
+| `ip route` | Show routing table | `ip r` | `ip route show` |
+| `ss` | Socket statistics | `ss [OPTIONS]` | `ss -tulpn` |
+| `netstat` | Network connections | `netstat [OPTIONS]` | `netstat -an` |
+| `dig` | DNS lookup | `dig DOMAIN` | `dig +short google.com` |
+| `nslookup` | DNS query | `nslookup DOMAIN` | `nslookup google.com 8.8.8.8` |
+| `traceroute` | Trace packet path | `traceroute HOST` | `traceroute google.com` |
+| `nc` | Netcat utility | `nc [OPTIONS] HOST PORT` | `nc -zv 192.168.1.1 1-100` |
+| `nmap` | Port scanner | `nmap [OPTIONS] TARGET` | `nmap -sV 192.168.1.1` |
+| `arp` | ARP table | `arp -a` | `arp -an` |
+| `hostname` | Show hostname | `hostname -I` | `hostname -f` |
+| `jq` | JSON processor | `jq FILTER` | `cat data.json \| jq '.'` |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```mermaid
+graph TD
+    START[Start: Networking Basics] --> BASICS[IP, Ports, Protocols]
+    BASICS --> COMMANDS[Basic Commands]
+    COMMANDS --> PING[ping, curl, wget]
+    PING --> ADVANCED[Advanced Tools]
+    ADVANCED --> NMAP[Nmap Scanning]
+    ADVANCED --> NETCAT[Netcat Mastery]
+    ADVANCED --> DNS[DNS Tools]
+    NMAP --> SECURITY[Security Testing]
+    NETCAT --> SECURITY
+    DNS --> SECURITY
+    SECURITY --> EXPERT[Network Expert]
+    
+    style START fill:#4CAF50
+    style EXPERT fill:#E91E63
+    style SECURITY fill:#FF5722
+```
+
+### Skills Progression
+
+| Level | Skills to Master | Estimated Time |
+|-------|------------------|----------------|
+| 🌱 Beginner | ping, curl, wget, basic IP concepts | 1-2 weeks |
+| 🌿 Intermediate | dig, nslookup, traceroute, ss/netstat | 2-3 weeks |
+| 🌳 Advanced | nmap, netcat, firewall concepts | 4-6 weeks |
+| 🏆 Expert | Network security, automation, troubleshooting | Ongoing |
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+| Tool | Purpose | Pros | Cons | Alternatives |
+|------|---------|------|------|--------------|
+| **ping** | Connectivity test | Simple, universal | Blocked by some firewalls | hping3, fping |
+| **curl** | HTTP requests | Versatile, scripting-friendly | Steep learning curve | wget, httpie, httpx |
+| **wget** | File downloads | Recursive, mirroring | No POST support | curl, aria2 |
+| **dig** | DNS queries | Detailed output, flexible | Complex syntax | nslookup, host |
+| **ss** | Socket stats | Fast, modern | Less documentation | netstat |
+| **traceroute** | Path tracing | Network debugging | Can be blocked | mtr, tracepath |
+| **nc/netcat** | Network utility | Swiss Army knife | No encryption | ncat, socat |
+| **nmap** | Port scanning | Comprehensive, scripts | Complex, detectable | masscan, rustscan |
+
+---
+
+## 🚀 PRACTICAL NETWORKING CHALLENGES
+
+### Challenge 1: Network Discovery
+**Objective:** Discover all live hosts on your local network
+```bash
+# Step 1: Find your network range
+ip addr
+
+# Step 2: Scan for live hosts
+nmap -sn 192.168.1.0/24
+
+# Step 3: Identify open ports on discovered hosts
+nmap -sS --top-ports 100 192.168.1.0/24
+```
+**Success Criteria:** Document all live hosts and their open ports
+
+---
+
+### Challenge 2: DNS Investigation
+**Objective:** Complete DNS enumeration of a domain
+```bash
+# Step 1: Get A records
+dig google.com A +short
+
+# Step 2: Get MX records
+dig google.com MX
+
+# Step 3: Get all nameservers
+dig google.com NS
+
+# Step 4: Perform reverse lookup
+dig -x $(dig +short google.com)
+```
+**Success Criteria:** Create a DNS report with all record types
+
+---
+
+### Challenge 3: HTTP API Testing
+**Objective:** Test a REST API using curl
+```bash
+# Step 1: GET request
+curl -s https://jsonplaceholder.typicode.com/posts | jq '.[0:5]'
+
+# Step 2: POST request
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"title":"Test","body":"Content","userId":1}' \
+  https://jsonplaceholder.typicode.com/posts
+
+# Step 3: Check headers
+curl -I https://google.com
+```
+**Success Criteria:** Successfully perform GET, POST, PUT, DELETE operations
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **IP Address** | Unique numerical identifier for devices on a network (e.g., 192.168.1.1) |
+| **IPv4** | 32-bit address format (4 octets, e.g., 192.168.1.1) |
+| **IPv6** | 128-bit address format (8 groups of hex, e.g., 2001:db8::1) |
+| **Port** | Virtual endpoint for network communication (0-65535) |
+| **Protocol** | Rules for data communication (TCP, UDP, HTTP, etc.) |
+| **TCP** | Transmission Control Protocol - reliable, connection-oriented |
+| **UDP** | User Datagram Protocol - fast, connectionless |
+| **DNS** | Domain Name System - translates domains to IP addresses |
+| **DHCP** | Dynamic Host Configuration Protocol - assigns IP addresses |
+| **NAT** | Network Address Translation - maps private to public IPs |
+| **Firewall** | Security device that filters network traffic |
+| **Latency** | Time delay in data transmission (measured in ms) |
+| **Bandwidth** | Maximum data transfer rate of a network |
+| **TTL** | Time To Live - packet lifetime in hops or seconds |
+| **MAC Address** | Hardware address of network interface |
+| **Subnet** | Logical subdivision of an IP network |
+| **Gateway** | Network node connecting different networks |
+| **Socket** | Combination of IP address and port number |
+
+---
+
+## 💼 CAREER INSIGHTS - Network Engineering Path
+
+### Career Progression
+```
+Entry Level ─────────────────────────────────────────────────────────────────────► Expert
+    │                    │                    │                    │
+Network Support      Network Admin      Network Engineer     Network Architect
+    │                    │                    │                    │
+  $40-60k             $60-80k             $80-120k            $120-180k+
+```
+
+### Key Certifications
+| Level | Certification | Value |
+|-------|--------------|-------|
+| Entry | CompTIA Network+ | Foundation knowledge |
+| Associate | Cisco CCNA | Industry standard |
+| Professional | Cisco CCNP | Advanced networking |
+| Expert | Cisco CCIE | Highest recognition |
+| Security | CEH, OSCP | Security focused |
+
+### Essential Skills for Network Professionals
+- **Technical:** Routing, switching, firewalls, VPNs, DNS/DHCP
+- **Scripting:** Python, Bash, Ansible for automation
+- **Tools:** Wireshark, nmap, tcpdump, various monitoring tools
+- **Soft Skills:** Problem-solving, documentation, communication
+
+### Day-to-Day Responsibilities
+- Monitor network performance and security
+- Configure routers, switches, and firewalls
+- Troubleshoot connectivity issues
+- Implement network changes and updates
+- Document network architecture
+- Respond to security incidents
+
+---
+
+## 🔐 SECURITY CONSIDERATIONS
+
+### Network Security Best Practices
+
+```mermaid
+graph LR
+    A[Defense in Depth] --> B[Firewall]
+    A --> C[IDS/IPS]
+    A --> D[Encryption]
+    A --> E[Access Control]
+    A --> F[Monitoring]
+    
+    style A fill:#E91E63
+    style B fill:#2196F3
+    style C fill:#FF5722
+    style D fill:#4CAF50
+    style E fill:#FF9800
+    style F fill:#9C27B0
+```
+
+### Security Checklist
+| Area | Best Practice | Priority |
+|------|--------------|----------|
+| **Access Control** | Use strong passwords, implement MFA | 🔴 Critical |
+| **Network Segmentation** | Separate sensitive networks | 🔴 Critical |
+| **Encryption** | Use TLS/SSL for data in transit | 🔴 Critical |
+| **Monitoring** | Log and monitor all network activity | 🟡 High |
+| **Updates** | Keep all systems patched | 🟡 High |
+| **Firewall Rules** | Follow least privilege principle | 🟡 High |
+| **Backups** | Regular backup of configurations | 🟢 Medium |
+| **Documentation** | Maintain network diagrams | 🟢 Medium |
+
+### Common Network Attacks to Understand
+| Attack Type | Description | Mitigation |
+|-------------|-------------|------------|
+| **DDoS** | Overwhelm with traffic | Rate limiting, CDN |
+| **MITM** | Intercept communications | Encryption, HSTS |
+| **DNS Spoofing** | Fake DNS responses | DNSSEC, monitoring |
+| **Port Scanning** | Reconnaissance for vulnerabilities | Firewalls, IDS |
+| **ARP Spoofing** | Link layer attack | Static ARP, monitoring |
+
+### Ethical Guidelines
+> ⚠️ **Always Remember:**
+> - Only scan networks you own or have permission to test
+> - Document all testing activities
+> - Report vulnerabilities responsibly
+> - Follow organizational security policies
+> - Never access unauthorized systems
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Always use `ping -c 4` instead of just `ping` to avoid infinite loops in scripts. The `-c` flag limits packet count.

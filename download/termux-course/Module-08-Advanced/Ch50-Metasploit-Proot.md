@@ -2330,7 +2330,17 @@ Before moving to next chapter, verify:
 
 ---
 
-## 💡 PRO TIPS BOXES
+## 📊 MERMAID ARCHITECTURE DIAGRAMS
+
+### Metasploit Architecture in Proot
+
+```mermaid
+graph TB
+    subgraph "Termux Layer"
+        A[Termux App] --> B[proot-distro]
+    end
+    
+    sub
 
 > 💡 **Pro Tip #1:** Always use workspaces in Metasploit - `workspace -a project_name` keeps your scans and hosts organized
 

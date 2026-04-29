@@ -1149,6 +1149,546 @@ termux-screen-record -b 8000000 -o recording.mp4
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Diagram 1: Image Processing Pipeline
+
+```mermaid
+flowchart LR
+    A[Input Image] --> B{Format?}
+    B -->|PNG| C[Keep Transparency]
+    B -->|JPG| D[Lossy Compression]
+    B -->|RAW| E[Process RAW]
+    
+    C --> F{Operation?}
+    D --> F
+    E --> F
+    
+    F -->|Resize| G[scale/resize]
+    F -->|Crop| G[crop]
+    F -->|Rotate| H[rotate]
+    F -->|Effects| I[filter/blur/sharpen]
+    
+    G --> J[Output]
+    H --> J
+    I --> J
+    
+    J --> K{Format Choice}
+    K -->|Web| L[JPG/WebP - Quality 80]
+    K -->|Print| M[PNG/TIFF - Max Quality]
+    K -->|Animation| N[GIF/APNG]
+```
+
+### Diagram 2: FFmpeg Video Processing Flow
+
+```mermaid
+flowchart TD
+    A[Input Video] --> B[Demuxer]
+    B --> C{Streams?}
+    C -->|Video| D[Video Decoder]
+    C -->|Audio| E[Audio Decoder]
+    
+    D --> F[Video Filter Chain]
+    E --> G[Audio Filter Chain]
+    
+    F --> H{Filters Applied}
+    H -->|Resize| I[scale filter]
+    H -->|Crop| J[crop filter]
+    H -->|Trim| K[trim filter]
+    
+    I --> L[Video Encoder]
+    J --> L
+    K --> L
+    G --> M[Audio Encoder]
+    
+    L --> N[Muxer]
+    M --> N
+    
+    N --> O[Output Container]
+    O --> P{Format}
+    P -->|MP4| Q[H.264/AAC]
+    P -->|WebM| R[VP9/Opus]
+    P -->|MKV| S[H.265/FLAC]
+```
+
+### Diagram 3: Media Format Compatibility Matrix
+
+```mermaid
+mindmap
+  root((Media Formats))
+    Images
+      Raster
+        PNG - Lossless, Transparency
+        JPEG - Photos, Smaller
+        WebP - Modern, Both
+        GIF - Animation
+      Vector
+        SVG - Scalable
+        PDF - Documents
+    Video
+      MP4 - Universal
+      WebM - Web Optimized
+      MKV - Features
+      AVI - Legacy
+    Audio
+      MP3 - Universal
+      AAC - Better Quality
+      FLAC - Lossless
+      Opus - Best Codec
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+| Command | Purpose | Syntax | Example |
+|---------|---------|--------|---------|
+| `convert` | Image conversion | `convert input.png output.jpg` | `convert photo.png photo.jpg` |
+| `identify` | Image info | `identify image.jpg` | `identify -verbose image.jpg` |
+| `mogrify` | Batch process | `mogrify -resize 800x *.jpg` | Batch resize all JPGs |
+| `composite` | Combine images | `composite -blend 50 img1.jpg img2.jpg out.jpg` | Blend two images |
+| `montage` | Create grid | `montage *.jpg -tile 3x3 grid.jpg` | 3x3 image grid |
+| `ffmpeg -i` | Convert video | `ffmpeg -i in.mp4 out.mkv` | MP4 to MKV |
+| `ffmpeg -crf` | Quality control | `ffmpeg -i in.mp4 -crf 23 out.mp4` | CRF quality (18-28) |
+| `ffmpeg -vf scale` | Resize video | `ffmpeg -i in.mp4 -vf scale=1280:720 out.mp4` | 720p output |
+| `ffmpeg -ss -t` | Trim video | `ffmpeg -i in.mp4 -ss 1:00 -t 30 out.mp4` | 30s from 1min |
+| `ffmpeg -vn` | Extract audio | `ffmpeg -i video.mp4 -vn audio.mp3` | Audio only |
+| `ffprobe` | Media info | `ffprobe video.mp4` | Get video details |
+| `termux-screen-record` | Screen record | `termux-screen-record -o out.mp4` | Record screen |
+| `convert -resize` | Resize image | `convert in.jpg -resize 50% out.jpg` | 50% size |
+| `convert -quality` | JPEG quality | `convert in.png -quality 85 out.jpg` | 85% quality |
+| `convert -blur` | Blur effect | `convert in.jpg -blur 0x5 out.jpg` | Gaussian blur |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    IMAGE & MEDIA MASTERY PATH                                ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  LEVEL 1: BEGINNER (Week 1)                                                 ║
+║  ┌─────────────────────────────────────────────────────────────────────┐    ║
+║  │ ⬜ Install ImageMagick & FFmpeg                                      │    ║
+║  │ ⬜ Convert image formats (PNG ↔ JPG)                                 │    ║
+║  │ ⬜ Resize images (specific size, percentage)                         │    ║
+║  │ ⬜ Basic video conversion                                            │    ║
+║  │ ⬜ Extract audio from video                                          │    ║
+║  └─────────────────────────────────────────────────────────────────────┘    ║
+║                              │                                               ║
+║                              ▼                                               ║
+║  LEVEL 2: INTERMEDIATE (Week 2)                                             ║
+║  ┌─────────────────────────────────────────────────────────────────────┐    ║
+║  │ ⬜ Batch image processing with mogrify                               │    ║
+║  │ ⬜ Add watermarks to images                                          │    ║
+║  │ ⬜ Apply effects (blur, sharpen, grayscale)                          │    ║
+║  │ ⬜ Video compression with CRF                                        │    ║
+║  │ ⬜ Create GIFs from video                                            │    ║
+║  └─────────────────────────────────────────────────────────────────────┘    ║
+║                              │                                               ║
+║                              ▼                                               ║
+║  LEVEL 3: ADVANCED (Week 3+)                                                ║
+║  ┌─────────────────────────────────────────────────────────────────────┐    ║
+║  │ ⬜ Complex FFmpeg filter chains                                      │    ║
+║  │ ⬜ Multi-pass video encoding                                         │    ║
+║  │ ⬜ Image montage creation                                            │    ║
+║  │ ⬜ Screen recording automation                                       │    ║
+║  │ ⬜ Video thumbnail generation                                        │    ║
+║  └─────────────────────────────────────────────────────────────────────┘    ║
+║                              │                                               ║
+║                              ▼                                               ║
+║  LEVEL 4: EXPERT (Ongoing)                                                  ║
+║  ┌─────────────────────────────────────────────────────────────────────┐    ║
+║  │ ⭐ Custom video filters                                              │    ║
+║  │ ⭐ HDR video processing                                              │    ║
+║  │ ⭐ Live streaming with FFmpeg                                        │    ║
+║  │ ⭐ Professional photo workflows                                      │    ║
+║  └─────────────────────────────────────────────────────────────────────┘    ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+| Feature | ImageMagick | FFmpeg | GIMP | libvips |
+|---------|-------------|--------|------|---------|
+| **Image Processing** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Video Processing** | ❌ | ⭐⭐⭐⭐⭐ | ⭐⭐ | ❌ |
+| **Batch Operations** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **GUI** | ❌ | ❌ | ✅ | ❌ |
+| **CLI Power** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ❌ | ⭐⭐⭐⭐ |
+| **Speed** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Memory Efficient** | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Format Support** | 200+ | 300+ | 100+ | 100+ |
+| **Termux Support** | ✅ Full | ✅ Full | ❌ No | ✅ Full |
+| **Learning Curve** | Medium | Steep | Easy | Medium |
+
+### Video Codec Comparison
+
+| Codec | Quality | Size | Speed | Compatibility |
+|-------|---------|------|-------|---------------|
+| H.264 (libx264) | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| H.265 (libx265) | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| VP9 (libvpx) | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐ |
+| AV1 (libaom) | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐ | ⭐⭐⭐ |
+
+---
+
+## 🚀 PRACTICAL CHALLENGES
+
+### Challenge 1: Build an Image Optimizer Script
+
+**Objective:** Create a script that optimizes images for web delivery.
+
+```bash
+#!/bin/bash
+# Image Optimizer for Web
+
+INPUT_DIR="$1"
+OUTPUT_DIR="$HOME/storage/downloads/optimized"
+
+mkdir -p "$OUTPUT_DIR"
+
+if [ -z "$INPUT_DIR" ]; then
+    echo "Usage: $0 <input_directory>"
+    exit 1
+fi
+
+echo "Optimizing images..."
+
+# Process images
+find "$INPUT_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" \) | while read img; do
+    filename=$(basename "$img")
+    name="${filename%.*}"
+    
+    # Create WebP version
+    convert "$img" -quality 80 -resize 1920x1080\> "$OUTPUT_DIR/${name}.webp"
+    
+    # Create optimized JPEG
+    convert "$img" -quality 85 -strip -interlace Plane "$OUTPUT_DIR/${name}.jpg"
+    
+    # Create thumbnail
+    convert "$img" -thumbnail 300x300 "$OUTPUT_DIR/${name}_thumb.jpg"
+    
+    echo "Processed: $filename"
+done
+
+echo "✅ Optimization complete!"
+echo "Output: $OUTPUT_DIR"
+```
+
+**Success Criteria:**
+- [ ] Images are resized appropriately
+- [ ] WebP versions are created
+- [ ] Thumbnails are generated
+- [ ] File sizes are reduced
+
+---
+
+### Challenge 2: Create a Video Thumbnail Generator
+
+**Objective:** Build a script that generates thumbnails from video files.
+
+```bash
+#!/bin/bash
+# Video Thumbnail Generator
+
+VIDEO="$1"
+OUTPUT_DIR="$HOME/storage/downloads/thumbnails"
+INTERVAL="${2:-60}"  # Default: every 60 seconds
+
+mkdir -p "$OUTPUT_DIR"
+
+if [ -z "$VIDEO" ]; then
+    echo "Usage: $0 <video_file> [interval_seconds]"
+    exit 1
+fi
+
+# Get video duration
+DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$VIDEO")
+DURATION_INT=${DURATION%.*}
+
+echo "Video duration: ${DURATION_INT}s"
+echo "Generating thumbnails every ${INTERVAL}s..."
+
+# Generate thumbnails at intervals
+for ((i=0; i<DURATION_INT; i+=INTERVAL)); do
+    TIMESTAMP=$(printf "%02d:%02d:%02d" $((i/3600)) $((i%3600/60)) $((i%60)))
+    OUTPUT="$OUTPUT_DIR/thumb_$(printf "%04d" $i).jpg"
+    
+    ffmpeg -y -ss "$TIMESTAMP" -i "$VIDEO" -vframes 1 -q:v 2 "$OUTPUT" 2>/dev/null
+    
+    echo "Created: thumb_$(printf "%04d" $i).jpg"
+done
+
+# Create contact sheet using ImageMagick
+montage "$OUTPUT_DIR"/thumb_*.jpg -tile 4x -geometry 320x180+10+10 "$OUTPUT_DIR/contact_sheet.jpg"
+
+echo "✅ Thumbnails generated!"
+echo "Contact sheet: $OUTPUT_DIR/contact_sheet.jpg"
+```
+
+**Success Criteria:**
+- [ ] Thumbnails are generated at correct intervals
+- [ ] Contact sheet is created
+- [ ] All frames are captured properly
+
+---
+
+### Challenge 3: Build a GIF Creator from Video
+
+**Objective:** Create a script that converts video segments to high-quality GIFs.
+
+```bash
+#!/bin/bash
+# Video to GIF Converter
+
+VIDEO="$1"
+START_TIME="${2:-00:00:00}"
+DURATION="${3:-5}"
+OUTPUT="$HOME/storage/downloads/output.gif"
+
+if [ -z "$VIDEO" ]; then
+    echo "Usage: $0 <video> [start_time] [duration]"
+    echo "Example: $0 video.mp4 00:01:30 5"
+    exit 1
+fi
+
+echo "Creating GIF..."
+echo "Video: $VIDEO"
+echo "Start: $START_TIME"
+echo "Duration: ${DURATION}s"
+
+# Create palette for better quality
+PALETTE="/tmp/palette.png"
+
+ffmpeg -y -ss "$START_TIME" -t "$DURATION" -i "$VIDEO" \
+    -vf "fps=15,scale=480:-1:flags=lanczos,palettegen" \
+    "$PALETTE" 2>/dev/null
+
+# Create GIF using palette
+ffmpeg -y -ss "$START_TIME" -t "$DURATION" -i "$VIDEO" -i "$PALETTE" \
+    -lavfi "fps=15,scale=480:-1:flags=lanczos[x];[x][1:v]paletteuse" \
+    "$OUTPUT" 2>/dev/null
+
+rm -f "$PALETTE"
+
+# Get file size
+SIZE=$(du -h "$OUTPUT" | cut -f1)
+
+echo "✅ GIF created!"
+echo "Output: $OUTPUT"
+echo "Size: $SIZE"
+```
+
+**Success Criteria:**
+- [ ] GIF is created from specified segment
+- [ ] Quality is optimized with palette
+- [ ] File size is reasonable
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **ImageMagick** | Command-line image processing suite |
+| **FFmpeg** | Multimedia framework for audio/video processing |
+| **Codec** | Algorithm for encoding/decoding media (H.264, AAC) |
+| **Container** | File wrapper format (MP4, MKV, AVI) |
+| **Muxing** | Combining video, audio, and subtitles into container |
+| **Demuxing** | Separating streams from container |
+| **Transcoding** | Converting between formats/codecs |
+| **Bitrate** | Data rate (kbps/Mbps) - higher = better quality |
+| **CRF** | Constant Rate Factor - quality-based encoding |
+| **Keyframe (I-frame)** | Full image frame for seeking |
+| **P-frame** | Predicted frame (differences from previous) |
+| **B-frame** | Bidirectional predicted frame |
+| **Frame Rate (FPS)** | Frames per second |
+| **Resolution** | Pixel dimensions (1920x1080) |
+| **Aspect Ratio** | Width to height ratio (16:9, 4:3) |
+| **Bit Depth** | Color information per channel (8-bit, 10-bit) |
+| **Chroma Subsampling** | Color resolution reduction (4:2:0) |
+| **VBR/CBR** | Variable/Constant Bit Rate |
+| **WebP** | Modern image format with superior compression |
+| **HEVC/H.265** | High Efficiency Video Coding |
+| **AV1** | Next-gen open source video codec |
+| **Lossless** | No quality loss during compression |
+| **Lossy** | Quality sacrificed for smaller size |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Media Engineering & Content Creation Career Path
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        CAREER PROGRESSION                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ENTRY LEVEL                                                               │
+│  ├── Video Editor            ──▶ $40,000 - $60,000/year                   │
+│  ├── Junior Video Engineer   ──▶ $50,000 - $70,000/year                   │
+│  └── Content Creator         ──▶ $35,000 - $55,000/year                   │
+│                                                                             │
+│  MID LEVEL                                                                 │
+│  ├── Video Engineer          ──▶ $70,000 - $100,000/year                  │
+│  ├── Media Server Admin      ──▶ $75,000 - $110,000/year                  │
+│  ├── Streaming Engineer      ──▶ $80,000 - $120,000/year                  │
+│  └── Post-Production Eng     ──▶ $65,000 - $95,000/year                   │
+│                                                                             │
+│  SENIOR LEVEL                                                              │
+│  ├── Senior Video Engineer   ──▶ $110,000 - $160,000/year                 │
+│  ├── Media Architect         ──▶ $130,000 - $180,000/year                 │
+│  ├── CDN Engineer            ──▶ $120,000 - $170,000/year                 │
+│  └── Platform Engineer       ──▶ $140,000 - $200,000/year                 │
+│                                                                             │
+│  SPECIALIZED                                                               │
+│  ├── Broadcast Engineer      ──▶ $80,000 - $140,000/year                  │
+│  ├── HDR/Dolby Engineer      ──▶ $100,000 - $160,000/year                 │
+│  └── Live Streaming Architect──▶ $150,000 - $220,000/year                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Key Skills Developed in This Chapter
+
+| Skill | Industry Application | Job Relevance |
+|-------|---------------------|---------------|
+| FFmpeg mastery | All media roles | ⭐⭐⭐⭐⭐ |
+| Image processing | Content creation | ⭐⭐⭐⭐ |
+| Video encoding | Streaming platforms | ⭐⭐⭐⭐⭐ |
+| Automation scripting | DevOps, Engineering | ⭐⭐⭐⭐⭐ |
+| Format knowledge | Media production | ⭐⭐⭐⭐ |
+| Quality optimization | All technical roles | ⭐⭐⭐⭐ |
+| Batch processing | Operations | ⭐⭐⭐⭐ |
+
+### Companies Hiring Media Skills
+- **Streaming:** Netflix, YouTube, Twitch, Vimeo
+- **Social:** TikTok, Instagram, Snapchat
+- **News:** CNN, BBC, Reuters
+- **Gaming:** Discord, Riot Games, Epic
+- **Enterprise:** AWS Media, Azure Media, Cloudflare Stream
+
+---
+
+## 📋 AUTOMATION SCRIPT TEMPLATES
+
+### Template 1: Batch Image Watermarker
+
+```bash
+#!/bin/bash
+#===============================================
+# Batch Image Watermarker
+# Adds watermark to all images in directory
+#===============================================
+
+INPUT_DIR="$1"
+WATERMARK="$HOME/watermark.png"
+OUTPUT_DIR="$HOME/storage/downloads/watermarked"
+
+mkdir -p "$OUTPUT_DIR"
+
+if [ -z "$INPUT_DIR" ]; then
+    echo "Usage: $0 <input_directory>"
+    exit 1
+fi
+
+find "$INPUT_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" \) | while read img; do
+    filename=$(basename "$img")
+    
+    composite -dissolve 50% -gravity southeast "$WATERMARK" "$img" "$OUTPUT_DIR/$filename"
+    
+    echo "Watermarked: $filename"
+done
+
+echo "✅ Batch watermarking complete!"
+```
+
+### Template 2: Video Compressor Script
+
+```bash
+#!/bin/bash
+#===============================================
+# Video Compressor
+# Compresses video while maintaining quality
+#===============================================
+
+INPUT="$1"
+CRF="${2:-23}"
+OUTPUT="${INPUT%.*}_compressed.mp4"
+
+if [ -z "$INPUT" ]; then
+    echo "Usage: $0 <video_file> [crf_value]"
+    echo "CRF values: 18 (best) to 28 (smallest)"
+    exit 1
+fi
+
+echo "Compressing video..."
+echo "CRF: $CRF"
+
+# Get original size
+ORIG_SIZE=$(du -h "$INPUT" | cut -f1)
+
+# Compress
+ffmpeg -i "$INPUT" \
+    -c:v libx264 -crf $CRF \
+    -c:a aac -b:a 128k \
+    -movflags +faststart \
+    "$OUTPUT" 2>/dev/null
+
+# Get new size
+NEW_SIZE=$(du -h "$OUTPUT" | cut -f1)
+
+echo "✅ Compression complete!"
+echo "Original: $ORIG_SIZE"
+echo "Compressed: $NEW_SIZE"
+```
+
+### Template 3: Social Media Image Resizer
+
+```bash
+#!/bin/bash
+#===============================================
+# Social Media Image Resizer
+# Creates images sized for different platforms
+#===============================================
+
+INPUT="$1"
+OUTPUT_DIR="$HOME/storage/downloads/social"
+
+mkdir -p "$OUTPUT_DIR"
+
+if [ -z "$INPUT" ]; then
+    echo "Usage: $0 <image_file>"
+    exit 1
+fi
+
+NAME=$(basename "$INPUT" | cut -d. -f1)
+
+# Instagram Square
+convert "$INPUT" -resize 1080x1080^ -gravity center -extent 1080x1080 "$OUTPUT_DIR/${NAME}_instagram.jpg"
+
+# Twitter Header
+convert "$INPUT" -resize 1500x500^ -gravity center -extent 1500x500 "$OUTPUT_DIR/${NAME}_twitter.jpg"
+
+# YouTube Thumbnail
+convert "$INPUT" -resize 1280x720^ -gravity center -extent 1280x720 "$OUTPUT_DIR/${NAME}_youtube.jpg"
+
+# Facebook Cover
+convert "$INPUT" -resize 1200x630^ -gravity center -extent 1200x630 "$OUTPUT_DIR/${NAME}_facebook.jpg"
+
+echo "✅ Social media images created!"
+echo "Output: $OUTPUT_DIR"
+ls -la "$OUTPUT_DIR"
+```
+
+---
+
 ## 💻 PRACTICE EXERCISES
 
 ### Exercise 1: Image Conversion & Optimization
@@ -4039,6 +4579,610 @@ Create a script that generates a report of all media files with their sizes:
 ```bash
 #!/bin/bash
 # Your code here
+```
+
+---
+
+## 📊 MERMAID DIAGRAMS
+
+### Image Processing Workflow
+
+```mermaid
+graph TD
+    A[Input Image] --> B{Operation Type?}
+    B -->|Convert| C[Format Conversion]
+    B -->|Resize| D[Dimension Change]
+    B -->|Enhance| E[Apply Effects]
+    B -->|Composite| F[Combine Images]
+    
+    C --> G{Target Format}
+    G -->|PNG| H[Transparent Support]
+    G -->|JPG| I[Compressed Photo]
+    G -->|WEBP| J[Modern Web]
+    G -->|GIF| K[Animation]
+    
+    D --> L{Resize Method}
+    L -->|Dimensions| M[Specific Size]
+    L -->|Percentage| N[Scale Factor]
+    L -->|Fit| O[Aspect Ratio Preserved]
+    
+    E --> P{Effect Type}
+    P -->|Filter| Q[Blur/Sharpen]
+    P -->|Color| R[Grayscale/Sepia]
+    P -->|Adjust| S[Brightness/Contrast]
+    
+    H --> T[Output Image]
+    I --> T
+    J --> T
+    K --> T
+    M --> T
+    N --> T
+    O --> T
+    Q --> T
+    R --> T
+    S --> T
+    F --> T
+```
+
+### FFmpeg Video Processing Pipeline
+
+```mermaid
+graph LR
+    A[Input Video] --> B[Demuxer]
+    B --> C{Streams}
+    C -->|Video| D[Video Decoder]
+    C -->|Audio| E[Audio Decoder]
+    
+    D --> F[Video Filters]
+    E --> G[Audio Filters]
+    
+    F --> H{Video Encoder}
+    G --> I{Audio Encoder}
+    
+    H -->|H.264| J[libx264]
+    H -->|H.265| K[libx265]
+    H -->|VP9| L[libvpx-vp9]
+    
+    I -->|AAC| M[aac]
+    I -->|MP3| N[libmp3lame]
+    I -->|OPUS| O[libopus]
+    
+    J --> P[Muxer]
+    K --> P
+    L --> P
+    M --> P
+    N --> P
+    O --> P
+    
+    P --> Q[Output File]
+```
+
+---
+
+## ⚡ UTILITY COMMAND CHEATSHEET
+
+### ImageMagick Quick Reference
+
+| Task | Command | Notes |
+|------|---------|-------|
+| **Convert format** | `convert input.png output.jpg` | Auto-detect by extension |
+| **Resize image** | `convert input.jpg -resize 800x600 output.jpg` | Fixed dimensions |
+| **Resize percentage** | `convert input.jpg -resize 50% output.jpg` | Scale down |
+| **Resize width** | `convert input.jpg -resize 800x output.jpg` | Maintain aspect ratio |
+| **Crop image** | `convert input.jpg -crop 500x400+100+50 output.jpg` | WidthxHeight+X+Y |
+| **Rotate** | `convert input.jpg -rotate 90 output.jpg` | Clockwise degrees |
+| **Grayscale** | `convert input.jpg -colorspace Gray output.jpg` | Black & white |
+| **Blur** | `convert input.jpg -blur 0x5 output.jpg` | Gaussian blur |
+| **Sharpen** | `convert input.jpg -sharpen 0x5 output.jpg` | Enhance details |
+| **Add text** | `convert input.jpg -fill white -pointsize 30 -gravity center -annotate 0 "Text" output.jpg` | Text overlay |
+| **Watermark** | `composite -dissolve 50% -gravity southeast wm.png input.jpg output.jpg` | Image watermark |
+| **Strip metadata** | `convert input.jpg -strip output.jpg` | Remove EXIF |
+| **Batch resize** | `mogrify -resize 800x600 *.jpg` | In-place modification |
+
+### FFmpeg Quick Reference
+
+| Task | Command | Notes |
+|------|---------|-------|
+| **Convert video** | `ffmpeg -i input.mp4 output.mkv` | Auto-detect format |
+| **Compress video** | `ffmpeg -i input.mp4 -crf 28 output.mp4` | CRF 18-28 good range |
+| **Extract audio** | `ffmpeg -i video.mp4 -vn -acodec libmp3lame audio.mp3` | Video to MP3 |
+| **Trim video** | `ffmpeg -i input.mp4 -ss 00:01:00 -t 30 -c copy output.mp4` | Start at 1min, 30sec |
+| **Resize video** | `ffmpeg -i input.mp4 -vf scale=1280:720 output.mp4` | Change resolution |
+| **Create GIF** | `ffmpeg -i video.mp4 -vf "fps=10,scale=320:-1" output.gif` | From video |
+| **Merge videos** | `ffmpeg -f concat -i list.txt -c copy output.mp4` | From file list |
+| **Add audio** | `ffmpeg -i video.mp4 -i audio.mp3 -c copy output.mp4` | Combine streams |
+| **Speed up** | `ffmpeg -i input.mp4 -filter:v "setpts=0.5*PTS" output.mp4` | 2x faster |
+| **Video info** | `ffprobe video.mp4` | Media details |
+| **Extract frames** | `ffmpeg -i video.mp4 frame_%04d.jpg` | All frames |
+| **Images to video** | `ffmpeg -framerate 1 -i img%03d.jpg video.mp4` | Slideshow |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+### Media Processing Mastery Journey
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    IMAGE & MEDIA TOOLS MASTERY PATH                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  LEVEL 1: BEGINNER (Days 1-3)                                               │
+│  ════════════════════════════                                                │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                       │
+│  │Image Convert │─▶│ Image Resize │─▶│ Format Info  │                       │
+│  │ convert cmd  │  │ -resize flag │  │ identify cmd │                       │
+│  └──────────────┘  └──────────────┘  └──────────────┘                       │
+│         │                                                                      │
+│         ▼                                                                      │
+│  LEVEL 2: INTERMEDIATE (Days 4-7)                                            │
+│  ════════════════════════════════                                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
+│  │Image Effects │─▶│ Video Convert│─▶│ Audio Extract│─▶│ Batch Process│    │
+│  │ blur/sharpen │  │ ffmpeg -i    │  │ -vn flag     │  │ mogrify cmd  │    │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘    │
+│         │                                                                      │
+│         ▼                                                                      │
+│  LEVEL 3: ADVANCED (Week 2)                                                  │
+│  ══════════════════════════                                                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
+│  │Watermarks    │─▶│ Video Compress│─▶│ GIF Creation │─▶│Filters Chain │    │
+│  │ composite    │  │ CRF settings │  │ palette opt  │  │ -vf filters  │    │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘    │
+│         │                                                                      │
+│         ▼                                                                      │
+│  LEVEL 4: EXPERT (Week 3+)                                                   │
+│  ══════════════════════════                                                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
+│  │Scripting     │─▶│ Automation   │─▶│ Custom Pipes │─▶│Media Pipeline│    │
+│  │ Batch scripts│  │ Cron + FFmpeg│  │ Complex chains│  │ End-to-end   │    │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills Progression Matrix
+
+| Skill Area | Beginner | Intermediate | Advanced | Expert |
+|------------|----------|--------------|----------|--------|
+| ImageMagick | Basic convert | Resize/crop | Effects/batch | Scripts |
+| FFmpeg | Simple convert | Trim/extract | Filters/codecs | Complex pipelines |
+| Batch Processing | Single files | Simple loops | mogrify | Production scripts |
+| Video Compression | Default | CRF adjustment | Multi-pass | Codec optimization |
+| Automation | Manual | Aliases | Scripts | Cron jobs |
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+### Image Processing Tools
+
+| Feature | ImageMagick | GraphicsMagick | PIL/Pillow | FFmpeg |
+|---------|-------------|----------------|------------|--------|
+| **Termux Support** | ✅ Full | ✅ Full | ✅ Python | ✅ Full |
+| **CLI Interface** | ✅ | ✅ | ❌ Python API | ✅ |
+| **200+ Formats** | ✅ | ✅ | ✅ | ✅ |
+| **Batch Processing** | ✅ mogrify | ✅ | ❌ Script needed | ✅ |
+| **Animation/GIF** | ✅ | Limited | ✅ | ✅ |
+| **PDF Support** | ✅ | ✅ | ✅ | ❌ |
+| **Speed** | Good | Faster | Good | Excellent |
+| **Memory Usage** | High | Lower | Lower | Variable |
+
+### Video Codec Comparison
+
+| Codec | Quality | Size | Speed | Compatibility |
+|-------|---------|------|-------|---------------|
+| **H.264 (libx264)** | Excellent | Good | Fast | Universal |
+| **H.265 (libx265)** | Excellent | Smaller | Slow | Growing |
+| **VP9 (libvpx-vp9)** | Good | Smaller | Slow | Web standard |
+| **AV1 (libaom)** | Excellent | Smallest | Very Slow | Future |
+| **MPEG-4** | Good | Larger | Fast | Legacy devices |
+
+### CRF Quality Guide
+
+| CRF Value | Quality | Size | Use Case |
+|-----------|---------|------|----------|
+| 0 | Lossless | Huge | Archival |
+| 18 | Visually Lossless | Large | High quality |
+| 23 | Default | Medium | General use |
+| 28 | Good | Small | Web/mobile |
+| 32 | Noticeable | Smaller | Storage saving |
+| 51 | Worst | Smallest | Preview only |
+
+---
+
+## 🚀 PRACTICAL AUTOMATION CHALLENGES
+
+### Challenge 1: Batch Image Processor
+**Objective:** Create a script that processes all images in a folder with multiple operations.
+
+```bash
+#!/bin/bash
+# batch-image-processor.sh
+
+INPUT_DIR="$1"
+OUTPUT_DIR="${2:-processed}"
+SIZE="${3:-1920x1080}"
+QUALITY="${4:-85}"
+
+[ -z "$INPUT_DIR" ] && { echo "Usage: $0 <input_dir> [output_dir] [size] [quality]"; exit 1; }
+
+mkdir -p "$OUTPUT_DIR"
+
+count=0
+for img in "$INPUT_DIR"/*.{jpg,jpeg,png,webp}; do
+    [ -f "$img" ] || continue
+    filename=$(basename "$img")
+    
+    echo "Processing: $filename"
+    
+    convert "$img" \
+        -resize "$SIZE\>" \
+        -quality "$QUALITY" \
+        -strip \
+        "$OUTPUT_DIR/$filename"
+    
+    ((count++))
+done
+
+echo "Processed $count images"
+```
+
+### Challenge 2: Video to Mobile Converter
+**Objective:** Convert any video to mobile-optimized MP4.
+
+```bash
+#!/bin/bash
+# mobile-video-convert.sh
+
+INPUT="$1"
+OUTPUT="${2:-mobile_output.mp4}"
+
+[ -z "$INPUT" ] && { echo "Usage: $0 <video> [output]"; exit 1; }
+
+echo "Converting for mobile..."
+
+ffmpeg -i "$INPUT" \
+    -c:v libx264 -preset slow -crf 26 \
+    -c:a aac -b:a 128k \
+    -vf "scale=854:480:force_original_aspect_ratio=decrease" \
+    -movflags +faststart \
+    "$OUTPUT"
+
+echo "Created: $OUTPUT"
+```
+
+### Challenge 3: GIF from Video with Optimization
+**Objective:** Create optimized GIF from video segment.
+
+```bash
+#!/bin/bash
+# video-to-gif.sh
+
+VIDEO="$1"
+START="${2:-00:00:00}"
+DURATION="${3:-5}"
+OUTPUT="${4:-output.gif}"
+
+[ -z "$VIDEO" ] && { echo "Usage: $0 <video> [start] [duration] [output]"; exit 1; }
+
+echo "Creating optimized GIF..."
+
+# Generate palette for better quality
+ffmpeg -y -ss "$START" -t "$DURATION" -i "$VIDEO" \
+    -vf "fps=15,scale=480:-1:flags=lanczos,palettegen" \
+    palette.png
+
+# Create GIF with palette
+ffmpeg -y -ss "$START" -t "$DURATION" -i "$VIDEO" -i palette.png \
+    -lavfi "fps=15,scale=480:-1:flags=lanczos[x];[x][1:v]paletteuse" \
+    "$OUTPUT"
+
+rm -f palette.png
+
+echo "Created: $OUTPUT"
+```
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+### Image Terms
+
+| Term | Definition |
+|------|------------|
+| **Raster Image** | Pixel-based image (JPG, PNG, GIF) |
+| **Vector Image** | Mathematically defined shapes (SVG) |
+| **Resolution** | Width x Height in pixels |
+| **DPI/PPI** | Dots/Pixels Per Inch |
+| **Aspect Ratio** | Width to height ratio (16:9, 4:3) |
+| **Bit Depth** | Color information per pixel (8-bit, 16-bit) |
+| **Alpha Channel** | Transparency information |
+| **EXIF** | Embedded metadata (camera, date, settings) |
+| **Lossy Compression** | Reduces size with quality loss |
+| **Lossless Compression** | Reduces size without quality loss |
+
+### Video Terms
+
+| Term | Definition |
+|------|------------|
+| **Codec** | COmpressor/DECompressor algorithm |
+| **Container** | File format holding streams (MP4, MKV) |
+| **Bitrate** | Data rate (kbps, Mbps) |
+| **Frame Rate (FPS)** | Frames per second |
+| **Keyframe (I-frame)** | Complete image frame |
+| **GOP** | Group of Pictures between keyframes |
+| **Transcoding** | Converting between formats |
+| **Muxing** | Combining video + audio streams |
+| **Demuxing** | Separating streams |
+| **CRF** | Constant Rate Factor (quality setting) |
+
+### FFmpeg Concepts
+
+| Term | Definition |
+|------|------------|
+| **-i** | Input file |
+| **-c:v** | Video codec |
+| **-c:a** | Audio codec |
+| **-vf** | Video filter |
+| **-af** | Audio filter |
+| **-ss** | Start time position |
+| **-t** | Duration |
+| **-crf** | Constant Rate Factor |
+| **-preset** | Encoding speed setting |
+| **-movflags** | MP4 optimization flags |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### Skills Learned & Industry Applications
+
+| Skill | Industry Application | Job Role |
+|-------|---------------------|----------|
+| **Image Processing** | Photo pipelines, thumbnails | Media Engineer |
+| **Video Encoding** | Streaming services | Video Engineer |
+| **Batch Automation** | Content processing | DevOps Engineer |
+| **Format Conversion** | Media compatibility | Backend Developer |
+| **Optimization** | CDN delivery, storage | Platform Engineer |
+
+### Career Paths Utilizing These Skills
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CAREER PATH OPPORTUNITIES                             │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  VIDEO ENGINEER                                                         │
+│  ├── Streaming platform development                                     │
+│  ├── Transcoding pipelines                                              │
+│  ├── Quality optimization                                               │
+│  └── Average Salary: $85,000 - $130,000                                │
+│                                                                          │
+│  MEDIA ENGINEER                                                         │
+│  ├── Image processing systems                                           │
+│  ├── Content management                                                 │
+│  ├── Asset pipelines                                                    │
+│  └── Average Salary: $80,000 - $120,000                                │
+│                                                                          │
+│  DEVOPS ENGINEER                                                        │
+│  ├── CI/CD media processing                                             │
+│  ├── Automation pipelines                                               │
+│  ├── Infrastructure scaling                                             │
+│  └── Average Salary: $95,000 - $140,000                                │
+│                                                                          │
+│  BACKEND DEVELOPER                                                      │
+│  ├── Media API development                                              │
+│  ├── File processing services                                           │
+│  ├── Cloud integration                                                  │
+│  └── Average Salary: $90,000 - $140,000                                │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Interview Questions Related to This Topic
+
+1. **How would you optimize video delivery for mobile devices?**
+   - Multiple quality variants (HLS/DASH)
+   - Adaptive bitrate streaming
+   - Mobile-optimized encoding (H.264 baseline)
+
+2. **Explain the difference between container formats and codecs.**
+   - Container: Holds streams (MP4, MKV)
+   - Codec: Encoding algorithm (H.264, AAC)
+   - One container can hold multiple codec combinations
+
+3. **How would you handle batch image processing efficiently?**
+   - Parallel processing with tools like GNU parallel
+   - Memory-efficient streaming
+   - Progress tracking and error handling
+
+---
+
+## 📋 AUTOMATION SCRIPT TEMPLATES
+
+### Template 1: Image Watermark Script
+
+```bash
+#!/bin/bash
+#===========================================
+# Image Watermark Script
+# Usage: ./watermark.sh <image> [watermark.png]
+#===========================================
+
+set -e
+
+IMAGE="$1"
+WATERMARK="${2:-watermark.png}"
+OUTPUT="watermarked_$(basename "$IMAGE")"
+
+[ -z "$IMAGE" ] && { echo "Usage: $0 <image> [watermark]"; exit 1; }
+[ ! -f "$WATERMARK" ] && { echo "Watermark not found: $WATERMARK"; exit 1; }
+
+composite -dissolve 50% \
+    -gravity southeast \
+    -geometry +20+20 \
+    "$WATERMARK" "$IMAGE" "$OUTPUT"
+
+echo "Created: $OUTPUT"
+```
+
+### Template 2: Video Compressor Script
+
+```bash
+#!/bin/bash
+#===========================================
+# Video Compressor Script
+# Usage: ./compress-video.sh <video> [crf]
+#===========================================
+
+set -e
+
+VIDEO="$1"
+CRF="${2:-28}"
+OUTPUT="compressed_$(basename "$VIDEO")"
+
+[ -z "$VIDEO" ] && { echo "Usage: $0 <video> [crf]"; exit 1; }
+
+echo "Compressing with CRF: $CRF"
+
+ffmpeg -i "$VIDEO" \
+    -c:v libx264 -preset slow -crf "$CRF" \
+    -c:a aac -b:a 128k \
+    -movflags +faststart \
+    "$OUTPUT"
+
+ORIGINAL=$(stat -c%s "$VIDEO" 2>/dev/null || stat -f%z "$VIDEO")
+COMPRESSED=$(stat -c%s "$OUTPUT" 2>/dev/null || stat -f%z "$OUTPUT")
+SAVED=$((100 - (COMPRESSED * 100 / ORIGINAL)))
+
+echo "Original: $ORIGINAL bytes"
+echo "Compressed: $COMPRESSED bytes"
+echo "Saved: ${SAVED}%"
+```
+
+### Template 3: Batch Thumbnail Generator
+
+```bash
+#!/bin/bash
+#===========================================
+# Thumbnail Generator
+# Usage: ./thumbnails.sh <video_dir> [size]
+#===========================================
+
+set -e
+
+DIR="$1"
+SIZE="${2:-200x200}"
+OUTPUT_DIR="thumbnails"
+
+[ -z "$DIR" ] && { echo "Usage: $0 <video_dir> [size]"; exit 1; }
+
+mkdir -p "$OUTPUT_DIR"
+
+count=0
+for video in "$DIR"/*.{mp4,mkv,avi,mov}; do
+    [ -f "$video" ] || continue
+    
+    name=$(basename "$video" | sed 's/\.[^.]*$//')
+    output="$OUTPUT_DIR/${name}.jpg"
+    
+    echo "Creating thumbnail: $name"
+    
+    ffmpeg -y -i "$video" \
+        -ss 00:00:05 \
+        -vframes 1 \
+        -vf "scale=$SIZE:force_original_aspect_ratio=decrease" \
+        "$output" 2>/dev/null
+    
+    ((count++))
+done
+
+echo "Created $count thumbnails"
+```
+
+### Template 4: Media Info Reporter
+
+```bash
+#!/bin/bash
+#===========================================
+# Media Info Reporter
+# Usage: ./media-report.sh <file_or_dir>
+#===========================================
+
+set -e
+
+TARGET="$1"
+REPORT="media_report_$(date +%Y%m%d_%H%M%S).txt"
+
+[ -z "$TARGET" ] && { echo "Usage: $0 <file_or_dir>"; exit 1; }
+
+echo "Generating media report..."
+
+{
+    echo "========================================"
+    echo "MEDIA REPORT - $(date)"
+    echo "========================================"
+    echo ""
+    
+    if [ -f "$TARGET" ]; then
+        # Single file
+        ffprobe -v quiet -print_format json -show_format -show_streams "$TARGET"
+    elif [ -d "$TARGET" ]; then
+        # Directory
+        find "$TARGET" -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.avi" -o -name "*.jpg" -o -name "*.png" \) | while read file; do
+            echo "--- $file ---"
+            if [[ "$file" =~ \.(mp4|mkv|avi)$ ]]; then
+                ffprobe -v quiet -show_entries format=duration,size -of default=noprint_wrappers=1 "$file"
+            else
+                identify "$file" 2>/dev/null || echo "Unable to read"
+            fi
+            echo ""
+        done
+    fi
+} > "$REPORT"
+
+echo "Report saved: $REPORT"
+```
+
+### Template 5: Video to Audio Batch Converter
+
+```bash
+#!/bin/bash
+#===========================================
+# Video to Audio Converter
+# Usage: ./video-to-audio.sh <video_dir> [format]
+#===========================================
+
+set -e
+
+DIR="$1"
+FORMAT="${2:-mp3}"
+OUTPUT_DIR="audio"
+
+[ -z "$DIR" ] && { echo "Usage: $0 <video_dir> [format]"; exit 1; }
+
+mkdir -p "$OUTPUT_DIR"
+
+count=0
+for video in "$DIR"/*.{mp4,mkv,avi,mov,webm}; do
+    [ -f "$video" ] || continue
+    
+    name=$(basename "$video" | sed 's/\.[^.]*$//')
+    output="$OUTPUT_DIR/${name}.$FORMAT"
+    
+    echo "Extracting: $name"
+    
+    ffmpeg -y -i "$video" \
+        -vn \
+        -acodec libmp3lame \
+        -ab 192k \
+        "$output" 2>/dev/null
+    
+    ((count++))
+done
+
+echo "Extracted $count audio files to $OUTPUT_DIR"
 ```
 
 ---

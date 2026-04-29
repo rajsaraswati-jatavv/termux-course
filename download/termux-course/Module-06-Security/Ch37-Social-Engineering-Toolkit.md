@@ -2559,6 +2559,90 @@ Attackers exploit:
 
 ---
 
+## 📊 MERMAID DIAGRAMS - SE Attack Flow
+
+```mermaid
+graph TD
+    A[Target Research] --> B[Attack Vector]
+    B --> C{Method?}
+    C -->|Phishing| D[Fake Website]
+    C -->|Vishing| E[Phone Call]
+    C -->|Pretexting| F[False Scenario]
+    
+    D --> G[Credentials Captured]
+    E --> H[Info Extracted]
+    F --> I[Access Gained]
+```
+
+---
+
+## ⚡ TOOL CHEATSHEET
+
+| Tool | Purpose |
+|------|---------|
+| SET | Phishing framework |
+| Zphisher | Easy phishing |
+| SocialFish | Credential harvesting |
+| Gophish | Campaign management |
+
+---
+
+## 🔧 TOOL COMPARISON
+
+| Tool | Difficulty |
+|------|------------|
+| SET | Advanced |
+| Zphisher | Easy |
+| Gophish | Medium |
+
+---
+
+## 🚀 CHALLENGES
+
+1. Create phishing page
+2. Credential harvesting test
+3. Write security awareness training
+
+⚠️ **LEGAL:** Only test your own lab!
+
+---
+
+## 📖 GLOSSARY
+
+| Term | Definition |
+|------|------------|
+| Phishing | Fake credentials theft |
+| Vishing | Voice phishing |
+| Smishing | SMS phishing |
+| Pretexting | False scenario |
+| Baiting | Malware distribution |
+
+---
+
+## 💼 CAREER: Security Awareness
+
+**Salary:** $70K-$130K
+**Focus:** Training & awareness
+
+---
+
+## ⚠️ LEGAL DISCLAIMER
+
+**Social engineering for authorized testing ONLY!**
+Unauthorized use is illegal and unethical.
+
+---
+
+## 🛡️ DEFENSIVE MEASURES
+
+- Security training
+- Verify senders
+- Check URLs carefully
+- Never share sensitive info
+- Use 2FA everywhere
+
+---
+
 ## ⚠️ SECURITY BEST PRACTICES
 
 ### ✅ DO's

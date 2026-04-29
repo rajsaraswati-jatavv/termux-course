@@ -1802,6 +1802,328 @@ Before moving to Chapter 27, verify:
 
 ---
 
+## 📊 MERMAID DIAGRAMS - NSE & Advanced Scanning
+
+### NSE Script Execution Flow
+```mermaid
+graph TB
+    START[Nmap Scan] --> PRE[Pre-scanning Scripts]
+    PRE --> HOST[Host Rules]
+    HOST --> PORT[Port Rules]
+    PORT --> ACTION[Action Function]
+    ACTION --> POST[Post-processing]
+    POST --> OUTPUT[Script Output]
+    
+    style START fill:#4CAF50
+    style ACTION fill:#2196F3
+    style OUTPUT fill:#E91E63
+```
+
+### NSE Script Categories
+```mermaid
+graph LR
+    A[NSE Scripts] --> B[Safe]
+    A --> C[Intrusive]
+    A --> D[Vuln]
+    A --> E[Auth]
+    A --> F[Brute]
+    A --> G[Discovery]
+    A --> H[Exploit]
+    
+    style B fill:#4CAF50
+    style C fill:#FF5722
+    style D fill:#E91E63
+    style H fill:#9C27B0
+```
+
+### Firewall Evasion Techniques
+```mermaid
+graph TB
+    A[Firewall] --> B{Evasion Method}
+    B --> C[Fragmentation -f]
+    B --> D[Decoy -D]
+    B --> E[Source Port --source-port]
+    B --> F[Timing -T0/T1]
+    B --> G[MTU --mtu]
+    B --> H[Badsum --badsum]
+    
+    style A fill:#FF5722
+    style C fill:#4CAF50
+    style D fill:#2196F3
+    style E fill:#FF9800
+```
+
+### Idle Scan Mechanism
+```mermaid
+sequenceDiagram
+    participant Attacker
+    participant Zombie
+    participant Target
+    
+    Attacker->>Zombie: SYN/ACK probe
+    Zombie-->>Attacker: Response with IP ID
+    Note over Attacker: Record IP ID = 1000
+    
+    Attacker->>Target: SYN (spoofed from Zombie)
+    Target->>Zombie: SYN-ACK (to Zombie)
+    Note over Zombie: IP ID increments to 1001
+    
+    Attacker->>Zombie: SYN/ACK probe
+    Zombie-->>Attacker: Response with IP ID = 1002
+    Note over Attacker: IP ID changed = Port Open!
+```
+
+---
+
+## ⚡ ADVANCED NMAP COMMAND CHEATSHEET
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `nmap -sC TARGET` | Default scripts | `nmap -sC 192.168.1.1` |
+| `nmap --script vuln` | Vulnerability scripts | `nmap --script vuln 192.168.1.1` |
+| `nmap --script auth` | Authentication scripts | `nmap --script auth 192.168.1.1` |
+| `nmap --script brute` | Brute force scripts | `nmap --script brute 192.168.1.1` |
+| `nmap --script "http-*"` | All HTTP scripts | `nmap --script "http-*" target.com` |
+| `nmap --script-args` | Script arguments | `nmap --script-args userdb=users.txt` |
+| `nmap -f TARGET` | Fragmentation | `nmap -f 192.168.1.1` |
+| `nmap -D RND:10 TARGET` | Random decoys | `nmap -D RND:10 192.168.1.1` |
+| `nmap -S IP TARGET` | Spoof source IP | `nmap -S 192.168.1.100 192.168.1.1` |
+| `nmap --source-port 53` | Source port manipulation | `nmap --source-port 53 192.168.1.1` |
+| `nmap -sI ZOMBIE TARGET` | Idle scan | `nmap -sI 192.168.1.50 target.com` |
+| `nmap -PS PORTS` | TCP SYN ping | `nmap -PS22,80,443 192.168.1.0/24` |
+| `nmap -PA PORTS` | TCP ACK ping | `nmap -PA80 192.168.1.0/24` |
+| `nmap -PU PORTS` | UDP ping | `nmap -PU53,161 192.168.1.0/24` |
+| `nmap -PE` | ICMP echo ping | `nmap -PE 192.168.1.0/24` |
+| `nmap -Pn` | Skip host discovery | `nmap -Pn 192.168.1.1` |
+| `nmap --traceroute` | Trace route to target | `nmap --traceroute target.com` |
+| `nmap -6 TARGET` | IPv6 scanning | `nmap -6 2001:db8::1` |
+| `nmap --badsum` | Bad checksum attack | `nmap --badsum 192.168.1.1` |
+| `nmap --data-length N` | Add random data | `nmap --data-length 25 192.168.1.1` |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION - Advanced Nmap
+
+```mermaid
+graph TD
+    START[Nmap Basics] --> NSE[NSE Introduction]
+    NSE --> CATEGORIES[Script Categories]
+    CATEGORIES --> SAFE[Safe Scripts]
+    CATEGORIES --> VULN[Vuln Scripts]
+    CATEGORIES --> BRUTE[Brute Scripts]
+    SAFE --> CUSTOM[Custom Scripts]
+    VULN --> CUSTOM
+    BRUTE --> CUSTOM
+    CUSTOM --> EVASION[Firewall Evasion]
+    EVASION --> IDLE[Idle Scan]
+    EVASION --> DECOY[Decoy Scan]
+    IDLE --> AUTOMATION[Automation]
+    DECOY --> AUTOMATION
+    AUTOMATION --> EXPERT[Advanced Expert]
+    
+    style START fill:#4CAF50
+    style EXPERT fill:#E91E63
+    style CUSTOM fill:#2196F3
+```
+
+### Advanced Nmap Skills Progression
+
+| Level | Skills to Master | Estimated Time |
+|-------|------------------|----------------|
+| 🌱 Intermediate | Basic scripts, -sC, common NSE | 2-3 weeks |
+| 🌿 Advanced | Script arguments, categories | 3-4 weeks |
+| 🌳 Expert | Firewall evasion, idle scan | 4-6 weeks |
+| 🏆 Master | Custom NSE scripts, automation | Ongoing |
+
+---
+
+## 🔧 TOOL COMPARISON TABLE - NSE Script Categories
+
+| Category | Purpose | Risk Level | Common Scripts |
+|----------|---------|------------|----------------|
+| **safe** | Non-intrusive scans | 🟢 Low | http-title, ssh-hostkey |
+| **vuln** | Vulnerability detection | 🟡 Medium | ssl-heartbleed, smb-vuln |
+| **auth** | Authentication testing | 🟡 Medium | ssh-auth-methods, ftp-anon |
+| **brute** | Brute force attacks | 🔴 High | ssh-brute, mysql-brute |
+| **exploit** | Active exploitation | 🔴 Critical | http-shellshock |
+| **discovery** | Information gathering | 🟢 Low | dns-brute, http-enum |
+| **intrusive** | May crash services | 🔴 High | Various aggressive scripts |
+| **dos** | Denial of service | 🔴 Critical | stress-test scripts |
+
+---
+
+## 🚀 PRACTICAL NMAP CHALLENGES - Advanced
+
+### Challenge 1: Vulnerability Assessment
+**Objective:** Perform vulnerability scan on a test target
+```bash
+# Step 1: Basic vulnerability scan
+nmap --script vuln scanme.nmap.org
+
+# Step 2: Specific vulnerability checks
+nmap --script ssl-heartbleed target.com
+nmap --script smb-vuln-ms17-010 target.com
+
+# Step 3: HTTP vulnerability scan
+nmap --script "vuln and http" target.com -p 80,443,8080
+
+# Step 4: Save results
+nmap --script vuln target.com -oA vuln_scan
+```
+**Success Criteria:** Identify and document all vulnerabilities found
+
+---
+
+### Challenge 2: Firewall Evasion
+**Objective:** Bypass firewall using various techniques
+```bash
+# Step 1: Normal scan (may be blocked)
+nmap -sS target.com
+
+# Step 2: Try fragmentation
+nmap -f target.com
+
+# Step 3: Use source port manipulation
+nmap --source-port 53 target.com
+
+# Step 4: Use decoys
+nmap -D RND:5 target.com
+
+# Step 5: Slow timing
+nmap -T1 target.com
+
+# Step 6: Combine techniques
+nmap -f --source-port 53 -D RND:3 -T2 target.com
+```
+**Success Criteria:** Successfully identify open ports behind firewall
+
+---
+
+### Challenge 3: Custom NSE Script
+**Objective:** Create a simple NSE script
+```lua
+-- Save as: banner.nse
+description = [[
+Simple banner grabber script
+]]
+
+author = "Your Name"
+license = "Same as Nmap"
+categories = {"discovery", "safe"}
+
+portrule = shortport.port_or_service(80, "http")
+
+action = function(host, port)
+    local socket = nmap.new_socket()
+    socket:connect(host.ip, port.number)
+    socket:send("HEAD / HTTP/1.0\r\n\r\n")
+    local response = socket:receive()
+    socket:close()
+    return response:match("Server: ([^\r\n]+)")
+end
+```
+```bash
+# Run custom script
+nmap --script banner.nse target.com
+```
+**Success Criteria:** Script successfully extracts server banner
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY - Advanced Nmap
+
+| Term | Definition |
+|------|------------|
+| **NSE** | Nmap Scripting Engine - Lua-based extension system |
+| **Lua** | Lightweight programming language used by NSE |
+| **Port Rule** | Condition determining when script runs |
+| **Host Rule** | Condition for host-level script execution |
+| **Fragmentation** | Breaking packets to evade IDS/firewalls |
+| **Decoy** | Fake source IPs to hide real attacker |
+| **Idle Scan** | Anonymous scan using zombie host |
+| **IP ID** | IP identification field used in idle scan |
+| **Zombie** | Idle host used for anonymous scanning |
+| **MTU** | Maximum Transmission Unit |
+| **Source Port** | Origin port number in TCP/UDP packet |
+| **TTL** | Time To Live - packet hop limit |
+| **Badsum** | Invalid checksum to test firewall |
+| **ACK Scan** | Scan using ACK packets |
+| **Window Scan** | Scan exploiting TCP window field |
+| **Maimon Scan** | FIN/ACK probe scan |
+
+---
+
+## 💼 CAREER INSIGHTS - Penetration Testing
+
+### Penetration Testing Career Path
+```
+Junior Pentester ─────────────────────────────────────────────────────────────────► Expert
+    │                    │                    │                    │
+Security Analyst     Pentester        Senior Pentester     Principal/Lead
+    │                    │                    │                    │
+  $50-70k             $80-120k           $120-160k            $160-250k+
+```
+
+### Skills Required for Pentesters
+| Category | Skills |
+|----------|--------|
+| **Technical** | Nmap, Metasploit, Burp Suite, Python, Networking |
+| **Methodology** | OWASP, PTES, OSSTMM, NIST |
+| **Certifications** | OSCP, GPEN, CEH, CRT |
+| **Soft Skills** | Report writing, communication, presentation |
+
+### Nmap in Professional Pentesting
+- **Reconnaissance Phase:** Network mapping, service enumeration
+- **Vulnerability Assessment:** Service version detection, NSE scripts
+- **Exploitation Planning:** Identifying attack surface
+- **Documentation:** Output formats for reports
+- **Automation:** Integration with other tools
+
+---
+
+## 🔐 SECURITY CONSIDERATIONS - Advanced Scanning Ethics
+
+### Legal Framework for Security Testing
+
+```mermaid
+graph TB
+    A[Security Test] --> B{Written Permission?}
+    B -->|Yes| C[Scope Defined?]
+    B -->|No| D[ILLEGAL - STOP]
+    C -->|Yes| E[Execute Test]
+    C -->|No| F[Define Scope First]
+    E --> G[Document Findings]
+    G --> H[Report to Client]
+    
+    style D fill:#FF5722
+    style E fill:#4CAF50
+```
+
+### Rules of Engagement
+| Phase | Considerations |
+|-------|----------------|
+| **Pre-engagement** | Written authorization, scope, rules of engagement |
+| **During Testing** | Stay within scope, avoid damage, document everything |
+| **Post-engagement** | Report findings, destroy data, maintain confidentiality |
+
+### Dangerous Scripts Warning
+> ⚠️ **Scripts that may cause harm:**
+> - DOS scripts - Can crash services
+> - Exploit scripts - Active exploitation
+> - Brute force - Account lockouts
+> - Intrusive scripts - Service instability
+>
+> **Always test in lab first!**
+
+### Responsible Disclosure
+1. Report vulnerabilities to owner
+2. Allow reasonable time to fix
+3. Don't disclose publicly before fix
+4. Follow coordinated disclosure guidelines
+5. Consider bug bounty programs
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Combine `-sC` with `-sV` for comprehensive enumeration: `nmap -sC -sV <target>` - this gives you scripts AND version info.

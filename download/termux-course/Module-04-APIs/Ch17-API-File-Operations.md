@@ -2001,6 +2001,412 @@ Before moving to Chapter 18, verify:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### 1. File Operations API Call Flow
+
+```mermaid
+flowchart TD
+    A[Termux Terminal] --> B[termux-storage-get]
+    A --> C[termux-share]
+    A --> D[termux-download]
+    A --> E[termux-media-scan]
+    
+    B --> F[Android Storage Access Framework]
+    C --> G[Android Share Intent]
+    D --> H[Android Download Manager]
+    E --> I[Android MediaStore]
+    
+    F --> J[File Picker Dialog]
+    G --> K[Share Sheet UI]
+    H --> L[Download Notification]
+    I --> M[Gallery App]
+    
+    J --> N[File Copied to Termux]
+    K --> O[Selected App]
+    L --> P[File in /sdcard/Download]
+    M --> Q[Media Visible in Gallery]
+    
+    style A fill:#4CAF50,color:#fff
+    style N fill:#2196F3,color:#fff
+    style O fill:#2196F3,color:#fff
+    style P fill:#2196F3,color:#fff
+    style Q fill:#2196F3,color:#fff
+```
+
+### 2. Permission System Flow
+
+```mermaid
+flowchart LR
+    subgraph Android Permissions
+        A[Storage Permission] --> B[termux-setup-storage]
+        C[Read Permission] --> D[Read Shared Storage]
+        E[Write Permission] --> F[Write to Shared Storage]
+    end
+    
+    subgraph API Requirements
+        G[termux-storage-get] --> A
+        H[termux-share] --> I[No Special Permission]
+        J[termux-download] --> E
+        K[termux-media-scan] --> A
+    end
+    
+    subgraph User Flow
+        L[First Run] --> M{Permission Granted?}
+        M -->|No| N[Permission Dialog]
+        N --> O[User Accepts]
+        O --> P[Storage Access Granted]
+        M -->|Yes| P
+    end
+    
+    style B fill:#FF5722,color:#fff
+    style P fill:#4CAF50,color:#fff
+```
+
+### 3. Data Flow Architecture
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant T as Termux
+    participant API as Termux:API App
+    participant A as Android System
+    participant S as Storage
+    
+    U->>T: termux-storage-get ~/file
+    T->>API: Broadcast Intent
+    API->>A: Request SAF
+    A->>U: Show File Picker
+    U->>A: Select File
+    A->>API: Return URI
+    API->>S: Copy File
+    S->>T: File at ~/file
+    T->>U: Success
+    
+    Note over T,S: File copied, not moved
+```
+
+---
+
+## ⚡ API COMMAND REFERENCE CARD
+
+| API Command | Purpose | Permissions | Example |
+|-------------|---------|-------------|---------|
+| `termux-storage-get` | Open file picker, copy selected file | Storage | `termux-storage-get ~/photo.jpg` |
+| `termux-share` | Share files/text via Android share sheet | None | `termux-share file.pdf` |
+| `termux-share -c` | Share with specific MIME type | None | `termux-share -c "image/jpeg" photo.jpg` |
+| `termux-share -a` | Share with action (send/view/edit) | None | `termux-share -a view doc.pdf` |
+| `termux-download` | Download file from URL | Storage | `termux-download https://example.com/file.pdf` |
+| `termux-download -d` | Download to specific folder | Storage | `termux-download -d /sdcard/Docs URL` |
+| `termux-download -t` | Download with custom title | Storage | `termux-download -t "MyFile" URL` |
+| `termux-media-scan` | Register media files in gallery | Storage | `termux-media-scan /sdcard/DCIM/photo.jpg` |
+| `termux-media-scan -r` | Recursive media scan | Storage | `termux-media-scan -r /sdcard/DCIM/` |
+
+### Quick Syntax Reference
+
+```bash
+# File Picker
+termux-storage-get <destination_path>
+
+# Share
+termux-share [-a action] [-c type] [-t title] <file|text>
+echo "text" | termux-share
+
+# Download
+termux-download [-d path] [-t title] <URL>
+
+# Media Scan
+termux-media-scan [-r] <file_or_directory>
+```
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    FILE OPERATIONS API MASTERY PATH                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+     🌱 BEGINNER                    🌿 INTERMEDIATE                  🌳 ADVANCED
+     ──────────────────             ──────────────────              ──────────────────
+     
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Setup Storage  │───────────▶│  File Picker    │───────────▶│  Automated      │
+     │  Permission     │            │  Integration    │            │  File Manager   │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Basic Share    │───────────▶│  Share with     │───────────▶│  Cross-App      │
+     │  Single Files   │            │  MIME Types     │            │  Integration    │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Simple         │───────────▶│  Download with  │───────────▶│  Batch          │
+     │  Downloads      │            │  Options        │            │  Downloader     │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+              │                              │                              │
+              ▼                              ▼                              ▼
+     ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
+     │  Scan Single    │───────────▶│  Batch Media    │───────────▶│  Media          │
+     │  Media File     │            │  Scanning       │            │  Organizer      │
+     └─────────────────┘            └─────────────────┘            └─────────────────┘
+
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     🏆 MASTERY CHECKPOINTS:
+     
+     □ Level 1: Successfully pick and save a file
+     □ Level 2: Share files to multiple apps
+     □ Level 3: Download files with custom paths
+     □ Level 4: Create automated file manager script
+     □ Level 5: Build Python file operations class
+     □ Level 6: Integrate all APIs in one project
+     
+     ─────────────────────────────────────────────────────────────────────────────
+     
+     ⏱️ ESTIMATED TIME TO MASTERY: 3-5 Hours Practice
+     
+     📚 PREREQUISITES: Chapters 1-16 (Basic Termux)
+     
+     🎯 NEXT STEPS: Device Information APIs (Chapter 18)
+```
+
+---
+
+## 🔧 API COMPARISON TABLE
+
+| API | Capability | Root Required | Android Version | Output Format |
+|-----|------------|---------------|-----------------|---------------|
+| `termux-storage-get` | File picker access | ❌ No | 5.0+ | File copy to path |
+| `termux-share` | Share files/text | ❌ No | 5.0+ | None (UI action) |
+| `termux-download` | URL downloads | ❌ No | 5.0+ | None (async) |
+| `termux-media-scan` | Gallery registration | ❌ No | 5.0+ | None |
+| `termux-open` | Open files with apps | ❌ No | 5.0+ | None |
+
+### Feature Comparison
+
+| Feature | storage-get | share | download | media-scan |
+|---------|-------------|-------|----------|------------|
+| Works offline | ✅ | ✅ | ❌ | ✅ |
+| Needs user interaction | ✅ | ✅ | ❌ | ❌ |
+| Background operation | ❌ | ❌ | ✅ | ❌ |
+| Progress notification | ❌ | ❌ | ✅ | ❌ |
+| Batch support | ❌ | ✅ | ❌ | ✅ |
+| Custom destination | ✅ | ❌ | ✅ | ❌ |
+
+---
+
+## 🚀 PRACTICAL PROJECT CHALLENGES
+
+### Challenge 1: Smart File Organizer 🗂️
+
+**Objective:** Create a script that picks multiple files and organizes them by type.
+
+**Requirements:**
+- Use `termux-storage-get` to pick files
+- Detect file type and move to appropriate folder
+- Use `termux-media-scan` for media files
+- Show notification on completion
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Complete this organizer
+FOLDER=~/organized_files
+mkdir -p "$FOLDER"/{images,documents,videos,others}
+
+# Pick file
+termux-storage-get ~/temp_file
+
+# TODO: Detect file type using 'file' command
+# TODO: Move to appropriate folder
+# TODO: Scan media files
+# TODO: Show completion notification
+```
+
+**Expected Output:** Files automatically sorted into Documents, Images, Videos folders.
+
+---
+
+### Challenge 2: Batch Download Manager 📥
+
+**Objective:** Create a download manager that reads URLs from a file and downloads all with progress tracking.
+
+**Requirements:**
+- Read URLs from a text file
+- Download each file sequentially
+- Track completed/failed downloads
+- Generate summary report
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create batch downloader
+URL_FILE=~/downloads.txt
+LOG_FILE=~/download_log.txt
+
+# TODO: Read each URL
+# TODO: Download with termux-download
+# TODO: Log success/failure
+# TODO: Show summary notification
+```
+
+**Expected Output:** All files downloaded with a summary of success/failure count.
+
+---
+
+### Challenge 3: Quick Share Tool 📤
+
+**Objective:** Build an interactive tool to quickly share different types of content.
+
+**Requirements:**
+- Menu-driven interface
+- Support text, files, and command output sharing
+- Remember recent shares
+- Support multiple sharing methods
+
+**Starter Code:**
+```bash
+#!/bin/bash
+# TODO: Create share tool
+# 1. Share text input
+# 2. Share picked file
+# 3. Share command output
+# 4. Share clipboard content
+# 5. View share history
+```
+
+**Expected Output:** A functional sharing tool with history and multiple modes.
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **SAF (Storage Access Framework)** | Android API for secure file access across apps |
+| **MIME Type** | Standard identifier for file content types (e.g., image/jpeg) |
+| **Share Intent** | Android mechanism for sharing content between apps |
+| **MediaStore** | Android database for tracking media files |
+| **File Picker** | System UI for selecting files from storage |
+| **Broadcast Intent** | Android message system for app communication |
+| **Content Provider** | Android component for sharing data between apps |
+| **URI** | Uniform Resource Identifier for file references |
+| **Scoped Storage** | Android 11+ privacy feature limiting file access |
+| **Download Manager** | Android system service for handling downloads |
+
+### File Path Reference
+
+| Path | Description |
+|------|-------------|
+| `~` or `$HOME` | Termux home: `/data/data/com.termux/files/home` |
+| `~/storage` | Symlink to shared storage (after setup) |
+| `~/storage/downloads` | Downloads folder |
+| `~/storage/dcim` | Camera/photos folder |
+| `~/storage/pictures` | Pictures folder |
+| `~/storage/music` | Music folder |
+| `/sdcard/` | External storage root |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How File Operations APIs Relate to Real-World Development
+
+**Mobile Development:**
+- File handling is fundamental to most mobile apps
+- Understanding SAF is crucial for modern Android development
+- Share functionality is a key feature in social/content apps
+
+**DevOps & Automation:**
+- Automated file processing scripts are essential
+- Batch operations mirror enterprise ETL processes
+- Error handling patterns apply to production systems
+
+**Security Testing:**
+- Understanding file access patterns helps in penetration testing
+- Knowledge of Android permissions is vital for mobile security
+- Share intents can be attack vectors (research area)
+
+### Career Paths Using These Skills
+
+| Role | Relevance | Salary Range (India) |
+|------|-----------|---------------------|
+| Android Developer | Direct application | ₹6-25 LPA |
+| Automation Engineer | Script development | ₹5-18 LPA |
+| Security Researcher | Mobile security testing | ₹8-30 LPA |
+| DevOps Engineer | Scripting & automation | ₹7-25 LPA |
+| QA Engineer | Test automation | ₹4-15 LPA |
+
+### Skills Roadmap
+
+```
+Current Chapter (File APIs)
+         │
+         ├──▶ Python Automation Scripts
+         │         │
+         │         └──▶ DevOps Engineer
+         │
+         ├──▶ Android File Handling
+         │         │
+         │         └──▶ Android Developer
+         │
+         ├──▶ Security Testing
+         │         │
+         │         └──▶ Mobile Security Researcher
+         │
+         └──▶ Test Automation
+                   │
+                   └──▶ QA Automation Engineer
+```
+
+---
+
+## ⚠️ PERMISSION REQUIREMENTS TABLE
+
+| API Command | Required Permission | How to Grant | Android Version Impact |
+|-------------|---------------------|--------------|------------------------|
+| `termux-storage-get` | Storage Read | `termux-setup-storage` | Scoped Storage on Android 11+ |
+| `termux-share` | None | N/A | Works on all versions |
+| `termux-download` | Storage Write | `termux-setup-storage` | Downloads to public folder |
+| `termux-media-scan` | Storage Read | `termux-setup-storage` | MediaStore access required |
+
+### Permission Setup Flow
+
+```bash
+# Step 1: Run setup command
+termux-setup-storage
+
+# Step 2: Accept Android permission dialog
+# Step 3: Verify storage access
+ls ~/storage/
+
+# Expected output:
+# dcim  downloads  movies  music  pictures  shared
+```
+
+### Troubleshooting Permissions
+
+| Issue | Solution |
+|-------|----------|
+| "Permission denied" | Re-run `termux-setup-storage` |
+| "Storage not available" | Check Android Settings > Apps > Termux > Permissions |
+| Files not in gallery | Run `termux-media-scan` on files |
+| Download failed | Check storage space: `df -h ~/storage/downloads` |
+| Share dialog empty | Check app defaults in Android settings |
+
+### Android 11+ Scoped Storage Notes
+
+- Apps can only access their own directories by default
+- `termux-setup-storage` creates special access symlinks
+- Media files need `termux-media-scan` to appear in gallery
+- Some system folders may be read-only
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1:** Always use `termux-setup-storage` before any file operation to ensure proper permissions. Without this, many operations will fail silently.

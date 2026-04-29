@@ -2952,6 +2952,594 @@ After completing this chapter, you should be able to:
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Diagram 1: Termux API Architecture
+
+```mermaid
+graph TD
+    A[Termux Terminal] --> B[termux-api package]
+    B --> C[API Commands]
+    
+    C --> D[termux-battery-status]
+    C --> E[termux-camera-photo]
+    C --> F[termux-sms-send]
+    C --> G[termux-location]
+    C --> H[Other APIs...]
+    
+    D --> I[Termux:API App]
+    E --> I
+    F --> I
+    G --> I
+    H --> I
+    
+    I --> J[Android System APIs]
+    
+    J --> K[CameraManager]
+    J --> L[SmsManager]
+    J --> M[LocationManager]
+    J --> N[Vibrator]
+    J --> O[NotificationManager]
+    
+    K --> P[Hardware Access]
+    L --> Q[SMS/Phone Access]
+    M --> R[GPS/Network Location]
+    N --> S[Vibration]
+    O --> T[Notifications]
+    
+    style A fill:#9C27B0,color:#fff
+    style I fill:#4CAF50,color:#fff
+    style J fill:#2196F3,color:#fff
+```
+
+### Diagram 2: API Permission Flow
+
+```mermaid
+flowchart TD
+    A[API Command] --> B{Termux:API App Installed?}
+    
+    B -->|No| C[Error: App not found]
+    C --> D[Install from F-Droid]
+    
+    B -->|Yes| E{Permission Granted?}
+    
+    E -->|No| F[Request Permission]
+    F --> G{User Allowed?}
+    
+    G -->|No| H[Error: Permission denied]
+    G -->|Yes| I[Execute API Call]
+    
+    E -->|Yes| I
+    
+    I --> J[Android System API]
+    J --> K[Return Result]
+    K --> L[JSON Output]
+    
+    style A fill:#673AB7,color:#fff
+    style L fill:#4CAF50,color:#fff
+    style C fill:#f44336,color:#fff
+    style H fill:#f44336,color:#fff
+```
+
+### Diagram 3: API Categories
+
+```mermaid
+mindmap
+  root((Termux API))
+    Device Info
+      Battery Status
+      Telephony Info
+      WiFi Info
+      Sensor Data
+    Hardware Control
+      Camera
+      Flashlight/Torch
+      Brightness
+      Volume
+      Vibration
+    Media
+      Notifications
+      Toast Messages
+      Media Player
+      Media Scanner
+      Downloads
+    Communication
+      SMS
+      Contacts
+      Call Log
+    Location
+      GPS
+      Network Location
+    Storage
+      File Picker
+      Share Content
+      Clipboard
+    Security
+      Fingerprint Auth
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+### Device Information APIs
+
+| Command | Purpose | Output Format |
+|---------|---------|---------------|
+| `termux-battery-status` | Battery info | JSON: percentage, status, temperature |
+| `termux-telephony-deviceinfo` | Device info | JSON: IMEI, phone type, network |
+| `termux-telephony-cellinfo` | Cell tower info | JSON: tower location data |
+| `termux-wifi-connectioninfo` | WiFi details | JSON: SSID, IP, MAC, speed |
+| `termux-wifi-scaninfo` | Nearby networks | JSON: network list |
+| `termux-camera-info` | Camera details | JSON: cameras, resolutions |
+| `termux-sensor -l` | List sensors | JSON: available sensors |
+
+### Hardware Control APIs
+
+| Command | Syntax | Example |
+|---------|--------|---------|
+| `termux-torch` | `on/off` | `termux-torch on` |
+| `termux-brightness` | `0-255` | `termux-brightness 100` |
+| `termux-volume` | `stream value` | `termux-volume music 15` |
+| `termux-vibrate` | `[-d ms]` | `termux-vibrate -d 1000` |
+| `termux-camera-photo` | `[-c N] file` | `termux-camera-photo photo.jpg` |
+| `termux-fingerprint` | (no args) | `termux-fingerprint` |
+
+### Media & Notification APIs
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `termux-notification` | Create notification | `--title "Hi" --content "Hello"` |
+| `termux-toast` | Show toast | `termux-toast "Message"` |
+| `termux-media-player` | Control playback | `play song.mp3` |
+| `termux-media-scan` | Gallery refresh | `termux-media-scan photo.jpg` |
+| `termux-download` | Download file | `termux-download URL` |
+
+### Communication APIs
+
+| Command | Syntax | Example |
+|---------|--------|---------|
+| `termux-contact-list` | List contacts | `termux-contact-list` |
+| `termux-sms-list` | List SMS | `-l 10 -t inbox` |
+| `termux-sms-send` | Send SMS | `-n "+91..." "Message"` |
+| `termux-call-log` | Call history | `-l 20` |
+
+### Location & Storage APIs
+
+| Command | Syntax | Example |
+|---------|--------|---------|
+| `termux-location` | Get GPS | `-p gps` |
+| `termux-clipboard-get` | Read clipboard | (no args) |
+| `termux-clipboard-set` | Write clipboard | `"text"` |
+| `termux-storage-get` | File picker | `dest_file` |
+| `termux-share` | Share content | `file.txt` |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                        🗺️ YOUR TERMUX JOURNEY 🗺️                              ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║   Module 1        Module 2          Module 3         Module 4+               ║
+║   ┌──────┐       ┌──────┐         ┌──────┐         ┌──────┐                  ║
+║   │ Intro│ ───►  │Enviro│ ───►    │Script│ ───►    │Advanc│                  ║
+║   │      │       │nment │         │ing   │         │ed    │                  ║
+║   └──────┘       └──────┘         └──────┘         └──────┘                  ║
+║                                                                               ║
+║   ✓ Done         📍 YOU ARE      Coming Next    Future Goal                  ║
+║                  HERE NOW!                                                     ║
+║                     ▼                                                         ║
+║                                                                               ║
+║   ═══════════════════════════════════════════════════════════════════════    ║
+║                                                                               ║
+║   MODULE 2 COMPLETE! 🎉                                                       ║
+║   ┌───────────────────────────────────────────────────────────────────────┐  ║
+║   │                                                                       │  ║
+║   │   Ch6: File System    ████████████████████ 100% ✓                     │  ║
+║   │   Ch7: Env Variables  ████████████████████ 100% ✓                     │  ║
+║   │   Ch8: Text Editors   ████████████████████ 100% ✓                     │  ║
+║   │   Ch9: Styling        ████████████████████ 100% ✓                     │  ║
+║   │   Ch10: API Setup     ████████████████████ 100% ✅ COMPLETE!          │  ║
+║   │                                                                       │  ║
+║   └───────────────────────────────────────────────────────────────────────┘  ║
+║                                                                               ║
+║   🏆 MODULE 2 SKILLS MASTERED:                                                ║
+║   📂 Directory Navigation    ✓                                                ║
+║   🔍 File Searching          ✓                                                ║
+║   🔧 Environment Variables   ✓                                                ║
+║   📝 Text Editing            ✓                                                ║
+║   🎨 Terminal Styling        ✓                                                ║
+║   📱 Android API Control     ✅                                               ║
+║                                                                               ║
+║   ➡️ NEXT: Module 3 - Scripting & Automation                                  ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL COMPARISON TABLE
+
+### API Categories by Use Case
+
+| Category | Commands | Best For |
+|----------|----------|----------|
+| **Automation** | notification, toast, volume, brightness | Scripts, scheduled tasks |
+| **Security** | fingerprint, camera, location | Auth, surveillance |
+| **Communication** | sms-send, contact-list, call-log | Messaging, backup |
+| **Network** | wifi-scan, wifi-connectioninfo | Pentesting, debugging |
+| **Media** | media-player, camera-photo, share | Multimedia apps |
+| **System** | battery-status, telephony-info | Monitoring, diagnostics |
+
+### Permission Requirements
+
+| API | Required Permission | Risk Level |
+|-----|---------------------|------------|
+| `termux-camera-photo` | Camera | ⚠️ High |
+| `termux-sms-send` | SMS | ⚠️ High |
+| `termux-sms-list` | Read SMS | ⚠️ High |
+| `termux-contact-list` | Contacts | ⚠️ Medium |
+| `termux-location` | Location | ⚠️ High |
+| `termux-call-log` | Call Log | ⚠️ Medium |
+| `termux-torch` | Flashlight | ✅ Low |
+| `termux-battery-status` | None | ✅ Low |
+
+### JSON Output Parsing Methods
+
+| Method | Command | Example |
+|--------|---------|---------|
+| **Python** | `python3 -c` | `termux-battery-status \| python3 -c "import sys,json; print(json.load(sys.stdin)['percentage'])"` |
+| **jq** | `jq '.key'` | `termux-battery-status \| jq '.percentage'` |
+| **grep** | `grep -o` | `termux-battery-status \| grep -o '"percentage": [0-9]*'` |
+| **sed** | `sed` | `termux-battery-status \| sed 's/.*"percentage": \([0-9]*\).*/\1/'` |
+
+---
+
+## 🚀 PRACTICAL CHALLENGES
+
+### Challenge 1: Battery Monitor Script 🔋
+**Difficulty:** ⭐ Beginner
+**Time:** 5 minutes
+**Task:** Create a script that checks battery status and shows a notification if battery is below 20% or above 90%.
+
+**Hint:** Use `termux-battery-status`, `grep` or `python`, and `termux-notification`.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+#!/bin/bash
+# battery_monitor.sh
+
+# Get battery percentage
+BATTERY_INFO=$(termux-battery-status)
+PERCENTAGE=$(echo "$BATTERY_INFO" | grep -o '"percentage": [0-9]*' | grep -o '[0-9]*')
+STATUS=$(echo "$BATTERY_INFO" | grep -o '"status": "[^"]*"' | cut -d'"' -f4)
+
+echo "Battery: ${PERCENTAGE}% - ${STATUS}"
+
+# Check conditions
+if [ "$PERCENTAGE" -lt 20 ]; then
+    termux-notification \
+        --title "🔋 Low Battery Warning" \
+        --content "Battery is at ${PERCENTAGE}%. Please charge your device!" \
+        --sound \
+        --priority high
+    termux-toast "⚠️ Battery Low: ${PERCENTAGE}%"
+elif [ "$PERCENTAGE" -gt 90 ] && [ "$STATUS" = "CHARGING" ]; then
+    termux-notification \
+        --title "🔋 Battery Full" \
+        --content "Battery is at ${PERCENTAGE}%. You can unplug now!" \
+        --priority default
+fi
+```
+
+**Run it:**
+```bash
+chmod +x battery_monitor.sh
+./battery_monitor.sh
+```
+
+</details>
+
+---
+
+### Challenge 2: Location Logger 📍
+**Difficulty:** ⭐⭐ Intermediate
+**Time:** 10 minutes
+**Task:** Create a script that:
+- Gets current GPS location
+- Saves timestamp, latitude, longitude to a log file
+- Shows a toast message confirming the log
+
+**Hint:** Use `termux-location`, parse JSON, and append to file.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+#!/bin/bash
+# location_logger.sh
+
+LOG_FILE=~/location_log.csv
+
+# Create log file with header if it doesn't exist
+if [ ! -f "$LOG_FILE" ]; then
+    echo "timestamp,latitude,longitude,accuracy,provider" > "$LOG_FILE"
+fi
+
+echo "📍 Getting location..."
+
+# Get location (try GPS first, fallback to network)
+LOCATION=$(termux-location -p gps -r once 2>/dev/null)
+
+if [ -z "$LOCATION" ]; then
+    echo "GPS failed, trying network..."
+    LOCATION=$(termux-location -p network -r once 2>/dev/null)
+fi
+
+if [ -z "$LOCATION" ]; then
+    termux-toast "❌ Failed to get location"
+    echo "Error: Could not get location"
+    exit 1
+fi
+
+# Parse JSON
+LAT=$(echo "$LOCATION" | grep -o '"latitude": [0-9.-]*' | grep -o '[0-9.-]*')
+LON=$(echo "$LOCATION" | grep -o '"longitude": [0-9.-]*' | grep -o '[0-9.-]*')
+ACC=$(echo "$LOCATION" | grep -o '"accuracy": [0-9.-]*' | grep -o '[0-9.-]*')
+PROV=$(echo "$LOCATION" | grep -o '"provider": "[^"]*"' | cut -d'"' -f4)
+
+TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+
+# Append to log
+echo "${TIMESTAMP},${LAT},${LON},${ACC},${PROV}" >> "$LOG_FILE"
+
+# Show confirmation
+termux-toast "✅ Location logged: ${LAT}, ${LON}"
+echo "📍 Location logged:"
+echo "   Time: $TIMESTAMP"
+echo "   Lat:  $LAT"
+echo "   Lon:  $LON"
+echo "   Acc:  ${ACC}m"
+echo "   Log:  $LOG_FILE"
+```
+
+**Run it:**
+```bash
+chmod +x location_logger.sh
+./location_logger.sh
+
+# View log
+cat ~/location_log.csv
+```
+
+</details>
+
+---
+
+### Challenge 3: Security Automation System 🛡️
+**Difficulty:** ⭐⭐⭐ Advanced
+**Time:** 15 minutes
+**Task:** Create a comprehensive security script that:
+- Requires fingerprint authentication to run
+- Captures a photo on failed auth attempt
+- Sends SMS alert with location on multiple failures
+- Logs all attempts to a file
+
+**Hint:** Combine multiple API calls with conditional logic.
+
+<details>
+<summary>📋 Click to reveal solution</summary>
+
+```bash
+#!/bin/bash
+# security_system.sh
+
+CONFIG_DIR=~/.security_system
+LOG_FILE=$CONFIG_DIR/security.log
+PHOTO_DIR=$CONFIG_DIR/photos
+MAX_ATTEMPTS=3
+
+# Setup directories
+mkdir -p "$CONFIG_DIR" "$PHOTO_DIR"
+
+# Emergency contact (CHANGE THIS!)
+EMERGENCY_NUMBER="+919876543210"
+
+log_event() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
+}
+
+capture_photo() {
+    local filename="$PHOTO_DIR/intruder_$(date +%Y%m%d_%H%M%S).jpg"
+    termux-camera-photo "$filename" 2>/dev/null
+    echo "$filename"
+}
+
+get_location() {
+    local loc
+    loc=$(termux-location -p network -r last 2>/dev/null)
+    if [ -n "$loc" ]; then
+        local lat=$(echo "$loc" | grep -o '"latitude": [0-9.-]*' | grep -o '[0-9.-]*')
+        local lon=$(echo "$loc" | grep -o '"longitude": [0-9.-]*' | grep -o '[0-9.-]*')
+        echo "Location: https://maps.google.com/?q=$lat,$lon"
+    else
+        echo "Location: Unknown"
+    fi
+}
+
+send_alert() {
+    local message="$1"
+    local location_info=$(get_location)
+    
+    termux-sms-send -n "$EMERGENCY_NUMBER" "🚨 SECURITY ALERT 🚨
+$message
+$location_info
+Time: $(date '+%Y-%m-%d %H:%M:%S')" 2>/dev/null
+}
+
+# Main security check
+echo "🔐 Security System Active"
+echo "Please authenticate with fingerprint..."
+log_event "Security check initiated"
+
+ATTEMPTS=0
+
+while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
+    # Try fingerprint
+    AUTH_RESULT=$(termux-fingerprint 2>/dev/null)
+    
+    if echo "$AUTH_RESULT" | grep -q "AUTH_RESULT_SUCCESS"; then
+        termux-toast "✅ Access Granted"
+        log_event "Authentication successful"
+        echo "✅ Access Granted"
+        exit 0
+    else
+        ATTEMPTS=$((ATTEMPTS + 1))
+        REMAINING=$((MAX_ATTEMPTS - ATTEMPTS))
+        
+        log_event "Authentication failed (Attempt $ATTEMPTS)"
+        
+        # Capture photo on failure
+        PHOTO=$(capture_photo)
+        log_event "Photo captured: $PHOTO"
+        
+        termux-toast "❌ Access Denied ($REMAINING attempts left)"
+        echo "❌ Access Denied. $REMAINING attempts remaining."
+        
+        if [ $ATTEMPTS -ge $MAX_ATTEMPTS ]; then
+            log_event "ALERT: Max attempts reached"
+            
+            # Critical alert
+            termux-notification \
+                --title "🚨 Security Alert" \
+                --content "Multiple failed authentication attempts!" \
+                --sound \
+                --priority max \
+                --led-color FF0000
+            
+            termux-vibrate -d 2000
+            
+            # Send SMS alert
+            send_alert "Multiple failed authentication attempts detected. Photo saved: $PHOTO"
+            
+            log_event "Emergency SMS sent"
+            echo "🚨 Emergency alert sent!"
+        fi
+    fi
+done
+
+exit 1
+```
+
+**Setup:**
+```bash
+chmod +x security_system.sh
+
+# Edit the emergency number
+nano security_system.sh
+# Change EMERGENCY_NUMBER to your number
+
+# Run the system
+./security_system.sh
+```
+
+**Note:** This is for educational purposes. Always respect privacy and legal requirements.
+
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+| Term | Definition |
+|------|------------|
+| **Termux:API** | Android app that bridges Termux commands to Android system features |
+| **API Command** | CLI tool that interfaces with Android system (e.g., termux-camera-photo) |
+| **JSON** | JavaScript Object Notation - data format used by API outputs |
+| **Broadcast Intent** | Android mechanism for inter-app communication |
+| **Permission** | Android security feature requiring user approval for sensitive operations |
+| **Runtime Permission** | Permission requested at runtime (not install time) in modern Android |
+| **Location Provider** | GPS, Network, or Passive source for location data |
+| **SMS Manager** | Android system service for sending/receiving SMS |
+| **Camera Manager** | Android system service for camera access |
+| **Notification** | Android system message shown in status bar |
+| **Toast** | Small popup message that disappears automatically |
+| **Vibrator** | Hardware component for haptic feedback |
+| **Sensor** | Device sensor (accelerometer, gyroscope, proximity, etc.) |
+| **Fingerprint Auth** | Biometric authentication using device fingerprint sensor |
+| **Content Provider** | Android component for sharing data between apps |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### How API Skills Help Your Career
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    API INTEGRATION SKILLS IN TECH CAREERS                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   📱  MOBILE DEVELOPER                                                  │
+│   ├── Understanding device capabilities                                 │
+│   ├── Camera, location, sensor integration                              │
+│   ├── Permission handling                                               │
+│   └── Salary Range: $70,000 - $160,000/year                             │
+│                                                                          │
+│   🔧  AUTOMATION ENGINEER                                               │
+│   ├── Script-based device control                                       │
+│   ├── Monitoring and alerting systems                                   │
+│   ├── Integration with external services                                │
+│   └── Salary Range: $75,000 - $140,000/year                             │
+│                                                                          │
+│   🛡️  SECURITY RESEARCHER                                               │
+│   ├── Device forensics                                                  │
+│   ├── Penetration testing tools                                         │
+│   ├── Security automation                                               │
+│   └── Salary Range: $70,000 - $150,000/year                             │
+│                                                                          │
+│   🤖  IoT DEVELOPER                                                     │
+│   ├── Device communication protocols                                    │
+│   ├── Sensor data collection                                            │
+│   ├── Edge computing                                                    │
+│   └── Salary Range: $80,000 - $150,000/year                             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Skills You're Building
+
+| Skill | Career Value | Real-World Application |
+|-------|--------------|------------------------|
+| JSON Parsing | ⭐⭐⭐⭐⭐ | API integration, data processing |
+| Permission Handling | ⭐⭐⭐⭐ | Mobile development, security |
+| Hardware Integration | ⭐⭐⭐⭐ | IoT, embedded systems |
+| Script Automation | ⭐⭐⭐⭐⭐ | DevOps, system admin |
+| Error Handling | ⭐⭐⭐⭐ | Robust applications |
+
+### Real-World Applications
+
+1. **Mobile App Development**: Camera, location, sensors
+2. **IoT Projects**: Device automation, sensor monitoring
+3. **Security Tools**: Surveillance, intrusion detection
+4. **Automation Scripts**: Task scheduling, alerts
+5. **Data Collection**: Logging, monitoring, analytics
+
+### Next Steps After Module 2
+
+1. **Module 3: Scripting** - Combine APIs with scripts
+2. **Learn Python/Node.js** - Better JSON handling
+3. **Explore Tasker** - Advanced Android automation
+4. **Build Projects** - Create useful automation tools
+5. **Contribute** - Share your scripts on GitHub
+
+---
+
 ## 💡 PRO TIPS BOX
 
 > 💡 **Pro Tip #1: JSON Parsing Made Easy**

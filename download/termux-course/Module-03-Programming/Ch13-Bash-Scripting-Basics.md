@@ -971,6 +971,604 @@ Thank you for watching! See you in Chapter 14!
 
 ---
 
+## 📊 MERMAID DIAGRAMS
+
+### Bash Script Execution Flow
+
+```mermaid
+flowchart TD
+    A[Script File] --> B[Read Shebang #!/bin/bash]
+    B --> C[Parse Commands]
+    C --> D{Syntax OK?}
+    D -->|No| E[Syntax Error]
+    D -->|Yes| F[Execute Line by Line]
+    F --> G{Command Exists?}
+    G -->|No| H[Command Not Found Error]
+    G -->|Yes| I[Run Command]
+    I --> J{Exit Code 0?}
+    J -->|Yes| K[Continue to Next Line]
+    J -->|No| L{Error Handling?}
+    L -->|set -e| M[Exit Script]
+    L -->|Continue| K
+    K --> N{More Lines?}
+    N -->|Yes| F
+    N -->|No| O[Script Complete]
+    E --> P[Exit with Error]
+    H --> P
+    M --> P
+```
+
+### Bash Variable Scope Architecture
+
+```mermaid
+graph TD
+    A[Bash Variables] --> B[Global Variables]
+    A --> C[Local Variables]
+    A --> D[Environment Variables]
+    
+    B --> B1[Script-wide scope]
+    B --> B2[Accessible in functions]
+    
+    C --> C1[Function scope only]
+    C --> C2[Declared with 'local']
+    
+    D --> D1[Exported to child processes]
+    D --> D2[Set with 'export']
+    
+    B1 --> E[Example: count=10]
+    C1 --> F[Example: local name='test']
+    D1 --> G[Example: export PATH=/usr/bin]
+```
+
+### Conditional Logic Flow
+
+```mermaid
+flowchart TD
+    A[if statement] --> B{Condition Test}
+    B -->|True/Exit 0| C[Execute THEN block]
+    B -->|False/Exit non-zero| D{elif present?}
+    D -->|Yes| E[Test elif condition]
+    E -->|True| F[Execute ELIF block]
+    E -->|False| D
+    D -->|No| G{else present?}
+    G -->|Yes| H[Execute ELSE block]
+    G -->|No| I[Continue after fi]
+    C --> I
+    F --> I
+    H --> I
+```
+
+---
+
+## ⚡ COMMAND CHEATSHEET
+
+### Bash Script Commands
+
+| Command | Syntax | Example | Purpose |
+|---------|--------|---------|---------|
+| Shebang | `#!/bin/bash` | First line of script | Specify interpreter |
+| chmod | `chmod +x script.sh` | `chmod +x test.sh` | Make executable |
+| echo | `echo "text"` | `echo "Hello"` | Print output |
+| read | `read var` | `read -p "Name: " name` | Get user input |
+| source | `source script.sh` | `source ~/.bashrc` | Execute in current shell |
+| bash | `bash script.sh` | `bash test.sh` | Run script |
+
+### Variable Operations
+
+| Operation | Syntax | Example | Result |
+|-----------|--------|---------|--------|
+| Assign | `var=value` | `name="John"` | No spaces around = |
+| Use | `$var` or `${var}` | `echo $name` | John |
+| Default | `${var:-default}` | `${unset:-"none"}` | none |
+| Assign default | `${var:=default}` | `${unset:="hi"}` | Sets and returns |
+| Length | `${#var}` | `${#name}` | 4 |
+| Substring | `${var:start:len}` | `${name:0:2}` | Jo |
+| Replace | `${var/old/new}` | `${name/J/M}` | Mohn |
+
+### Arithmetic Operations
+
+| Method | Syntax | Example | Result |
+|--------|--------|---------|--------|
+| Double parens | `$((expr))` | `echo $((5+3))` | 8 |
+| let | `let var=expr` | `let x=5+3` | x=8 |
+| expr | `expr arg op arg` | `expr 5 + 3` | 8 |
+| bc | `echo "expr" \| bc` | `echo "5/2" \| bc` | 2 |
+
+### Test Operators
+
+| Operator | True If | Example |
+|----------|---------|---------|
+| `-e file` | File exists | `[ -e /etc/passwd ]` |
+| `-f file` | Is regular file | `[ -f script.sh ]` |
+| `-d dir` | Is directory | `[ -d /home ]` |
+| `-r file` | Is readable | `[ -r file.txt ]` |
+| `-w file` | Is writable | `[ -w file.txt ]` |
+| `-x file` | Is executable | `[ -x script.sh ]` |
+| `-z str` | String is empty | `[ -z "$var" ]` |
+| `-n str` | String not empty | `[ -n "$var" ]` |
+| `= ` | Strings equal | `[ "$a" = "$b" ]` |
+| `!=` | Strings not equal | `[ "$a" != "$b" ]` |
+| `-eq` | Numbers equal | `[ $a -eq $b ]` |
+| `-ne` | Numbers not equal | `[ $a -ne $b ]` |
+| `-lt` | Less than | `[ $a -lt $b ]` |
+| `-gt` | Greater than | `[ $a -gt $b ]` |
+
+### Loop Constructs
+
+| Loop | Syntax | Best For |
+|------|--------|----------|
+| for | `for i in list; do...done` | Known iterations |
+| C-style for | `for ((i=0;i<n;i++)); do...done` | Counter-based |
+| while | `while [ cond ]; do...done` | Condition-based |
+| until | `until [ cond ]; do...done` | Run until true |
+
+---
+
+## 🎯 LEARNING PATH VISUALIZATION
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                BASH SCRIPTING LEARNING JOURNEY - T3RMUXK1NG                  ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                                ║
+║  🚀 START YOUR BASH JOURNEY                                                   ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    PHASE 1: FOUNDATION                                   │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │Shebang  │──►│ echo    │──►│Variables│──►│ Comments│                  │  ║
+║  │  │#!/bin/bash   │         │   │ name=val│   │   #     │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐           ⭐            ⭐            ⭐                           │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    PHASE 2: INPUT/OUTPUT                                 │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │  read   │──►│ printf  │──►│ Redirect│──►│  Pipes  │                  │  ║
+║  │  │ input   │   │ format  │   │  > >> < │   │    \|   │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐          ⭐⭐           ⭐⭐           ⭐⭐                          │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    PHASE 3: CONTROL FLOW                                  │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │if/else  │──►│  case   │──►│for loop │──►│while    │                  │  ║
+║  │  │ tests   │   │ switch  │   │         │   │  loop   │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐        ⭐⭐⭐          ⭐⭐⭐          ⭐⭐⭐                         │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    PHASE 4: DATA STRUCTURES                               │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │ Arrays  │──►│Associat.│──►│ Strings │──►│  Math   │                  │  ║
+║  │  │ [a b c] │   │ Arrays  │   │ ${#var} │   │ $(())   │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐⭐       ⭐⭐⭐⭐         ⭐⭐⭐          ⭐⭐⭐                         │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
+║  │                    PHASE 5: FUNCTIONS                                     │  ║
+║  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐                  │  ║
+║  │  │ define  │──►│arguments│──►│ return  │──►│  local  │                  │  ║
+║  │  │ func(){}│   │  $1 $2  │   │ values  │   │  scope  │                  │  ║
+║  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘                  │  ║
+║  │       ⭐⭐⭐⭐       ⭐⭐⭐⭐         ⭐⭐⭐⭐        ⭐⭐⭐⭐                        │  ║
+║  └─────────────────────────────────────────────────────────────────────────┘  ║
+║       │                                                                        ║
+║       ▼                                                                        ║
+║                         🏆 BASH SCRIPTING MASTER 🏆                           ║
+║                                                                                ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## 🔧 TOOL/FEATURE COMPARISON TABLE
+
+### Bash vs Python vs Node.js for Scripting
+
+| Feature | Bash | Python | Node.js |
+|---------|------|--------|---------|
+| **System Integration** | ⭐⭐⭐⭐⭐ Native | ⭐⭐⭐ Via modules | ⭐⭐⭐ Via modules |
+| **Text Processing** | ⭐⭐⭐⭐ pipes/grep | ⭐⭐⭐⭐⭐ Powerful | ⭐⭐⭐⭐ Good |
+| **Learning Curve** | ⭐⭐⭐ Medium | ⭐⭐⭐⭐ Easy | ⭐⭐⭐ Medium |
+| **Cross-platform** | ⭐⭐ Unix mostly | ⭐⭐⭐⭐⭐ Excellent | ⭐⭐⭐⭐⭐ Excellent |
+| **Performance** | ⭐⭐⭐⭐ Fast startup | ⭐⭐⭐ Interpreted | ⭐⭐⭐⭐ V8 engine |
+| **Libraries** | ⭐⭐ Limited | ⭐⭐⭐⭐⭐ Massive | ⭐⭐⭐⭐⭐ NPM |
+| **Error Handling** | ⭐⭐ Basic | ⭐⭐⭐⭐⭐ Robust | ⭐⭐⭐⭐ Good |
+| **Termux Support** | ⭐⭐⭐⭐⭐ Native | ⭐⭐⭐⭐⭐ Perfect | ⭐⭐⭐⭐⭐ Perfect |
+| **Best For** | System tasks, glue | General purpose | Web, async I/O |
+
+### Shell Types Comparison
+
+| Shell | Full Name | Default On | Features |
+|-------|-----------|------------|----------|
+| **bash** | Bourne Again Shell | Most Linux, Termux | Most common, feature-rich |
+| **sh** | Bourne Shell | POSIX systems | Minimal, portable |
+| **zsh** | Z Shell | macOS (Catalina+) | Advanced completion, themes |
+| **dash** | Debian Almquist | Debian/Ubuntu (sh) | Fast, POSIX compliant |
+| **fish** | Friendly Interactive | Not default | User-friendly, autosuggestions |
+
+---
+
+## 🚀 PRACTICAL CODING CHALLENGES
+
+### Challenge 1: System Information Reporter 📊
+
+**Difficulty:** ⭐ Beginner  
+**Time:** 10 minutes
+
+**Problem:** Create a Bash script that displays system information including hostname, current user, date/time, uptime, and disk usage.
+
+**Sample Output:**
+```
+═══════════════════════════════════════
+       SYSTEM INFORMATION REPORT
+═══════════════════════════════════════
+Hostname: localhost
+User: u0_a123
+Date: Mon Jan 15 10:30:45 IST 2025
+Uptime: up 2 hours, 15 minutes
+Disk Usage: 45% used
+Memory: 2GB / 4GB
+═══════════════════════════════════════
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```bash
+#!/bin/bash
+# System Information Reporter
+
+echo "═══════════════════════════════════════"
+echo "       SYSTEM INFORMATION REPORT"
+echo "═══════════════════════════════════════"
+
+echo "Hostname: $(hostname)"
+echo "User: $(whoami)"
+echo "Date: $(date)"
+echo "Uptime: $(uptime -p 2>/dev/null || uptime)"
+
+# Disk usage (root partition)
+disk_used=$(df -h / | tail -1 | awk '{print $5}' | tr -d '%')
+echo "Disk Usage: ${disk_used}% used"
+
+# Memory (if available)
+if command -v free &>/dev/null; then
+    mem_info=$(free -h | grep Mem)
+    total=$(echo $mem_info | awk '{print $2}')
+    used=$(echo $mem_info | awk '{print $3}')
+    echo "Memory: ${used} / ${total}"
+fi
+
+echo "═══════════════════════════════════════"
+```
+</details>
+
+---
+
+### Challenge 2: Automated Backup Script 💾
+
+**Difficulty:** ⭐⭐ Intermediate  
+**Time:** 15 minutes
+
+**Problem:** Create a script that:
+1. Takes a source directory as argument
+2. Creates a timestamped backup in ~/backups
+3. Compresses it as .tar.gz
+4. Logs the operation with timestamp
+
+**Sample Output:**
+```
+Backup Script Started...
+Source: /home/user/myproject
+Creating backup directory...
+Creating compressed archive...
+Backup created: backup_myproject_20250115_103045.tar.gz
+Size: 2.5M
+Log saved to: /home/user/backups/backup.log
+Backup Complete!
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```bash
+#!/bin/bash
+# Automated Backup Script
+
+# Check argument
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <source_directory>"
+    exit 1
+fi
+
+SOURCE="$1"
+BACKUP_DIR="$HOME/backups"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BASENAME=$(basename "$SOURCE")
+BACKUP_FILE="${BACKUP_DIR}/backup_${BASENAME}_${TIMESTAMP}.tar.gz"
+LOG_FILE="${BACKUP_DIR}/backup.log"
+
+echo "Backup Script Started..."
+
+# Check source exists
+if [ ! -d "$SOURCE" ]; then
+    echo "Error: Source directory does not exist!"
+    exit 1
+fi
+
+# Create backup directory
+mkdir -p "$BACKUP_DIR"
+echo "Creating backup directory..."
+
+# Create backup
+echo "Creating compressed archive..."
+tar -czf "$BACKUP_FILE" -C "$(dirname "$SOURCE")" "$BASENAME" 2>/dev/null
+
+if [ $? -eq 0 ]; then
+    SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
+    echo "Backup created: $(basename "$BACKUP_FILE")"
+    echo "Size: $SIZE"
+    
+    # Log the backup
+    echo "$(date): Backup of $SOURCE created - Size: $SIZE" >> "$LOG_FILE"
+    echo "Log saved to: $LOG_FILE"
+    echo "Backup Complete!"
+else
+    echo "Error: Backup failed!"
+    exit 1
+fi
+```
+</details>
+
+---
+
+### Challenge 3: Log File Analyzer 📋
+
+**Difficulty:** ⭐⭐⭐ Advanced  
+**Time:** 20 minutes
+
+**Problem:** Create a script that analyzes a log file and produces a summary report showing:
+- Total lines
+- Error count
+- Warning count
+- Top 5 IP addresses (if present)
+- Errors by hour
+
+**Sample Output:**
+```
+═════════════════════════════════════════════════
+              LOG ANALYSIS REPORT
+═════════════════════════════════════════════════
+File: /var/log/app.log
+Total Lines: 15,420
+
+SUMMARY:
+  Errors:   234
+  Warnings: 567
+  Info:     14,619
+
+TOP 5 IP ADDRESSES:
+  192.168.1.100   - 456 requests
+  10.0.0.15       - 234 requests
+  172.16.0.5      - 189 requests
+  192.168.1.50    - 167 requests
+  10.0.0.25       - 134 requests
+
+ERRORS BY HOUR:
+  00:00-06:00 - 45 errors
+  06:00-12:00 - 78 errors
+  12:00-18:00 - 56 errors
+  18:00-24:00 - 55 errors
+═════════════════════════════════════════════════
+```
+
+<details>
+<summary>🔑 Hidden Solution</summary>
+
+```bash
+#!/bin/bash
+# Log File Analyzer
+
+LOG_FILE="$1"
+
+if [ ! -f "$LOG_FILE" ]; then
+    echo "Usage: $0 <logfile>"
+    exit 1
+fi
+
+echo "═════════════════════════════════════════════════"
+echo "              LOG ANALYSIS REPORT"
+echo "═════════════════════════════════════════════════"
+echo "File: $LOG_FILE"
+
+# Count lines
+TOTAL=$(wc -l < "$LOG_FILE")
+echo "Total Lines: $(printf "%'d" $TOTAL)"
+echo ""
+
+# Count by severity
+ERRORS=$(grep -ci "error" "$LOG_FILE" 2>/dev/null || echo 0)
+WARNINGS=$(grep -ci "warning\|warn" "$LOG_FILE" 2>/dev/null || echo 0)
+INFO=$((TOTAL - ERRORS - WARNINGS))
+
+echo "SUMMARY:"
+printf "  Errors:   %d\n" "$ERRORS"
+printf "  Warnings: %d\n" "$WARNINGS"
+printf "  Info:     %d\n" "$INFO"
+echo ""
+
+# Top IPs
+echo "TOP 5 IP ADDRESSES:"
+grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' "$LOG_FILE" 2>/dev/null | \
+    sort | uniq -c | sort -rn | head -5 | \
+    while read count ip; do
+        printf "  %-15s - %s requests\n" "$ip" "$count"
+    done
+echo ""
+
+# Errors by hour
+echo "ERRORS BY HOUR:"
+for hour in 00 06 12 18; do
+    end_hour=$((10#$hour + 6))
+    end_hour=$(printf "%02d" $end_hour)
+    count=$(grep -E "\[$hour:[0-5][0-9]" "$LOG_FILE" 2>/dev/null | \
+            grep -ci "error" || echo 0)
+    printf "  %s:00-%s:00 - %d errors\n" "$hour" "$end_hour" "$count"
+done
+
+echo "═════════════════════════════════════════════════"
+```
+</details>
+
+---
+
+## 📖 GLOSSARY & TERMINOLOGY
+
+### Bash Scripting Terms
+
+| Term | Definition |
+|------|------------|
+| **Shell** | A command-line interface that interprets and executes commands |
+| **Bash** | Bourne Again Shell - the default shell on most Linux systems |
+| **Shebang** | `#!/bin/bash` - first line indicating the script interpreter |
+| **Script** | A file containing a series of commands to be executed |
+| **Variable** | A named storage location for data ($name or ${name}) |
+| **Exit Code** | Numeric status returned by commands (0 = success, non-zero = error) |
+| **Pipe** | `|` - redirects output of one command to input of another |
+| **Redirect** | `>` or `>>` - sends output to a file |
+| **Wildcard** | `*` or `?` - pattern matching for filenames |
+| **Globbing** | Pattern expansion for matching filenames |
+| **PID** | Process ID - unique identifier for running processes |
+| **Environment Variable** | Variable available to child processes (exported) |
+| **Subshell** | A child shell process spawned by a script |
+| **Escape Character** | `\` - prevents special interpretation of next character |
+| **Argument** | Value passed to a script or function ($1, $2, etc.) |
+
+---
+
+## 💼 CAREER INSIGHTS
+
+### DevOps/Shell Scripting Career Path
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    DEVOPS CAREER PROGRESSION                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ LEVEL 5: DevOps Architect (8+ years)                                │   │
+│  │ • Infrastructure Design       • Multi-cloud Strategy               │   │
+│  │ • Team Leadership             • Tool Selection & Governance        │   │
+│  │ Salary: ₹40-70 LPA | $150K-220K                                      │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                   ▲                                          │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ LEVEL 4: Senior DevOps Engineer (5-8 years)                         │   │
+│  │ • CI/CD Pipeline Design       • Kubernetes Administration          │   │
+│  │ • Infrastructure as Code      • Security Implementation            │   │
+│  │ Salary: ₹25-40 LPA | $100K-150K                                      │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                   ▲                                          │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ LEVEL 3: DevOps Engineer (2-5 years)                                │   │
+│  │ • Docker & Containers         • Jenkins/GitHub Actions             │   │
+│  │ • Cloud Platforms (AWS/GCP)   • Monitoring & Logging               │   │
+│  │ Salary: ₹12-25 LPA | $70K-100K                                       │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                   ▲                                          │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ LEVEL 2: System Administrator (1-2 years)                           │   │
+│  │ • Linux Administration        • Bash Scripting                     │   │
+│  │ • Basic Networking            • Server Maintenance                 │   │
+│  │ Salary: ₹5-12 LPA | $45K-70K                                         │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                   ▲                                          │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ LEVEL 1: Learning (You are here!)                                   │   │
+│  │ • Bash Fundamentals           • Linux Commands                     │   │
+│  │ • Shell Scripting             • Automation Basics                  │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                      KEY SKILLS FOR DEVOPS                                   │
+│                                                                              │
+│  🔹 Bash/Shell Scripting  🔹 Docker & Kubernetes  🔹 CI/CD Pipelines        │
+│  🔹 AWS/GCP/Azure         🔹 Linux Administration  🔹 Terraform/Ansible     │
+│  🔹 Git Version Control   🔹 Monitoring Tools      🔹 Python/Go            │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🏆 CODE OPTIMIZATION TIPS
+
+### Bash Script Performance Tips
+
+| Tip | Description | Impact |
+|-----|-------------|--------|
+| **Avoid subshells** | Use `${}` instead of `$()` where possible | ⭐⭐⭐⭐ |
+| **Use builtins** | Prefer `[[ ]]` over `[ ]` | ⭐⭐⭐ |
+| **Quote variables** | Always `"$var"` to prevent word splitting | ⭐⭐⭐⭐⭐ |
+| **Use arrays** | Instead of space-separated strings | ⭐⭐⭐⭐ |
+| **Minimize pipes** | Reduce pipeline stages | ⭐⭐⭐⭐ |
+| **Use printf** | More efficient than echo for formatting | ⭐⭐⭐ |
+| **Cache command output** | Store in variable if used multiple times | ⭐⭐⭐⭐ |
+| **Use set -e** | Fail fast on errors | ⭐⭐⭐⭐⭐ |
+
+### Common Bash Anti-Patterns
+
+```bash
+# ❌ BAD: Unquoted variables
+if [ $name = "test" ]; then  # Fails if name has spaces
+
+# ✅ GOOD: Always quote
+if [ "$name" = "test" ]; then  # Safe
+
+# ❌ BAD: Using cat with grep
+cat file.txt | grep "pattern"
+
+# ✅ GOOD: Direct file input
+grep "pattern" file.txt
+
+# ❌ BAD: For loop over ls output
+for file in $(ls); do
+
+# ✅ GOOD: Glob pattern
+for file in *; do
+
+# ❌ BAD: Multiple echo calls
+echo "Line 1"
+echo "Line 2"
+echo "Line 3"
+
+# ✅ GOOD: Single echo with heredoc
+cat << EOF
+Line 1
+Line 2
+Line 3
+EOF
+
+# ❌ BAD: Using sed for simple substitution
+var=$(echo "$var" | sed 's/old/new/')
+
+# ✅ GOOD: Parameter expansion
+var="${var//old/new}"
+```
+
+---
+
 ## 📖 TECHNICAL GUIDE
 
 ### 1. What is Bash Scripting?

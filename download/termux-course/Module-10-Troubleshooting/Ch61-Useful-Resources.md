@@ -3059,6 +3059,712 @@ NEWS:
 
 ---
 
+## 📊 MERMAID TROUBLESHOOTING FLOWS
+
+### Decision Tree: Learning Path Selection
+
+```mermaid
+flowchart TD
+    A[Start Learning] --> B{Your Interest?}
+    B -->|Security/Hacking| C[Cybersecurity Path]
+    B -->|Programming| D[Development Path]
+    B -->|System Admin| E[Linux/DevOps Path]
+    B -->|Just Learning| F[General Path]
+    
+    C --> C1[Linux Basics]
+    C1 --> C2[Networking]
+    C2 --> C3[Security Fundamentals]
+    C3 --> C4[CTF Practice]
+    C4 --> C5[Certifications: CEH, OSCP]
+    
+    D --> D1[Python/Node.js]
+    D1 --> D2[Git/GitHub]
+    D2 --> D3[Data Structures]
+    D3 --> D4[Projects]
+    D4 --> D5[Portfolio Building]
+    
+    E --> E1[Linux Commands]
+    E1 --> E2[Scripting]
+    E2 --> E3[Cloud Platforms]
+    E3 --> E4[Automation Tools]
+    E4 --> E5[Certifications: RHCSA, AWS]
+    
+    F --> F1[Termux Basics]
+    F1 --> F2[Linux Commands]
+    F2 --> F3[Choose Specialty]
+    F3 --> B
+    
+    style A fill:#3498db
+    style B fill:#9b59b6
+    style C fill:#e74c3c
+    style D fill:#2ecc71
+    style E fill:#f39c12
+    style F fill:#1abc9c
+```
+
+### Decision Tree: Resource Selection
+
+```mermaid
+flowchart TD
+    A[Need Resource] --> B{What type?}
+    B -->|Documentation| C[Official Sources]
+    B -->|Tutorial| D[Learning Platforms]
+    B -->|Help/Support| E[Community]
+    B -->|Career| F[Job Platforms]
+    
+    C --> C1[Termux Wiki]
+    C1 --> C2[GitHub Repos]
+    C2 --> C3[Man Pages]
+    
+    D --> D1{Level?}
+    D1 -->|Beginner| D2[YouTube, freeCodeCamp]
+    D1 -->|Intermediate| D3[Udemy, Coursera]
+    D1 -->|Advanced| D4[Official Docs, Source Code]
+    
+    E --> E1[Reddit r/termux]
+    E1 --> E2[Telegram Groups]
+    E2 --> E3[Stack Overflow]
+    
+    F --> F1[LinkedIn]
+    F1 --> F2[AngelList/Wellfound]
+    F2 --> F3[Company Career Pages]
+    
+    style A fill:#3498db
+    style B fill:#9b59b6
+    style C fill:#2ecc71
+    style D fill:#f39c12
+    style E fill:#e74c3c
+    style F fill:#1abc9c
+```
+
+### Decision Tree: Career Path Navigation
+
+```mermaid
+flowchart TD
+    A[Career Goal] --> B{Target Role?}
+    B -->|Pen Tester| C[Security Track]
+    B -->|Developer| D[Development Track]
+    B -->|SysAdmin| E[Infrastructure Track]
+    B -->|Undecided| F[Explore Track]
+    
+    C --> C1[Linux+ → Security+]
+    C1 --> C2[CEH → eJPT]
+    C2 --> C3[OSCP → OSWE]
+    C3 --> C4[Senior Pen Tester]
+    
+    D --> D1[Language Mastery]
+    D1 --> D2[Framework Expertise]
+    D2 --> D3[Cloud Certs]
+    D3 --> D4[Senior Developer]
+    
+    E --> E1[Linux+ → RHCSA]
+    E1 --> E2[AWS/Azure Certs]
+    E2 --> E3[CKA/Docker]
+    E3 --> E4[DevOps/SRE]
+    
+    F --> F1[Complete This Course]
+    F1 --> F2[Try Different Paths]
+    F2 --> F3[Find Your Interest]
+    F3 --> B
+    
+    style A fill:#3498db
+    style C fill:#e74c3c
+    style D fill:#2ecc71
+    style E fill:#f39c12
+    style F fill:#9b59b6
+```
+
+---
+
+## ⚡ ERROR CODE REFERENCE
+
+| Error Code | Meaning | Cause | Solution |
+|------------|---------|-------|----------|
+| `404 Not Found` | Resource missing | URL changed, content removed | Check for updated URL |
+| `Connection refused` | Service unavailable | Server down, firewall | Try alternative, check status |
+| `SSL certificate error` | Certificate issue | Expired/invalid cert | Update CA certificates |
+| `Rate limit exceeded` | Too many requests | API limits hit | Wait, use different account |
+| `Authentication failed` | Login issue | Wrong credentials | Reset password, check 2FA |
+| `Access denied` | Permission issue | Not authorized | Check account permissions |
+| `Timeout` | Request took too long | Slow connection, server load | Retry, try different time |
+| `DNS resolution failed` | Can't find host | DNS issues | Try different DNS, check URL |
+| `403 Forbidden` | Access prohibited | Geographic/subscription limit | Use VPN, upgrade account |
+| `429 Too Many Requests` | Rate limiting | Excessive requests | Slow down, implement backoff |
+
+---
+
+## 🎯 TROUBLESHOOTING METHODOLOGY
+
+### Resource Discovery Framework
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    RESOURCE DISCOVERY METHODOLOGY                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  STEP 1: IDENTIFY THE NEED                                              │
+│  ═════════════════════════                                              │
+│  □ What skill do you want to learn?                                     │
+│  □ What problem are you trying to solve?                                │
+│  □ What's your current knowledge level?                                 │
+│                                                                          │
+│  STEP 2: START WITH OFFICIAL SOURCES                                    │
+│  ═══════════════════════════════════                                    │
+│  □ Check official documentation first                                   │
+│  □ Look at GitHub repositories                                          │
+│  □ Read wiki pages                                                      │
+│                                                                          │
+│  STEP 3: SEEK COMMUNITY KNOWLEDGE                                       │
+│  ═══════════════════════════════                                        │
+│  □ Search on Reddit                                                     │
+│  □ Check Stack Overflow                                                 │
+│  □ Browse GitHub Issues                                                 │
+│  □ Join Telegram/Discord groups                                         │
+│                                                                          │
+│  STEP 4: USE VIDEO TUTORIALS                                            │
+│  ══════════════════════════                                             │
+│  □ YouTube for visual learners                                          │
+│  □ Udemy/Coursera for structured learning                               │
+│  □ Platform-specific tutorials                                          │
+│                                                                          │
+│  STEP 5: PRACTICE & BUILD                                                │
+│  ═══════════════════════                                                │
+│  □ Hands-on labs (TryHackMe, HTB)                                       │
+│  □ Personal projects                                                    │
+│  □ Open source contributions                                            │
+│                                                                          │
+│  STEP 6: DOCUMENT & SHARE                                                │
+│  ═══════════════════════                                                │
+│  □ Keep notes of what you learn                                         │
+│  □ Share with community                                                 │
+│  □ Build your knowledge base                                            │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### The LEARN Method for New Skills
+
+```
+L - LOCATE the best resources
+    Research before diving in
+
+E - EVALUATE the quality
+    Check reviews, recent updates, author credibility
+
+A - APPLY immediately
+    Practice while learning, don't just read
+
+R - REVIEW regularly
+    Revisit concepts, spaced repetition
+
+N - NAVIGATE to next level
+    Progress to harder topics gradually
+```
+
+---
+
+## 🔧 DIAGNOSTIC COMMAND COLLECTION
+
+### System Information Resources
+
+```bash
+# Check Termux version for compatibility
+echo $TERMUX_VERSION
+
+# Check Android version
+getprop ro.build.version.release
+
+# Device info for troubleshooting
+getprop ro.product.model
+getprop ro.product.brand
+
+# Check available resources
+free -h
+df -h
+
+# List installed packages
+pkg list-installed
+```
+
+### Quick Reference Links
+
+```bash
+# Open Termux Wiki in browser
+am start -a android.intent.action.VIEW -d https://wiki.termux.com
+
+# Open Termux GitHub
+am start -a android.intent.action.VIEW -d https://github.com/termux
+
+# Open this channel
+am start -a android.intent.action.VIEW -d https://youtube.com/@t3rmuxk1ng
+```
+
+### Environment Verification
+
+```bash
+# Verify all essential tools are installed
+for cmd in python git curl wget nano vim; do
+    which $cmd > /dev/null && echo "✓ $cmd" || echo "✗ $cmd (missing)"
+done
+
+# Check storage access
+[ -d ~/storage ] && echo "✓ Storage access" || echo "✗ No storage access"
+
+# Check API package
+pkg list-installed | grep -q termux-api && echo "✓ Termux:API" || echo "✗ Termux:API missing"
+```
+
+---
+
+## 🚀 PRACTICAL DEBUGGING CHALLENGES
+
+### Challenge 1: Find the Best Resource
+
+```
+SCENARIO:
+─────────────────────────────────────────────────────────────────────────
+You want to learn about Metasploit in Termux but don't know where to start.
+
+TASKS:
+1. Find the official Metasploit documentation
+2. Find a beginner-friendly tutorial
+3. Find a community to ask questions
+4. Create a learning plan
+
+SOLUTION APPROACH:
+1. Official: https://docs.metasploit.com/
+2. Tutorial: Search "Metasploit Termux" on YouTube
+3. Community: 
+   - Reddit: r/termux, r/metasploit
+   - Telegram: Security groups
+   - GitHub: rapid7/metasploit-framework issues
+4. Learning Plan:
+   a) Understand basics from official docs
+   b) Watch video tutorials
+   c) Practice on legal targets (TryHackMe, HTB)
+   d) Join community for support
+─────────────────────────────────────────────────────────────────────────
+```
+
+### Challenge 2: Build Your Learning Portfolio
+
+```
+SCENARIO:
+─────────────────────────────────────────────────────────────────────────
+You've completed this course and want to showcase your skills to employers.
+
+TASKS:
+1. Create a GitHub portfolio
+2. Document your projects
+3. Get community recognition
+4. Prepare for job applications
+
+CHECKLIST:
+□ GitHub Profile Setup:
+  - Profile picture
+  - Bio with skills
+  - Link to projects
+  
+□ Projects to Include:
+  - Termux automation scripts
+  - Security tools you've built
+  - Documentation/contributions
+  
+□ Community Presence:
+  - Active on r/termux
+  - Contributions to open source
+  - Blog posts/writeups
+  
+□ Job Preparation:
+  - LinkedIn profile updated
+  - Resume with Termux skills
+  - Prepare demo projects
+─────────────────────────────────────────────────────────────────────────
+```
+
+### Challenge 3: Continuous Learning Plan
+
+```
+SCENARIO:
+─────────────────────────────────────────────────────────────────────────
+You want to keep learning after this course. Create a 6-month plan.
+
+TEMPLATE:
+─────────────────────────────────────────────────────────────────────────
+MONTH 1-2: SOLIDIFY FOUNDATIONS
+□ Review weak areas from this course
+□ Practice Linux commands daily
+□ Complete Linux Journey course
+□ Set up development environment properly
+
+MONTH 3-4: CHOOSE SPECIALIZATION
+□ Pick: Security / Development / DevOps
+□ Complete beginner course in chosen field
+□ Build 2-3 projects in that area
+□ Join relevant communities
+
+MONTH 5-6: ADVANCE & CERTIFY
+□ Study for certification
+□ Take practice tests
+□ Apply for entry-level positions
+□ Continue building portfolio
+
+RESOURCES FOR EACH PHASE:
+- Security: TryHackMe → HackTheBox → OSCP prep
+- Development: freeCodeCamp → Build projects → GitHub portfolio
+- DevOps: Linux → Docker → Kubernetes → AWS/Azure
+─────────────────────────────────────────────────────────────────────────
+```
+
+---
+
+## 📖 GLOSSARY OF ERROR MESSAGES
+
+### Web/Resource Access Errors
+
+| Error Message | Meaning | What To Do |
+|--------------|---------|------------|
+| `404 Not Found` | Page doesn't exist | Check URL, use search |
+| `403 Forbidden` | Access denied | Check permissions, try different source |
+| `500 Internal Server Error` | Server error | Try again later |
+| `Connection timed out` | Server not responding | Check internet, try later |
+| `DNS_PROBE_POSSIBLE` | DNS issue | Clear DNS cache, change DNS |
+| `SSL_ERROR` | Certificate problem | Update browser/certs |
+| `ERR_CONNECTION_REFUSED` | Can't connect | Check URL, firewall |
+
+### Learning Platform Errors
+
+| Error Message | Meaning | What To Do |
+|--------------|---------|------------|
+| `Course not available` | Region/subscription limited | Use VPN, upgrade plan |
+| `Session expired` | Login timeout | Re-login |
+| `Video unavailable` | Content removed | Find alternative source |
+| `Rate limit exceeded` | Too many requests | Wait, try later |
+| `Quota exceeded` | Usage limit hit | Upgrade or wait for reset |
+
+### Community/Support Errors
+
+| Error Message | Meaning | What To Do |
+|--------------|---------|------------|
+| `Account suspended` | Violation | Appeal or create new account |
+| `Post removed` | Rule violation | Check community rules |
+| `Chat banned` | Misconduct | Appeal to moderators |
+| `Email verification required` | Not verified | Check email, verify |
+
+---
+
+## 💼 IT SUPPORT CAREER PATH
+
+### Career Progression Roadmap
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    COMPLETE CAREER ROADMAP                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  STARTING POINT (After This Course)                                     │
+│  ═══════════════════════════════════                                    │
+│  Skills Acquired:                                                        │
+│  ✓ Linux command line proficiency                                       │
+│  ✓ Basic scripting (Bash, Python)                                       │
+│  ✓ Package management                                                   │
+│  ✓ Basic security concepts                                              │
+│  ✓ Troubleshooting methodology                                          │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  PATH 1: CYBERSECURITY                                                  │
+│  ══════════════════════                                                  │
+│                                                                          │
+│  Entry: Security Analyst / SOC Analyst                                  │
+│  ├── Requirements: Security+, Linux knowledge                           │
+│  ├── Salary: $50,000 - $75,000                                          │
+│  └── Timeline: 0-1 year from course completion                          │
+│                                                                          │
+│  Mid: Penetration Tester                                                │
+│  ├── Requirements: OSCP, practical experience                           │
+│  ├── Salary: $80,000 - $120,000                                         │
+│  └── Timeline: 2-4 years                                                │
+│                                                                          │
+│  Senior: Security Consultant / Red Team Lead                            │
+│  ├── Requirements: Multiple certs, leadership                           │
+│  ├── Salary: $120,000 - $180,000                                        │
+│  └── Timeline: 5-8 years                                                │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  PATH 2: DEVELOPMENT                                                    │
+│  ═════════════════════                                                   │
+│                                                                          │
+│  Entry: Junior Developer                                                │
+│  ├── Requirements: Programming language, Git, portfolio                 │
+│  ├── Salary: $50,000 - $70,000                                          │
+│  └── Timeline: 0-1 year                                                 │
+│                                                                          │
+│  Mid: Software Engineer                                                 │
+│  ├── Requirements: Full-stack skills, system design                     │
+│  ├── Salary: $80,000 - $120,000                                         │
+│  └── Timeline: 2-4 years                                                │
+│                                                                          │
+│  Senior: Senior Engineer / Tech Lead                                    │
+│  ├── Requirements: Architecture, mentoring                              │
+│  ├── Salary: $130,000 - $200,000                                        │
+│  └── Timeline: 5-10 years                                               │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  PATH 3: DEVOPS / INFRASTRUCTURE                                        │
+│  ═══════════════════════════════                                        │
+│                                                                          │
+│  Entry: Junior SysAdmin / DevOps Engineer                               │
+│  ├── Requirements: Linux+, cloud basics, scripting                      │
+│  ├── Salary: $55,000 - $75,000                                          │
+│  └── Timeline: 0-1 year                                                 │
+│                                                                          │
+│  Mid: Senior DevOps Engineer                                            │
+│  ├── Requirements: AWS/Azure, Docker, K8s                               │
+│  ├── Salary: $90,000 - $140,000                                         │
+│  └── Timeline: 2-5 years                                                │
+│                                                                          │
+│  Senior: SRE / Platform Engineer                                        │
+│  ├── Requirements: Large-scale systems, automation                      │
+│  ├── Salary: $140,000 - $220,000                                        │
+│  └── Timeline: 5-10 years                                               │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Certification Path by Specialty
+
+```
+CYBERSECURITY CERTIFICATIONS
+═════════════════════════════
+Beginner:    CompTIA Security+ → CEH → eJPT
+Intermediate: OSCP → CRTP → PNPT
+Advanced:     OSWE → OSEP → OSMR
+
+DEVELOPMENT CERTIFICATIONS
+════════════════════════════
+Language:    Language-specific (not always needed)
+Cloud:       AWS Developer Associate
+Platform:    Google Cloud Developer
+Methodology: Scrum Master (PSM I)
+
+DEVOPS CERTIFICATIONS
+══════════════════════
+Foundation:  CompTIA Linux+
+Cloud:       AWS SysOps / Azure Administrator
+Containers:  CKA (Kubernetes) / Docker Certified
+Advanced:    AWS DevOps Pro / GCP SRE
+```
+
+### Skills Transfer from Termux
+
+```
+TERMUX SKILL → INDUSTRY SKILL
+═════════════════════════════════════════════════════════════════
+
+Command Line Proficiency
+├── Termux: Daily terminal usage
+├── Industry: Linux administration, DevOps
+└── Value: Essential for 90% of tech roles
+
+Package Management
+├── Termux: pkg install, apt
+├── Industry: apt, yum, docker, npm, pip
+└── Value: Dependency management in any environment
+
+Scripting & Automation
+├── Termux: Bash scripts, cron jobs
+├── Industry: CI/CD, infrastructure as code
+└── Value: Automation is key in modern IT
+
+Security Tools
+├── Termux: Nmap, Metasploit basics
+├── Industry: Penetration testing, security ops
+└── Value: Directly applicable to security roles
+
+Troubleshooting
+├── Termux: Error diagnosis, debugging
+├── Industry: Incident response, root cause analysis
+└── Value: Critical thinking in all roles
+```
+
+---
+
+## 🔧 PREVENTIVE MAINTENANCE CHECKLIST
+
+### Weekly Learning Goals
+
+```markdown
+# Weekly Learning Checklist
+
+## Daily Habits (30 min/day)
+- [ ] Practice on learning platform
+- [ ] Read one technical article
+- [ ] Code/script for at least 15 minutes
+- [ ] Review notes from previous day
+
+## Weekly Goals
+- [ ] Complete one chapter/module
+- [ ] Watch 2-3 tutorial videos
+- [ ] Participate in community discussion
+- [ ] Update learning notes
+- [ ] Work on personal project
+
+## Monthly Goals
+- [ ] Complete one course/certification module
+- [ ] Build/complete one project
+- [ ] Contribute to open source
+- [ ] Update resume/portfolio
+- [ ] Network with professionals
+```
+
+### Resource Organization System
+
+```bash
+# Create organized learning directory
+mkdir -p ~/learning/{courses,projects,notes,resources}
+
+# Structure for notes
+mkdir -p ~/learning/notes/{linux,security,programming,tools}
+
+# Keep track of useful links
+echo "https://wiki.termux.com" >> ~/learning/resources/termux_links.txt
+echo "https://github.com/termux" >> ~/learning/resources/termux_links.txt
+
+# Log your progress
+echo "$(date): Completed Chapter 61" >> ~/learning/progress.log
+```
+
+### Continuous Learning Schedule
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CONTINUOUS LEARNING SCHEDULE                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  DAILY LEARNING (30-60 minutes)                                         │
+│  ────────────────────────────────                                       │
+│  □ Morning: Read articles/news (15 min)                                 │
+│  □ Lunch: Watch tutorial video (15 min)                                 │
+│  □ Evening: Hands-on practice (30 min)                                  │
+│                                                                          │
+│  WEEKLY DEEP DIVE (3-5 hours)                                           │
+│  ─────────────────────────────                                          │
+│  □ One focused learning session (2 hours)                               │
+│  □ Project work (2 hours)                                               │
+│  □ Community participation (1 hour)                                     │
+│                                                                          │
+│  MONTHLY MILESTONES                                                     │
+│  ──────────────────                                                     │
+│  □ Complete one course module                                           │
+│  □ Finish one project                                                   │
+│  □ Write one blog post/writeup                                          │
+│  □ Update portfolio                                                     │
+│                                                                          │
+│  QUARTERLY ASSESSMENT                                                   │
+│  ────────────────────                                                   │
+│  □ Review progress towards goals                                        │
+│  □ Adjust learning plan                                                 │
+│  □ Update certifications list                                           │
+│  □ Career opportunity review                                            │
+│                                                                          │
+│  YEARLY GOALS                                                           │
+│  ─────────────                                                           │
+│  □ Earn at least one certification                                      │
+│  □ Build significant portfolio presence                                 │
+│  □ Contribute meaningfully to open source                               │
+│  □ Network expansion (conferences, meetups)                             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📚 RESOURCE CURATION
+
+### Essential Bookmarks for Every Termux User
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    ESSENTIAL BOOKMARKS                                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  OFFICIAL RESOURCES                                                     │
+│  ───────────────────                                                    │
+│  • wiki.termux.com - Official documentation                             │
+│  • github.com/termux - Source code and issues                           │
+│  • f-droid.org/packages/com.termux - Official downloads                 │
+│                                                                          │
+│  LEARNING PLATFORMS                                                     │
+│  ──────────────────                                                     │
+│  • tryhackme.com - Beginner-friendly security labs                      │
+│  • hackthebox.com - Advanced security challenges                        │
+│  • overthewire.org/wargames - Command line practice                     │
+│  • linuxjourney.com - Linux fundamentals                                │
+│                                                                          │
+│  COMMUNITY                                                              │
+│  ─────────                                                               │
+│  • reddit.com/r/termux - Main community                                 │
+│  • t.me/termux - Telegram group                                         │
+│  • stackoverflow.com/questions/tagged/termux                            │
+│                                                                          │
+│  DEVELOPMENT                                                            │
+│  ───────────                                                             │
+│  • github.com - Code hosting and collaboration                          │
+│  • gitlab.com - Alternative to GitHub                                   │
+│  • codepen.io - Web development playground                              │
+│                                                                          │
+│  NEWS & UPDATES                                                         │
+│  ────────────────                                                        │
+│  • thehackernews.com - Security news                                    │
+│  • krebsonsecurity.com - Security analysis                              │
+│  • distrowatch.com - Linux distributions                                │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Curated YouTube Channels
+
+| Channel | Topic | Why Follow |
+|---------|-------|------------|
+| T3rmuxk1ng | Termux tutorials | This course creator |
+| NetworkChuck | Linux/Networking | Beginner-friendly explanations |
+| David Bombal | IT/Certifications | Industry interviews, tutorials |
+| John Hammond | CTF/Hacking | CTF walkthroughs, tool tutorials |
+| LiveOverflow | Binary exploitation | Deep technical content |
+| The Cyber Mentor | Career guidance | Job tips, certifications |
+| IppSec | HackTheBox | HTB machine walkthroughs |
+| freeCodeCamp | Everything | Free full courses |
+
+### Recommended Books (Free PDF Available)
+
+| Book | Topic | Level |
+|------|-------|-------|
+| "The Linux Command Line" | Linux basics | Beginner |
+| "Automate the Boring Stuff" | Python | Beginner |
+| "Linux Basics for Hackers" | Linux + Security | Beginner-Intermediate |
+| "Black Hat Python" | Python for security | Intermediate |
+| "The Web Application Hacker's Handbook" | Web security | Intermediate-Advanced |
+| "Penetration Testing" by Georgia Weidman | Pentesting | Intermediate |
+
+### Tools Every Termux User Should Know
+
+| Tool | Category | Install Command |
+|------|----------|-----------------|
+| git | Version control | `pkg install git` |
+| python | Programming | `pkg install python` |
+| nodejs | Programming | `pkg install nodejs` |
+| vim/nano | Text editing | `pkg install vim nano` |
+| htop | Monitoring | `pkg install htop` |
+| nmap | Network scanning | `pkg install nmap` |
+| curl/wget | Downloads | Built-in / `pkg install wget` |
+| tmux/screen | Multiplexing | `pkg install tmux` |
+| neofetch | System info | `pkg install neofetch` |
+
+---
+
 ## 💡 PRO TIPS FOR CONTINUED LEARNING
 
 > 💡 **Pro Tip #1:** Set up a dedicated GitHub repository for your Termux projects - this becomes your portfolio for job applications.
