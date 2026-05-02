@@ -1,8 +1,16 @@
-pip install lunar_python
+# lunar_python - Lunar calendar library
+# Install: pip install lunar_python
+try:
+    from lunar_python import Lunar, Solar
+    LUNAR_AVAILABLE = True
+except ImportError:
+    LUNAR_AVAILABLE = False
+
 import datetime
-from lunar_python import Lunar, Solar
 
 def get_cyber_divination_data(birth_year, birth_month, birth_day, birth_hour=0, birth_minute=0):
+    if not LUNAR_AVAILABLE:
+        return {"error": "lunar_python not installed. Run: pip install lunar_python"}
     """
     赛博算命核心算法 v2.1
     - 输出适配 HTML 前端渲染
