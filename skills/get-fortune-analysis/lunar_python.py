@@ -9,12 +9,12 @@ except ImportError:
 import datetime
 
 def get_cyber_divination_data(birth_year, birth_month, birth_day, birth_hour=0, birth_minute=0):
-    if not LUNAR_AVAILABLE:
-        return {"error": "lunar_python not installed. Run: pip install lunar_python"}
     """
     赛博算命核心算法 v2.1
     - 输出适配 HTML 前端渲染
     """
+    if not LUNAR_AVAILABLE:
+        return {"error": "lunar_python not installed. Run: pip install lunar_python"}
     
     # --- 基础配置 (简化版) ---
     GAN_WU_XING = {"甲": "木", "乙": "木", "丙": "火", "丁": "火", "戊": "土", "己": "土", "庚": "金", "辛": "金", "壬": "水", "癸": "水"}
