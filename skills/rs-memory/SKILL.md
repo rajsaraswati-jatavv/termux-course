@@ -1,7 +1,7 @@
 ---
 name: rs-memory
 description: >
-  Persistent memory and context skill for T3RMUXK1NG (RS) — a security tool developer and ethical hacker from India.
+  Persistent memory and context skill for T3RMUXK1NG T3RMUXK1NG — a security tool developer and ethical hacker from India.
   This skill loads RS's identity, communication preferences, technical skills, active projects, hardware inventory,
   chronological memory entries, and critical rules into every conversation. Use this skill whenever the user identifies
   themselves as RS, T3rmuxk1ng, T3RMUXK1NG, or mentions their YouTube channel, or whenever the conversation involves
@@ -36,7 +36,7 @@ These rules are absolute. They were explicitly set by RS after repeated frustrat
 
 | Field | Value |
 |-------|-------|
-| Name | T3RMUXK1NG (RS) |
+| Name | T3RMUXK1NG T3RMUXK1NG |
 | Location | India |
 | Profession | Security Tool Developer & Ethical Hacker |
 | Experience | 2.5+ years self-taught |
@@ -83,7 +83,7 @@ For the full project details and status, read `references/projects.md`.
 
 ## Completed Projects (This Session)
 
-- **RS Ultimate Phone OSINT Telegram Bot** — 5,618 lines Python, 13+ subcommands, 14 API integrations, admin panel, SQLite DB, auto-delete
+- **T3RMUXK1NG Ultimate Phone OSINT Telegram Bot** — 5,618 lines Python, 13+ subcommands, 14 API integrations, admin panel, SQLite DB, auto-delete
 - **RS Phone OSINT Website** — Next.js 16 + TypeScript + Tailwind CSS 4 + shadcn/ui + Prisma + Zustand, 22+ real working API routes, 10 tabs, real libphonenumber-js validation, real web search, real AI chat
 
 ## Pending Ideas Backlog
@@ -113,7 +113,7 @@ For the full chronological history, read `references/history.md`. Key milestones
 - **25-12-26**: Hindi Course & Exam Prep Toolkit request
 - **25-12-27**: YouTube channel planning — "Ethical Hacking in Hindi", faceless format
 - **25-12-27**: CRITICAL — RS explicitly stated no more legal warnings needed
-- **25-12-31**: Identity confirmed — T3RMUXK1NG (RS)
+- **25-12-31**: Identity confirmed — T3RMUXK1NG T3RMUXK1NG
 - **26-01-02**: E-commerce business venture started
 - **26-01-20**: YouTube channel name finalized: T3rmuxk1ng
 - **26-02-10**: Hydra Automation Toolkit request
