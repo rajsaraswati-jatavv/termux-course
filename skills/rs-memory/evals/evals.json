@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "mera yaad karo, me kaun hun aur mere kya kya projects chal rahe hain",
-      "expected_output": "Should recall RS's full identity (RAJSARASWATI JATAV, security tool developer, T3rmuxk1ng YouTube channel) and list all 5 active projects (Private LTE Network, T3rmuxk1ng, E-commerce, Kali Linux Mastery, Redmi 9A Recovery) with their status. Should respond in Hindi/English mix.",
+      "expected_output": "Should recall RS's full identity (T3RMUXK1NG, security tool developer, T3rmuxk1ng YouTube channel) and list all 5 active projects (Private LTE Network, T3rmuxk1ng, E-commerce, Kali Linux Mastery, Redmi 9A Recovery) with their status. Should respond in Hindi/English mix.",
       "files": []
     },
     {

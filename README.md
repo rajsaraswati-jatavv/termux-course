@@ -2,8 +2,8 @@
 
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Termux](https://img.shields.io/badge/Termux-000000?style=for-the-badge&logo=termux&logoColor=white)](https://termux.dev/)
-[![Course](https://img.shields.io/badge/Chapters-61-blue?style=for-the-badge)](https://github.com/rajsaraswati-jatavv/termux-course)
-[![Status](https://img.shields.io/badge/Status-Complete-success?style=for-the-badge)](https://github.com/rajsaraswati-jatavv/termux-course)
+[![Course](https://img.shields.io/badge/Chapters-61-blue?style=for-the-badge)](https://github.com/T3RMUXK1NG/termux-course)
+[![Status](https://img.shields.io/badge/Status-Complete-success?style=for-the-badge)](https://github.com/T3RMUXK1NG/termux-course)
 
 > The most comprehensive Termux course ever created — 61 chapters, 10 modules, 350,000+ lines of content. From beginner to expert. Built by [T3rmuxk1ng](https://youtube.com/@T3rmuxk1ng).
 
@@ -45,7 +45,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/rajsaraswati-jatavv/termux-course.git
+git clone https://github.com/T3RMUXK1NG/termux-course.git
 cd termux-course
 
 # Start with Chapter 1
@@ -102,10 +102,10 @@ Every chapter includes:
 
 ## 👤 Author
 
-**Rajsaraswati Jatav (T3rmuxk1ng)**
+**T3RMUXK1NG (T3rmuxk1ng)**
 
 - YouTube: [https://youtube.com/@T3rmuxk1ng](https://youtube.com/@T3rmuxk1ng)
-- GitHub: [rajsaraswati-jatavv](https://github.com/rajsaraswati-jatavv)
+- GitHub: [T3RMUXK1NG](https://github.com/T3RMUXK1NG)
 
 ---
 
@@ -119,6 +119,6 @@ This course content is licensed under the MIT License.
 
 **If you found this course useful, give it a star!**
 
-[YouTube](https://youtube.com/@T3rmuxk1ng) | [GitHub](https://github.com/rajsaraswati-jatavv)
+[YouTube](https://youtube.com/@T3rmuxk1ng) | [GitHub](https://github.com/T3RMUXK1NG)
 
 </div>

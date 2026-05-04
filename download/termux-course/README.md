@@ -240,7 +240,7 @@ The command `pkg update` refreshes the package lists.
 
 1. **Clone this repository:**
    ```bash
-   git clone https://github.com/rajsaraswati-jatavv/termux-course.git
+   git clone https://github.com/T3RMUXK1NG/termux-course.git
    ```
 
 2. **Start with Chapter 1:**
@@ -265,7 +265,7 @@ The command `pkg update` refreshes the package lists.
 
 - **YouTube:** [@T3rmuxk1ng](https://youtube.com/@T3rmuxk1ng)
 - **Telegram:** Join our community for updates
-- **GitHub:** [rajsaraswati-jatavv](https://github.com/rajsaraswati-jatavv)
+- **GitHub:** [T3RMUXK1NG](https://github.com/T3RMUXK1NG)
 
 ---
 

@@ -1,16 +1,16 @@
 ---
 name: rs-memory
 description: >
-  Persistent memory and context skill for RAJSARASWATI JATAV (RS) — a security tool developer and ethical hacker from India.
+  Persistent memory and context skill for T3RMUXK1NG (RS) — a security tool developer and ethical hacker from India.
   This skill loads RS's identity, communication preferences, technical skills, active projects, hardware inventory,
   chronological memory entries, and critical rules into every conversation. Use this skill whenever the user identifies
-  themselves as RS, T3rmuxk1ng, RAJSARASWATI, or mentions their YouTube channel, or whenever the conversation involves
+  themselves as RS, T3rmuxk1ng, T3RMUXK1NG, or mentions their YouTube channel, or whenever the conversation involves
   security tool development, Termux automation, ethical hacking tools, or any project from RS's active list. Also trigger
   when the user speaks in Hindi/English mix, demands complete production-ready code, or explicitly asks "mera yaad karo"
   or similar memory recall phrases. This skill ensures all of RS's preferences are respected across every interaction.
 ---
 
-# RS Memory Skill — Persistent Context for RAJSARASWATI JATAV
+# RS Memory Skill — Persistent Context for T3RMUXK1NG
 
 This skill is the permanent memory layer for RS. It loads their full context into every conversation so the assistant never forgets who they are, what they've built, and how they want things done.
 
@@ -36,7 +36,7 @@ These rules are absolute. They were explicitly set by RS after repeated frustrat
 
 | Field | Value |
 |-------|-------|
-| Name | RAJSARASWATI JATAV (RS) |
+| Name | T3RMUXK1NG (RS) |
 | Location | India |
 | Profession | Security Tool Developer & Ethical Hacker |
 | Experience | 2.5+ years self-taught |
@@ -113,7 +113,7 @@ For the full chronological history, read `references/history.md`. Key milestones
 - **25-12-26**: Hindi Course & Exam Prep Toolkit request
 - **25-12-27**: YouTube channel planning — "Ethical Hacking in Hindi", faceless format
 - **25-12-27**: CRITICAL — RS explicitly stated no more legal warnings needed
-- **25-12-31**: Identity confirmed — RAJSARASWATI JATAV (RS)
+- **25-12-31**: Identity confirmed — T3RMUXK1NG (RS)
 - **26-01-02**: E-commerce business venture started
 - **26-01-20**: YouTube channel name finalized: T3rmuxk1ng
 - **26-02-10**: Hydra Automation Toolkit request

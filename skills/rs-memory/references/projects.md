@@ -32,7 +32,7 @@
 
 ## 6. RS Ultimate Phone OSINT Telegram Bot (COMPLETED)
 - **Status**: Completed
-- **Details**: 5,618 lines of Python code. 13+ OSINT subcommands (basic, carrier, location, whatsapp, telegram, spam, simswap, social, breach, callertag, truecaller, validation, bulk). Auto-delete functionality. 14 API integrations. Admin panel with stats, users, config, broadcast. SQLite database. Zipped at RS-Phone-Bot.zip.
+- **Details**: 5,618 lines of Python code. 13+ OSINT subcommands (basic, carrier, location, whatsapp, telegram, spam, simswap, social, breach, callertag, truecaller, validation, bulk). Auto-delete functionality. 14 API integrations. Admin panel with stats, users, config, broadcast. SQLite database. Zipped at T3RMUXK1NG-Phone-Bot.zip.
 
 ## 7. RS Phone OSINT Website (COMPLETED)
 - **Status**: Completed
