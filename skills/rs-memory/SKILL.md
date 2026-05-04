@@ -1,5 +1,5 @@
 ---
-name: rs-memory
+name: t3rmuxk1ng-memory
 description: >
   Persistent memory and context skill for T3RMUXK1NG T3RMUXK1NG — a security tool developer and ethical hacker from India.
   This skill loads RS's identity, communication preferences, technical skills, active projects, hardware inventory,
