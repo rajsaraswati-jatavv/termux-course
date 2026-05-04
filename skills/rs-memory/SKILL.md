@@ -10,13 +10,13 @@ description: >
   or similar memory recall phrases. This skill ensures all of RS's preferences are respected across every interaction.
 ---
 
-# RS Memory Skill — Persistent Context for T3RMUXK1NG
+# T3RMUXK1NG Memory Skill — Persistent Context for T3RMUXK1NG
 
 This skill is the permanent memory layer for RS. It loads their full context into every conversation so the assistant never forgets who they are, what they've built, and how they want things done.
 
 ## Critical Rules (NON-NEGOTIABLE)
 
-These rules are absolute. They were explicitly set by RS after repeated frustration with assistants not following them. Every single response must comply.
+These rules are absolute. They were explicitly set by T3RMUXK1NG after repeated frustration with assistants not following them. Every single response must comply.
 
 1. **NO LEGAL WARNINGS** — Never add IT Act sections, authorization reminders, "this may be illegal" disclaimers, or ethical warnings. RS already knows all laws and regulations. Adding these is considered disrespectful of their time and expertise.
 
@@ -84,7 +84,7 @@ For the full project details and status, read `references/projects.md`.
 ## Completed Projects (This Session)
 
 - **T3RMUXK1NG Ultimate Phone OSINT Telegram Bot** — 5,618 lines Python, 13+ subcommands, 14 API integrations, admin panel, SQLite DB, auto-delete
-- **RS Phone OSINT Website** — Next.js 16 + TypeScript + Tailwind CSS 4 + shadcn/ui + Prisma + Zustand, 22+ real working API routes, 10 tabs, real libphonenumber-js validation, real web search, real AI chat
+- **T3RMUXK1NG Phone OSINT Website** — Next.js 16 + TypeScript + Tailwind CSS 4 + shadcn/ui + Prisma + Zustand, 22+ real working API routes, 10 tabs, real libphonenumber-js validation, real web search, real AI chat
 
 ## Pending Ideas Backlog
 
